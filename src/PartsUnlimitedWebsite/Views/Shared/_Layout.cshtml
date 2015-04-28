@@ -1,4 +1,5 @@
 ﻿@using PartsUnlimited
+@inject Microsoft.Framework.Runtime.IRuntimeEnvironment RuntimeEnvironment 
 
 <!DOCTYPE html>
 <html lang="en">
@@ -133,6 +134,27 @@
                     </div>
                 </div>
                 <hr />
+
+                @{ 
+                    string imageName = @"/images/";
+
+                    switch (@RuntimeEnvironment.OperatingSystem.ToLowerInvariant())
+                    {
+                        case "windows":
+                            imageName += "windows.png";
+                            break;
+                        case "darwin":
+                            imageName += "osx-yosemite-logo.png";
+                            break;
+                        case "linux":
+                            imageName += "ubuntu-logo14.png";
+                            break;
+                        default: // todo : maybe a question mark?
+                            imageName += "windows.png";
+                            break;
+                    }
+                }
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="pull-left-sm">
@@ -143,6 +165,11 @@
                         <div class="pull-left-sm pull-right-md">
                             All rights reserved. Your payments are safe and secure.
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="text-center">
+                        Site powered by <img src="@imageName" height="100" /> @RuntimeEnvironment.OperatingSystemVersion and running on @RuntimeEnvironment.RuntimeType @RuntimeEnvironment.RuntimeVersion
                     </div>
                 </div>
             </div>
