@@ -13,7 +13,7 @@ The project has sample data included (under Models/SampleData.cs). This populate
 1.	Sign up for the service (may require you to sign up for a Marketplace account if you don’t have one)
 1.	After you successfully sign up for the service, go to “Mange your models and upload data”
 1.	You need to get your credentials by clicking on the “Account Information” link. Copy and paste the string back in to the Account Key field to validate and initiate the connection
-1.	Create a new model and train it with a proper set of data. You can use Transactions.csv to train your model. It takes two columns of data: one is transaction ID and the other one is item ID
+1.	Create a new model and train it with a proper set of data. You can use [Transactions.csv](https://github.com/Microsoft/PartsUnlimited/blob/master/docs/Transactions.csv) to train your model. It takes two columns of data: one is transaction ID and the other one is item ID
 1.	After you have created and trained the model, you can test it by selecting the model you just created and entering an item ID to see the output. This output represents item IDs that are usually bought together with the input item ID (Tip: number of occurrences you specify to train your model must be greater than the smallest multiplier in your sample data)
 
 ##How to add the "Frequently Bought Together" Service to your site##
