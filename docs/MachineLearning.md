@@ -6,7 +6,7 @@ In the config.json file of PartsUnlimited we provide a “WebsiteOptions” key 
 
 The service takes a few seconds to load for the first time. In order to avoid delaying the rest of the page, we display the recommendations in a separate div and use ajax to asynchronously load the content.
 
-The project has sample data included (under Models/SampleData.cs). This populates the purchase history, which then creates a csv file that the “Frequently Bought Together” service uses to generate the recommendations. The instructions below also have data on how to train your service separately using your own data from a .csv file.
+The project has sample data included (under Models/SampleData.cs). This populates the purchase history. You can then create a .csv file based on these transactions that the “Frequently Bought Together” service uses to generate the recommendations. The instructions below also have data on how to train your service separately using your own data from a .csv file.
 
 ##How to sign up for the "Frequently Bought Together" Service ##
 1.	Go to the [“Frequently Bought Together” API service page](https://datamarket.azure.com/dataset/amla/mba)
