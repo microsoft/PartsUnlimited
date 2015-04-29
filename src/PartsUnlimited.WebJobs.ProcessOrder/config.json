@@ -1,0 +1,10 @@
+﻿{
+	"Data": {
+		"DefaultConnection": {
+			"ConnectionString": ""
+		},
+		"AzureWebJobsStorage": {
+			"ConnectionString": ""
+		}
+	}
+}

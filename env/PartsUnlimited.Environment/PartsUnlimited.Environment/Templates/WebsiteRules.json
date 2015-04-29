@@ -1,0 +1,76 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "WebsiteName": {
+            "type": "string"
+        },
+        "EnableRules": {
+            "type": "bool",
+            "defaultValue": false
+        }
+    },
+    "resources": [
+        {
+            "name": "[concat('ServerErrors ', parameters('WebsiteName'))]",
+            "type": "Microsoft.Insights/alertrules",
+            "location": "East US",
+            "apiVersion": "2014-04-01",
+            "tags": {
+                "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('WebsiteName'))]": "Resource",
+                "displayName": "WebsiteAlertRuleServerErrors"
+            },
+            "properties": {
+                "name": "[concat('ServerErrors ', parameters('WebsiteName'))]",
+                "description": "[concat(parameters('WebsiteName'), ' has some server errors, status code 5xx.')]",
+                "isEnabled": "[parameters('EnableRules')]",
+                "condition": {
+                    "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.ThresholdRuleCondition",
+                    "dataSource": {
+                        "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleMetricDataSource",
+                        "resourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('WebsiteName'))]",
+                        "metricName": "Http5xx"
+                    },
+                    "operator": "GreaterThan",
+                    "threshold": 0,
+                    "windowSize": "PT5M"
+                },
+                "action": {
+                    "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleEmailAction",
+                    "sendToServiceOwners": true,
+                    "customEmails": [ ]
+                }
+            }
+        },
+        {
+            "name": "[concat('ForbiddenRequests ', parameters('WebsiteName'))]",
+            "type": "Microsoft.Insights/alertrules",
+            "location": "East US",
+            "apiVersion": "2014-04-01",
+            "tags": {
+                "displayName": "WebsiteAlertRuleForbiddenRequests"
+            },
+            "properties": {
+                "name": "[concat('ForbiddenRequests ', parameters('WebsiteName'))]",
+                "description": "[concat(parameters('WebsiteName'), ' has some requests that are forbidden, status code 403.')]",
+                "isEnabled": "[parameters('EnableRules')]",
+                "condition": {
+                    "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.ThresholdRuleCondition",
+                    "dataSource": {
+                        "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleMetricDataSource",
+                        "resourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('WebsiteName'))]",
+                        "metricName": "Http403"
+                    },
+                    "operator": "GreaterThan",
+                    "threshold": 0,
+                    "windowSize": "PT5M"
+                },
+                "action": {
+                    "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleEmailAction",
+                    "sendToServiceOwners": true,
+                    "customEmails": [ ]
+                }
+            }
+        }
+    ]
+}

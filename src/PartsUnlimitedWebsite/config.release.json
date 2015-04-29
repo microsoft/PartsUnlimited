@@ -1,0 +1,20 @@
+﻿{
+    "CDN": {
+        "Images": "https://partsunlimited.blob.core.windows.net/cdn/Images",
+        "Scripts": {
+            "bootstrap": "http://ajax.aspnetcdn.com/ajax/bootstrap/3.3.1/bootstrap.min.js",
+            "jquery": "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.3.min.js",
+            "jquery-ui": "http://ajax.aspnetcdn.com/ajax/jquery.ui/1.11.2/jquery-ui.min.js",
+            "jquery-validation": "http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js",
+            "signalr": "http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.1.0.min.js",
+            "modernizr": "http://ajax.aspnetcdn.com/ajax/modernizr/modernizr-2.7.2.js",
+            "respond": "http://ajax.aspnetcdn.com/ajax/respond/1.2.0/respond.js",
+            "site": "/Scripts/site.js"
+
+        },
+        "Styles": {
+            "jquery-ui": "http://ajax.aspnetcdn.com/ajax/jquery.ui/1.11.1/themes/smoothness/jquery-ui.css",
+            "bootstrap": "http://ajax.aspnetcdn.com/ajax/bootstrap/3.3.1/css/bootstrap.min.css"
+        }
+    }
+}

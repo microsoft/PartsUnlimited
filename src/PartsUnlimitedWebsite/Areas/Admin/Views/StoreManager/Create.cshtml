@@ -1,0 +1,27 @@
+﻿@model PartsUnlimited.Models.Product
+
+@{
+    ViewBag.Title = "Create";
+}
+<section>
+    <h2>Create</h2>
+
+    <div class="row">
+        <div class="col-md-6 no-gutter-xs">
+            <div class="col-xs-12 no-gutter-sm">
+                <h4>Product</h4>
+            </div>
+            @using (Html.BeginForm())
+            {
+                @await Html.PartialAsync("_Alter", Model)
+            }
+        </div>
+        <div class="col-md-6">
+
+        </div>
+    </div>
+
+        <div class="back-link">
+            @Html.ActionLink("Back to List", "Index", null, null, new { @class="action-link" })
+        </div>
+</section>

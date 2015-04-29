@@ -1,0 +1,19 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "",
+  "authors": [ "" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "dependencies": {
+        "PartsUnlimited.Models": "",
+		"Microsoft.Azure.WebJobs": "1.0.0",
+		"Microsoft.Azure.WebJobs.Core": "1.0.0"
+  },
+  "commands": {
+    "PartsUnlimited.WebJobs.ProcessOrder" : "PartsUnlimited.WebJobs.ProcessOrder"
+  },
+  "frameworks" : {
+    "dnx451": { }
+  }
+}

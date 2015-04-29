@@ -1,0 +1,34 @@
+﻿@using PartsUnlimited.Models;
+@using Microsoft.AspNet.Identity;
+@using Microsoft.AspNet.Http.Authentication;
+@model ExternalLoginListViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+
+<h4>Use another service to log in</h4>
+@{
+    var loginProviders = SignInManager.GetExternalAuthenticationSchemes();
+    if (loginProviders.Count() == 0)
+    {
+        <div>
+            <p>
+                There are no external authentication services configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=313242">this article</a>
+                for details on setting up this ASP.NET application to support logging in via external services.
+            </p>
+        </div>
+    }
+    else
+    {
+        using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Model.ReturnUrl }))
+        {
+            @Html.AntiForgeryToken()
+            <div id="socialLoginList">
+                    @foreach (AuthenticationDescription p in loginProviders.Where(a => a.Caption != null))
+                    {
+                        <div>
+				<button type="submit" class="btn btn-default" id="@p.AuthenticationScheme" name="provider" value="@p.AuthenticationScheme" title="Log in using your @p.Caption account">@p.AuthenticationScheme</button>
+                        </div>
+                    }
+            </div>
+        }
+    }
+}

@@ -1,0 +1,34 @@
+{
+  "version": "0.0.0",
+  "name": "PartsUnlimited",
+  "description": "An online store for PartsUnlimited, a car parts company",
+  "repository": {
+    "type": "git",
+    "url": "https://partsunlimited.visualstudio.com/DefaultCollection/_git/PartsUnlimited"
+  },
+  "readme": "Look at: https://partsunlimited.visualstudio.com/DefaultCollection/Assets/_git/Cloud#path=%2FREADME.md&version=GBmaster&_a=contents",
+  "_comment": "Only grunt, grunt-bower-task, and grun-contrib-copy are required.  The rest (in specific order) are there to reduce nesting.  Node will nest too deep and cause PathTooLongException in many parts of the toolchain and infrastructure",
+  "devDependencies": {
+    "argparse": "1.0.1",
+    "bower": "^1.3.12",
+    "bower-registry-client": "^0.2.1",
+    "cli-color": "0.3.2",
+    "combined-stream": "0.0.7",
+    "end-of-stream": "1.0.0",
+    "es6-weak-map": "^0.1.2",
+    "form-data": "^0.2.0",
+    "grunt": "0.4.5",
+    "grunt-bower-task": "0.4.0",
+    "grunt-contrib-concat": "0.5.0",
+    "grunt-contrib-copy": "0.7.0",
+    "grunt-contrib-uglify": "0.7.0",
+    "grunt-sass": "^0.18.1",
+    "gzip-size": "1.0.0",
+    "latest-version": "^1.0.0",
+    "npmconf": "2.1.1",
+    "pretty-bytes": "1.0.4",
+    "readable-stream": "1.1.13",
+    "request": "~2.27.0",
+    "update-notifier": "0.3.2"
+  }
+}

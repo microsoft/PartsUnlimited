@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|AnyCPU">
+      <Configuration>Debug</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|AnyCPU">
+      <Configuration>Release</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>a38cd247-e7ec-4035-914c-aeaf6abe3941</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworkIdentifier>Deployment</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>1.0</TargetFrameworkVersion>
+    <PrepareForBuildDependsOn>
+    </PrepareForBuildDependsOn>
+  </PropertyGroup>
+  <Import Condition=" Exists('Deployment.targets') " Project="Deployment.targets" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
+  <!-- vertag<:>start tokens<:>maj.min -->
+  <Import Condition=" Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Deployment\1.1\DeploymentProject.targets') " Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Deployment\1.1\DeploymentProject.targets" />
+  <!-- vertag<:>end -->
+  <ItemGroup>
+    <Folder Include="Tools\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Deployment.targets">
+      <Visible>False</Visible>
+    </None>
+    <Content Include="Scripts\Deploy-AzureResourceGroup.ps1" />
+    <Content Include="Templates\FullEnvironmentSetup.json" />
+    <Content Include="Templates\DemoEnvironmentSetup.json" />
+    <None Include="Scripts\Install-AzCopy.ps1" />
+    <None Include="Scripts\New-CdnStorageContainer.psm1" />
+    <Content Include="Templates\AppInsights.json" />
+    <None Include="Templates\FullEnvironmentSetup.param.json" />
+    <None Include="Templates\DemoEnvironmentSetup.param.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Templates\HostingPlanAndRules.json" />
+    <Content Include="Templates\SqlServerAndDb.json" />
+    <Content Include="Templates\WebsiteWithTwoSlots.json" />
+    <Content Include="Templates\Website.json" />
+    <Content Include="Templates\WebsiteRules.json" />
+    <None Include="Tools\AzCopy.exe" />
+    <None Include="Tools\Microsoft.Data.Edm.dll">
+      <Visible>False</Visible>
+    </None>
+    <None Include="Tools\Microsoft.Data.OData.dll">
+      <Visible>False</Visible>
+    </None>
+    <None Include="Tools\Microsoft.Data.Services.Client.dll">
+      <Visible>False</Visible>
+    </None>
+    <None Include="Tools\Microsoft.WindowsAzure.Storage.dll">
+      <Visible>False</Visible>
+    </None>
+    <None Include="Tools\Microsoft.WindowsAzure.Storage.DataMovement.dll">
+      <Visible>False</Visible>
+    </None>
+  </ItemGroup>
+  <Target Name="GetReferenceAssemblyPaths" />
+</Project>

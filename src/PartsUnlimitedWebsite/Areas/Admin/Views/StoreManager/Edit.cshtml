@@ -1,0 +1,36 @@
+﻿@model PartsUnlimited.Models.Product
+
+@{
+    ViewBag.Title = "Edit";
+}
+<section id="edit-product-page">
+    <h2>Edit</h2>
+
+    <div class="row">
+        <div class="col-md-6 no-gutter-xs">
+            @if (Model != null)
+            {
+
+                <div class="col-xs-12 no-gutter-sm">
+                    <h4>Product</h4>
+                </div>
+                @using (Html.BeginForm())
+                {
+                    @Html.HiddenFor(model => model.ProductId)
+                    @await Html.PartialAsync("_Alter", Model)
+                }
+            }
+            else
+            {
+                @Html.Label(null, "Unable to locate the product")
+            }
+        </div>
+        <div class="col-md-6">
+
+        </div>
+    </div>
+    <div class="back-link">
+        @Html.ActionLink("Back to List", "Index", null, null, new { @class="action-link" })
+    </div>
+
+</section>

@@ -1,0 +1,85 @@
+﻿@model IEnumerable<PartsUnlimited.Models.Product>
+
+@using PartsUnlimited.Areas.Admin.Controllers;
+
+@{
+    ViewBag.Title = "Index";
+}
+<section class="section-alt">
+    <div class="row">
+        <div class="col-md-12">
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Category.Name)
+            <sup>
+                <a href="@Url.Action("Index", new { sortField = SortField.Name, sortDirection = SortDirection.Up })">
+                    <span class="glyphicon glyphicon-arrow-up"></span>
+                </a>
+                <a href="@Url.Action("Index", new { sortField = SortField.Name, sortDirection = SortDirection.Down})">
+                    <span class="glyphicon glyphicon-arrow-down"></span>
+                </a>
+            </sup>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Title)
+            <sup>
+                <a href="@Url.Action("Index", new { sortField = SortField.Title, sortDirection = SortDirection.Up })">
+                    <span class="glyphicon glyphicon-arrow-up"></span>
+                </a>
+                <a href="@Url.Action("Index", new { sortField = SortField.Title, sortDirection = SortDirection.Down})">
+                    <span class="glyphicon glyphicon-arrow-down"></span>
+                </a>
+            </sup>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Price)
+            <sup>
+                <a href="@Url.Action("Index", new { sortField = SortField.Price, sortDirection = SortDirection.Up })">
+                    <span class="glyphicon glyphicon-arrow-up"></span>
+                </a>
+                <a href="@Url.Action("Index", new { sortField = SortField.Price, sortDirection = SortDirection.Down})">
+                    <span class="glyphicon glyphicon-arrow-down"></span>
+                </a>
+            </sup>
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Name)
+
+            </td>
+            <td>
+                @if (item.Title.Length <= 25)
+                {
+                    @item.Title
+                }
+                else
+                {
+                <span title="@item.Title">@item.Title.Substring(0, 25)<text>...</text></span>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ProductId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ProductId }) |
+                @Html.ActionLink("Delete", "RemoveProduct", new { id = item.ProductId })
+            </td>
+        </tr>
+    }
+
+</table>
+</div>
+</div>
+</section>

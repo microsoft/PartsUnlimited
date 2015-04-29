@@ -1,0 +1,6 @@
+﻿@model IEnumerable<PartsUnlimited.Models.Category>
+@foreach (var category in Model)
+            {
+    <li>@Html.ActionLink(category.Name, "Browse", "Store", new { CategoryId = category.CategoryId }, null)</li>
+        }
+<li>@Html.ActionLink("More", "Index", "Store")</li>

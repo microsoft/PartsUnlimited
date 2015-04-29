@@ -1,0 +1,87 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "PartsUnlimitedServerName": {
+            "type": "string"
+        },
+        "PartsUnlimitedServerAdminLogin": {
+            "type": "string"
+        },
+        "PartsUnlimitedServerAdminLoginPassword": {
+            "type": "securestring"
+        },
+        "PartsUnlimitedDBName": {
+            "type": "string"
+        },
+        "PartsUnlimitedDBCollation": {
+            "type": "string",
+            "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        "PartsUnlimitedDBEdition": {
+            "type": "string",
+            "defaultValue": "Web",
+            "allowedValues": [
+                "Basic",
+                "Business",
+                "Premium",
+                "Standard",
+                "Web"
+            ]
+        }
+    },
+    "resources": [
+        {
+            "name": "[parameters('PartsUnlimitedServerName')]",
+            "type": "Microsoft.Sql/servers",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2014-04-01-preview",
+            "dependsOn": [ ],
+            "tags": {
+                "displayName": "PartsUnlimitedServer"
+            },
+            "properties": {
+                "administratorLogin": "[parameters('PartsUnlimitedServerAdminLogin')]",
+                "administratorLoginPassword": "[parameters('PartsUnlimitedServerAdminLoginPassword')]"
+            },
+            "resources": [
+                {
+                    "name": "[concat('AllowAllIps', parameters('PartsUnlimitedServerName'))]",
+                    "type": "firewallrules",
+                    "location": "[resourceGroup().location]",
+                    "apiVersion": "2014-04-01-preview",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', parameters('PartsUnlimitedServerName'))]"
+                    ],
+                    "properties": {
+                        "startIpAddress": "0.0.0.0",
+                        "endIpAddress": "0.0.0.0"
+                    }
+                },
+                {
+                    "name": "[parameters('PartsUnlimitedDBName')]",
+                    "type": "databases",
+                    "location": "[resourceGroup().location]",
+                    "apiVersion": "2014-04-01-preview",
+                    "dependsOn": [
+                        "[parameters('PartsUnlimitedServerName')]"
+                    ],
+                    "tags": {
+                        "displayName": "PartsUnlimitedDB"
+                    },
+                    "properties": {
+                        "collation": "[parameters('PartsUnlimitedDBCollation')]",
+                        "edition": "[parameters('PartsUnlimitedDBEdition')]",
+                        "maxSizeBytes": "1073741824"
+                    }
+                }
+            ]
+        }
+    ],
+    "outputs": {
+        "connectionString": {
+            "type": "string",
+            "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', parameters('PartsUnlimitedServerName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', parameters('PartsUnlimitedDBName'), ';User Id=', parameters('PartsUnlimitedServerAdminLogin'), '@', parameters('PartsUnlimitedServerName'), ';Password=', parameters('PartsUnlimitedServerAdminLoginPassword'), ';')]"
+        }
+    }
+}

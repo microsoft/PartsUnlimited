@@ -1,0 +1,64 @@
+@model PartsUnlimited.Models.Product
+
+
+@Html.AntiForgeryToken()
+@Html.ValidationSummary(true)
+
+<div class="form-group col-sm-8 col-md-10 no-gutter-sm">
+    @Html.LabelFor(model => model.SkuNumber, new { @class = "control-label" })
+    @Html.TextBoxFor(m => m.SkuNumber, new { @class = "form-control", placeholder = "Sku Number" })
+    @Html.ValidationMessageFor(m => m.SkuNumber, "", new { @class = "text-danger" })
+</div>
+
+<div class="form-group col-sm-8 col-md-10 no-gutter-sm">                        
+    @Html.LabelFor(model => model.CategoryId, new { @class = "control-label" })
+    <select name="categoryId" class="form-control">
+        @foreach (var item in ViewBag.Categories)
+        {
+            <option @if (item.Selected) { <text> selected="selected" </text> } value="@item.Value">@item.Text</option>
+        }
+    </select>
+    @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+</div>
+
+<div class="form-group col-sm-8 col-md-10 no-gutter-sm">
+    @Html.LabelFor(model => model.Title, new { @class = "control-label" })
+    @Html.TextBoxFor(m => m.Title, new { @class = "form-control", placeholder = "Title" })
+    @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+</div>
+
+<div class="form-group col-sm-8 col-md-10 no-gutter-sm">
+    @Html.LabelFor(model => model.Price, new { @class = "control-label" })
+    @Html.TextBoxFor(m => m.Price, new { @class = "form-control", placeholder = "Price" })
+    @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text-danger" })
+</div>
+
+<div class="form-group col-sm-8 col-md-10 no-gutter-sm">
+    @Html.LabelFor(model => model.SalePrice, new { @class = "control-label" })
+    @Html.TextBoxFor(m => m.SalePrice, new { @class = "form-control", placeholder = "Sale Price" })
+    @Html.ValidationMessageFor(m => m.SalePrice, "", new { @class = "text-danger" })
+</div>
+
+<div class="form-group col-sm-8 col-md-10 no-gutter-sm">
+    @Html.LabelFor(model => model.ProductArtUrl, new { @class = "control-label" })
+    @Html.TextBoxFor(m => m.ProductArtUrl, new { @class = "form-control", placeholder = "Product Art Url" })
+    @Html.ValidationMessageFor(m => m.ProductArtUrl, "", new { @class = "text-danger" })
+</div>
+
+<div class="form-group col-sm-8 col-md-10 no-gutter-sm">
+    @Html.LabelFor(model => model.ProductDetails, new { @class = "control-label" })
+    @Html.TextAreaFor(m => m.ProductDetails, new { @class = "form-control", placeholder = "Product Details\nMust be in json format. For example:\n{ \"Size\" :  \"1.1 Gal.\" , \"Synthetic \" : \"Yes\"}" })
+    @Html.ValidationMessageFor(m => m.ProductDetails, "", new { @class = "text-danger" })
+</div>
+
+<div class="form-group col-sm-8 col-md-10 no-gutter-sm">
+    @Html.LabelFor(model => model.Description, new { @class = "control-label" })
+    @Html.TextAreaFor(m => m.Description, new { @class = "form-control", placeholder = "Description" })
+    @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+</div>
+
+<div class="form-group">
+    <div class="col-md-10 no-gutter-sm">
+        <input type="submit" value="Save" class="btn btn-default" />
+    </div>
+</div>

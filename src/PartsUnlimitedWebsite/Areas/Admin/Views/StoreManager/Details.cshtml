@@ -1,0 +1,96 @@
+﻿@model PartsUnlimited.Models.Product
+
+@{
+    ViewBag.Title = "Details";
+}
+<section id="edit-product-page">
+    <h2>Details</h2>
+
+    <div class="row">
+        <div class="col-md-6 no-gutter-xs">
+            @if (Model != null)
+            {
+
+                <div>
+                    <h4>Product</h4>
+                    <hr />
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.SkuNumber)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.SkuNumber)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Category)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Category.Name)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Title)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Price)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Price)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.SalePrice)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.SalePrice)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.ProductArtUrl)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.ProductArtUrl)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.ProductDetails)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.ProductDetails)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Description)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Description)
+                        </dd>
+
+                    </dl>
+                </div>
+            }
+            else
+            {
+                @Html.Label(null, "Unable to locate the product")
+            }
+        </div>
+        <div class="col-md-6">
+
+        </div>
+    </div>    
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ProductId }, new { @class = "btn btn-default" })
+    <div class="back-link">
+        @Html.ActionLink("Back to List", "Index", null, null, new { @class = "action-link" })
+    </div>
+</section>
