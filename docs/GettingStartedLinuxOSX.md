@@ -1,16 +1,16 @@
-#Getting Started for Linux#
+#Getting Started for Linux/OS X#
 
 ##Get DNVM##
 
 The CoreCLR-based `dnu` doesn't support all the available features
-yet.  So to develop on Linux we still need to install a Mono-based
+yet.  So to develop on Linux or Mac OS X we still need to install a Mono-based
 DNX runtime and use `dnu` from it.
 
-Please follow the instructions for Linux at
+Please follow the instructions at
 <https://github.com/aspnet/Home> to get DNVM and run the `upgrade`
-command. (Note that the doc there doesn't list `unzip` as a
+command. (Note For Linux the doc there doesn't list `unzip` as a
 prerequisites, however you need to install that as well, otherwise
-DNVM commands would fail.)
+DNVM commands would fail to install DNX runtimes.)
 
 ```
     dnvm upgrade -u
@@ -18,12 +18,6 @@ DNVM commands would fail.)
 
 The `-u` switch uses the unstable DNX feed, which is default to
 <https://www.myget.org/F/aspnetvnext/api/v2>.
-
-We can install a CoreCLR runtime by running the following command
-
-```
-    dnvm install 1.0.0-beta5-11649 -u -r coreclr -arch x64
-```
 
 Run `dnvm list` to show the installed DNX runtimes.  You should see output
 like
@@ -35,9 +29,18 @@ like
            1.0.0-beta5-11649    mono         ~/.dnx/runtimes
 ```
 
+We can install a CoreCLR runtime by running the following command
+
+```
+    dnvm install 1.0.0-beta5-11649 -u -r coreclr -arch x64
+```
+
+
 ##Get NodeJS, Bower, and Grunt##
 
-These tools are needed in `dnu restore`.
+These tools are used in `dnu restore`.
+
+###For Linux###
 
 ```
     sudo apt-get install npm nodejs
@@ -51,6 +54,16 @@ those legacy packages, workaround by
 
 ```
     sudo ln -s  /usr/bin/nodejs /usr/bin/node
+```
+
+###For Mac OS X###
+
+Download then install nodejs from <https://nodejs.org/download/>, then
+run the following commands
+
+```
+    sudo npm install bower -g
+    sudo npm install grunt-cli -g
 ```
 
 ##Develop##
@@ -68,15 +81,26 @@ from the `dnvm list` output.  In our example the version is
 Then you can use commands like `dnu build`, `dnu pack`, `dnu publish`,
 etc., on your ASP.Net vNext projects.
 
-For example, to publish the PartsUnlimited website app to `~/site`
+For example on **Linux**, the following commands publish the PartsUnlimited website app to `~/site`:
 
 ```
-    cd src/PartsUnlimitedWebsite
+    cd src
     dnu restore
+    cd PartsUnlimitedWebsite
     dnu publish --runtime ~/.dnx/runtimes/dnx-coreclr-linux-x64.1.0.0-beta5-11649 -o ~/site
 ```
 
-The above command bundles the specified CoreCLR runtime with the app.
+The specified CoreCLR runtime is bundled with the app.
+
+For **Mac**, the only difference is in the path name.  Replace `linux`
+with `darwin`:
+
+```
+    cd src
+    dnu restore
+    cd PartsUnlimitedWebsite
+    dnu publish --runtime ~/.dnx/runtimes/dnx-coreclr-darwin-x64.1.0.0-beta5-11649 -o ~/site
+```
 
 Run the app by
 
@@ -84,7 +108,7 @@ Run the app by
     ~/site/Kestrel
 ```
 
-Use your favorite web browser to navigate to `http://localhost:5004`.
+Use your favorite web browser to navigate to `http://localhost:5001`.
 `lynx` and `links` are text-based web browsers, if you don't have GUI
 installed for your Linux machine.
 
@@ -97,6 +121,8 @@ runtime installed under `~/.dnx` to `$PATH`.
     rm -rf ~/site/approot/packages/dnx-coreclr-linux-x64.1.0.0-beta5-11649/
     dnvm use 1.0.0-beta5-11649 -r coreclr -arch x64
 ```
+
+Again for **Mac** replace `linux` in the above with `darwin`.
 
 Then change the last line of `~/site/Kestrel` so it look like this
 
