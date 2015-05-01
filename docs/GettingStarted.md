@@ -1,7 +1,7 @@
 # Getting Started#
 
-The following instruction is for Windows. For Linux, please see
-[Getting Started for Linux](GettingStartedLinux.md)
+The following instruction is for Windows. For Linux or Mac OS X, please see
+[Getting Started for Linux/OS X](GettingStartedLinuxOSX.md)
 
 ## Set up your machine ##
 1. Install [Visual Studio 2015 RC](http://go.microsoft.com/fwlink/?LinkId=517106)
