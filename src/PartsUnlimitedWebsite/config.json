@@ -29,6 +29,12 @@
     "ShowRecommendations": "true"
   },
   "Keys": {
+    // To use Azure Machine Learning Frequently Bought Together Recommendation Service,
+    // please refer to the instructions under docs/MachineLearning.md in this repository.
+    "AzureMLFrequentlyBoughtTogether": {
+      "AccountKey": "",
+      "ModelName": ""
+    },
     "ApplicationInsights": {
       "InstrumentationKey": "efc04167-3227-40ff-aa88-46a271dba379"
     }
