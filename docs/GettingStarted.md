@@ -10,7 +10,7 @@
 1. Open Visual Studio 2015
 2. Go to View -> Team Explorer
 3. On the Connect page of the Team Explorer window, click the Clone dropdown located under the Local Git Repositories section
-4. Enter the URL (insert URL to the Microsoft GitHub for Parts Unlimited here)
+4. Enter the URL https://github.com/Microsoft/PartsUnlimited.git
 5. If desired, change the local repository path
 6. Click the Clone button
 
