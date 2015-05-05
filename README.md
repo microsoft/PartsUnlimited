@@ -4,6 +4,8 @@ Parts Unlimited is an example eCommerce website site based for training purposes
 
 To read more about this project, please view the [Getting Started docs](docs/GettingStarted.md). The website includes product listings by category, product details, shopping cart, order history, product recommendations, search, and more.  To get started learning about building and managing the site, visit the Parts Unlimited docs for hands-on labs. 
 
+[Click here](https://github.com/Microsoft/PartsUnlimitedMRP) for the related Parts Unlimited Manufacturing Resource Planning (MRP) application.
+
 ## Key Features##
 - Works with Visual Studio 2015 RC
 - ASP.NET 5 support for Linux and Mono
