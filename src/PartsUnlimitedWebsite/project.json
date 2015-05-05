@@ -39,8 +39,7 @@
   "commands": {
     "WebListener": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls http://localhost:5001",
     "Kestrel": "Microsoft.AspNet.Hosting --server Kestrel --server.urls http://localhost:5001",
-    "run": "run server.urls=http://localhost:5001",
-    "ef": "EntityFramework.Commands"
+    "run": "run server.urls=http://localhost:5001"
   },
   "scripts": {
     "postrestore": [ "npm install" ],

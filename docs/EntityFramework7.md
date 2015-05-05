@@ -5,7 +5,7 @@ The Parts Unlimited model project is setup to use [EntityFramework 7](https://gi
 ## Set up Environment##
 1. Open a new command prompt.
 2. Navigate to the src\PartsUnlimited.Models directory.
-3. Run `dvm upgrade` to install necessary ASP.NET 5 tools, if not done already.
+3. Run `dnvm upgrade` to install necessary ASP.NET 5 tools, if not done already.
 4. Run `dnu restore` to load all the packages needed by PartsUnlimited.Models project.
 
 ## Setup Connection String##
