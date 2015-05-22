@@ -10,7 +10,7 @@
         "test": "xunit.runner.aspnet"
     },
     "frameworks": {
-        "dhx451": {
+        "dnx451": {
             "frameworkAssemblies": {
                 "System.Xml": "4.0.0.0"
             },
