@@ -24,11 +24,16 @@ namespace PartsUnlimited.Components
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var announcementProduct = await _cache.GetOrSet("announcementProduct", async context =>
+            Product announcementProduct;
+            if (!_cache.TryGetValue("announcementProduct", out announcementProduct))
             {
-                context.SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
-                return await GetLatestProduct();
-            });
+                announcementProduct = await GetLatestProduct();
+
+                if (announcementProduct != null)
+                {
+                    _cache.Set("announcementProduct", announcementProduct, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)));
+                }
+            }
 
             return View(announcementProduct);
         }

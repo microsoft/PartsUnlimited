@@ -109,13 +109,19 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         public IActionResult Details(int id)
         {
             string cacheId = string.Format("product_{0}", id);
-            var product = _cache.GetOrSet(cacheId, context =>
+
+            Product product;
+            if (!_cache.TryGetValue(cacheId, out product))
             {
-                //Remove it from cache if not retrieved in last 10 minutes
-                context.SetSlidingExpiration(TimeSpan.FromMinutes(10));
-                //If this returns null how do we prevent the cache to store this. 
-                return _db.Products.Where(a => a.ProductId == id).FirstOrDefault();
-            });
+                //If this returns null, don't stick it in the cache
+                product =  _db.Products.Where(a => a.ProductId == id).FirstOrDefault();
+
+                if (product != null)
+                {
+                    //                               Remove it from cache if not retrieved in last 10 minutes
+                    _cache.Set(cacheId, product, new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10)));
+                }
+            }
 
             if (product == null)
             {

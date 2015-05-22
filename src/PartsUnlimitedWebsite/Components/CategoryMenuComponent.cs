@@ -26,13 +26,17 @@ namespace PartsUnlimited.Components
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var category = await _cache.GetOrSet("category", async context =>
+            List<Category> categoryList;
+            if (!_cache.TryGetValue("category", out categoryList))
             {
-                context.SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
-                return await GetCategories();
-            });
+                categoryList = await GetCategories(); 
 
-            return View(category);
+                if (categoryList != null)
+                {
+                    _cache.Set("categoryList", categoryList, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)));
+                }
+            }
+            return View(categoryList);
         }
 
         private async Task<List<Category>> GetCategories()
