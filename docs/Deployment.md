@@ -4,13 +4,13 @@ For full deployments, you can deploy the PartsUnlimited app to slots as needed. 
 ##How to Deploy Demo/Simple Environment and Publish Website##
 
 1.	Create a storage account (or use an existing one) where deployment artifacts can be uploaded. The Storage account must be on the same subscription as the one the website will be deployed to.
-1.	Open env\PartsUnlimited.Environment\PartsUnlimited.Environment.sln
+1.	Open PartsUnlimited.sln at the root of the directory
 1.	If you haven’t already done so, install PowerShell Tools for Visual Studio by following these steps:
-    * In the Solution Explorer window, expand the Scripts folder in the project, and open Deploy-AzureResourceGroup.ps1
-    * After the editor window opens, a notification bar for PowerShell Tools for Visual Studio should appear at the top.  Click the Install Now link to download and install it from the Visual Studio Gallery.
-    * Close Visual Studio to complete the installation
-    * Re-open Visual Studio
-    * Re-open env\PartsUnlimited.Environment\PartsUnlimited.Environment.sln
+    * Go to Tools - Extensions and Updates and search for "PowerShell"
+    ![PowerShell Tools for Visual Studio](./img/PowerShellToolsVS.jpg)
+    * If it is not present, then click the Online - Visual Studio Gallery section and search for "PowerShell" there and then install.
+    * Restart Visual Studio to complete the installation
+    * Re-open the Visual Studio project PartsUnlimited.sln
 1.	Right-click on the PartsUnlimitedEnv folder (the deployment project root) and choose Deploy -> New Deployment…
 1.	Choose the subscription to which you want to deploy
 1.	Under Resource Group select New…
@@ -23,6 +23,7 @@ For full deployments, you can deploy the PartsUnlimited app to slots as needed. 
 1.	If prompted, edit the parameter to add any required value for the deployment template.
     * Do not fill in values for anything that has ‘auto-generated’ for its value.
 1.	If prompted fill in any values the scripts ask for.  This will only happen if you leave a non-auto-generated parameter blank.
+    * The WebsiteName must be globally unique and have only letters and numbers
     * The SQL Server name (specified by PartsUnlimitedServerName) should be all lowercase
     * The Storage Account name (specified by CdnStorageAccountName) should be all lowercase and be 3 to 24 characters in length
     * The Storage Container name (specified by CdnStorageContainerName) should be all lowercase and be 3 to 63 characters in length
@@ -45,13 +46,13 @@ For full deployments, you can deploy the PartsUnlimited app to slots as needed. 
 ##How to Deploy Demo/Full Environment And Publish Website##
 1.	Create a storage account (or use an existing one) where deployment artifacts can be uploaded.
     * The Storage account must be on the same subscription as the one the website will be deployed to.
-1.	Open env\PartsUnlimited.Environment\PartsUnlimited.Environment.sln
+1.	Open PartsUnlimited.sln at the root of the directory
 1.	If you haven’t already done so, install PowerShell Tools for Visual Studio by following these steps:
-    * In the Solution Explorer window, expand the Scripts folder in the project, and open Deploy-AzureResourceGroup.ps1
-    * After the editor window opens, a notification bar for PowerShell Tools for Visual Studio should appear at the top.  Click the Install Now link to download and install it from the Visual Studio Gallery.
-    * Close Visual Studio to complete the installation
-    * Re-open Visual Studio
-    * Re-open env\PartsUnlimited.Environment\PartsUnlimited.Environment.sln
+    * Go to Tools - Extensions and Updates and search for "PowerShell"
+    ![PowerShell Tools for Visual Studio](./img/PowerShellToolsVS.jpg)
+    * If it is not present, then click the Online - Visual Studio Gallery section and search for "PowerShell" there and then install.
+    * Restart Visual Studio to complete the installation
+    * Re-open the Visual Studio project PartsUnlimited.sln
 1.	Right-click on the PartsUnlimitedEnv folder (the deployment project root) and choose Deploy -> New Deployment…
 1.	Choose subscription to deploy to.
 1.	Under Resource Group choose New…
