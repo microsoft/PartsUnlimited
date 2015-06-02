@@ -1,13 +1,13 @@
 # Getting Started#
 
 ## Set up your machine ##
-1. Install [Visual Studio 2013 Update 4](http://www.visualstudio.com)
+1. Install [Visual Studio 2013 Update 4 or 2015 RC](http://www.visualstudio.com) 
 2. Install [Microsoft Web Platform Installer](http://www.microsoft.com/web/downloads/platform.aspx)
-3. When Web Platform Installer opens, click the Add button for `Microsoft Azure SDK for .NET (VS 2015) - 2.6`
+3. When Web Platform Installer opens, click the Add button for `Microsoft Azure SDK for .NET (VS 2013 or VS 2015) - 2.6`
 4. Click the Install button and follow the prompts to complete the installation
 
 ## Get the source code ##
-1. Open Visual Studio 2013
+1. Open Visual Studio 2013 or 2015
 2. Go to View -> Team Explorer
 3. On the Connect page of the Team Explorer window, click the Clone dropdown located under the Local Git Repositories section
 4. Enter the URL (insert URL to the Microsoft GitHub for Parts Unlimited here)
