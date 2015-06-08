@@ -23,7 +23,7 @@
     "outputs": {
         "instrumentationKey": {
             "type": "string",
-            "value": "[reference(concat('Microsoft.Insights/components/', parameters('WebsiteName'), 'Insights')).instrumentationKey]"
+            "value": "[reference(concat('Microsoft.Insights/components/', parameters('WebsiteName'), 'Insights')).InstrumentationKey]"
         }
     }
 }
