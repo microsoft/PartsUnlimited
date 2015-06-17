@@ -20,7 +20,7 @@ The `-u` switch uses the unstable DNX feed, which is default to
 <https://www.myget.org/F/aspnetvnext/api/v2>.
 
 Run `dnvm list` to show the installed DNX runtimes.  You should see output
-like
+similar to below
 
 ```
     Active Version              Runtime Arch Location             Alias
@@ -81,22 +81,25 @@ from the `dnvm list` output.  In our example the version is
 Then you can use commands like `dnu build`, `dnu pack`, `dnu publish`,
 etc., on your ASP.Net vNext projects.
 
-For example on **Linux**, the following commands publish the PartsUnlimited website app to `~/site`:
+For example on **Linux**, the following commands publish the PartsUnlimited website app to `~/site`
 
 ```
-    cd src
+    cd src/Partsunlimited.Models
     dnu restore
-    cd PartsUnlimitedWebsite
+    cd ../PartsUnlimitedWebsite
+    dnu restore
     dnu publish --runtime ~/.dnx/runtimes/dnx-coreclr-linux-x64.1.0.0-beta5-11649 -o ~/site
 ```
 
 The specified CoreCLR runtime is bundled with the app.
 
 For **Mac**, the only difference is in the path name.  Replace `linux`
-with `darwin`:
+with `darwin`
 
 ```
-    cd src
+    cd src/Partsunlimited.Models
+    dnu restore
+    cd ../PartsUnlimitedWebsite
     dnu restore
     cd PartsUnlimitedWebsite
     dnu publish --runtime ~/.dnx/runtimes/dnx-coreclr-darwin-x64.1.0.0-beta5-11649 -o ~/site
