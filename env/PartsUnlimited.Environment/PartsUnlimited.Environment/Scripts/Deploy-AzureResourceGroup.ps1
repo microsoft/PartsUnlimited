@@ -106,16 +106,15 @@ New-AzureResourceGroup -Name $ResourceGroupName `
                         @OptionalParameters `
                         -Force -Verbose
 
-$WebsiteName = (Get-AzureResource -ResourceGroupName $ResourceGroupName -ResourceType 'Microsoft.Web/sites').Name
-$WebsiteLocation = (Get-AzureWebApp -ResourceGroupName $ResourceGroupName -Name $WebsiteName).Location
 
-# Parse the parameter file and update the values of CDN Storage names if they are present
+# Parse the parameter file and update the values, if they are present
 $CdnStorageAccountName = $null
 $CdnStorageContainerName = $null
 $CdnStorageAccountNameForDev = $null
 $CdnStorageContainerNameForDev = $null
 $CdnStorageAccountNameForStaging = $null
 $CdnStorageContainerNameForStaging = $null
+$WebsiteName = $null
 
 $JsonParameters = Get-TemplateParameters $TemplateParametersFile
 
@@ -130,8 +129,11 @@ $JsonParameters | Get-Member -Type NoteProperty | ForEach-Object {
         "CdnStorageContainerNameForDev"     { $CdnStorageContainerNameForDev = $ParameterValue.value }
         "CdnStorageAccountNameForStaging"   { $CdnStorageAccountNameForStaging = $ParameterValue.value }
         "CdnStorageContainerNameForStaging" { $CdnStorageContainerNameForStaging = $ParameterValue.value }
+		"WebsiteName"                       { $WebsiteName = $ParameterValue.value}
     }
 } 
+
+$WebsiteLocation = (Get-AzureWebApp -ResourceGroupName $ResourceGroupName -Name $WebsiteName).Location
 
 #Create Storage container needed for website.
 #This will not be needed when Azure Resource Management templates support the creation of storage accounts.
@@ -149,7 +151,6 @@ if ($CdnStorageAccountName) {
     {
         $createdStorageAccountNames.Add($CdnStorageAccountName)
     }
-
     $cdnUrl = New-CdnStorageContainer -StorageAccountName $CdnStorageAccountName -ContainerName $CdnStorageContainerName -Location $WebsiteLocation
 
     $Website = (Get-AzureWebsite -Name $WebsiteName -Slot production)
