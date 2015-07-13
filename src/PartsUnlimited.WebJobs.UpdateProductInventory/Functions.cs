@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Framework.ConfigurationModel;
 using PartsUnlimited.Models;
 
 namespace PartsUnlimited.WebJobs.UpdateProductInventory
@@ -13,7 +14,10 @@ namespace PartsUnlimited.WebJobs.UpdateProductInventory
     {
         public async static Task UpdateProductProcessTaskAsync([QueueTrigger("product")] ProductMessage message)
         {
-            using (var context = new PartsUnlimitedContext())
+            var config = new Configuration().AddJsonFile("config.json");
+            var connectionString = config.Get("Data:DefaultConnection:ConnectionString");
+
+            using (var context = new PartsUnlimitedContext(connectionString))
             {
                 var dbProductList = await context.Products.ToListAsync();
                 foreach (var queueProduct in message.ProductList)
