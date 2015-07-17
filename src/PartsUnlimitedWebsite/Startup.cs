@@ -8,7 +8,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using Microsoft.Framework.Caching.Memory;
-using Microsoft.Framework.ConfigurationModel;
+using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Runtime;
 using PartsUnlimited.Areas.Admin;
@@ -31,9 +31,11 @@ namespace PartsUnlimited
         {
             //Below code demonstrates usage of multiple configuration sources. For instance a setting say 'setting1' is found in both the registered sources, 
             //then the later source will win. By this way a Local config can be overridden by a different setting while deployed remotely.
-            Configuration = new Configuration(env.ApplicationBasePath)
+            var builder = new ConfigurationBuilder(env.ApplicationBasePath)
                         .AddJsonFile("config.json")
                         .AddEnvironmentVariables(); //All environment variables in the process's context flow in as configuration values.
+
+            Configuration = builder.Build();
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -92,19 +94,19 @@ namespace PartsUnlimited
             {
                 var telemetry = p.GetRequiredService<ITelemetryProvider>();
 
-                return new ConfigurationWebsiteOptions(Configuration.GetSubKey("WebsiteOptions"), telemetry);
+                return new ConfigurationWebsiteOptions(Configuration.GetConfigurationSection("WebsiteOptions"), telemetry);
             });
 
             services.AddScoped<IApplicationInsightsSettings>(p =>
             {
-                return new ConfigurationApplicationInsightsSettings(Configuration.GetSubKey("Keys:ApplicationInsights"));
+                return new ConfigurationApplicationInsightsSettings(Configuration.GetConfigurationSection("Keys:ApplicationInsights"));
             });
 
             // Associate IPartsUnlimitedContext with context
             services.AddTransient<IPartsUnlimitedContext>(s => s.GetService<PartsUnlimitedContext>());
 
             // We need access to these settings in a static extension method, so DI does not help us :(
-            ContentDeliveryNetworkExtensions.Configuration = new ContentDeliveryNetworkConfiguration(Configuration.GetSubKey("CDN"));
+            ContentDeliveryNetworkExtensions.Configuration = new ContentDeliveryNetworkConfiguration(Configuration.GetConfigurationSection("CDN"));
 
             // Add MVC services to the services container
             services.AddMvc();
@@ -122,7 +124,7 @@ namespace PartsUnlimited
 
         private void SetupRecommendationService(IServiceCollection services)
         {
-            var azureMlConfig = new AzureMLFrequentlyBoughtTogetherConfig(Configuration.GetSubKey("Keys:AzureMLFrequentlyBoughtTogether"));
+            var azureMlConfig = new AzureMLFrequentlyBoughtTogetherConfig(Configuration.GetConfigurationSection("Keys:AzureMLFrequentlyBoughtTogether"));
 
             // If keys are not available for Azure ML recommendation service, register an empty recommendation engine
             if (string.IsNullOrEmpty(azureMlConfig.AccountKey) || string.IsNullOrEmpty(azureMlConfig.ModelName))
@@ -184,7 +186,7 @@ namespace PartsUnlimited
             app.UseIdentity();
 
             // Add login providers (Microsoft/AzureAD/Google/etc).  This must be done after `app.UseIdentity()`
-            app.AddLoginProviders(new ConfigurationLoginProviders(Configuration.GetSubKey("Authentication")));
+            app.AddLoginProviders(new ConfigurationLoginProviders(Configuration.GetConfigurationSection("Authentication")));
 
             // Add MVC to the request pipeline
             app.UseMvc(routes =>
@@ -209,7 +211,7 @@ namespace PartsUnlimited
             SampleData.InitializePartsUnlimitedDatabaseAsync(
                 app.ApplicationServices.GetService<PartsUnlimitedContext>,
                 app.ApplicationServices.GetService<UserManager<ApplicationUser>>(),
-                Configuration.GetSubKey("AdminRole")
+                Configuration.GetConfigurationSection("AdminRole")
                 ).Wait();
         }
     }

@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Framework.ConfigurationModel;
+using Microsoft.Framework.Configuration;
 using NSubstitute;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +35,7 @@ namespace PartsUnlimited.Utils
 
             var subkeys = values.Select(v => new KeyValuePair<string, IConfiguration>(v.Name, emptyConfig));
 
-            config.GetSubKeys().Returns(subkeys);
+            config.GetConfigurationSections().Returns(subkeys);
 
             foreach (var value in values)
             {
