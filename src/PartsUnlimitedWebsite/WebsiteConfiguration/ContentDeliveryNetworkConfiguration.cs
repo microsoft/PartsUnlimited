@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Framework.ConfigurationModel;
+using Microsoft.Framework.Configuration;
 using System.Linq;
 
 namespace PartsUnlimited.WebsiteConfiguration
@@ -11,8 +11,8 @@ namespace PartsUnlimited.WebsiteConfiguration
         public ContentDeliveryNetworkConfiguration(IConfiguration config)
         {
             Images = config.Get("images");
-            Scripts = config.GetSubKey("Scripts").ToLookup();
-            Styles = config.GetSubKey("Styles").ToLookup();
+            Scripts = config.GetConfigurationSection("Scripts").ToLookup();
+            Styles = config.GetConfigurationSection("Styles").ToLookup();
         }
 
         public string Images { get; }

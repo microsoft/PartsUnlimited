@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Framework.ConfigurationModel;
+using Microsoft.Framework.Configuration;
 using NSubstitute;
 using PartsUnlimited.WebsiteConfiguration;
 using System.Collections.Generic;
@@ -46,7 +46,7 @@ namespace PartsUnlimited.Utils
 
             var config = Substitute.For<IConfiguration>();
             var scriptsConfig = CreateConfig(values);
-            config.GetSubKey("Scripts").Returns(scriptsConfig);
+            config.GetConfigurationSection("Scripts").Returns(scriptsConfig);
 
             var cdnConfig = new ContentDeliveryNetworkConfiguration(config);
 
@@ -62,7 +62,7 @@ namespace PartsUnlimited.Utils
 
             var subkeys = values.Select(v => new KeyValuePair<string, IConfiguration>(v.Name, emptyConfig));
 
-            config.GetSubKeys().Returns(subkeys);
+            config.GetConfigurationSections().Returns(subkeys);
 
             foreach (var value in values)
             {
