@@ -8,6 +8,17 @@ namespace PartsUnlimited.Models
 {
     public class PartsUnlimitedContext : IdentityDbContext<ApplicationUser>, IPartsUnlimitedContext
     {
+        private readonly string _connectionString;
+
+        public PartsUnlimitedContext()
+        {
+        }
+
+        public PartsUnlimitedContext(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -27,6 +38,14 @@ namespace PartsUnlimited.Models
             builder.Entity<Store>().Key(o => o.StoreId);
 
             base.OnModelCreating(builder);
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!string.IsNullOrWhiteSpace(_connectionString))
+            {
+                optionsBuilder.UseSqlServer(_connectionString);
+            }
         }
     }
 }

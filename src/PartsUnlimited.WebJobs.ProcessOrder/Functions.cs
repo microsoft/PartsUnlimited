@@ -4,6 +4,7 @@
 using System;
 using System.Linq;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Framework.ConfigurationModel;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -19,7 +20,10 @@ namespace PartsUnlimited.WebJobs.ProcessOrder
             Console.WriteLine("Starting Create Order Process Task");
             try
             {
-                using (var context = new PartsUnlimitedContext())
+                var config = new Configuration().AddJsonFile("config.json");
+                var connectionString = config.Get("Data:DefaultConnection:ConnectionString");
+
+                using (var context = new PartsUnlimitedContext(connectionString))
                 {
                     var orders = context.Orders.Where(x => !x.Processed).ToList();
                     Console.WriteLine("Found {0} orders to process", orders.Count);
