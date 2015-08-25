@@ -4,6 +4,8 @@ The DevOps team has noticed that the recommendations page is slow to load and sh
 
 In this lab, you will learn how to set up Application Insights telemetry, and drill down into performance monitoring data through Application Insights in the new Azure Portal.
 
+*Note: This hands-on lab is designed to use code from the aspnet45 branch.*
+
 **Prerequisites**
 
 - Visual Studio 2013 or higher
