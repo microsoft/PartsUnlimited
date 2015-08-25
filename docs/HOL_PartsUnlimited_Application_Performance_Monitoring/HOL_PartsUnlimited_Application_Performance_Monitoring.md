@@ -8,7 +8,7 @@ In this lab, you will learn how to set up Application Insights telemetry, and dr
 
 - Visual Studio 2013 or higher
 
-- PartsUnlimited website deployed to a Microsoft Azure Web App (see [link](https://github.com/Microsoft/PartsUnlimited/blob/master/docs/Deployment.md))
+- PartsUnlimited website deployed to a Microsoft Azure Web App (see [link](https://github.com/Microsoft/PartsUnlimited/blob/aspnet45/docs/Deployment.md))
 
 - Application Insights created in the same Azure Resource Group as the PartsUnlimited website
 
