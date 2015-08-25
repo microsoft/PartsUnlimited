@@ -148,7 +148,7 @@ monitoring data through Application Insights in the new Azure Portal.
 
 Try these labs out for next steps:
 
-- Automated Recovery hands-on lab
-- Testing in Production hands-on lab
-- Load Tests and Auto-Scaling hands-on lab
-- Using Azure Automation Service to Provision and De-Provision Environments hands-on lab
+- Automated Recovery hands-on lab <!---Coming soon!-->
+- Testing in Production hands-on lab <!---Coming soon!-->
+- Load Tests and Auto-Scaling hands-on lab <!---Coming soon!-->
+- Using Azure Automation Service to Provision and De-Provision Environments hands-on lab <!---Coming soon!-->
