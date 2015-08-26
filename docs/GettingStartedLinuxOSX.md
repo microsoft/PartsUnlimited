@@ -20,21 +20,22 @@ The `-u` switch uses the unstable DNX feed, which is default to
 <https://www.myget.org/F/aspnetvnext/api/v2>.
 
 Run `dnvm list` to show the installed DNX runtimes.  You should see output
-like
+similar to below
 
 ```
-    Active Version              Runtime Arch Location             Alias
-    ------ -------              ------- ---- --------             -----
-      *    1.0.0-beta5-11649    coreclr x64  ~/.dnx/runtimes      default
-           1.0.0-beta5-11649    mono         ~/.dnx/runtimes
+Active Version              Runtime Arch OperatingSystem Alias
+------ -------              ------- ---- --------------- -----
+       1.0.0-beta5          coreclr x64  linux
+  *    1.0.0-beta5          mono         linux/darwin
+       1.0.0-beta7-12335    coreclr x64  linux           default
+       1.0.0-beta7-12335    mono         linux/darwin
 ```
 
-We can install a CoreCLR runtime by running the following command
+A specific version of the CoreCLR runtime can be installed via
 
 ```
-    dnvm install 1.0.0-beta5-11649 -u -r coreclr -arch x64
+    dnvm install 1.0.0-beta7-12335 -u -r coreclr -arch x64
 ```
-
 
 ##Get NodeJS, Bower, and Grunt##
 
@@ -68,38 +69,47 @@ run the following commands
 
 ##Develop##
 
-Switch to use a Mono-based DNX runtime since the CoreCLR-based `dnu`
-doesn't support restore/publish scenarios yet. The version can be picked
-from the `dnvm list` output.  In our example the version is
-`1.0.0-beta5-11649`.  Due to changes in how DNX layouts files,
-`1.0.0-beta5-11624` or a later version is required.
+
+To install the beta5 CoreCLR runtime, we need to customize the unstable
+DNX feed as the packages are hosted there.
 
 ```
-    dnvm use 1.0.0-beta5-11649 -r mono
+    export DNX_UNSTABLE_FEED=https://www.myget.org/F/aspnetmaster/api/v2
+    dnvm install 1.0.0-beta5 -r coreclr -u
+```
+
+Switch to use a Mono-based DNX runtime since the CoreCLR-based `dnu`
+doesn't support restore/publish scenarios yet. 
+
+```
+    dnvm install 1.0.0-beta5 -r mono
 ```
 
 Then you can use commands like `dnu build`, `dnu pack`, `dnu publish`,
 etc., on your ASP.Net vNext projects.
 
-For example on **Linux**, the following commands publish the PartsUnlimited website app to `~/site`:
+For example on **Linux**, the following commands publish the PartsUnlimited website app to `~/site`
 
 ```
-    cd src
+    cd src/Partsunlimited.Models
     dnu restore
-    cd PartsUnlimitedWebsite
-    dnu publish --runtime ~/.dnx/runtimes/dnx-coreclr-linux-x64.1.0.0-beta5-11649 -o ~/site
+    cd ../PartsUnlimitedWebsite
+    dnu restore
+    dnu publish --runtime ~/.dnx/runtimes/dnx-coreclr-linux-x64.1.0.0-beta5 -o ~/site
 ```
 
 The specified CoreCLR runtime is bundled with the app.
 
 For **Mac**, the only difference is in the path name.  Replace `linux`
-with `darwin`:
+with `darwin`
 
 ```
-    cd src
+    cd src/Partsunlimited.Models
+    dnu restore
+    cd ../PartsUnlimitedWebsite
     dnu restore
     cd PartsUnlimitedWebsite
-    dnu publish --runtime ~/.dnx/runtimes/dnx-coreclr-darwin-x64.1.0.0-beta5-11649 -o ~/site
+    dnu publish --runtime ~/.dnx/runtimes/dnx-coreclr-darwin-x64.1.0.0-beta5 -o ~/site
 ```
 
 Run the app by
@@ -114,7 +124,7 @@ installed for your Linux machine.
 
 If you want to use a runtime installed on your machine, just modify
 the path of `dnx` command in `~/site/Kestrel`.  For example, use the
-following command to remove the bundled CoreCLR runtime, add a shared DNX
+following commands to remove the bundled CoreCLR runtime, add a shared DNX
 runtime installed under `~/.dnx` to `$PATH`.
 
 ```
