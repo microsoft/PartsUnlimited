@@ -20,8 +20,6 @@ pushed to Visual Studio Online.
 
 **1. Setup your Visual Studio Online Account using Visual Studio:** In this step, you will connect your own Visual Studio Online account, download the PartsUnlimited source code, and then push it to your own Visual Studio Online account. 
 
-<!-- **2. Setup your Visual Studio Online Account using Git:** In this step, you download the PartsUnlimited source code, and then push it to your own Visual Studio Online account. -->
-
 **2. Create Continuous Integration Build:** In this step, you will create a build definition in Visual Studio Online that will be triggered every time a commit is pushed to your repository in Visual Studio Online. 
 
 **3. Test the CI Trigger in Visual Studio Online:** In this step, test the Continuous Integration build (CI) build we created by changing code in the Parts Unlimited project with Visual Studio Online. 
@@ -35,11 +33,12 @@ order to use Build.
 page**:
 
 	https://<account>.visualstudio.com
-<!-- Let's avoid people from having to use Visual Studio at all.  They should be able to do CI with simply git and their web browser.-->
 
 **2.** Connect to the VSO account project using Visual Studio.
 
 ![](<media/25.jpg>)
+
+> **Talking Point:** For this lab we are using the VSO Git project. The next couple of steps will allow you to add the PartUnlimited source to the Git master repository.
 
 **3.** Navigate to [https://github.com/Microsoft/PartsUnlimited/tree/aspnet45](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45) and download the sample as a zip
 
