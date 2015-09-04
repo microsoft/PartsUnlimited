@@ -39,6 +39,18 @@ order to use Release Management Online.
 
 **3.** Create a new pool named “HOL_Pool”
 
+**4.** On the machine where you are going to run the agent, from the collection administration page (https://<account>.visualstudio.com/DefaultCollection/_admin), download the agent.
+
+**5.** Unzip the .zip file into a folder on disk. To avoid long-path problems, keep the path as short as possible. 
+
+For example: 
+
+/C:\source\HOL\agent
+
+**6.**	Run PowerShell as Administrator
+
+**7.**	Enable PowerShell to run downloaded scripts signed by trusted publishers
+
 ### 1: Setup a continuous deployment with Visual Studio Release Management Online 
 
 We want setup a release agent for our Visual Studio Online account in
