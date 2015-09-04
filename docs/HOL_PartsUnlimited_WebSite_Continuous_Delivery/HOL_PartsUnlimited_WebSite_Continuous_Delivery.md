@@ -51,6 +51,8 @@ For example:
 
 **7.**	Enable PowerShell to run downloaded scripts signed by trusted publishers
 
+**8.**  Change to the directory where you unzipped the agent. 
+
 ### 1: Setup a continuous deployment with Visual Studio Release Management Online 
 
 We want setup a release agent for our Visual Studio Online account in
