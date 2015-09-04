@@ -17,3 +17,9 @@ pushed to Visual Studio Online.
 -   Project Admin rights to the Visual Studio Online account
 
 ### Tasks Overview: ###
+
+**1. Setup a continuous deployment with Visual Studio Release Management Online:** In this step, we will use our CI build and the Web Deploy package to set up continuous deployment in our release pipeline. 
+
+**2. Setup an Release Agent:** In this step, you will create a release agent for use in our release pipeline. 
+
+**3. Test the CD Trigger in Visual Studio Online:** In this step, test the Continuous Integration build (CI) build we created by changing code in the Parts Unlimited project with Visual Studio Online. 
