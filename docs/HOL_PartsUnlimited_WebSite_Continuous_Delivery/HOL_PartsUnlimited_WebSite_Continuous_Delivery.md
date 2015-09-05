@@ -12,8 +12,6 @@ pushed to Visual Studio Online.
 
 -   An active Visual Studio Online account
 
--   An Visual Studio 2015 or Visual Studio 2013 Update 5 client
-
 -   Project Admin rights to the Visual Studio Online account
 
 ### Tasks Overview: ###
@@ -37,23 +35,49 @@ order to use Release Management Online.
 
 **2.** Go to the control panel
 
+![](<media/1.jpg>)
+
 **3.** Create a new pool named “HOL_Pool”
 
+![](<media/2.jpg>)
+
 **4.** On the machine where you are going to run the agent, from the collection administration page (https://<account>.visualstudio.com/DefaultCollection/_admin), download the agent.
+
+![](<media/3.jpg>)
 
 **5.** Unzip the .zip file into a folder on disk. To avoid long-path problems, keep the path as short as possible. 
 
 For example: 
 
-/C:\source\HOL\agent
+    C:\agent\HOL
 
 **6.**	Run PowerShell as Administrator
 
 **7.**	Enable PowerShell to run downloaded scripts signed by trusted publishers
 
+![](<media/4.jpg>)
+
 **8.**  Change to the directory where you unzipped the agent. 
 
-### 1: Setup a continuous deployment with Visual Studio Release Management Online 
+    cd C:\agent\HOL\
+
+![](<media/5.jpg>)
+
+**9.**  Press Enter to use the default agent name. Enter the name for this agent (default is Agent-My-Machine-Name)
+
+![](<media/5.jpg>)
+
+**10.** Enter the URL the VSO server
+
+    https://<account>.visualstudio.com
+
+**11.** Configure this agent against which pool? (default pool name is 'default')
+
+    HOL_Pool
+
+![](<media/6.jpg>)
+
+### 2: Setup a continuous deployment with Visual Studio Release Management Online 
 
 We want setup a release agent for our Visual Studio Online account in
 order to use Release Management Online.
@@ -62,3 +86,5 @@ order to use Release Management Online.
 the page.
 
 **3.** Click the **green “plus” sign**, select **Visual Studio Build**, and then click **OK**.
+
+### 3: Test the CD Trigger in Visual Studio Online 
