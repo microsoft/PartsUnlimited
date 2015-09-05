@@ -43,6 +43,8 @@ order to use Release Management Online.
 
 ![](<media/2.jpg>)
 
+![](<media/3.jpg>)
+
 **4.** On the machine where you are going to run the agent, from the collection administration page (https://<account>.visualstudio.com/DefaultCollection/_admin), download the agent.
 
 ![](<media/4.jpg>)
