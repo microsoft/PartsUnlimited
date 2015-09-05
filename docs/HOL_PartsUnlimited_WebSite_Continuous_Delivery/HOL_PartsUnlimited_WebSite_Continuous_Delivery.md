@@ -33,7 +33,7 @@ order to use Release Management Online.
 
 	https://<account>.visualstudio.com
 
-**2.** Go to the control panel
+**2.** Go to the **Admin Control Panel**
 
 ![](<media/1.jpg>)
 
