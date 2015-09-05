@@ -87,6 +87,8 @@ order to use Release Management Online.
 **2.** Once on the project’s home page, click on the **Release** hub at the top of
 the page.
 
+![](<media/8.jpg>)
+
 **3.** Click the **green “plus” sign**, select **Visual Studio Build**, and then click **OK**.
 
 ### 3: Test the CD Trigger in Visual Studio Online 
