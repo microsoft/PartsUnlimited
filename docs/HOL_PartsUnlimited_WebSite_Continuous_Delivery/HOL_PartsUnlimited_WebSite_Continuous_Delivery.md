@@ -37,7 +37,9 @@ order to use Release Management Online.
 
 ![](<media/1.jpg>)
 
-**3.** Click Control Panel then Agent Pools, Click New Pool to create a new pool named “HOL_Pool”
+**3.** Click **Control Panel** then **Agent Pools**, Click **New Pool** to create a new pool named: 
+
+	HOL_Pool
 
 ![](<media/2.jpg>)
 
