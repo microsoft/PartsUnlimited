@@ -37,13 +37,13 @@ order to use Release Management Online.
 
 ![](<media/1.jpg>)
 
-**3.** Create a new pool named “HOL_Pool”
+**3.** Click Control Panel then Agent Pools, Click New Pool to create a new pool named “HOL_Pool”
 
 ![](<media/2.jpg>)
 
 **4.** On the machine where you are going to run the agent, from the collection administration page (https://<account>.visualstudio.com/DefaultCollection/_admin), download the agent.
 
-![](<media/3.jpg>)
+![](<media/4.jpg>)
 
 **5.** Unzip the .zip file into a folder on disk. To avoid long-path problems, keep the path as short as possible. 
 
