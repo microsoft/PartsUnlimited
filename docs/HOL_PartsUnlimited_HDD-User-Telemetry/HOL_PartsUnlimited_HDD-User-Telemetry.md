@@ -1,8 +1,8 @@
 #User Telemetry with Application Insights
 
-The marketing team has expressed interest in the behavior of users across the PartsUnlimited website for how to best market the products, especially how popular the applications is and where the users live. The development team would like to know which browsers and operating systems that most users browse to the site from to target better user experiences.  
+The marketing team has expressed interest in the behavior of users across the PartsUnlimited website for how to best market the products, especially how popular the web application is and where the users live. The development team would like to know which browsers and operating systems that most users browse to the site from to target better user experiences.  
 
-Using the out-of-box telemetry for Application Insights (and custom telemetry already in the PartsUnlimited website), the teams will be able to find out how people use the application and gain insights into the goals that they will need to achieve. 
+Using the out-of-box telemetry for Application Insights, the teams will be able to find out how people use the application and gain insights into the goals that they will need to achieve. 
 
 
 In this lab, you will learn about setting up Application Insights and inserting the snippet of code for usage tracking into a web application to gain further insight into how users are behaving towards your web application.
@@ -21,7 +21,7 @@ In this lab, you will learn about setting up Application Insights and inserting 
 
 1. Set up Application Insights for PartsUnlimited
 
-2. View real-time results for user telemtry in the Azure portal
+2. View real-time results for user telemetry in the Azure portal
 
 ###Task 1: Set up Application Insights for PartsUnlimited
 **Step 1.** In an Internet browser, navigate to <http://portal.azure.com> and
@@ -102,7 +102,7 @@ sign in with your credentials.
 
 ![](<media/task2step4.png>)
 
-**Step 5.** Note the Usage Timeline. By drilling into usage, we can gauge how popular our web application is based on the number of distinct users, active sessions, and number of calls to trackPageView() (usually called once). Click in the chart on "Users" to view more information about the users. 
+**Step 5.** Note the Usage timeline. By drilling into usage, we can gauge how popular our web application is based on the number of distinct users, active sessions, and number of calls to trackPageView() (usually called once). Click in the chart on "Users" to view more information about the users. 
 
 ![](<media/task2step5.png>)
 
@@ -116,11 +116,11 @@ sign in with your credentials.
 
 ![](<media/task2step7.png>)
 
-**Step 8.** In the Browsers Timeline, note that the receiving response time, client processing time, page load network time, send request time, server response time, and page views. Additionally, the average count of browser page load time is shown below the timeline. Click on the timeline chart. 
+**Step 8.** In the Browsers timeline, note the receiving response time, client processing time, page load network time, send request time, server response time, and page views. Additionally, the average count of browser page load time is shown below the timeline. Click on the timeline chart. 
 
 ![](<media/task2step8.png>)
 
-**Step 9.** In the Chart Details pane, scroll down to the Client area and uncheck all of the properties except for Receiving response time. Then, turn on the Grouping and select "Browser" as the "group by" property. The Browsers timeline will change and show the average receiving response time and broken down into the various browsers that were used to log into the site. 
+**Step 9.** In the Chart Details pane, scroll down to the Client area and uncheck all of the properties except for Receiving Response Time. Then, turn on the Grouping and select "Browser" as the "group by" property. The Browsers timeline will change and show the average receiving response time broken down into the various browsers that were used to log into the site. 
 
 ![](<media/task2step9.png>)
 
@@ -134,16 +134,17 @@ sign in with your credentials.
 
 ![](<media/task2step11.png>)
 
-All of the out-of-box data from Application Insights provide different facets of user telemetry to find out how users interact with your web application. 
+All of the out-of-box data from Application Insights provide different types of data to learn how users interact with your web application. 
 
 In this lab, you learned about setting up Application Insights and inserting the snippet of code for usage tracking into a web application to gain further insight into how users are behaving towards your web application.
 
 Try these labs out for next steps:
 
-- Automated Recovery hands-on lab (coming soon)
-- Testing in Production hands-on lab
-- Load Tests and Auto-Scaling hands-on lab
-- Using Azure Automation Service to Provision and De-Provision Environments hands-on lab
+- [Testing in Production hands-on lab](https://github.com/Microsoft/PartsUnlimited/tree/hands-on-labs/docs/HOL_HDD_Testing_in_Production)
+
+- [Application Performance Monitoring hands-on lab](https://github.com/Microsoft/PartsUnlimited/tree/hands-on-labs/docs/HOL_PartsUnlimited_Application_Performance_Monitoring)
+
+- [Continuous Integration hands-on lab](https://github.com/Microsoft/PartsUnlimited/tree/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Integration)
 
 **Further Resources**
 
