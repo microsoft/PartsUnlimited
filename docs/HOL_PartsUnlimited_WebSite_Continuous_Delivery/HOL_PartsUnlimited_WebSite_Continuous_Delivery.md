@@ -89,6 +89,12 @@ the page.
 
 ![](<media/8.jpg>)
 
-**3.** Click the **green “plus” sign**, select **Visual Studio Build**, and then click **OK**.
+**3.** Click the **green “plus” sign** to create new release definition.
+
+![](<media/9.jpg>)
+
+**4.** When the selection dialog appears, select **Visual Studio Build**, and then click **OK**.
+
+![](<media/10.jpg>)
 
 ### 3: Test the CD Trigger in Visual Studio Online 
