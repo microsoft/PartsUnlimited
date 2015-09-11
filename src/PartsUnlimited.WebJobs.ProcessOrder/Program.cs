@@ -4,7 +4,7 @@
 using System;
 using System.Linq;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Framework.ConfigurationModel;
+using Microsoft.Framework.Configuration;
 
 namespace PartsUnlimited.WebJobs.ProcessOrder
 {
@@ -12,7 +12,9 @@ namespace PartsUnlimited.WebJobs.ProcessOrder
     {
         public int Main(string[] args)
         {
-            var config = new Configuration().AddJsonFile("config.json");
+            var builder = new ConfigurationBuilder();
+            builder.Add(new JsonConfigurationSource("config.json"));
+            var config = builder.Build();
             var webjobsConnectionString = config.Get("Data:AzureWebJobsStorage:ConnectionString");
             var dbConnectionString = config.Get("Data:DefaultConnection:ConnectionString");
             if (string.IsNullOrWhiteSpace(webjobsConnectionString))
@@ -27,7 +29,7 @@ namespace PartsUnlimited.WebJobs.ProcessOrder
                 return 10;
             }
 
-            var jobHostConfig = new JobHostConfiguration(config.Get("Data:AzureWebJobsStorage:ConnectionString"));
+            var jobHostConfig = new JobHostConfiguration(Configuration.Get("Data:AzureWebJobsStorage:ConnectionString"));
             var host = new JobHost(jobHostConfig);
             var methodInfo = typeof(Functions).GetMethods().First();
 

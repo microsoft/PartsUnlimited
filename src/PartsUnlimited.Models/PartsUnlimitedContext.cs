@@ -40,7 +40,7 @@ namespace PartsUnlimited.Models
             base.OnModelCreating(builder);
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(EntityOptionsBuilder optionsBuilder)
         {
             if (!string.IsNullOrWhiteSpace(_connectionString))
             {
