@@ -80,7 +80,7 @@ sign in with your credentials.
 
 Now that the telemetry has been added to the web application, it may take a few minutes for Application Insights to refresh.
 
-###Task 2: View real-time results for user telemtry in the Azure portal
+###Task 2: View real-time results for user telemetry in the Azure portal
 
 Now that we've given Application Insights time to refresh, we can take a look at the usage data in the new Azure Portal. The Portal will show a variety of metrics out of the box, including number of sessions, users, and browser sessions. 
 
@@ -106,7 +106,7 @@ sign in with your credentials.
 
 ![](<media/task2step5.png>)
 
-**Step 6.** In the Users timeline, note the number of users, new users, and page views. Additionally, the unique count of users by country is recorded. Click the X in the upper-right corner to close the users panel.  
+**Step 6.** In the Users timeline, note the number of users, new users, and page views. Additionally, the unique count of users by country is recorded. Click the X in the upper-right corner to close the Users panel.  
 
 ![](<media/task2step6.png>)
 
