@@ -3,6 +3,7 @@
 
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Data.Entity;
 using PartsUnlimited.Models;
 using System;
 using System.Linq;

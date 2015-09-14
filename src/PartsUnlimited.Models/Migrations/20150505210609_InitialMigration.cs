@@ -16,24 +16,24 @@ namespace PartsUnlimited.Models.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
+                    Id = table.Column(type: "nvarchar(450)", nullable: false),
                     ConcurrencyStamp = table.Column(type: "nvarchar(max)", nullable: true),
-                    Id = table.Column(type: "nvarchar(450)", nullable: true),
                     Name = table.Column(type: "nvarchar(max)", nullable: true),
                     NormalizedName = table.Column(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                    table.PrimaryKey("PK_IdentityRole", x => x.Id);
                 });
             migration.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
+                    Id = table.Column(type: "nvarchar(450)", nullable: false),
                     AccessFailedCount = table.Column(type: "int", nullable: false),
                     ConcurrencyStamp = table.Column(type: "nvarchar(max)", nullable: true),
                     Email = table.Column(type: "nvarchar(max)", nullable: true),
                     EmailConfirmed = table.Column(type: "bit", nullable: false),
-                    Id = table.Column(type: "nvarchar(450)", nullable: true),
                     LockoutEnabled = table.Column(type: "bit", nullable: false),
                     LockoutEnd = table.Column(type: "datetimeoffset", nullable: true),
                     Name = table.Column(type: "nvarchar(max)", nullable: true),
@@ -48,7 +48,7 @@ namespace PartsUnlimited.Models.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.PrimaryKey("PK_ApplicationUser", x => x.Id);
                 });
             migration.CreateTable(
                 name: "Category",
@@ -68,14 +68,14 @@ namespace PartsUnlimited.Models.Migrations
                 name: "Order",
                 columns: table => new
                 {
+                    OrderId = table.Column(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGeneration", "Identity"),
                     Address = table.Column(type: "nvarchar(max)", nullable: true),
                     City = table.Column(type: "nvarchar(max)", nullable: true),
                     Country = table.Column(type: "nvarchar(max)", nullable: true),
                     Email = table.Column(type: "nvarchar(max)", nullable: true),
                     Name = table.Column(type: "nvarchar(max)", nullable: true),
                     OrderDate = table.Column(type: "datetime2", nullable: false),
-                    OrderId = table.Column(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGeneration", "Identity"),
                     Phone = table.Column(type: "nvarchar(max)", nullable: true),
                     PostalCode = table.Column(type: "nvarchar(max)", nullable: true),
                     Processed = table.Column(type: "bit", nullable: false),
@@ -91,9 +91,9 @@ namespace PartsUnlimited.Models.Migrations
                 name: "Store",
                 columns: table => new
                 {
-                    Name = table.Column(type: "nvarchar(max)", nullable: true),
                     StoreId = table.Column(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGeneration", "Identity")
+                        .Annotation("SqlServer:ValueGeneration", "Identity"),
+                    Name = table.Column(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -103,17 +103,17 @@ namespace PartsUnlimited.Models.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    ClaimType = table.Column(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column(type: "nvarchar(max)", nullable: true),
                     Id = table.Column(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGeneration", "Identity"),
+                    ClaimType = table.Column(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column(type: "nvarchar(max)", nullable: true),
                     RoleId = table.Column(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.PrimaryKey("PK_IdentityRoleClaim<string>", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
                         columns: x => x.RoleId,
                         referencedTable: "AspNetRoles",
                         referencedColumn: "Id");
@@ -122,17 +122,17 @@ namespace PartsUnlimited.Models.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    ClaimType = table.Column(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column(type: "nvarchar(max)", nullable: true),
                     Id = table.Column(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGeneration", "Identity"),
+                    ClaimType = table.Column(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    table.PrimaryKey("PK_IdentityUserClaim<string>", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                        name: "FK_IdentityUserClaim<string>_ApplicationUser_UserId",
                         columns: x => x.UserId,
                         referencedTable: "AspNetUsers",
                         referencedColumn: "Id");
@@ -141,16 +141,16 @@ namespace PartsUnlimited.Models.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column(type: "nvarchar(450)", nullable: true),
+                    LoginProvider = table.Column(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column(type: "nvarchar(max)", nullable: true),
-                    ProviderKey = table.Column(type: "nvarchar(450)", nullable: true),
                     UserId = table.Column(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.PrimaryKey("PK_IdentityUserLogin<string>", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
-                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        name: "FK_IdentityUserLogin<string>_ApplicationUser_UserId",
                         columns: x => x.UserId,
                         referencedTable: "AspNetUsers",
                         referencedColumn: "Id");
@@ -159,19 +159,19 @@ namespace PartsUnlimited.Models.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    RoleId = table.Column(type: "nvarchar(450)", nullable: true),
-                    UserId = table.Column(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK_IdentityUserRole<string>", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        name: "FK_IdentityUserRole<string>_IdentityRole_RoleId",
                         columns: x => x.RoleId,
                         referencedTable: "AspNetRoles",
                         referencedColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        name: "FK_IdentityUserRole<string>_ApplicationUser_UserId",
                         columns: x => x.UserId,
                         referencedTable: "AspNetUsers",
                         referencedColumn: "Id");
@@ -180,6 +180,8 @@ namespace PartsUnlimited.Models.Migrations
                 name: "Product",
                 columns: table => new
                 {
+                    ProductId = table.Column(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGeneration", "Identity"),
                     CategoryId = table.Column(type: "int", nullable: false),
                     Created = table.Column(type: "datetime2", nullable: false),
                     Description = table.Column(type: "nvarchar(max)", nullable: true),
@@ -188,8 +190,6 @@ namespace PartsUnlimited.Models.Migrations
                     Price = table.Column(type: "decimal(18, 2)", nullable: false),
                     ProductArtUrl = table.Column(type: "nvarchar(max)", nullable: true),
                     ProductDetails = table.Column(type: "nvarchar(max)", nullable: true),
-                    ProductId = table.Column(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGeneration", "Identity"),
                     RecommendationId = table.Column(type: "int", nullable: false),
                     SalePrice = table.Column(type: "decimal(18, 2)", nullable: false),
                     SkuNumber = table.Column(type: "nvarchar(max)", nullable: true),
@@ -208,9 +208,9 @@ namespace PartsUnlimited.Models.Migrations
                 name: "CartItem",
                 columns: table => new
                 {
-                    CartId = table.Column(type: "nvarchar(max)", nullable: true),
                     CartItemId = table.Column(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGeneration", "Identity"),
+                    CartId = table.Column(type: "nvarchar(max)", nullable: true),
                     Count = table.Column(type: "int", nullable: false),
                     DateCreated = table.Column(type: "datetime2", nullable: false),
                     ProductId = table.Column(type: "int", nullable: false)
@@ -253,11 +253,11 @@ namespace PartsUnlimited.Models.Migrations
                 name: "Raincheck",
                 columns: table => new
                 {
+                    RaincheckId = table.Column(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGeneration", "Identity"),
                     Name = table.Column(type: "nvarchar(max)", nullable: true),
                     ProductId = table.Column(type: "int", nullable: false),
                     Quantity = table.Column(type: "int", nullable: false),
-                    RaincheckId = table.Column(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGeneration", "Identity"),
                     SalePrice = table.Column(type: "float", nullable: false),
                     StoreId = table.Column(type: "int", nullable: false)
                 },

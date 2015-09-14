@@ -3,7 +3,7 @@
 
 using Microsoft.AspNet.Identity;
 using Microsoft.Data.Entity;
-using Microsoft.Framework.ConfigurationModel;
+using Microsoft.Framework.Configuration;
 using PartsUnlimited.Areas.Admin;
 using System;
 using System.Collections.Generic;

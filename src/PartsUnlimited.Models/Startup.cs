@@ -3,26 +3,31 @@
 
 using Microsoft.AspNet.Builder;
 using Microsoft.Data.Entity;
-using Microsoft.Framework.ConfigurationModel;
+using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
+using Microsoft.Framework.Runtime;
 using System;
 
 namespace PartsUnlimited.Models
 {
     public class Startup
     {
-        public void Configure(IApplicationBuilder app)
-        {
-        }
+        public IConfiguration Configuration { get; private set; }
 
+        public Startup(IApplicationEnvironment env)
+        {
+            //Below code demonstrates usage of multiple configuration sources. For instance a setting say 'setting1' is found in both the registered sources, 
+            //then the later source will win. By this way a Local config can be overridden by a different setting while deployed remotely.
+            var builder = new ConfigurationBuilder(env.ApplicationBasePath)
+                        .AddJsonFile("config.json")
+                        .AddEnvironmentVariables(); //All environment variables in the process's context flow in as configuration values.
+
+            Configuration = builder.Build();
+        }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            IConfiguration config = new Configuration()
-                        .AddJsonFile("config.json")
-                        .AddEnvironmentVariables();
-
-            var sqlConnectionString = config.Get("Data:DefaultConnection:ConnectionString");
+            var sqlConnectionString = Configuration.Get("Data:DefaultConnection:ConnectionString");
             if (!String.IsNullOrEmpty(sqlConnectionString))
             {
                 services.AddEntityFramework()
