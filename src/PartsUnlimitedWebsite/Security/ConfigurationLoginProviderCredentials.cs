@@ -9,21 +9,10 @@ namespace PartsUnlimited.Security
     {
         public ConfigurationLoginProviderCredentials(IConfiguration config)
         {
-            Key = GetString(config, "Key");
-            Secret = GetString(config, "Secret");
+            Key = config["Key"];
+            Secret = config["Secret"];
 
             Use = !string.IsNullOrWhiteSpace(Key) && !string.IsNullOrWhiteSpace(Secret);
-        }
-
-        private string GetString(IConfiguration config, string key)
-        {
-            string s;
-            if (config.TryGet(key, out s))
-            {
-                return s;
-            }
-
-            return null;
         }
 
         public string Key { get; }

@@ -18,7 +18,7 @@ namespace PartsUnlimited.Utils
             const string ImageCdn = "some/test/path";
 
             var config = Substitute.For<IConfiguration>();
-            config.Get("images").Returns(ImageCdn);
+            config["images"].Returns(ImageCdn);
 
             var cdnConfig = new ContentDeliveryNetworkConfiguration(config);
 
@@ -29,7 +29,7 @@ namespace PartsUnlimited.Utils
         public void ImageContentNull()
         {
             var config = Substitute.For<IConfiguration>();
-            config.Get("images").Returns((string)null);
+            config["images"].Returns((string)null);
             var cdnConfig = new ContentDeliveryNetworkConfiguration(config);
 
             Assert.Null(cdnConfig.Images);
@@ -45,8 +45,8 @@ namespace PartsUnlimited.Utils
             };
 
             var config = Substitute.For<IConfiguration>();
-            var scriptsConfig = CreateConfig(values);
-            config.GetConfigurationSection("Scripts").Returns(scriptsConfig);
+            var scriptsConfigSection = CreateConfigSection(values);
+            config.GetSection("Scripts").Returns(scriptsConfigSection);
 
             var cdnConfig = new ContentDeliveryNetworkConfiguration(config);
 
@@ -55,21 +55,21 @@ namespace PartsUnlimited.Utils
             Assert.Equal(new[] { "path2" }, cdnConfig.Scripts["item2"]);
         }
 
-        private IConfiguration CreateConfig(IEnumerable<ConfigPathHelper> values)
+        private IConfigurationSection CreateConfigSection(IEnumerable<ConfigPathHelper> values)
         {
-            var config = Substitute.For<IConfiguration>();
-            var emptyConfig = Substitute.For<IConfiguration>();
-
-            var subkeys = values.Select(v => new KeyValuePair<string, IConfiguration>(v.Name, emptyConfig));
-
-            config.GetConfigurationSections().Returns(subkeys);
+            var section = Substitute.For<IConfigurationSection>();
+            var sections = new List<IConfigurationSection>();
 
             foreach (var value in values)
             {
-                config.Get(value.Name).Returns(value.Path);
+                var emptySection = Substitute.For<IConfigurationSection>();
+                emptySection.Key.Returns(value.Name);
+                emptySection.Value.Returns(value.Path);
+                sections.Add(emptySection);
             }
 
-            return config;
+            section.GetChildren().Returns(sections);
+            return section;
         }
 
         private class ConfigPathHelper

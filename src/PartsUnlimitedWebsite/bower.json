@@ -10,8 +10,8 @@
     "jquery-ui-smoothness": "1.11.1",
     "modernizr": "2.7.2",
     "signalr": "2.1.2",
-	"respond": "1.2.0",
-	"jquery-zoom" : "1.7.14"
+    "respond": "1.2.0",
+    "jquery-zoom": "1.7.14"
   },
   "exportsOverride": {
     "bootstrap": {
@@ -19,8 +19,5 @@
       "css": "dist/css/*",
       "fonts": "dist/fonts/*"
     }
-  },
-  "resolutions": {
-    "jquery": "2.1.1"
   }
 }

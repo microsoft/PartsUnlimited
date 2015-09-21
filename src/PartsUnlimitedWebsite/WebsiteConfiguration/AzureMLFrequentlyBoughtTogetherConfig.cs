@@ -9,19 +9,8 @@ namespace PartsUnlimited.WebsiteConfiguration
     {
         public AzureMLFrequentlyBoughtTogetherConfig(IConfiguration config)
         {
-            AccountKey = GetString(config, "AccountKey");
-            ModelName = GetString(config, "ModelName");
-        }
-
-        private string GetString(IConfiguration config, string key)
-        {
-            string s;
-            if (config.TryGet(key, out s))
-            {
-                return s;
-            }
-
-            return null;
+            AccountKey = config["AccountKey"];
+            ModelName = config["ModelName"];
         }
 
         public string AccountKey { get; }

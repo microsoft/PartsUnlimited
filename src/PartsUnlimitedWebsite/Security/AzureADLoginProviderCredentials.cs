@@ -9,10 +9,10 @@ namespace PartsUnlimited.Security
     {
         public AzureADLoginProviderCredentials(IConfiguration config)
         {
-            ClientId = config.Get("ClientId");
-            Authority = config.Get("Authority");
-            RedirectUri = config.Get("RedirectUri");
-            Caption = config.Get("Caption");
+            ClientId = config["ClientId"];
+            Authority = config["Authority"];
+            RedirectUri = config["RedirectUri"];
+            Caption = config["Caption"];
 
             Use = !string.IsNullOrWhiteSpace(ClientId)
                 && !string.IsNullOrWhiteSpace(Authority)

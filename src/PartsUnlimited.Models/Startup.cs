@@ -5,7 +5,7 @@ using Microsoft.AspNet.Builder;
 using Microsoft.Data.Entity;
 using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
-using Microsoft.Framework.Runtime;
+using Microsoft.Dnx.Runtime;
 using System;
 
 namespace PartsUnlimited.Models
@@ -27,7 +27,7 @@ namespace PartsUnlimited.Models
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var sqlConnectionString = Configuration.Get("Data:DefaultConnection:ConnectionString");
+            var sqlConnectionString = Configuration["Data:DefaultConnection:ConnectionString"];
             if (!String.IsNullOrEmpty(sqlConnectionString))
             {
                 services.AddEntityFramework()
@@ -38,6 +38,5 @@ namespace PartsUnlimited.Models
                         });
             }
         }
-
     }
 }

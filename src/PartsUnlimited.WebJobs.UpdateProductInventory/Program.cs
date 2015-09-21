@@ -4,6 +4,7 @@
 using System;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Framework.Configuration;
+using Microsoft.Framework.Configuration.Json;
 
 namespace PartsUnlimited.WebJobs.UpdateProductInventory
 {
@@ -14,8 +15,8 @@ namespace PartsUnlimited.WebJobs.UpdateProductInventory
             var builder = new ConfigurationBuilder();
             builder.Add(new JsonConfigurationSource("config.json"));
             var config = builder.Build();
-            var webjobsConnectionString = config.Get("Data:AzureWebJobsStorage:ConnectionString");
-            var dbConnectionString = config.Get("Data:DefaultConnection:ConnectionString");
+            var webjobsConnectionString = config["Data:AzureWebJobsStorage:ConnectionString"];
+            var dbConnectionString = config["Data:DefaultConnection:ConnectionString"];
 
             if (string.IsNullOrWhiteSpace(webjobsConnectionString))
             {

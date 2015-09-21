@@ -1,297 +1,309 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
-using Microsoft.Data.Entity.Relational.Migrations;
-using Microsoft.Data.Entity.Relational.Migrations.Builders;
-using Microsoft.Data.Entity.Relational.Migrations.Operations;
+using Microsoft.Data.Entity.Migrations;
+using Microsoft.Data.Entity.SqlServer.Metadata;
 
 namespace PartsUnlimited.Models.Migrations
 {
     public partial class InitialMigration : Migration
     {
-        public override void Up(MigrationBuilder migration)
+        protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migration.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column(type: "nvarchar(450)", nullable: false),
-                    ConcurrencyStamp = table.Column(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column(type: "nvarchar(max)", nullable: true),
-                    NormalizedName = table.Column(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<string>(isNullable: false),
+                    ConcurrencyStamp = table.Column<string>(isNullable: true),
+                    Name = table.Column<string>(isNullable: true),
+                    NormalizedName = table.Column<string>(isNullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IdentityRole", x => x.Id);
                 });
-            migration.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column(type: "nvarchar(450)", nullable: false),
-                    AccessFailedCount = table.Column(type: "int", nullable: false),
-                    ConcurrencyStamp = table.Column(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column(type: "nvarchar(max)", nullable: true),
-                    EmailConfirmed = table.Column(type: "bit", nullable: false),
-                    LockoutEnabled = table.Column(type: "bit", nullable: false),
-                    LockoutEnd = table.Column(type: "datetimeoffset", nullable: true),
-                    Name = table.Column(type: "nvarchar(max)", nullable: true),
-                    NormalizedEmail = table.Column(type: "nvarchar(max)", nullable: true),
-                    NormalizedUserName = table.Column(type: "nvarchar(max)", nullable: true),
-                    PasswordHash = table.Column(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column(type: "bit", nullable: false),
-                    SecurityStamp = table.Column(type: "nvarchar(max)", nullable: true),
-                    TwoFactorEnabled = table.Column(type: "bit", nullable: false),
-                    UserName = table.Column(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<string>(isNullable: false),
+                    AccessFailedCount = table.Column<int>(isNullable: false),
+                    ConcurrencyStamp = table.Column<string>(isNullable: true),
+                    Email = table.Column<string>(isNullable: true),
+                    EmailConfirmed = table.Column<bool>(isNullable: false),
+                    LockoutEnabled = table.Column<bool>(isNullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(isNullable: true),
+                    Name = table.Column<string>(isNullable: true),
+                    NormalizedEmail = table.Column<string>(isNullable: true),
+                    NormalizedUserName = table.Column<string>(isNullable: true),
+                    PasswordHash = table.Column<string>(isNullable: true),
+                    PhoneNumber = table.Column<string>(isNullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(isNullable: false),
+                    SecurityStamp = table.Column<string>(isNullable: true),
+                    TwoFactorEnabled = table.Column<bool>(isNullable: false),
+                    UserName = table.Column<string>(isNullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ApplicationUser", x => x.Id);
                 });
-            migration.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "Category",
                 columns: table => new
                 {
-                    CategoryId = table.Column(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGeneration", "Identity"),
-                    Description = table.Column(type: "nvarchar(max)", nullable: true),
-                    ImageUrl = table.Column(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column(type: "nvarchar(max)", nullable: true)
+                    CategoryId = table.Column<int>(isNullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn),
+                    Description = table.Column<string>(isNullable: true),
+                    ImageUrl = table.Column<string>(isNullable: true),
+                    Name = table.Column<string>(isNullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Category", x => x.CategoryId);
                 });
-            migration.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "Order",
                 columns: table => new
                 {
-                    OrderId = table.Column(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGeneration", "Identity"),
-                    Address = table.Column(type: "nvarchar(max)", nullable: true),
-                    City = table.Column(type: "nvarchar(max)", nullable: true),
-                    Country = table.Column(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column(type: "nvarchar(max)", nullable: true),
-                    OrderDate = table.Column(type: "datetime2", nullable: false),
-                    Phone = table.Column(type: "nvarchar(max)", nullable: true),
-                    PostalCode = table.Column(type: "nvarchar(max)", nullable: true),
-                    Processed = table.Column(type: "bit", nullable: false),
-                    State = table.Column(type: "nvarchar(max)", nullable: true),
-                    Total = table.Column(type: "decimal(18, 2)", nullable: false),
-                    Username = table.Column(type: "nvarchar(max)", nullable: true)
+                    OrderId = table.Column<int>(isNullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn),
+                    Address = table.Column<string>(isNullable: false),
+                    City = table.Column<string>(isNullable: false),
+                    Country = table.Column<string>(isNullable: false),
+                    Email = table.Column<string>(isNullable: false),
+                    Name = table.Column<string>(isNullable: false),
+                    OrderDate = table.Column<DateTime>(isNullable: false),
+                    Phone = table.Column<string>(isNullable: false),
+                    PostalCode = table.Column<string>(isNullable: false),
+                    Processed = table.Column<bool>(isNullable: false),
+                    State = table.Column<string>(isNullable: false),
+                    Total = table.Column<decimal>(isNullable: false),
+                    Username = table.Column<string>(isNullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Order", x => x.OrderId);
                 });
-            migration.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "Store",
                 columns: table => new
                 {
-                    StoreId = table.Column(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGeneration", "Identity"),
-                    Name = table.Column(type: "nvarchar(max)", nullable: true)
+                    StoreId = table.Column<int>(isNullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn),
+                    Name = table.Column<string>(isNullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Store", x => x.StoreId);
                 });
-            migration.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGeneration", "Identity"),
-                    ClaimType = table.Column(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column(type: "nvarchar(max)", nullable: true),
-                    RoleId = table.Column(type: "nvarchar(450)", nullable: true)
+                    Id = table.Column<int>(isNullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn),
+                    ClaimType = table.Column<string>(isNullable: true),
+                    ClaimValue = table.Column<string>(isNullable: true),
+                    RoleId = table.Column<string>(isNullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IdentityRoleClaim<string>", x => x.Id);
                     table.ForeignKey(
                         name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
-                        columns: x => x.RoleId,
-                        referencedTable: "AspNetRoles",
-                        referencedColumn: "Id");
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id");
                 });
-            migration.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGeneration", "Identity"),
-                    ClaimType = table.Column(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column(type: "nvarchar(450)", nullable: true)
+                    Id = table.Column<int>(isNullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn),
+                    ClaimType = table.Column<string>(isNullable: true),
+                    ClaimValue = table.Column<string>(isNullable: true),
+                    UserId = table.Column<string>(isNullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IdentityUserClaim<string>", x => x.Id);
                     table.ForeignKey(
                         name: "FK_IdentityUserClaim<string>_ApplicationUser_UserId",
-                        columns: x => x.UserId,
-                        referencedTable: "AspNetUsers",
-                        referencedColumn: "Id");
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
-            migration.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column(type: "nvarchar(450)", nullable: false),
-                    ProviderDisplayName = table.Column(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column(type: "nvarchar(450)", nullable: true)
+                    LoginProvider = table.Column<string>(isNullable: false),
+                    ProviderKey = table.Column<string>(isNullable: false),
+                    ProviderDisplayName = table.Column<string>(isNullable: true),
+                    UserId = table.Column<string>(isNullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IdentityUserLogin<string>", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
                         name: "FK_IdentityUserLogin<string>_ApplicationUser_UserId",
-                        columns: x => x.UserId,
-                        referencedTable: "AspNetUsers",
-                        referencedColumn: "Id");
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
-            migration.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(isNullable: false),
+                    RoleId = table.Column<string>(isNullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IdentityUserRole<string>", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
                         name: "FK_IdentityUserRole<string>_IdentityRole_RoleId",
-                        columns: x => x.RoleId,
-                        referencedTable: "AspNetRoles",
-                        referencedColumn: "Id");
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_IdentityUserRole<string>_ApplicationUser_UserId",
-                        columns: x => x.UserId,
-                        referencedTable: "AspNetUsers",
-                        referencedColumn: "Id");
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
-            migration.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "Product",
                 columns: table => new
                 {
-                    ProductId = table.Column(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGeneration", "Identity"),
-                    CategoryId = table.Column(type: "int", nullable: false),
-                    Created = table.Column(type: "datetime2", nullable: false),
-                    Description = table.Column(type: "nvarchar(max)", nullable: true),
-                    Inventory = table.Column(type: "int", nullable: false),
-                    LeadTime = table.Column(type: "int", nullable: false),
-                    Price = table.Column(type: "decimal(18, 2)", nullable: false),
-                    ProductArtUrl = table.Column(type: "nvarchar(max)", nullable: true),
-                    ProductDetails = table.Column(type: "nvarchar(max)", nullable: true),
-                    RecommendationId = table.Column(type: "int", nullable: false),
-                    SalePrice = table.Column(type: "decimal(18, 2)", nullable: false),
-                    SkuNumber = table.Column(type: "nvarchar(max)", nullable: true),
-                    Title = table.Column(type: "nvarchar(max)", nullable: true)
+                    ProductId = table.Column<int>(isNullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn),
+                    CategoryId = table.Column<int>(isNullable: false),
+                    Created = table.Column<DateTime>(isNullable: false),
+                    Description = table.Column<string>(isNullable: false),
+                    Inventory = table.Column<int>(isNullable: false),
+                    LeadTime = table.Column<int>(isNullable: false),
+                    Price = table.Column<decimal>(isNullable: false),
+                    ProductArtUrl = table.Column<string>(isNullable: false),
+                    ProductDetails = table.Column<string>(isNullable: false),
+                    RecommendationId = table.Column<int>(isNullable: false),
+                    SalePrice = table.Column<decimal>(isNullable: false),
+                    SkuNumber = table.Column<string>(isNullable: false),
+                    Title = table.Column<string>(isNullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Product", x => x.ProductId);
                     table.ForeignKey(
                         name: "FK_Product_Category_CategoryId",
-                        columns: x => x.CategoryId,
-                        referencedTable: "Category",
-                        referencedColumn: "CategoryId");
+                        column: x => x.CategoryId,
+                        principalTable: "Category",
+                        principalColumn: "CategoryId");
                 });
-            migration.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "CartItem",
                 columns: table => new
                 {
-                    CartItemId = table.Column(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGeneration", "Identity"),
-                    CartId = table.Column(type: "nvarchar(max)", nullable: true),
-                    Count = table.Column(type: "int", nullable: false),
-                    DateCreated = table.Column(type: "datetime2", nullable: false),
-                    ProductId = table.Column(type: "int", nullable: false)
+                    CartItemId = table.Column<int>(isNullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn),
+                    CartId = table.Column<string>(isNullable: false),
+                    Count = table.Column<int>(isNullable: false),
+                    DateCreated = table.Column<DateTime>(isNullable: false),
+                    ProductId = table.Column<int>(isNullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CartItem", x => x.CartItemId);
                     table.ForeignKey(
                         name: "FK_CartItem_Product_ProductId",
-                        columns: x => x.ProductId,
-                        referencedTable: "Product",
-                        referencedColumn: "ProductId");
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "ProductId");
                 });
-            migration.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "OrderDetail",
                 columns: table => new
                 {
-                    OrderDetailId = table.Column(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGeneration", "Identity"),
-                    OrderId = table.Column(type: "int", nullable: false),
-                    ProductId = table.Column(type: "int", nullable: false),
-                    Quantity = table.Column(type: "int", nullable: false),
-                    UnitPrice = table.Column(type: "decimal(18, 2)", nullable: false)
+                    OrderDetailId = table.Column<int>(isNullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn),
+                    OrderId = table.Column<int>(isNullable: false),
+                    ProductId = table.Column<int>(isNullable: false),
+                    Quantity = table.Column<int>(isNullable: false),
+                    UnitPrice = table.Column<decimal>(isNullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrderDetail", x => x.OrderDetailId);
                     table.ForeignKey(
                         name: "FK_OrderDetail_Order_OrderId",
-                        columns: x => x.OrderId,
-                        referencedTable: "Order",
-                        referencedColumn: "OrderId");
+                        column: x => x.OrderId,
+                        principalTable: "Order",
+                        principalColumn: "OrderId");
                     table.ForeignKey(
                         name: "FK_OrderDetail_Product_ProductId",
-                        columns: x => x.ProductId,
-                        referencedTable: "Product",
-                        referencedColumn: "ProductId");
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "ProductId");
                 });
-            migration.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "Raincheck",
                 columns: table => new
                 {
-                    RaincheckId = table.Column(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGeneration", "Identity"),
-                    Name = table.Column(type: "nvarchar(max)", nullable: true),
-                    ProductId = table.Column(type: "int", nullable: false),
-                    Quantity = table.Column(type: "int", nullable: false),
-                    SalePrice = table.Column(type: "float", nullable: false),
-                    StoreId = table.Column(type: "int", nullable: false)
+                    RaincheckId = table.Column<int>(isNullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn),
+                    Name = table.Column<string>(isNullable: true),
+                    ProductId = table.Column<int>(isNullable: false),
+                    Quantity = table.Column<int>(isNullable: false),
+                    SalePrice = table.Column<double>(isNullable: false),
+                    StoreId = table.Column<int>(isNullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Raincheck", x => x.RaincheckId);
                     table.ForeignKey(
                         name: "FK_Raincheck_Product_ProductId",
-                        columns: x => x.ProductId,
-                        referencedTable: "Product",
-                        referencedColumn: "ProductId");
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "ProductId");
                     table.ForeignKey(
                         name: "FK_Raincheck_Store_StoreId",
-                        columns: x => x.StoreId,
-                        referencedTable: "Store",
-                        referencedColumn: "StoreId");
+                        column: x => x.StoreId,
+                        principalTable: "Store",
+                        principalColumn: "StoreId");
                 });
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "NormalizedName");
+            migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "AspNetUsers",
+                column: "NormalizedEmail");
+            migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "AspNetUsers",
+                column: "NormalizedUserName");
         }
-        
-        public override void Down(MigrationBuilder migration)
+
+        protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migration.DropTable("AspNetRoles");
-            migration.DropTable("AspNetRoleClaims");
-            migration.DropTable("AspNetUserClaims");
-            migration.DropTable("AspNetUserLogins");
-            migration.DropTable("AspNetUserRoles");
-            migration.DropTable("AspNetUsers");
-            migration.DropTable("CartItem");
-            migration.DropTable("Category");
-            migration.DropTable("Order");
-            migration.DropTable("OrderDetail");
-            migration.DropTable("Product");
-            migration.DropTable("Raincheck");
-            migration.DropTable("Store");
+            migrationBuilder.DropTable("AspNetRoleClaims");
+            migrationBuilder.DropTable("AspNetUserClaims");
+            migrationBuilder.DropTable("AspNetUserLogins");
+            migrationBuilder.DropTable("AspNetUserRoles");
+            migrationBuilder.DropTable("CartItem");
+            migrationBuilder.DropTable("OrderDetail");
+            migrationBuilder.DropTable("Raincheck");
+            migrationBuilder.DropTable("AspNetRoles");
+            migrationBuilder.DropTable("AspNetUsers");
+            migrationBuilder.DropTable("Order");
+            migrationBuilder.DropTable("Product");
+            migrationBuilder.DropTable("Store");
+            migrationBuilder.DropTable("Category");
         }
     }
 }

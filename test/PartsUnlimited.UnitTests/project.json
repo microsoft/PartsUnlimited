@@ -2,7 +2,7 @@
     "version": "1.0.0-*",
     "dependencies": {
         "xunit": "2.1.0-beta1-*",
-        "xunit.runner.aspnet": "2.1.0-beta1-*",
+        "xunit.runner.aspnet": "2.0.0-aspnet-beta7",
         "NSubstitute": "1.8.1",
         "PartsUnlimitedWebsite": ""
     },

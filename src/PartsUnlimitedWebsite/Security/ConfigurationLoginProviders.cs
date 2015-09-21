@@ -13,12 +13,12 @@ namespace PartsUnlimited.Security
             Google = GetProvider(config, nameof(Google));
             Microsoft = GetProvider(config, nameof(Microsoft));
             Twitter = GetProvider(config, nameof(Twitter));
-            Azure = new AzureADLoginProviderCredentials(config.GetConfigurationSection(nameof(Azure)));
+            Azure = new AzureADLoginProviderCredentials(config.GetSection(nameof(Azure)));
         }
 
         private ILoginProviderCredentials GetProvider(IConfiguration config, string providerName)
         {
-            return new ConfigurationLoginProviderCredentials(config.GetConfigurationSection(providerName));
+            return new ConfigurationLoginProviderCredentials(config.GetSection(providerName));
         }
 
         public ILoginProviderCredentials Facebook { get; }

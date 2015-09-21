@@ -9,7 +9,7 @@ namespace PartsUnlimited.WebsiteConfiguration
     {
         public ConfigurationApplicationInsightsSettings(IConfiguration config)
         {
-            InstrumentationKey = config.Get(nameof(InstrumentationKey));
+            InstrumentationKey = config[nameof(InstrumentationKey)];
         }
 
         public string InstrumentationKey { get; }

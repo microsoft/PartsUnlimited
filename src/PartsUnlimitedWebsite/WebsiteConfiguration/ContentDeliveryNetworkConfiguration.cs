@@ -10,9 +10,9 @@ namespace PartsUnlimited.WebsiteConfiguration
     {
         public ContentDeliveryNetworkConfiguration(IConfiguration config)
         {
-            Images = config.Get("images");
-            Scripts = config.GetConfigurationSection("Scripts").ToLookup();
-            Styles = config.GetConfigurationSection("Styles").ToLookup();
+            Images = config["images"];
+            Scripts = config.GetSection("Scripts").ToLookup();
+            Styles = config.GetSection("Styles").ToLookup();
         }
 
         public string Images { get; }

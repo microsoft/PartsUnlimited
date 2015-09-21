@@ -3,14 +3,14 @@
 
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Diagnostics;
+using Microsoft.AspNet.Diagnostics.Entity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using Microsoft.Framework.Caching.Memory;
 using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
-using Microsoft.Framework.Runtime;
+using Microsoft.Dnx.Runtime;
 using PartsUnlimited.Areas.Admin;
 using PartsUnlimited.Models;
 using PartsUnlimited.Queries;
@@ -42,17 +42,17 @@ namespace PartsUnlimited
         {
             //If this type is present - we're on mono
             var runningOnMono = Type.GetType("Mono.Runtime") != null;
-            var sqlConnectionString = Configuration.Get("Data:DefaultConnection:ConnectionString");
+            var sqlConnectionString = Configuration["Data:DefaultConnection:ConnectionString"];
             var useInMemoryDatabase = string.IsNullOrWhiteSpace(sqlConnectionString);
 
             // Add EF services to the services container
             if (useInMemoryDatabase || runningOnMono)
             {
                 services.AddEntityFramework()
-                        .AddInMemoryStore()
+                        .AddInMemoryDatabase()
                         .AddDbContext<PartsUnlimitedContext>(options =>
                         {
-                            options.UseInMemoryStore();
+                            options.UseInMemoryDatabase();
                         });
             }
             else
@@ -94,19 +94,19 @@ namespace PartsUnlimited
             {
                 var telemetry = p.GetRequiredService<ITelemetryProvider>();
 
-                return new ConfigurationWebsiteOptions(Configuration.GetConfigurationSection("WebsiteOptions"), telemetry);
+                return new ConfigurationWebsiteOptions(Configuration.GetSection("WebsiteOptions"), telemetry);
             });
 
             services.AddScoped<IApplicationInsightsSettings>(p =>
             {
-                return new ConfigurationApplicationInsightsSettings(Configuration.GetConfigurationSection("Keys:ApplicationInsights"));
+                return new ConfigurationApplicationInsightsSettings(Configuration.GetSection("Keys:ApplicationInsights"));
             });
 
             // Associate IPartsUnlimitedContext with context
             services.AddTransient<IPartsUnlimitedContext>(s => s.GetService<PartsUnlimitedContext>());
 
             // We need access to these settings in a static extension method, so DI does not help us :(
-            ContentDeliveryNetworkExtensions.Configuration = new ContentDeliveryNetworkConfiguration(Configuration.GetConfigurationSection("CDN"));
+            ContentDeliveryNetworkExtensions.Configuration = new ContentDeliveryNetworkConfiguration(Configuration.GetSection("CDN"));
 
             // Add MVC services to the services container
             services.AddMvc();
@@ -124,7 +124,7 @@ namespace PartsUnlimited
 
         private void SetupRecommendationService(IServiceCollection services)
         {
-            var azureMlConfig = new AzureMLFrequentlyBoughtTogetherConfig(Configuration.GetConfigurationSection("Keys:AzureMLFrequentlyBoughtTogether"));
+            var azureMlConfig = new AzureMLFrequentlyBoughtTogetherConfig(Configuration.GetSection("Keys:AzureMLFrequentlyBoughtTogether"));
 
             // If keys are not available for Azure ML recommendation service, register an empty recommendation engine
             if (string.IsNullOrEmpty(azureMlConfig.AccountKey) || string.IsNullOrEmpty(azureMlConfig.ModelName))
@@ -145,7 +145,8 @@ namespace PartsUnlimited
         {
             //Display custom error page in production when error occurs
             //During development use the ErrorPage middleware to display error information in the browser
-            app.UseErrorPage(ErrorPageOptions.ShowAll);
+            app.UseErrorPage();
+            app.UseDatabaseErrorPage(DatabaseErrorPageOptions.ShowAll);
 
             // Add the runtime information page that can be used by developers
             // to see what packages are used by the application
@@ -186,7 +187,7 @@ namespace PartsUnlimited
             app.UseIdentity();
 
             // Add login providers (Microsoft/AzureAD/Google/etc).  This must be done after `app.UseIdentity()`
-            app.AddLoginProviders(new ConfigurationLoginProviders(Configuration.GetConfigurationSection("Authentication")));
+            app.AddLoginProviders(new ConfigurationLoginProviders(Configuration.GetSection("Authentication")));
 
             // Add MVC to the request pipeline
             app.UseMvc(routes =>
@@ -211,7 +212,7 @@ namespace PartsUnlimited
             SampleData.InitializePartsUnlimitedDatabaseAsync(
                 app.ApplicationServices.GetService<PartsUnlimitedContext>,
                 app.ApplicationServices.GetService<UserManager<ApplicationUser>>(),
-                Configuration.GetConfigurationSection("AdminRole")
+                Configuration.GetSection("AdminRole")
                 ).Wait();
         }
     }

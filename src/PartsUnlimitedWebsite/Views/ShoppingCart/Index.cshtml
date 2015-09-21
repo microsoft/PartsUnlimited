@@ -1,6 +1,6 @@
 ﻿@using PartsUnlimited
 @model PartsUnlimited.ViewModels.ShoppingCartViewModel
-@inject AntiForgery Xsrf
+@inject Microsoft.AspNet.Antiforgery.IAntiforgery Xsrf
 @{
     ViewBag.Title = "Shopping Cart";
 }
@@ -9,7 +9,7 @@
 {
     public string GetAntiXsrfToken()
     {
-        var tokens = Xsrf.GetTokens(Context, null);
+        var tokens = Xsrf.GetTokens(Context);
         return $"{tokens.CookieToken}:{tokens.FormToken}";
     }
 }

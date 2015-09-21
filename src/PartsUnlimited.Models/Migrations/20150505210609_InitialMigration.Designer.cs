@@ -1,357 +1,382 @@
 using System;
 using Microsoft.Data.Entity;
+using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
-using Microsoft.Data.Entity.Relational.Migrations.Infrastructure;
+using Microsoft.Data.Entity.Migrations;
 using PartsUnlimited.Models;
+using Microsoft.Data.Entity.SqlServer.Metadata;
 
 namespace PartsUnlimited.Models.Migrations
 {
-    [ContextType(typeof(PartsUnlimitedContext))]
+    [DbContext(typeof(PartsUnlimitedContext))]
     partial class InitialMigration
     {
         public override string Id
         {
             get { return "20150505210609_InitialMigration"; }
         }
-        
-        public override string ProductVersion
+
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
-            get { return "7.0.0-beta5-13549"; }
-        }
-        
-        public override void BuildTargetModel(ModelBuilder builder)
-        {
-            builder
-                .Annotation("SqlServer:ValueGeneration", "Identity");
-            
-            builder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRole", b =>
+            modelBuilder
+                .Annotation("ProductVersion", "7.0.0-beta7-15540")
+                .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRole", b =>
                 {
-                    b.Property<string>("Id")
-                        .GenerateValueOnAdd();
-                    
+                    b.Property<string>("Id");
+
                     b.Property<string>("ConcurrencyStamp")
                         .ConcurrencyToken();
-                    
-                    b.Property<string>("Name");
-                    
-                    b.Property<string>("NormalizedName");
-                    
+
+                    b.Property<string>("Name")
+                        .Annotation("MaxLength", 256);
+
+                    b.Property<string>("NormalizedName")
+                        .Annotation("MaxLength", 256);
+
                     b.Key("Id");
-                    
+
+                    b.Index("NormalizedName")
+                        .Annotation("Relational:Name", "RoleNameIndex");
+
                     b.Annotation("Relational:TableName", "AspNetRoles");
                 });
-            
-            builder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
+
+            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .GenerateValueOnAdd()
-                        .StoreGeneratedPattern(StoreGeneratedPattern.Identity);
-                    
+                        .ValueGeneratedOnAdd();
+
                     b.Property<string>("ClaimType");
-                    
+
                     b.Property<string>("ClaimValue");
-                    
+
                     b.Property<string>("RoleId");
-                    
+
                     b.Key("Id");
-                    
+
                     b.Annotation("Relational:TableName", "AspNetRoleClaims");
                 });
-            
-            builder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserClaim<string>", b =>
+
+            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .GenerateValueOnAdd()
-                        .StoreGeneratedPattern(StoreGeneratedPattern.Identity);
-                    
+                        .ValueGeneratedOnAdd();
+
                     b.Property<string>("ClaimType");
-                    
+
                     b.Property<string>("ClaimValue");
-                    
+
                     b.Property<string>("UserId");
-                    
+
                     b.Key("Id");
-                    
+
                     b.Annotation("Relational:TableName", "AspNetUserClaims");
                 });
-            
-            builder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserLogin<string>", b =>
+
+            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider")
-                        .GenerateValueOnAdd();
-                    
-                    b.Property<string>("ProviderKey")
-                        .GenerateValueOnAdd();
-                    
+                    b.Property<string>("LoginProvider");
+
+                    b.Property<string>("ProviderKey");
+
                     b.Property<string>("ProviderDisplayName");
-                    
+
                     b.Property<string>("UserId");
-                    
+
                     b.Key("LoginProvider", "ProviderKey");
-                    
+
                     b.Annotation("Relational:TableName", "AspNetUserLogins");
                 });
-            
-            builder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserRole<string>", b =>
+
+            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId");
-                    
+
                     b.Property<string>("RoleId");
-                    
+
                     b.Key("UserId", "RoleId");
-                    
+
                     b.Annotation("Relational:TableName", "AspNetUserRoles");
                 });
-            
-            builder.Entity("PartsUnlimited.Models.ApplicationUser", b =>
+
+            modelBuilder.Entity("PartsUnlimited.Models.ApplicationUser", b =>
                 {
-                    b.Property<string>("Id")
-                        .GenerateValueOnAdd();
-                    
+                    b.Property<string>("Id");
+
                     b.Property<int>("AccessFailedCount");
-                    
+
                     b.Property<string>("ConcurrencyStamp")
                         .ConcurrencyToken();
-                    
-                    b.Property<string>("Email");
-                    
+
+                    b.Property<string>("Email")
+                        .Annotation("MaxLength", 256);
+
                     b.Property<bool>("EmailConfirmed");
-                    
+
                     b.Property<bool>("LockoutEnabled");
-                    
+
                     b.Property<DateTimeOffset?>("LockoutEnd");
-                    
+
                     b.Property<string>("Name");
-                    
-                    b.Property<string>("NormalizedEmail");
-                    
-                    b.Property<string>("NormalizedUserName");
-                    
+
+                    b.Property<string>("NormalizedEmail")
+                        .Annotation("MaxLength", 256);
+
+                    b.Property<string>("NormalizedUserName")
+                        .Annotation("MaxLength", 256);
+
                     b.Property<string>("PasswordHash");
-                    
+
                     b.Property<string>("PhoneNumber");
-                    
+
                     b.Property<bool>("PhoneNumberConfirmed");
-                    
+
                     b.Property<string>("SecurityStamp");
-                    
+
                     b.Property<bool>("TwoFactorEnabled");
-                    
-                    b.Property<string>("UserName");
-                    
+
+                    b.Property<string>("UserName")
+                        .Annotation("MaxLength", 256);
+
                     b.Key("Id");
-                    
+
+                    b.Index("NormalizedEmail")
+                        .Annotation("Relational:Name", "EmailIndex");
+
+                    b.Index("NormalizedUserName")
+                        .Annotation("Relational:Name", "UserNameIndex");
+
                     b.Annotation("Relational:TableName", "AspNetUsers");
                 });
-            
-            builder.Entity("PartsUnlimited.Models.CartItem", b =>
+
+            modelBuilder.Entity("PartsUnlimited.Models.CartItem", b =>
                 {
                     b.Property<int>("CartItemId")
-                        .GenerateValueOnAdd()
-                        .StoreGeneratedPattern(StoreGeneratedPattern.Identity);
-                    
-                    b.Property<string>("CartId");
-                    
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CartId")
+                        .Required();
+
                     b.Property<int>("Count");
-                    
+
                     b.Property<DateTime>("DateCreated");
-                    
+
                     b.Property<int>("ProductId");
-                    
+
                     b.Key("CartItemId");
                 });
-            
-            builder.Entity("PartsUnlimited.Models.Category", b =>
+
+            modelBuilder.Entity("PartsUnlimited.Models.Category", b =>
                 {
                     b.Property<int>("CategoryId")
-                        .GenerateValueOnAdd()
-                        .StoreGeneratedPattern(StoreGeneratedPattern.Identity);
-                    
+                        .ValueGeneratedOnAdd();
+
                     b.Property<string>("Description");
-                    
+
                     b.Property<string>("ImageUrl");
-                    
-                    b.Property<string>("Name");
-                    
+
+                    b.Property<string>("Name")
+                        .Required();
+
                     b.Key("CategoryId");
                 });
-            
-            builder.Entity("PartsUnlimited.Models.Order", b =>
+
+            modelBuilder.Entity("PartsUnlimited.Models.Order", b =>
                 {
                     b.Property<int>("OrderId")
-                        .GenerateValueOnAdd()
-                        .StoreGeneratedPattern(StoreGeneratedPattern.Identity);
-                    
-                    b.Property<string>("Address");
-                    
-                    b.Property<string>("City");
-                    
-                    b.Property<string>("Country");
-                    
-                    b.Property<string>("Email");
-                    
-                    b.Property<string>("Name");
-                    
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Address")
+                        .Required()
+                        .Annotation("MaxLength", 70);
+
+                    b.Property<string>("City")
+                        .Required()
+                        .Annotation("MaxLength", 40);
+
+                    b.Property<string>("Country")
+                        .Required()
+                        .Annotation("MaxLength", 40);
+
+                    b.Property<string>("Email")
+                        .Required();
+
+                    b.Property<string>("Name")
+                        .Required()
+                        .Annotation("MaxLength", 160);
+
                     b.Property<DateTime>("OrderDate");
-                    
-                    b.Property<string>("Phone");
-                    
-                    b.Property<string>("PostalCode");
-                    
+
+                    b.Property<string>("Phone")
+                        .Required()
+                        .Annotation("MaxLength", 24);
+
+                    b.Property<string>("PostalCode")
+                        .Required()
+                        .Annotation("MaxLength", 10);
+
                     b.Property<bool>("Processed");
-                    
-                    b.Property<string>("State");
-                    
+
+                    b.Property<string>("State")
+                        .Required()
+                        .Annotation("MaxLength", 40);
+
                     b.Property<decimal>("Total");
-                    
-                    b.Property<string>("Username");
-                    
+
+                    b.Property<string>("Username")
+                        .Required();
+
                     b.Key("OrderId");
                 });
-            
-            builder.Entity("PartsUnlimited.Models.OrderDetail", b =>
+
+            modelBuilder.Entity("PartsUnlimited.Models.OrderDetail", b =>
                 {
                     b.Property<int>("OrderDetailId")
-                        .GenerateValueOnAdd()
-                        .StoreGeneratedPattern(StoreGeneratedPattern.Identity);
-                    
+                        .ValueGeneratedOnAdd();
+
                     b.Property<int>("OrderId");
-                    
+
                     b.Property<int>("ProductId");
-                    
+
                     b.Property<int>("Quantity");
-                    
+
                     b.Property<decimal>("UnitPrice");
-                    
+
                     b.Key("OrderDetailId");
                 });
-            
-            builder.Entity("PartsUnlimited.Models.Product", b =>
+
+            modelBuilder.Entity("PartsUnlimited.Models.Product", b =>
                 {
                     b.Property<int>("ProductId")
-                        .GenerateValueOnAdd()
-                        .StoreGeneratedPattern(StoreGeneratedPattern.Identity);
-                    
+                        .ValueGeneratedOnAdd();
+
                     b.Property<int>("CategoryId");
-                    
+
                     b.Property<DateTime>("Created");
-                    
-                    b.Property<string>("Description");
-                    
+
+                    b.Property<string>("Description")
+                        .Required();
+
                     b.Property<int>("Inventory");
-                    
+
                     b.Property<int>("LeadTime");
-                    
+
                     b.Property<decimal>("Price");
-                    
-                    b.Property<string>("ProductArtUrl");
-                    
-                    b.Property<string>("ProductDetails");
-                    
+
+                    b.Property<string>("ProductArtUrl")
+                        .Required()
+                        .Annotation("MaxLength", 1024);
+
+                    b.Property<string>("ProductDetails")
+                        .Required();
+
                     b.Property<int>("RecommendationId");
-                    
+
                     b.Property<decimal>("SalePrice");
-                    
-                    b.Property<string>("SkuNumber");
-                    
-                    b.Property<string>("Title");
-                    
+
+                    b.Property<string>("SkuNumber")
+                        .Required();
+
+                    b.Property<string>("Title")
+                        .Required()
+                        .Annotation("MaxLength", 160);
+
                     b.Key("ProductId");
                 });
-            
-            builder.Entity("PartsUnlimited.Models.Raincheck", b =>
+
+            modelBuilder.Entity("PartsUnlimited.Models.Raincheck", b =>
                 {
                     b.Property<int>("RaincheckId")
-                        .GenerateValueOnAdd()
-                        .StoreGeneratedPattern(StoreGeneratedPattern.Identity);
-                    
+                        .ValueGeneratedOnAdd();
+
                     b.Property<string>("Name");
-                    
+
                     b.Property<int>("ProductId");
-                    
+
                     b.Property<int>("Quantity");
-                    
+
                     b.Property<double>("SalePrice");
-                    
+
                     b.Property<int>("StoreId");
-                    
+
                     b.Key("RaincheckId");
                 });
-            
-            builder.Entity("PartsUnlimited.Models.Store", b =>
+
+            modelBuilder.Entity("PartsUnlimited.Models.Store", b =>
                 {
                     b.Property<int>("StoreId")
-                        .GenerateValueOnAdd()
-                        .StoreGeneratedPattern(StoreGeneratedPattern.Identity);
-                    
+                        .ValueGeneratedOnAdd();
+
                     b.Property<string>("Name");
-                    
+
                     b.Key("StoreId");
                 });
-            
-            builder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
+
+            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
                 {
                     b.Reference("Microsoft.AspNet.Identity.EntityFramework.IdentityRole")
                         .InverseCollection()
                         .ForeignKey("RoleId");
                 });
-            
-            builder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserClaim<string>", b =>
+
+            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserClaim<string>", b =>
                 {
                     b.Reference("PartsUnlimited.Models.ApplicationUser")
                         .InverseCollection()
                         .ForeignKey("UserId");
                 });
-            
-            builder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserLogin<string>", b =>
+
+            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserLogin<string>", b =>
                 {
                     b.Reference("PartsUnlimited.Models.ApplicationUser")
                         .InverseCollection()
                         .ForeignKey("UserId");
                 });
-            
-            builder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserRole<string>", b =>
+
+            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserRole<string>", b =>
                 {
                     b.Reference("Microsoft.AspNet.Identity.EntityFramework.IdentityRole")
                         .InverseCollection()
                         .ForeignKey("RoleId");
-                    
+
                     b.Reference("PartsUnlimited.Models.ApplicationUser")
                         .InverseCollection()
                         .ForeignKey("UserId");
                 });
-            
-            builder.Entity("PartsUnlimited.Models.CartItem", b =>
+
+            modelBuilder.Entity("PartsUnlimited.Models.CartItem", b =>
                 {
                     b.Reference("PartsUnlimited.Models.Product")
                         .InverseCollection()
                         .ForeignKey("ProductId");
                 });
-            
-            builder.Entity("PartsUnlimited.Models.OrderDetail", b =>
+
+            modelBuilder.Entity("PartsUnlimited.Models.OrderDetail", b =>
                 {
                     b.Reference("PartsUnlimited.Models.Order")
                         .InverseCollection()
                         .ForeignKey("OrderId");
-                    
+
                     b.Reference("PartsUnlimited.Models.Product")
                         .InverseCollection()
                         .ForeignKey("ProductId");
                 });
-            
-            builder.Entity("PartsUnlimited.Models.Product", b =>
+
+            modelBuilder.Entity("PartsUnlimited.Models.Product", b =>
                 {
                     b.Reference("PartsUnlimited.Models.Category")
                         .InverseCollection()
                         .ForeignKey("CategoryId");
                 });
-            
-            builder.Entity("PartsUnlimited.Models.Raincheck", b =>
+
+            modelBuilder.Entity("PartsUnlimited.Models.Raincheck", b =>
                 {
                     b.Reference("PartsUnlimited.Models.Product")
                         .InverseCollection()
                         .ForeignKey("ProductId");
-                    
+
                     b.Reference("PartsUnlimited.Models.Store")
                         .InverseCollection()
                         .ForeignKey("StoreId");
