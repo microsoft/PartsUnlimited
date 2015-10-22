@@ -25,16 +25,16 @@ Entity Framework requires a connection string to the database to which the migra
 3. Save the file.
 
 ##How to Add a Migration
-From the command prompt run `dnx . ef migration add MyMigration`
+From the command prompt run `dnx ef migrations add MyMigration`
 
 Migrations will be added to the database to described in the DefaultConnection configuration entry.  The name of the migration must  be unique.
 
 ##How to Apply a Migration
-From the command prompt, run `dnx . ef migration apply`.  The command must be run from the directory where project.json resides.
+From the command prompt, run `dnx ef migrations apply`.  The command must be run from the directory where project.json resides.
 
 Entity Framework will inspect the database specified in the DefaultConnection connection string and apply any missing migrations.  PartsUnlimited.Models has an InitialMigration already added.  Migration information can be seen under src\PartsUnlimited.Models\Migrations.
 
 Applying a migration does not automatically seed the database with data.  The PartsUnlimited website is configured to input sample data into the database only if the tables are empty as is the case when apply the initial migration for PartsUnlimited.Models.
 
 ##Migration Commands
-There are several commands for EntityFramework, including listing available migrations, applying, removing and adding migrations.  Run `dnx . ef migration` to see a list of available commands.
+There are several commands for EntityFramework, including listing available migrations, applying, removing and adding migrations.  Run `dnx ef migrations` to see a list of available commands.

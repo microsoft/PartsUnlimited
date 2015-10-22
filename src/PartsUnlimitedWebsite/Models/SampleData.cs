@@ -92,8 +92,8 @@ namespace PartsUnlimited.Models
             //    await roleManager.CreateAsync(new IdentityRole(adminRole));
             //}
 
-            var username = adminRole.Get("UserName");
-            var password = adminRole.Get("Password");
+            var username = adminRole["UserName"];
+            var password = adminRole["Password"];
 
             var user = await userManager.FindByNameAsync(username);
 
@@ -172,7 +172,7 @@ namespace PartsUnlimited.Models
                     {
                         var order = new Order
                         {
-                            Username = adminRole.Get("UserName"),
+                            Username = adminRole["UserName"],
                             OrderDate = DateTime.Now,
                             Name = $"John Smith{random.Next()}",
                             Address = "15010 NE 36th St",
@@ -181,7 +181,7 @@ namespace PartsUnlimited.Models
                             PostalCode = "98052",
                             Country = "United States",
                             Phone = "425-703-6214",
-                            Email = adminRole.Get("UserName")
+                            Email = adminRole["UserName"]
                         };
 
                         db.Orders.Add(order);

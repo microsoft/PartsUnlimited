@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Data.Entity;
 using Microsoft.Framework.Configuration;
+using Microsoft.Framework.Configuration.Json;
 using PartsUnlimited.Models;
 
 namespace PartsUnlimited.WebJobs.UpdateProductInventory
@@ -19,7 +20,7 @@ namespace PartsUnlimited.WebJobs.UpdateProductInventory
             var builder = new ConfigurationBuilder();
             builder.Add(new JsonConfigurationSource("config.json"));
             var config = builder.Build();
-            var connectionString = config.Get("Data:DefaultConnection:ConnectionString");
+            var connectionString = config["Data:DefaultConnection:ConnectionString"];
 
             using (var context = new PartsUnlimitedContext(connectionString))
             {

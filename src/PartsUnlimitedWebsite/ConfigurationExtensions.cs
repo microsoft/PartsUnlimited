@@ -24,9 +24,9 @@ namespace Microsoft.Framework.Configuration
                 return Enumerable.Empty<string>().ToLookup(s => s, s => s);
             }
 
-            var subkeys = config.GetConfigurationSections();
-            var names = subkeys.Select(s => s.Key).ToList();
-            var values = names.Select(config.Get).ToList();
+            var subkeys = config.GetChildren();
+            var names = subkeys.Select(s => s.Key.Split(':').Last()).ToList();
+            var values = subkeys.Select(s => s.Value).ToList();
 
             if (values.Any(v => v == null))
             {
@@ -43,7 +43,7 @@ namespace Microsoft.Framework.Configuration
 
         public static T Get<T>(this IConfiguration configuration, string key)
         {
-            return (T)Convert.ChangeType(configuration.Get(key), typeof(T));
+            return (T)Convert.ChangeType(configuration[key], typeof(T));
         }
     }
 }

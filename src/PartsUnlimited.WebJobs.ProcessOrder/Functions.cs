@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Framework.Configuration;
+using Microsoft.Framework.Configuration.Json;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -23,7 +24,7 @@ namespace PartsUnlimited.WebJobs.ProcessOrder
                 var builder = new ConfigurationBuilder();
                 builder.Add(new JsonConfigurationSource("config.json"));
                 var config = builder.Build();
-                var connectionString = config.Get("Data:DefaultConnection:ConnectionString");
+                var connectionString = config["Data:DefaultConnection:ConnectionString"];
 
                 using (var context = new PartsUnlimitedContext(connectionString))
                 {

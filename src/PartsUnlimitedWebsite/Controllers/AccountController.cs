@@ -423,9 +423,9 @@ namespace PartsUnlimited.Controllers
         // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult LogOff()
+        public async Task<ActionResult> LogOff()
         {
-            SignInManager.SignOut();
+            await SignInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
 
