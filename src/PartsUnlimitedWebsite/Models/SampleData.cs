@@ -18,9 +18,9 @@ namespace PartsUnlimited.Models
 {
     public static class SampleData
     {
-
-        private static string DefaultAdminNameConfigPath = "AdminRole:UserName";
-        private static string DefaultAdminPasswordConfigPath = "AdminRole:Password";
+        private static string AdminRoleSectionName = "AdminRole";
+        private static string DefaultAdminNameKey = "UserName";
+        private static string DefaultAdminPasswordKey = "Password";
 
         public static async Task InitializePartsUnlimitedDatabaseAsync(IServiceProvider serviceProvider, bool createUser = true)
         {
@@ -86,12 +86,7 @@ namespace PartsUnlimited.Models
             }
         }
 
-        /// <summary>
-        /// Creates a store manager user who can manage the inventory.
-        /// </summary>
-        /// <param name="serviceProvider"></param>
-        /// <returns></returns>
-        private static async Task CreateAdminUser(IServiceProvider serviceProvider)
+        private static IConfigurationSection GetAdminRoleConfiguration(IServiceProvider serviceProvider)
         {
             var appEnv = serviceProvider.GetService<IApplicationEnvironment>();
 
@@ -99,15 +94,25 @@ namespace PartsUnlimited.Models
                         .AddJsonFile("config.json")
                         .AddEnvironmentVariables();
             var configuration = builder.Build();
+            return configuration.GetSection(AdminRoleSectionName);
+        }
 
-              var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
+        /// <summary>
+        /// Creates a store manager user who can manage the inventory.
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        /// <returns></returns>
+        private static async Task CreateAdminUser(IServiceProvider serviceProvider)
+        {
+            IConfigurationSection configuration = GetAdminRoleConfiguration(serviceProvider);
+            UserManager<ApplicationUser> userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
 
-            var user = await userManager.FindByNameAsync(configuration[DefaultAdminNameConfigPath]);
+            var user = await userManager.FindByNameAsync(configuration[DefaultAdminNameKey]);
 
             if (user == null)
             {
-                user = new ApplicationUser { UserName = configuration[DefaultAdminNameConfigPath] };
-                await userManager.CreateAsync(user, configuration[DefaultAdminPasswordConfigPath]);
+                user = new ApplicationUser { UserName = configuration[DefaultAdminNameKey] };
+                await userManager.CreateAsync(user, configuration[DefaultAdminPasswordKey]);
                 await userManager.AddClaimAsync(user, new Claim(AdminConstants.ManageStore.Name, AdminConstants.ManageStore.Allowed));
             }
         }
@@ -169,6 +174,9 @@ namespace PartsUnlimited.Models
                 new{ Transactions = new []{16, 18}, Multiplier = 80 }
             };
 
+            IConfigurationSection configuration = GetAdminRoleConfiguration(serviceProvider);
+            string userName = configuration[DefaultAdminNameKey];
+
             using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var db = serviceScope.ServiceProvider.GetService<PartsUnlimitedContext>();
@@ -180,7 +188,7 @@ namespace PartsUnlimited.Models
                     {
                         var order = new Order
                         {
-                            Username = "Administrator@test.com",
+                            Username = userName,
                             OrderDate = DateTime.Now,
                             Name = $"John Smith{random.Next()}",
                             Address = "15010 NE 36th St",
@@ -189,7 +197,7 @@ namespace PartsUnlimited.Models
                             PostalCode = "98052",
                             Country = "United States",
                             Phone = "425-703-6214",
-                            Email = "Administrator@test.com"
+                            Email = userName
                         };
 
                         db.Orders.Add(order);
