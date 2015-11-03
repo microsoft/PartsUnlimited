@@ -39,8 +39,10 @@
     "PartsUnlimited.Models": ""
   },
   "commands": {
-    "web": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.Kestrel --server.urls http://localhost:5001",
-    "run": "run server.urls=http://localhost:5001"
+    "WebListener": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls http://localhost:5001",
+    "Kestrel": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.Kestrel --server.urls http://localhost:5001",
+    "run": "run server.urls=http://localhost:5001",
+    "web": "Microsoft.AspNet.Server.Kestrel"
   },
   "scripts": {
     "postrestore": [ "npm install" ],
