@@ -31,9 +31,10 @@ namespace PartsUnlimited
         {
             //Below code demonstrates usage of multiple configuration sources. For instance a setting say 'setting1' is found in both the registered sources, 
             //then the later source will win. By this way a Local config can be overridden by a different setting while deployed remotely.
-            var builder = new ConfigurationBuilder(env.ApplicationBasePath)
-                        .AddJsonFile("config.json")
-                        .AddEnvironmentVariables(); //All environment variables in the process's context flow in as configuration values.
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ApplicationBasePath)
+                .AddJsonFile("config.json")
+                .AddEnvironmentVariables(); //All environment variables in the process's context flow in as configuration values.
 
             Configuration = builder.Build();
         }
@@ -72,7 +73,7 @@ namespace PartsUnlimited
 
 
             // Configure admin policies
-            services.ConfigureAuthorization(auth =>
+            services.AddAuthorization(auth =>
             {
                 auth.AddPolicy(AdminConstants.Role,
                     new AuthorizationPolicyBuilder()
@@ -145,7 +146,7 @@ namespace PartsUnlimited
         {
             //Display custom error page in production when error occurs
             //During development use the ErrorPage middleware to display error information in the browser
-            app.UseErrorPage();
+            app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage(DatabaseErrorPageOptions.ShowAll);
 
             // Add the runtime information page that can be used by developers
@@ -160,7 +161,7 @@ namespace PartsUnlimited
         //The allowed values are Development,Staging and Production
         public void ConfigureStaging(IApplicationBuilder app)
         {
-            app.UseErrorHandler("/Home/Error");
+            app.UseExceptionHandler("/Home/Error");
             Configure(app);
         }
 
@@ -168,7 +169,7 @@ namespace PartsUnlimited
         //The allowed values are Development,Staging and Production
         public void ConfigureProduction(IApplicationBuilder app)
         {
-            app.UseErrorHandler("/Home/Error");
+            app.UseExceptionHandler("/Home/Error");
             Configure(app);
         }
 

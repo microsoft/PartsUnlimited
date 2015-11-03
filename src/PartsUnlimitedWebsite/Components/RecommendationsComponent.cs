@@ -5,6 +5,8 @@ using Microsoft.AspNet.Mvc;
 using PartsUnlimited.Models;
 using PartsUnlimited.WebsiteConfiguration;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Mvc.ViewComponents;
+using System;
 
 namespace PartsUnlimited.Components
 {

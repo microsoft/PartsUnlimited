@@ -29,13 +29,13 @@ namespace PartsUnlimited.Models
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Product>().Key(a => a.ProductId);
-            builder.Entity<Order>().Key(o => o.OrderId);
-            builder.Entity<Category>().Key(g => g.CategoryId);
-            builder.Entity<CartItem>().Key(c => c.CartItemId);
-            builder.Entity<OrderDetail>().Key(o => o.OrderDetailId);
-            builder.Entity<Raincheck>().Key(o => o.RaincheckId);
-            builder.Entity<Store>().Key(o => o.StoreId);
+            builder.Entity<Product>().HasKey(a => a.ProductId);
+            builder.Entity<Order>().HasKey(o => o.OrderId);
+            builder.Entity<Category>().HasKey(g => g.CategoryId);
+            builder.Entity<CartItem>().HasKey(c => c.CartItemId);
+            builder.Entity<OrderDetail>().HasKey(o => o.OrderDetailId);
+            builder.Entity<Raincheck>().HasKey(o => o.RaincheckId);
+            builder.Entity<Store>().HasKey(o => o.StoreId);
 
             base.OnModelCreating(builder);
         }

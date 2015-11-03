@@ -6,13 +6,13 @@
   "projectUrl": "",
   "licenseUrl": "",
   "dependencies": {
-    "EntityFramework.Commands": "7.0.0-beta7",
-    "EntityFramework.SqlServer": "7.0.0-beta7",
-    "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-beta7",
-    "Microsoft.AspNet.Mvc": "6.0.0-beta7",
-    "Microsoft.AspNet.StaticFiles": "1.0.0-beta7",
-    "Microsoft.Framework.Configuration.Json": "1.0.0-beta7",
-    "Microsoft.Framework.OptionsModel": "1.0.0-beta7"
+    "EntityFramework.Commands": "7.0.0-beta8",
+    "EntityFramework.SqlServer": "7.0.0-beta8",
+    "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-beta8",
+    "Microsoft.AspNet.Mvc": "6.0.0-beta8",
+    "Microsoft.AspNet.StaticFiles": "1.0.0-beta8",
+    "Microsoft.Framework.Configuration.Json": "1.0.0-beta8",
+    "Microsoft.Framework.OptionsModel": "1.0.0-beta8"
   },
   "commands": {
     "ef": "EntityFramework.Commands"
