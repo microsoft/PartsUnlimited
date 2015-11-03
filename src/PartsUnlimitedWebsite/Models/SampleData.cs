@@ -4,21 +4,31 @@
 using Microsoft.AspNet.Identity;
 using Microsoft.Data.Entity;
 using Microsoft.Framework.Configuration;
+using Microsoft.Framework.DependencyInjection;
 using PartsUnlimited.Areas.Admin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Dnx.Runtime;
+
 
 namespace PartsUnlimited.Models
 {
     public static class SampleData
     {
-        public static async Task InitializePartsUnlimitedDatabaseAsync(Func<PartsUnlimitedContext> contextFactory, UserManager<ApplicationUser> userManager, IConfiguration adminRole)
+
+        private static string DefaultAdminNameConfigPath = "AdminRole:UserName";
+        private static string DefaultAdminPasswordConfigPath = "AdminRole:Password";
+
+        public static async Task InitializePartsUnlimitedDatabaseAsync(IServiceProvider serviceProvider, bool createUser = true)
         {
-            using (var db = contextFactory())
+            using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
+                var db = serviceScope.ServiceProvider.GetService<PartsUnlimitedContext>();
+
+
                 bool dbNewlyCreated = await db.Database.EnsureCreatedAsync();
 
                 //Seeding a database using migrations is not yet supported. (https://github.com/aspnet/EntityFramework/issues/629.)
@@ -27,53 +37,51 @@ namespace PartsUnlimited.Models
 
                 if (dbNewlyCreated || tablesEmpty)
                 {
-                    await InsertTestData(contextFactory, adminRole);
-                    await CreateAdminUser(userManager, adminRole);
+                    await InsertTestData(serviceProvider);
+                    await CreateAdminUser(serviceProvider);
                 }
             }
         }
 
-        public static async Task InsertTestData(Func<PartsUnlimitedContext> contextFactory, IConfiguration adminRole)
+        public static async Task InsertTestData(IServiceProvider serviceProvider)
         {
             var categories = GetCategories().ToList();
-            await AddOrUpdateAsync(contextFactory, g => g.Name, categories);
+            await AddOrUpdateAsync(serviceProvider, g => g.Name, categories);
 
             var products = GetProducts(categories).ToList();
-            await AddOrUpdateAsync(contextFactory, a => a.Title, products);
+            await AddOrUpdateAsync(serviceProvider, a => a.Title, products);
 
             var stores = GetStores().ToList();
-            await AddOrUpdateAsync(contextFactory, a => a.Name, stores);
+            await AddOrUpdateAsync(serviceProvider, a => a.Name, stores);
 
             var rainchecks = GetRainchecks(stores, products).ToList();
-            await AddOrUpdateAsync(contextFactory, a => a.RaincheckId, rainchecks);
+            await AddOrUpdateAsync(serviceProvider, a => a.RaincheckId, rainchecks);
 
-            PopulateOrderHistory(contextFactory, products, adminRole);
+            PopulateOrderHistory(serviceProvider, products);
         }
 
-        // TODO [EF] This may be replaced by a first class mechanism in EF
         private static async Task AddOrUpdateAsync<TEntity>(
-            Func<PartsUnlimitedContext> contextFactory,
+            IServiceProvider serviceProvider,
             Func<TEntity, object> propertyToMatch, IEnumerable<TEntity> entities)
             where TEntity : class
         {
             // Query in a separate context so that we can attach existing entities as modified
             List<TEntity> existingData;
-            using (var db = contextFactory())
+            using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
+                var db = serviceScope.ServiceProvider.GetService<PartsUnlimitedContext>();
                 existingData = db.Set<TEntity>().ToList();
             }
 
-            using (var db = contextFactory())
+            using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
+                var db = serviceScope.ServiceProvider.GetService<PartsUnlimitedContext>();
                 foreach (var item in entities)
                 {
-                    var newState = existingData.Any(g => propertyToMatch(g).Equals(propertyToMatch(item)))
+                    db.Entry(item).State = existingData.Any(g => propertyToMatch(g).Equals(propertyToMatch(item)))
                         ? EntityState.Modified
                         : EntityState.Added;
-
-                    db.Entry(item).State = newState;
                 }
-
                 await db.SaveChangesAsync();
             }
         }
@@ -83,25 +91,23 @@ namespace PartsUnlimited.Models
         /// </summary>
         /// <param name="serviceProvider"></param>
         /// <returns></returns>
-        public static async Task CreateAdminUser(UserManager<ApplicationUser> userManager, IConfiguration adminRole)
+        private static async Task CreateAdminUser(IServiceProvider serviceProvider)
         {
-            // TODO: Identity SQL does not support roles yet
-            //var roleManager = serviceProvider.GetService<ApplicationRoleManager>();
-            //if (!await roleManager.RoleExistsAsync(adminRole))
-            //{
-            //    await roleManager.CreateAsync(new IdentityRole(adminRole));
-            //}
+            var appEnv = serviceProvider.GetService<IApplicationEnvironment>();
 
-            var username = adminRole["UserName"];
-            var password = adminRole["Password"];
+            var builder = new ConfigurationBuilder().SetBasePath(appEnv.ApplicationBasePath)
+                        .AddJsonFile("config.json")
+                        .AddEnvironmentVariables();
+            var configuration = builder.Build();
 
-            var user = await userManager.FindByNameAsync(username);
+              var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
+
+            var user = await userManager.FindByNameAsync(configuration[DefaultAdminNameConfigPath]);
 
             if (user == null)
             {
-                user = new ApplicationUser { UserName = username };
-                await userManager.CreateAsync(user, password);
-                //await userManager.AddToRoleAsync(user, adminRole);
+                user = new ApplicationUser { UserName = configuration[DefaultAdminNameConfigPath] };
+                await userManager.CreateAsync(user, configuration[DefaultAdminPasswordConfigPath]);
                 await userManager.AddClaimAsync(user, new Claim(AdminConstants.ManageStore.Name, AdminConstants.ManageStore.Allowed));
             }
         }
@@ -144,7 +150,7 @@ namespace PartsUnlimited.Models
             yield return new Category { Name = "Oil", Description = "Oil description", ImageUrl = "product_oil_premium-oil.jpg" };
         }
 
-        public static void PopulateOrderHistory(Func<PartsUnlimitedContext> contextFactory, IEnumerable<Product> products, IConfiguration adminRole)
+        public static void PopulateOrderHistory(IServiceProvider serviceProvider, IEnumerable<Product> products)
         {
             var random = new Random(1234);
             var recomendationCombinations = new[] {
@@ -163,8 +169,10 @@ namespace PartsUnlimited.Models
                 new{ Transactions = new []{16, 18}, Multiplier = 80 }
             };
 
-            using (var db = contextFactory())
+            using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
+                var db = serviceScope.ServiceProvider.GetService<PartsUnlimitedContext>();
+
                 var orders = new List<Order>();
                 foreach (var combination in recomendationCombinations)
                 {
@@ -172,7 +180,7 @@ namespace PartsUnlimited.Models
                     {
                         var order = new Order
                         {
-                            Username = adminRole["UserName"],
+                            Username = "Administrator@test.com",
                             OrderDate = DateTime.Now,
                             Name = $"John Smith{random.Next()}",
                             Address = "15010 NE 36th St",
@@ -181,7 +189,7 @@ namespace PartsUnlimited.Models
                             PostalCode = "98052",
                             Country = "United States",
                             Phone = "425-703-6214",
-                            Email = adminRole["UserName"]
+                            Email = "Administrator@test.com"
                         };
 
                         db.Orders.Add(order);
@@ -232,13 +240,14 @@ namespace PartsUnlimited.Models
 
         public static IEnumerable<Product> GetProducts(IEnumerable<Category> categories)
         {
-            var categoriesMap = categories.ToDictionary(c => c.Name, c => c.CategoryId);
+            var categoriesMap = categories.ToDictionary(c => c.Name, c => c);
 
             yield return new Product
             {
                 SkuNumber = "LIG-0001",
                 Title = "Halogen Headlights (2 Pack)",
-                CategoryId = categoriesMap["Lighting"],
+                Category = categoriesMap["Lighting"],
+                CategoryId = categoriesMap["Lighting"].CategoryId,
                 Price = 38.99M,
                 SalePrice = 38.99M,
                 ProductArtUrl = "product_lighting_headlight.jpg",
@@ -253,7 +262,8 @@ namespace PartsUnlimited.Models
             {
                 SkuNumber = "LIG-0002",
                 Title = "Bugeye Headlights (2 Pack)",
-                CategoryId = categoriesMap["Lighting"],
+                Category = categoriesMap["Lighting"],
+                CategoryId = categoriesMap["Lighting"].CategoryId,
                 Price = 48.99M,
                 SalePrice = 48.99M,
                 ProductArtUrl = "product_lighting_bugeye-headlight.jpg",
@@ -268,7 +278,8 @@ namespace PartsUnlimited.Models
             {
                 SkuNumber = "LIG-0003",
                 Title = "Turn Signal Light Bulb",
-                CategoryId = categoriesMap["Lighting"],
+                Category = categoriesMap["Lighting"],
+                CategoryId = categoriesMap["Lighting"].CategoryId,
                 Price = 6.49M,
                 SalePrice = 6.49M,
                 ProductArtUrl = "product_lighting_lightbulb.jpg",
@@ -283,7 +294,8 @@ namespace PartsUnlimited.Models
             {
                 SkuNumber = "WHE-0001",
                 Title = "Matte Finish Rim",
-                CategoryId = categoriesMap["Wheels & Tires"],
+                Category = categoriesMap["Wheels & Tires"],
+                CategoryId = categoriesMap["Wheels & Tires"].CategoryId,
                 Price = 75.99M,
                 SalePrice = 75.99M,
                 ProductArtUrl = "product_wheel_rim.jpg",
@@ -298,7 +310,8 @@ namespace PartsUnlimited.Models
             {
                 SkuNumber = "WHE-0002",
                 Title = "Blue Performance Alloy Rim",
-                CategoryId = categoriesMap["Wheels & Tires"],
+                Category = categoriesMap["Wheels & Tires"],
+                CategoryId = categoriesMap["Wheels & Tires"].CategoryId,
                 Price = 88.99M,
                 SalePrice = 88.99M,
                 ProductArtUrl = "product_wheel_rim-blue.jpg",
@@ -313,7 +326,8 @@ namespace PartsUnlimited.Models
             {
                 SkuNumber = "WHE-0003",
                 Title = "High Performance Rim",
-                CategoryId = categoriesMap["Wheels & Tires"],
+                Category = categoriesMap["Wheels & Tires"],
+                CategoryId = categoriesMap["Wheels & Tires"].CategoryId,
                 Price = 99.99M,
                 SalePrice = 99.49M,
                 ProductArtUrl = "product_wheel_rim-red.jpg",
@@ -328,7 +342,8 @@ namespace PartsUnlimited.Models
             {
                 SkuNumber = "WHE-0004",
                 Title = "Wheel Tire Combo",
-                CategoryId = categoriesMap["Wheels & Tires"],
+                Category = categoriesMap["Wheels & Tires"],
+                CategoryId = categoriesMap["Wheels & Tires"].CategoryId,
                 Price = 72.49M,
                 SalePrice = 72.49M,
                 ProductArtUrl = "product_wheel_tyre-wheel-combo.jpg",
@@ -343,7 +358,8 @@ namespace PartsUnlimited.Models
             {
                 SkuNumber = "WHE-0005",
                 Title = "Chrome Rim Tire Combo",
-                CategoryId = categoriesMap["Wheels & Tires"],
+                Category = categoriesMap["Wheels & Tires"],
+                CategoryId = categoriesMap["Wheels & Tires"].CategoryId,
                 Price = 129.99M,
                 SalePrice = 129.99M,
                 ProductArtUrl = "product_wheel_tyre-rim-chrome-combo.jpg",
@@ -358,7 +374,8 @@ namespace PartsUnlimited.Models
             {
                 SkuNumber = "WHE-0006",
                 Title = "Wheel Tire Combo (4 Pack)",
-                CategoryId = categoriesMap["Wheels & Tires"],
+                Category = categoriesMap["Wheels & Tires"],
+                CategoryId = categoriesMap["Wheels & Tires"].CategoryId,
                 Price = 219.99M,
                 SalePrice = 219.99M,
                 ProductArtUrl = "product_wheel_tyre-wheel-combo-pack.jpg",
@@ -373,7 +390,8 @@ namespace PartsUnlimited.Models
             {
                 SkuNumber = "BRA-0001",
                 Title = "Disk and Pad Combo",
-                CategoryId = categoriesMap["Brakes"],
+                Category = categoriesMap["Wheels & Tires"],
+                CategoryId = categoriesMap["Wheels & Tires"].CategoryId,
                 Price = 25.99M,
                 SalePrice = 25.99M,
                 ProductArtUrl = "product_brakes_disk-pad-combo.jpg",
@@ -388,7 +406,8 @@ namespace PartsUnlimited.Models
             {
                 SkuNumber = "BRA-0002",
                 Title = "Brake Rotor",
-                CategoryId = categoriesMap["Brakes"],
+                Category = categoriesMap["Brakes"],
+                CategoryId = categoriesMap["Brakes"].CategoryId,
                 Price = 18.99M,
                 SalePrice = 18.99M,
                 ProductArtUrl = "product_brakes_disc.jpg",
@@ -403,7 +422,8 @@ namespace PartsUnlimited.Models
             {
                 SkuNumber = "BRA-0003",
                 Title = "Brake Disk and Calipers",
-                CategoryId = categoriesMap["Brakes"],
+                Category = categoriesMap["Brakes"],
+                CategoryId = categoriesMap["Brakes"].CategoryId,
                 Price = 43.99M,
                 SalePrice = 43.99M,
                 ProductArtUrl = "product_brakes_disc-calipers-red.jpg",
@@ -418,7 +438,8 @@ namespace PartsUnlimited.Models
             {
                 SkuNumber = "BAT-0001",
                 Title = "12-Volt Calcium Battery",
-                CategoryId = categoriesMap["Batteries"],
+                Category = categoriesMap["Batteries"],
+                CategoryId = categoriesMap["Batteries"].CategoryId,
                 Price = 129.99M,
                 SalePrice = 129.99M,
                 ProductArtUrl = "product_batteries_basic-battery.jpg",
@@ -433,7 +454,8 @@ namespace PartsUnlimited.Models
             {
                 SkuNumber = "BAT-0002",
                 Title = "Spiral Coil Battery",
-                CategoryId = categoriesMap["Batteries"],
+                Category = categoriesMap["Batteries"],
+                CategoryId = categoriesMap["Batteries"].CategoryId,
                 Price = 154.99M,
                 SalePrice = 154.99M,
                 ProductArtUrl = "product_batteries_premium-battery.jpg",
@@ -448,7 +470,8 @@ namespace PartsUnlimited.Models
             {
                 SkuNumber = "BAT-0003",
                 Title = "Jumper Leads",
-                CategoryId = categoriesMap["Batteries"],
+                Category = categoriesMap["Batteries"],
+                CategoryId = categoriesMap["Batteries"].CategoryId,
                 Price = 16.99M,
                 SalePrice = 16.99M,
                 ProductArtUrl = "product_batteries_jumper-leads.jpg",
@@ -463,7 +486,8 @@ namespace PartsUnlimited.Models
             {
                 SkuNumber = "OIL-0001",
                 Title = "Filter Set",
-                CategoryId = categoriesMap["Oil"],
+                Category = categoriesMap["Oil"],
+                CategoryId = categoriesMap["Oil"].CategoryId,
                 Price = 28.99M,
                 SalePrice = 28.99M,
                 ProductArtUrl = "product_oil_filters.jpg",
@@ -478,7 +502,8 @@ namespace PartsUnlimited.Models
             {
                 SkuNumber = "OIL-0002",
                 Title = "Oil and Filter Combo",
-                CategoryId = categoriesMap["Oil"],
+                Category = categoriesMap["Oil"],
+                CategoryId = categoriesMap["Oil"].CategoryId,
                 Price = 34.49M,
                 SalePrice = 34.49M,
                 ProductArtUrl = "product_oil_oil-filter-combo.jpg",
@@ -493,7 +518,8 @@ namespace PartsUnlimited.Models
             {
                 SkuNumber = "OIL-0003",
                 Title = "Synthetic Engine Oil",
-                CategoryId = categoriesMap["Oil"],
+                Category = categoriesMap["Oil"],
+                CategoryId = categoriesMap["Oil"].CategoryId,
                 Price = 36.49M,
                 SalePrice = 36.49M,
                 ProductArtUrl = "product_oil_premium-oil.jpg",

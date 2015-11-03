@@ -209,12 +209,7 @@ namespace PartsUnlimited
             });
 
             //Populates the PartsUnlimited sample data
-
-            SampleData.InitializePartsUnlimitedDatabaseAsync(
-                app.ApplicationServices.GetService<PartsUnlimitedContext>,
-                app.ApplicationServices.GetService<UserManager<ApplicationUser>>(),
-                Configuration.GetSection("AdminRole")
-                ).Wait();
+            SampleData.InitializePartsUnlimitedDatabaseAsync(app.ApplicationServices).Wait();
         }
     }
 }
