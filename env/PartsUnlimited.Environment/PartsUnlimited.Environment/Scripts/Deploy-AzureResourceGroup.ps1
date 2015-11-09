@@ -19,8 +19,7 @@ Set-StrictMode -Version 3
 Import-Module Azure
 
 try {
-    $AzureToolsUserAgentString = New-Object -TypeName System.Net.Http.Headers.ProductInfoHeaderValue -ArgumentList 'VSAzureTools', '1.4'
-    [Microsoft.Azure.Common.Authentication.AzureSession]::ClientFactory.UserAgents.Add($AzureToolsUserAgentString)
+  [Microsoft.Azure.Common.Authentication.AzureSession]::ClientFactory.AddUserAgent("VSAzureTools-$UI$($host.name)".replace(" ","_"), "2.7")
 } catch { }
 
 $OptionalParameters = New-Object -TypeName Hashtable
@@ -60,7 +59,17 @@ if ($UploadArtifacts)
     $OptionalParameters.Add($ArtifactsLocationSasTokenName, $null)
 
     # Parse the parameter file and update the values of artifacts location and artifacts location SAS token if they are present
-    $JsonParameters = Get-TemplateParameters $TemplateParametersFile
+    $JsonContent = Get-Content $TemplateParametersFile -Raw | ConvertFrom-Json
+    $JsonParameters = $JsonContent | Get-Member -Type NoteProperty | Where-Object {$_.Name -eq "parameters"}
+
+    if ($JsonParameters -eq $null)
+    {
+        $JsonParameters = $JsonContent
+    }
+    else
+    {
+        $JsonParameters = $JsonContent.parameters
+    }
 
     $JsonParameters | Get-Member -Type NoteProperty | ForEach-Object {
         $ParameterValue = $JsonParameters | Select-Object -ExpandProperty $_.Name
@@ -71,9 +80,18 @@ if ($UploadArtifacts)
         }
     }
 
-    Switch-AzureMode AzureServiceManagement
-    $StorageAccountKey = (Get-AzureStorageKey -StorageAccountName $StorageAccountName).Primary
-    $StorageAccountContext = New-AzureStorageContext $StorageAccountName (Get-AzureStorageKey $StorageAccountName).Primary
+   if ($StorageAccountResourceGroupName)
+	{
+		Switch-AzureMode AzureResourceManager
+	    $StorageAccountKey = (Get-AzureStorageAccountKey -ResourceGroupName $StorageAccountResourceGroupName -Name $StorageAccountName).Key1
+    }
+    else
+	{
+		Switch-AzureMode AzureServiceManagement
+	    $StorageAccountKey = (Get-AzureStorageKey -StorageAccountName $StorageAccountName).Primary 
+    }
+    
+    $StorageAccountContext = New-AzureStorageContext -StorageAccountName $StorageAccountName -StorageAccountKey $StorageAccountKey
 
     # Generate the value for artifacts location if it is not provided in the parameter file
     $ArtifactsLocation = $OptionalParameters[$ArtifactsLocationName]
