@@ -2,11 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Mvc.ViewComponents;
 using PartsUnlimited.Models;
 using PartsUnlimited.WebsiteConfiguration;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc.ViewComponents;
-using System;
 
 namespace PartsUnlimited.Components
 {
