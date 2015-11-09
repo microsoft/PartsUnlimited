@@ -39,5 +39,9 @@ namespace PartsUnlimited.Models
                         });
             }
         }
+
+        public void Configure(IApplicationBuilder app)
+        {
+        }
     }
 }
