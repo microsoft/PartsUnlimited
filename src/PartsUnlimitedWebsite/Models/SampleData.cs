@@ -3,6 +3,7 @@
 
 using Microsoft.AspNet.Identity;
 using Microsoft.Data.Entity;
+using Microsoft.Dnx.Runtime;
 using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
 using PartsUnlimited.Areas.Admin;
@@ -11,7 +12,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Dnx.Runtime;
 
 
 namespace PartsUnlimited.Models
@@ -86,7 +86,12 @@ namespace PartsUnlimited.Models
             }
         }
 
-        private static IConfigurationSection GetAdminRoleConfiguration(IServiceProvider serviceProvider)
+       /// <summary>
+       /// Returns configuration section for AdminRole.
+       /// </summary>
+       /// <param name="serviceProvider"></param>
+       /// <returns></returns>
+       private static IConfigurationSection GetAdminRoleConfiguration(IServiceProvider serviceProvider)
         {
             var appEnv = serviceProvider.GetService<IApplicationEnvironment>();
 
