@@ -15,8 +15,7 @@ Param(
 # Ensure AzCopy.exe is available
 . $PSScriptRoot\Install-AzCopy.ps1
 
-Set-StrictMode -Version 3
-Import-Module Azure
+Import-Module Azure -ErrorAction SilentlyContinue
 
 try {
   [Microsoft.Azure.Common.Authentication.AzureSession]::ClientFactory.AddUserAgent("VSAzureTools-$UI$($host.name)".replace(" ","_"), "2.7")
