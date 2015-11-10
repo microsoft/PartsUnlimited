@@ -40,6 +40,7 @@ namespace PartsUnlimited.Models
             }
         }
 
+        //Configure is required by 'ef migrations add' command.
         public void Configure(IApplicationBuilder app)
         {
         }
