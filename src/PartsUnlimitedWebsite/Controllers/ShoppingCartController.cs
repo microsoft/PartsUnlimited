@@ -3,6 +3,7 @@
 
 using Microsoft.AspNet.Antiforgery;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Framework.Primitives;
 using PartsUnlimited.Models;
 using PartsUnlimited.Telemetry;
 using PartsUnlimited.ViewModels;
@@ -30,7 +31,7 @@ namespace PartsUnlimited.Controllers
 
         public IActionResult Index()
         {
-            var cart = ShoppingCart.GetCart(_db, Context);
+            var cart = ShoppingCart.GetCart(_db, HttpContext);
 
             var items = cart.GetCartItems();
             var itemsCount = items.Sum(x => x.Count);
@@ -76,11 +77,11 @@ namespace PartsUnlimited.Controllers
             var startTime = System.DateTime.Now;
 
             // Add it to the shopping cart
-            var cart = ShoppingCart.GetCart(_db, Context);
+            var cart = ShoppingCart.GetCart(_db, HttpContext);
 
             cart.AddToCart(addedProduct);
 
-            await _db.SaveChangesAsync(Context.RequestAborted);
+            await _db.SaveChangesAsync(HttpContext.RequestAborted);
 
             // Trace add process
             var measurements = new Dictionary<string, double>()
@@ -98,15 +99,14 @@ namespace PartsUnlimited.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveFromCart(int id)
         {
-            var formParameters = await Context.Request.ReadFormAsync();
-            var requestVerification = formParameters["RequestVerificationToken"];
-            string cookieToken = null;
-            string formToken = null;
+            var cookieToken = string.Empty;
+            var formToken = string.Empty;
+            StringValues tokenHeaders;
+            string[] tokens = null;
 
-            if (!string.IsNullOrWhiteSpace(requestVerification))
+            if (HttpContext.Request.Headers.TryGetValue("RequestVerificationToken", out tokenHeaders))
             {
-                var tokens = requestVerification.Split(':');
-
+                tokens = tokenHeaders.First().Split(':');
                 if (tokens != null && tokens.Length == 2)
                 {
                     cookieToken = tokens[0];
@@ -114,13 +114,14 @@ namespace PartsUnlimited.Controllers
                 }
             }
 
-            _antiforgery.ValidateTokens(Context, new AntiforgeryTokenSet(formToken, cookieToken));
+
+            _antiforgery.ValidateTokens(HttpContext, new AntiforgeryTokenSet(formToken, cookieToken));
 
             // Start timer for save process telemetry
             var startTime = System.DateTime.Now;
 
             // Retrieve the current user's shopping cart
-            var cart = ShoppingCart.GetCart(_db, Context);
+            var cart = ShoppingCart.GetCart(_db, HttpContext);
 
             // Get the name of the product to display confirmation
             // TODO [EF] Turn into one query once query of related data is enabled
@@ -130,7 +131,7 @@ namespace PartsUnlimited.Controllers
             // Remove from cart
             int itemCount = cart.RemoveFromCart(id);
 
-            await _db.SaveChangesAsync(Context.RequestAborted);
+            await _db.SaveChangesAsync(HttpContext.RequestAborted);
 
             string removed = (itemCount > 0) ? " 1 copy of " : string.Empty;
 
