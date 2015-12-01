@@ -3,7 +3,7 @@ HOL - Parts Unlimited WebSite Continuous Deployment with Release Management Onli
 In this lab you have an application called PartsUnlimited, committed to a Git repo
 in Visual Studio Team Services (VSTS) and a Continuous Integration build that builds the app and
 runs unit tests whenever code is pushed to the master branch. Please refer to the
-[HOL - Parts Unlimited Website Continous Integration with Visual Studio Team Services](http://CI-HOL.com)
+[HOL - Parts Unlimited Website Continous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Integration/HOL_PartsUnlimited_WebSite_Continuous_Integration_with_Visual_Studio_Online_Build.md)
 in order to see how the CI build was set up.
 Now you want to set up Release Management Online (a feature of Visual Studio Team Services)
 to be able continuously deploy the application to an Azure Web App. Initially the
@@ -20,11 +20,11 @@ the app will be deployed to the production site.
 > **Note**: In order to use deployment slots, you'll need to configure the Web App to use Standard or Premium App Service Plan mode. You **cannot** create
 deployment slots for Basic or Free Azure Web Apps. To learn more about deployment slots, see [this article](https://azure.microsoft.com/en-us/documentation/articles/web-sites-staged-publishing/).
 
-* You have completed the [HOL - Parts Unlimited Website Continous Integration with Visual Studio Team Services](http://CI-HOL.com)
+* You have completed the [HOL - Parts Unlimited Website Continous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Integration/HOL_PartsUnlimited_WebSite_Continuous_Integration_with_Visual_Studio_Online_Build.md)
 
 ## Tasks Overview:
 
-**1. Complete the [HOL - Parts Unlimited Website Continous Integration with Visual Studio Team Services](http://CI-HOL.com).**
+**1. Complete the [HOL - Parts Unlimited Website Continous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Integration/HOL_PartsUnlimited_WebSite_Continuous_Integration_with_Visual_Studio_Online_Build.md).**
 This will walk through creating a Visual Studio Team Services account, committing the PartsUnlimited source code
 and setting up the Continous Integration (CI) build.
 
@@ -54,7 +54,7 @@ Once the Release Definition is set up, you will trigger a release and see the pi
 
 # Hands On Lab
 ### 1: Complete HOL - Parts Unlimited Website Continous Integration with Visual Studio Team Services
-Make sure you've completed [HOL - Parts Unlimited Website Continous Integration with Visual Studio Team Services](http://CI-HOL.com).
+Make sure you've completed [HOL - Parts Unlimited Website Continous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Integration/HOL_PartsUnlimited_WebSite_Continuous_Integration_with_Visual_Studio_Online_Build.md).
 
 ### 2: Create a Web App in Azure
 In order to deploy to Azure, you're going to need to create an Azure Web App. You'll need to select a Standard or Premium
@@ -335,5 +335,13 @@ click on All Releases and then click the Overview link.
 
 ![](media/39.png)
 
-# Congratulations!
+## Congratulations!
 You've completed this HOL
+
+## Further Reading
+1. [Release Management for Visual Studio Team Services](https://msdn.microsoft.com/Library/vs/alm/release/overview-rmpreview)
+
+The following more PartsUnlimited Hands on Labs:
+1. [User Telemetry with Application Insights](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_HDD-User-Telemetry/HOL_PartsUnlimited_HDD-User-Telemetry.md)
+2. [Testing in Production with Azure Websites - PartsUnlimited](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_HDD_Testing_in_Production/HDD%20Testing%20in%20Production%20with%20Azure%20Websites%20HOL.md)
+3. [Application Performance Monitoring - PartsUnlimited](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_Application_Performance_Monitoring/HOL_PartsUnlimited_Application_Performance_Monitoring.md)
