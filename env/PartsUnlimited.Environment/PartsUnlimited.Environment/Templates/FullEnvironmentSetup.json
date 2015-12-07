@@ -77,12 +77,6 @@
         },
         "CdnStorageContainerNameForStaging": {
             "type": "string"
-        },
-        "_artifactsLocation": {
-            "type": "string"
-        },
-        "_artifactsLocationSasToken": {
-            "type": "securestring"
         }
     },
     "variables": {
