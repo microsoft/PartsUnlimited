@@ -86,6 +86,7 @@
         }
     },
     "variables": {
+        "sharedTemplateUrl": "[uri(deployment().properties.templateLink.uri)]",
         "sqlServerAndDbTemplateFile": "PartsUnlimited.Environment/Templates/SqlServerAndDb.json",
         "appInsightsTemplateFile": "PartsUnlimited.Environment/Templates/AppInsights.json",
         "hostingPlanTemplateFile": "PartsUnlimited.Environment/Templates/HostingPlanAndRules.json",
@@ -100,7 +101,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('sqlServerAndDbTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "uri": "[concat(parameters('sharedTemplateUrl'), '/', variables('sqlServerAndDbTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -120,7 +121,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('sqlServerAndDbTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "uri": "[concat(parameters('sharedTemplateUrl'), '/', variables('sqlServerAndDbTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -140,7 +141,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('sqlServerAndDbTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "uri": "[concat(parameters('sharedTemplateUrl'), '/', variables('sqlServerAndDbTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -160,7 +161,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('appInsightsTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "uri": "[concat(parameters('sharedTemplateUrl'), '/', variables('appInsightsTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -175,7 +176,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('appInsightsTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "uri": "[concat(parameters('sharedTemplateUrl'), '/', variables('appInsightsTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -190,7 +191,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('appInsightsTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "uri": "[concat(parameters('sharedTemplateUrl'), '/', variables('appInsightsTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -205,7 +206,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('hostingPlanTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "uri": "[concat(parameters('sharedTemplateUrl'), '/', variables('hostingPlanTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -232,7 +233,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('websiteTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "uri": "[concat(parameters('sharedTemplateUrl'), '/', variables('websiteTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -257,7 +258,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('websiteRulesTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "uri": "[concat(parameters('sharedTemplateUrl'), '/', variables('websiteRulesTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
