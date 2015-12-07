@@ -91,11 +91,11 @@
         {
             "name": "SqlServerAndDb",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-01-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('sharedTemplateUrl'), '/', variables('sqlServerAndDbTemplateFile'))]",
+                    "uri": "[concat(variables('sharedTemplateUrl'), '/', variables('sqlServerAndDbTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -111,11 +111,11 @@
         {
             "name": "SqlServerAndDb-Dev",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-01-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('sharedTemplateUrl'), '/', variables('sqlServerAndDbTemplateFile'))]",
+                    "uri": "[concat(variables('sharedTemplateUrl'), '/', variables('sqlServerAndDbTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -131,11 +131,11 @@
         {
             "name": "SqlServerAndDb-Stage",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-01-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('sharedTemplateUrl'), '/', variables('sqlServerAndDbTemplateFile'))]",
+                    "uri": "[concat(variables('sharedTemplateUrl'), '/', variables('sqlServerAndDbTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -151,11 +151,11 @@
         {
             "name": "AppInsights",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-01-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('sharedTemplateUrl'), '/', variables('appInsightsTemplateFile'))]",
+                    "uri": "[concat(variables('sharedTemplateUrl'), '/', variables('appInsightsTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -166,11 +166,11 @@
         {
             "name": "AppInsights-Dev",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-01-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('sharedTemplateUrl'), '/', variables('appInsightsTemplateFile'))]",
+                    "uri": "[concat(variables('sharedTemplateUrl'), '/', variables('appInsightsTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -181,11 +181,11 @@
         {
             "name": "AppInsights-Stage",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-01-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('sharedTemplateUrl'), '/', variables('appInsightsTemplateFile'))]",
+                    "uri": "[concat(variables('sharedTemplateUrl'), '/', variables('appInsightsTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -196,11 +196,11 @@
         {
             "name": "HostingPlan",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-01-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('sharedTemplateUrl'), '/', variables('hostingPlanTemplateFile'))]",
+                    "uri": "[concat(variables('sharedTemplateUrl'), '/', variables('hostingPlanTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -214,7 +214,7 @@
         {
             "name": "Website",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-01-01",
             "dependsOn": [
                 "Microsoft.Resources/deployments/HostingPlan",
                 "Microsoft.Resources/deployments/SqlServerAndDb",
@@ -227,7 +227,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('sharedTemplateUrl'), '/', variables('websiteTemplateFile'))]",
+                    "uri": "[concat(variables('sharedTemplateUrl'), '/', variables('websiteTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -245,14 +245,14 @@
         {
             "name": "WebsiteRules",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-01-01",
             "dependsOn": [
                 "Microsoft.Resources/deployments/Website"
             ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('sharedTemplateUrl'), '/', variables('websiteRulesTemplateFile'))]",
+                    "uri": "[concat(variables('sharedTemplateUrl'), '/', variables('websiteRulesTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
