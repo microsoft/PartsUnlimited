@@ -4,9 +4,7 @@ For full deployments, you can deploy the PartsUnlimited app to slots as needed. 
 ##How to Deploy Demo/Simple Environment and Publish Website##
 
 1.	Create a storage account (or use an existing one) where deployment artifacts can be uploaded. The Storage account must be on the same subscription as the one the website will be deployed to.
-1.	If you haven’t already done so, install PowerShell Tools for Visual Studio by following these steps:
-	* Install [Microsoft Web Platform Installer](http://www.microsoft.com/web/downloads/platform.aspx)
-	* When Web Platform Installer opens, click the Add button for `Microsoft Azure PowerShell - November 2015`
+1.	If you haven’t already done so, install [Microsoft Azure PowerShell - November 2015 Tools for Visual Studio](https://github.com/Azure/azure-powershell/releases/download/v1.0.1-November2015/azure-powershell.1.0.1.msi)
 1.	Open env\PartsUnlimited.Environment\PartsUnlimited.Environment.sln
 1.	Right-click on the PartsUnlimited.Environment and choose Deploy -> New Deployment…
 1.	Choose the subscription to which you want to deploy
@@ -41,9 +39,7 @@ For full deployments, you can deploy the PartsUnlimited app to slots as needed. 
 
 ##How to Deploy Demo/Full Environment And Publish Website##
 1.	Create a storage account (or use an existing one) where deployment artifacts can be uploaded. The Storage account must be on the same subscription as the one the website will be deployed to.
-1.	If you haven’t already done so, install PowerShell Tools for Visual Studio by following these steps:
-	* Install [Microsoft Web Platform Installer](http://www.microsoft.com/web/downloads/platform.aspx)
-	* When Web Platform Installer opens, click the Add button for `Microsoft Azure PowerShell - November 2015`
+1.	If you haven’t already done so, install [Microsoft Azure PowerShell - November 2015 Tools for Visual Studio](https://github.com/Azure/azure-powershell/releases/download/v1.0.1-November2015/azure-powershell.1.0.1.msi)
 1.	Open env\PartsUnlimited.Environment\PartsUnlimited.Environment.sln
 1.	Right-click on the PartsUnlimited.Environment and choose Deploy -> New Deployment…
 1.	Choose subscription to deploy to.
