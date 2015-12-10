@@ -7,15 +7,19 @@ Before you going you will need to pull the solution and setup the required Azure
 
 ##Redis##
 
+Reference
+[Get stared with Redis](https://azure.microsoft.com/en-us/documentation/articles/cache-dotnet-how-to-use-azure-redis-cache/)
+
 
 ##Azure Storage / CDN ##
-
+Reference
+[How to use CDN](https://azure.microsoft.com/en-us/documentation/articles/cdn-how-to-use-cdn/)
 
 ##DocDB##
-
+Reference
+[Learning Path Doc DB](https://azure.microsoft.com/en-us/documentation/learning-paths/documentdb/)
 
 ##Web.config##
-
 Edit web config, add the following keys here.
 
 #Scenarios#
