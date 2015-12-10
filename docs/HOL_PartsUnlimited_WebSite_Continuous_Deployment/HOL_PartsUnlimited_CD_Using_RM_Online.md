@@ -3,7 +3,7 @@ HOL - Parts Unlimited WebSite Continuous Deployment with Release Management Onli
 In this lab you have an application called PartsUnlimited, committed to a Git repo
 in Visual Studio Team Services (VSTS) and a Continuous Integration build that builds the app and
 runs unit tests whenever code is pushed to the master branch. Please refer to the
-[HOL - Parts Unlimited Website Continous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Integration/HOL_PartsUnlimited_WebSite_Continuous_Integration_with_Visual_Studio_Online_Build.md)
+[HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Integration/HOL_PartsUnlimited_WebSite_Continuous_Integration_with_Visual_Studio_Online_Build.md)
 in order to see how the CI build was set up.
 Now you want to set up Release Management Online (a feature of Visual Studio Team Services)
 to be able continuously deploy the application to an Azure Web App. Initially the
@@ -20,120 +20,89 @@ the app will be deployed to the production site.
 > **Note**: In order to use deployment slots, you'll need to configure the Web App to use Standard or Premium App Service Plan mode. You **cannot** create
 deployment slots for Basic or Free Azure Web Apps. To learn more about deployment slots, see [this article](https://azure.microsoft.com/en-us/documentation/articles/web-sites-staged-publishing/).
 
-* You have completed the [HOL - Parts Unlimited Website Continous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Integration/HOL_PartsUnlimited_WebSite_Continuous_Integration_with_Visual_Studio_Online_Build.md)
+* You have completed the [HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Integration/HOL_PartsUnlimited_WebSite_Continuous_Integration_with_Visual_Studio_Online_Build.md)
+
+* An organizational account that is a co-administrator on your Azure account
+> **Note**: This is required because deploying [ARM Templates](https://azure.microsoft.com/en-us/documentation/articles/resource-group-authoring-templates/)
+to Azure requires an organizational account or a [Service Principal](http://blogs.msdn.com/b/visualstudioalm/archive/2015/10/04/automating-azure-resource-group-deployment-using-a-service-principal-in-visual-studio-online-build-release-management.aspx).
+MSA Account and certificate-based connections are not supported. For this HOL, you will use an organizational account.
 
 ## Tasks Overview:
 
-**1. Complete the [HOL - Parts Unlimited Website Continous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Integration/HOL_PartsUnlimited_WebSite_Continuous_Integration_with_Visual_Studio_Online_Build.md).**
+**1. Complete the [HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Integration/HOL_PartsUnlimited_WebSite_Continuous_Integration_with_Visual_Studio_Online_Build.md).**
 This will walk through creating a Visual Studio Team Services account, committing the PartsUnlimited source code
-and setting up the Continous Integration (CI) build.
+and setting up the Continuous Integration (CI) build.
 
-**2. Create a Web App in Azure**
-This HOL utilized Deployment slots in Azure. This requires you to create a Web App in Azure on the 
-Standard or Premium App Service plan.
+**2. Modify the CI Build to include ARM Templates**
+The source code already defines the infrastructure required by the application in code (Infrastructure as Code). The
+code is a json file based on the Azure Resource Manager (ARM) template schema. You will use the template to deploy
+or update the infrastructure as part of the release.
 
-**3. Create Azure SQL Databases**
-You will need to create empty databases for the PartsUnlimited Website. You'll create one for dev,
-one for staging and one for production.
->**Note:** Deployment of schemas and data is beyond the scope of this HOL. It is recommended that you investigate
-<a href="https://msdn.microsoft.com/en-us/library/hh272686(v=vs.103).aspx">SQL Server Data Tools (SSDT)</a> for 
-managing database schema deployments.
-
-**4. Create a Service Endpoint in Visual Studio Team Services to an Azure Account.**
+**3. Create a Service Endpoint in Visual Studio Team Services to an Azure Account.**
 In this step you'll download your Azure publish settings file and create Service Endpoint in Visual Studio Team Services for
 your Azure account. This will enable you to configure deployment of the PartsUnlimited Website to Azure as an Azure
 Web Application from Builds or Releases.
 
-**5. Create a Release Pipeline for the Parts Unlimited Website.**
+**4. Create a Release Pipeline for the Parts Unlimited Website.**
 In this step, you will create a Release definition for the PartsUnlimited Website. You'll use the CI build output
 as the input artefact for the Release and then define how the release moves through `environments` with approvals
-inbetween.
+in between.
 
-**6. Trigger a Release.**
+**5. Trigger a Release.**
 Once the Release Definition is set up, you will trigger a release and see the pipeline in action.
 
 # Hands On Lab
-### 1: Complete HOL - Parts Unlimited Website Continous Integration with Visual Studio Team Services
-Make sure you've completed [HOL - Parts Unlimited Website Continous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Integration/HOL_PartsUnlimited_WebSite_Continuous_Integration_with_Visual_Studio_Online_Build.md).
+### 1: Complete HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services
+Make sure you've completed [HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Integration/HOL_PartsUnlimited_WebSite_Continuous_Integration_with_Visual_Studio_Online_Build.md).
 
-### 2: Create a Web App in Azure
-In order to deploy to Azure, you're going to need to create an Azure Web App. You'll need to select a Standard or Premium
-App Service plan in order to use Deployment slots.
-> **Note:** Deployment slots are only available on Standard or Premium App Service Plans. They are **not** available
-on Free or Basic plans. Once you've completed this lab, you probably want to delete the site to minimize costs.
+### 2: Modify the CI Build to include the ARM Templates
+In order to deploy to Azure, you're going to to specify the infrastructure that the PartsUnlimited Website requires. For example,
+the site requires an Azure SQL Database and an Azure Web App. Rather than create these by hand, you are going to use the Azure
+Resource Manager (ARM) templates that describe this infrastructure in a json file. This is good practice, since you're
+describing infrastructure as code.
 
-1. Log in to [https://portal.azure.com](https://portal.azure.com)
-* Make sure you select the subscription (in the upper right corner) that you want to host the PartsUnlimited site on.
-2. Create a new Web App
-* Click "+ New", then "Web + Mobile", then "Web App" to create a new Web App.
+The task that will deploy the ARM template will create the resource group if it does not exist. If the resource group does
+exist, then the template is used to update the existing resources.
 
-![](media/17.png)
-* Enter a unique name for the Web App.
-* Select the subscription that you want to use.
-* Enter a name for a new Resource Group.
-> Once you've completed this lab, you can delete the entire Resource Group. This will delete all the resources
-that you are creating - including service plans and web apps.
-* For the App Service plan, you can select an existing Standard or Premium plan. You can also create a new service plan,
-but it must be Standard or Premium in order to make use of Deployment slots.
+> **Note:** The infrastructure described in the ARM templates for this HOL will create resources that are not free.
+It creates an Azure Web App with 3 deployment slots. Deployment slots are only available on Standard or Premium App Service Plans.
+They are **not** available on Free or Basic plans. Once you've completed this lab, you probably want to delete the resource
+group in order to minimize charges to your Azure account.
 
-![](media/18.png)
-* Click Create to create the Web App. This will take a few moments.
-3. Create Deployment slots
-* Once the Web App has been created, click on the Web App tile from the Start screen or navigate to the Web App.
-* Click on "All Settings" and then click "Deployment slots".
+1. Log into your VSTS account and click on the BUILD hub.
+2. Click the HOL Build that you configured in the Continuous Integration HOL, and click "Edit".
+3. Click the "Copy and Publish Build Artifacts" task and update it to look as follows:
+	![](media/48.png)
+	* This constrains the `drop` folder to contain only the WebDeploy zip file, which is a package containing
+	the website.
+4. Click "+ Add build step..." and add a new "Publish Build Artifacts" task. Configure it as follows:
+	![](media/48.png)
+	* For `Path to Publish`, click the "..." button and browse to the PartsUnlimitedEnv/Templates folder
+	* For `Artifact Name`, enter "ARMTemplates"
+	* For `Artifact Type`, select "Server" 
+5. Queue a new build by clicking the "Queue build" button. Accept the defaults and click OK.
+6. When the build has completed, verify that there are 2 folders: drop and ARMTemplates.
+	* The drop folder should contain a single file: PartsUnlimitedWebsite.zip (click "Explore" to view the contents)
+	* The ARMTemplates folder should contain a number of json files.
 
-![](media/19.png)
-* Click the "Add Slot" button. Enter "dev" for the name and click OK.
-* Click the "Add Slot" button. Enter "staging" for the name and click OK.
-
-![](media/20.png)
-
-### 3: Create Azure SQL Databases
-The PartsUnlimited Website access a database. In order for the site to work in Azure, you're going to need to
-create a SQL Database in Azure for the site. And since there are also separate deployment slots for dev and staging,
-you're going to create 3 databases in total. You can add them to any Resource Group in Azure, but it is recommended
-that you add them to the Resource Group you created when you created the Azure Web App.
-> **Note:** The code for the site includes logic to create the database and populate it with data if it does not exist.
-Thus the first time you deploy the site, the site itself will create data in the database.
-
-1. Log in to [https://portal.azure.com](https://portal.azure.com) if you are not still logged in.
-* Make sure you select the subscription (in the upper right corner) that you want to host the PartsUnlimited site on.
-2. Create a new SQL Database and SQL Server
-* Click "+ New", then "Data + Storage", then "SQL Database" to create a new SQL Database.
-
-![](media/23.png)
-* Enter `PartsUnlimitedDB-Prod` as the database name.
-* Click "Server _Configure required settings_" to configure the server settings.
-	* Click "Create a new server"
-	* Enter a unique name for the server
-	* Enter an admin username and password. Make a note of these since you'll need them for the Release later.
-	* Select a location for the server (it is recommended that you select the same location as the Web App).
-
-	![](media/24.png)
-* You can change the pricing tier to Basic.
-* **Optional, but recommended:** Change the Resource Group to the Resource Group you created when creating the Web App.
-
-	![](media/25.png)	
-* Click Create. This will take a few moments.
-3. Create SQL Database for dev and staging in the new SQL Server
-* Click "+ New", then "Data + Storage", then "SQL Database" to create a new SQL Database.
-* Enter `PartsUnlimitedDB-Dev` as the database name.
-* Click "Server _Configure required settings_" to configure the server settings.
-	* Select the existing database server and click "Select"
-
-	![](media/26.png)
-* You can change the pricing tier to Basic.
-* Click Create.
-4. Repeat step 3 to create a `PartsUnlimitedDB-Staging` database.	
-
-### 4: Create a Service Link from Visual Studio Team Services to an Azure Account
+### 3: Create a Service Link from Visual Studio Team Services to an Azure Account
 In order to interact with Azure, you'll need to create a Service Endpoint in VSTS. This Endpoint includes the
 authentication information required to deploy to Azure.
 
-1. Download you Azure publish profile.
-* Navigate to (https://manage.windowsazure.com/publishsettings)[https://manage.windowsazure.com/publishsettings]. 
-If you have multiple subscriptions, select the subscription you want to use to host the PartsUnlimited Website. 
-Save the file to a location on your machine.
+> **Note**: Deploying [ARM Templates](https://azure.microsoft.com/en-us/documentation/articles/resource-group-authoring-templates/)
+to Azure from Release Management requires an organizational account or a [Service Principal](http://blogs.msdn.com/b/visualstudioalm/archive/2015/10/04/automating-azure-resource-group-deployment-using-a-service-principal-in-visual-studio-online-build-release-management.aspx).
+MSA Accounts and certificate-based connections are not supported. For this HOL, you will use an organizational account, but you can 
+create a Service Principal if you wish to.
+
+1. Create an organizational account in Azure
+	* Create a user in the Azure Active Directory from the old Azure portal (https://manage.windowsazure.com). If you do not have
+	a custom domain, then use the `onmicrosoft.com` domain (the default domain). The user should be something like `testuser@myazure.onmicrosoft.com`
+	* After adding the account, the following two things need to be done to use the account during a VSTS release:
+		* Add the Active Directory account to the co-administrators in the subscription. Go to the Settings hub (click on the Gear
+		icon in the left-hand main menu) and then click on administrators and add the account as a co-admin.
+		* Login to the portal with this Active Directory account (e.g. `testuser@myazure.onmicrosoft.com`, and change the password.
+		Initially a temporary password is created and that needs to be changed at the first login.
+
 2. Create an Azure Service Endpoint in Visual Studio Team Services
 	* Log in to your VSTS account.
 	* Open the project administration page by clicking the gear icon in the upper right.
@@ -147,32 +116,36 @@ Save the file to a location on your machine.
 		![](media/3.png)
 	* Click on the "Certificate Based" radio button
 		* Enter any name for the Connection Name - this is to identify this Service Endpoint in VSTS.
-		* Copy the Subscription Id, Subscription Name and Management Certificate fields from your
-		Azure publish profile (that you downloaded earlier) into the corresponding text boxes. Once
-		you're done, click OK. 
-	
+		* Copy the Subscription Id and Subscription Name for your Azure subscription. You can get this
+		by logging into the new Azure portal and clicking "Subscriptions".
 		![](media/4.png)
+		
+		* Enter the username and password of the user you created in the previous Task. Click OK.
+	
+		![](media/41.png)
 	* You should see a new Service Endpoint. You can close the project administration page.
 	
 	![](media/5.png)
 
-### 5: Create a Release Definition
+### 4: Create a Release Definition
 Now that you have an Azure Service Endpoint to deploy to, and a package to deploy (from your CI build),
 you can create a Release Definition. The Release Definition defines how your application moves through
-various Environments, including Tasks to deploy your application, run script or run tests. You can also
-configure incoming or outgoing approvals for each Environment.
+various Environments, including Tasks to update infrastructure, deploy your application, run script and
+run tests. You can also configure incoming or outgoing approvals for each Environment.
 
 An Environment is simply a logical grouping of tasks - it should not be confused with a set of machines.
+For this Release Definition, you will create 4 "Environments" - one to set up the infrastructure (which
+describes Dev, Staging and Production infrastructure) and 3 others: 1 for Dev, 1 for Staging and 1 for
+Production.
 
-1. Create a Release Definition
+1. Create a Release Definition to Deploy Infrastructure
 	* In VSTS, click on the Release hub
 	* Click on the green + button at the top of the left hand menu to create a new definition. This will
-	launch a wizard prompting you to select a deployment template. Click on "Azure Website Deployment" and
-	click OK.
+	launch a wizard prompting you to select a deployment template. Click on "Empty" to start with an empty
+	release and click OK.
 	
 	![](media/6.png)
-	* The template has created a single Environment (called Default Environment) with 2 deployment Tasks
-	(Azure Web App Deployment and Visual Studio Test). Delete the Visual Studio Test task.
+	* The template has created a single Environment (called Default Environment).
 	* Enter "PartsUnlimited" into the name field at the top to name this Release Definition.
 	* Before completing the "Azure Web App Deployment" task, you'll need to configure the source package. Click on 
 	the "Artifacts" link.
@@ -181,28 +154,103 @@ An Environment is simply a logical grouping of tasks - it should not be confused
 	* Click the "Link to a build definition" link.
 	
 	![](media/8.png)
-	* You'll now link this Release Definition to the CI build. Select the Project and Build from the dropdowns and click Link.
+	* You'll now link this Release Definition to the CI build. Select the Project and Build from the drop downs and click Link.
 	
 	![](media/9.png)
 	> **Note:** It is possible to Link other package sources, but you only need the CI build for this Release.
 	
-	* Click on the Environments link to go back to the Environments page. Clik on the "Azure Web App Deployment" Task.
-		* Select the Azure Service Endpoint you created earlier in the Azure Subscription dropdown.
+	* Click on the Environments link to go back to the Environments page. 
+	
+	* Click the name label on the Default Environment card and change the name to "Prep Env".
+	
+		![](media/12.png)
+	
+	* Click on the "+ Add tasks" button to add a task for this environment. In the "Deploy" group, click the "Add"
+	button next to "Azure Resource Group Deployment" to add the task. Close the "ADD TASKS" dialog.
+	
+		![](media/42.png)
+		
+	* Click on the "Azure Resource Group Deployment" task. Configure it as follows:
+		* `Azure Subscription`: select the Azure subscription endpoint that you created in Task 2
+		* `Action`: select "Create or Update Resource Group"
+		* `Resource Group`: enter a name for your resource group. This must be unique in your Azure
+		subscription.
+		* `Location`: select an Azure location
+		* `Template`: click the "..." button and browse to the FullEnvironmentSetup.json file in the ARMTemplates
+		folder.
+		
+		![](media/43.png)
+		* `Template Parameters`: click the "..." button and browse to the FullEnvironmentSetup.param.json file
+		in the ARMTemplates folder.
+		* `Override Template Parameters`: Enter the following in a single line (shown split here for convenience):
+		```
+		-WebsiteName $(WebsiteName)
+		-PartsUnlimitedServerName $(ServerName)
+		-PartsUnlimitedHostingPlanName $(HostingPlan)
+		-CdnStorageAccountName $(StorageAccountName)
+		-CdnStorageContainerName $(StorageAccountName)-cont
+		-CdnStorageAccountNameForDev $(DevStorageAccountName)
+		-CdnStorageContainerNameForDev $(DevStorageAccountName)-cont
+		-CdnStorageAccountNameForStaging $(StagingStorageAccountName)
+		-CdnStorageContainerNameForStaging $(StagingStorageAccountName)-cont
+		-PartsUnlimitedServerAdminLoginPassword (ConvertTo-SecureString $(AdminPassword) -AsPlainText -Force)
+		-PartsUnlimitedServerAdminLoginPasswordForTest (ConvertTo-SecureString $(AdminTestPassword) -AsPlainText -Force)
+		```
+		You will shortly define the values for each parameter, like `$(ServerName)`, in the Environment variables.
+		
+		> **Note**: If you open the FullEnvironmentSetup.param.json file, you will see empty placeholders for these parameters.
+		You could hard code values in the file, but then you would have to update the file, commit and create a new
+		build in order to change the values. Overriding the values in the Release makes changing values easier.
+		
+		* `Output -> Resource Group`: Enter "PartsUnlimitedRG". Subsequent tasks will be able to use this variable if
+		they require the name of the resource group created.
+	
+	* Click on the ellipsis (...) button next to the Environment and select "Configure variables..."
+	
+		![](media/44.png)
+		* Create variables as follows:
+
+	* Save the definition.
+
+2. Test the ARM Template Deployment
+
+	Before moving on, it is a good idea to test the template so far.
+	
+	* Click on "+ Release" in the toolbar and select "Create Release" to start a new release.
+	
+	![](media/45.png)
+	
+	* Select the latest build from the drop-down, and then select "Prep Env" as the target environment.
+	Click "Create" to start the release.
+	
+	![](media/46.png)
+	
+	* Click the "Release-x" link to open the release.
+	
+	![](media/47.png)
+	
+	* Click on the Logs link to open and monitor the deployment logs.
+	
+	
+	
+3. Add Web Deployment Tasks to Deploy the Web App
+
+	Now that the deployment is configured, you can add tasks to deploy the web app.
+		
+	* Click on the "Azure Web App Deployment" Task.
+		* Select the Azure Service Endpoint you created earlier in the Azure Subscription drop down.
 		* For Web App Name, enter the name of the Web App you created earlier in Azure.
 		* Select a region for your Web App.
 		* Enter "dev" for the Slot. This will deploy the site to the "dev" deployment slot. This allows you
 		to deploy the site to Azure without affecting the Production site.
-		* Click the elipsis (...) button to set the Web Deploy Package location. Browse to the PartsUnlimitedWebsite.zip file and click OK.
+		* Click the ellipsis (...) button to set the Web Deploy Package location. Browse to the PartsUnlimitedWebsite.zip file and click OK.
 	
 		![](media/10.png)
 		* The Task should look like this:
 	
 		![](media/11.png)
-	* Click the name label on the Default Environment card and change the name to "Dev".
-	
-		![](media/12.png)
-	
-	* Click on the elipsis (...) button next to the Environment and select "Configure variables..."
+		
+	* Click on the ellipsis (...) button next to the Environment and select "Configure variables..."
 	
 		![](media/13.png)
 		* These variables allow you to configure values for the Dev environment. Most of these variables are used to
@@ -211,11 +259,11 @@ An Environment is simply a logical grouping of tasks - it should not be confused
 		
 		![](media/14.png)
 		> The password is masked by setting it as a "secret" variable. To change the value, click the padlock icon 
-		to unlock the textbox, enter the password and then click the padlock to lock and mask the password again.
+		to unlock the text box, enter the password and then click the padlock to lock and mask the password again.
 		> The ConnectionStringName is `DefaultConnectionString`. You can see this if you open the web.config of the website.
 	* Click Save to save the Release Definition.
 
-2. Test the Dev Environment
+4. Test the Dev Environment
 
 	You will shortly clone the Dev Environment into both Staging and Prod environments. However, before you do that
 	it's a good idea to test that the Dev Environment is correctly configured by creating a new Release.
@@ -224,7 +272,7 @@ An Environment is simply a logical grouping of tasks - it should not be confused
 	
 	![](media/15.png)
 	* You can enter a Release Description if you want to.
-	* Select the latest build from the HOL Build dropdown.
+	* Select the latest build from the HOL Build drop down.
 	* Click on the Dev Environment to set it as the target environment for this Release. Click Create.
 
 	![](media/16.png)
@@ -249,13 +297,13 @@ An Environment is simply a logical grouping of tasks - it should not be confused
 	* Click on the PartsUnlimited link and then the Edit link to open the Release Definition.
 	> **Note:** It is possible to change the definition for a Release without changing the Release Definition (i.e. the Release is an instance of the Release Definition that you can edit). You want to make sure that you are editing the Release Definition, not a Release.
 	
-	* Click the elipsis (...) on the Dev Environment card and select "Clone environment"
+	* Click the ellipsis (...) on the Dev Environment card and select "Clone environment"
 	![](media/28.png)
 	* A new Environment is created. Enter "Staging" for the name.
 	* On the Azure Web App Deployment task, set the Slot to `staging`.
 	
 	![](media/29.png)
-	* Click the elipsis (...) on the Staging Environment card and select "Configure variables..."
+	* Click the ellipsis (...) on the Staging Environment card and select "Configure variables..."
 		* Even though the `AdministratorLoginPassword` parameter shows a masked value, this is currently
 		a bug. You will need to re-enter the password since it is actually emptied after the clone operation.
 		* Change the DatabaseName variable to the Staging database you created earlier and click OK.
@@ -280,7 +328,7 @@ An Environment is simply a logical grouping of tasks - it should not be confused
 	
 	* Save the Release Definition.
 
-3. Clone the Staging environment to Production
+5. Clone the Staging environment to Production
 	* Clone the Staging environment to a new Environment called Production.
 	* Update the Slot parameter to be empty (i.e. the site will deploy to the production slot)
 	* Update the database name in the Environment variables.
@@ -289,9 +337,9 @@ An Environment is simply a logical grouping of tasks - it should not be confused
 	
 	![](media/34.png)
 
-4. Configure Continous Deployment for this Release Definition
+6. Configure Continuous Deployment for this Release Definition
 	* Click on the Triggers link of the Release Definition.
-	* Check the "Continuous Deployment" checkbox.
+	* Check the "Continuous Deployment" check box.
 	* Set the Source Label and Target environment.
 	> Selecting the build as the trigger means that any time the artifact build
 	completes, a new release will automatically start using the latest build.
@@ -337,6 +385,10 @@ click on All Releases and then click the Overview link.
 
 ## Congratulations!
 You've completed this HOL!
+
+>**Note:** Deployment of schemas and data is beyond the scope of this HOL. It is recommended that you investigate
+<a href="https://msdn.microsoft.com/en-us/library/hh272686(v=vs.103).aspx">SQL Server Data Tools (SSDT)</a> for 
+managing database schema deployments.
 
 ## Further Reading
 1. [Release Management for Visual Studio Team Services](https://msdn.microsoft.com/Library/vs/alm/release/overview-rmpreview)
