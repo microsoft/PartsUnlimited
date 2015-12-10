@@ -17,10 +17,6 @@ namespace PartsUnlimited.Security
                     options.Authority = loginProviders.Azure.Authority;
                     options.RedirectUri = loginProviders.Azure.RedirectUri;
 
-                    if (!string.IsNullOrWhiteSpace(loginProviders.Azure.Caption))
-                    {
-                        options.Caption = loginProviders.Azure.Caption;
-                    }
                 });
             }
 
@@ -71,7 +67,6 @@ namespace PartsUnlimited.Security
 
                 app.UseMicrosoftAccountAuthentication(options =>
                 {
-                    options.Caption = "MicrosoftAccount - Requires project changes";
                     options.ClientId = loginProviders.Microsoft.Key;
                     options.ClientSecret = loginProviders.Microsoft.Secret;
                 });
