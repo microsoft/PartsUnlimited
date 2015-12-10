@@ -1,21 +1,22 @@
 ﻿{
     "version": "1.0.0-*",
-    "dependencies": {
-        "xunit": "2.1.0-beta1-*",
-        "xunit.runner.aspnet": "2.0.0-aspnet-beta7",
-        "NSubstitute": "1.8.1",
-        "PartsUnlimitedWebsite": ""
-    },
+  "dependencies": {
+    "xunit": "2.1.0-beta1-*",
+    "xunit.runner.aspnet": "2.0.0-aspnet-beta8",
+    "NSubstitute": "1.8.1",
+    "PartsUnlimitedWebsite": ""
+  },
     "commands": {
         "test": "xunit.runner.aspnet"
     },
-    "frameworks": {
-        "dnx451": {
-            "frameworkAssemblies": {
-                "System.Xml": "4.0.0.0"
-            },
-            "dependencies": {
-            }
-        }
+  "frameworks": {
+    "dnx451": {
+      "frameworkAssemblies": {
+        "System.Xml": "4.0.0.0"
+      },
+      "dependencies": {
+      }
     }
+  }
 }
+

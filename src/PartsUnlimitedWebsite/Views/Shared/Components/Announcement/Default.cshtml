@@ -1,6 +1,6 @@
 ﻿@model PartsUnlimited.Models.Product
 
-<div class="alert alert-new-arrival @if (Model == null) { <text>hidden</text>}" id="alert-new-arrival" role="alert">
+<div class="alert alert-new-arrival @(@Model == null ? "hidden": "show") " id="alert-new-arrival" role="alert">
     <div class="container">
         <div class="alert-content">
             <span class="glyphicon glyphicon-bullhorn"></span>

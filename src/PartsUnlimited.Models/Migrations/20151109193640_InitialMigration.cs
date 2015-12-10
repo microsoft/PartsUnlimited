@@ -1,10 +1,7 @@
-// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
 using System;
 using System.Collections.Generic;
 using Microsoft.Data.Entity.Migrations;
-using Microsoft.Data.Entity.SqlServer.Metadata;
+using Microsoft.Data.Entity.Metadata;
 
 namespace PartsUnlimited.Models.Migrations
 {
@@ -16,10 +13,10 @@ namespace PartsUnlimited.Models.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(isNullable: false),
-                    ConcurrencyStamp = table.Column<string>(isNullable: true),
-                    Name = table.Column<string>(isNullable: true),
-                    NormalizedName = table.Column<string>(isNullable: true)
+                    Id = table.Column<string>(nullable: false),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    NormalizedName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -29,22 +26,22 @@ namespace PartsUnlimited.Models.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(isNullable: false),
-                    AccessFailedCount = table.Column<int>(isNullable: false),
-                    ConcurrencyStamp = table.Column<string>(isNullable: true),
-                    Email = table.Column<string>(isNullable: true),
-                    EmailConfirmed = table.Column<bool>(isNullable: false),
-                    LockoutEnabled = table.Column<bool>(isNullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(isNullable: true),
-                    Name = table.Column<string>(isNullable: true),
-                    NormalizedEmail = table.Column<string>(isNullable: true),
-                    NormalizedUserName = table.Column<string>(isNullable: true),
-                    PasswordHash = table.Column<string>(isNullable: true),
-                    PhoneNumber = table.Column<string>(isNullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(isNullable: false),
-                    SecurityStamp = table.Column<string>(isNullable: true),
-                    TwoFactorEnabled = table.Column<bool>(isNullable: false),
-                    UserName = table.Column<string>(isNullable: true)
+                    Id = table.Column<string>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    NormalizedEmail = table.Column<string>(nullable: true),
+                    NormalizedUserName = table.Column<string>(nullable: true),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    SecurityStamp = table.Column<string>(nullable: true),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    UserName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -54,11 +51,11 @@ namespace PartsUnlimited.Models.Migrations
                 name: "Category",
                 columns: table => new
                 {
-                    CategoryId = table.Column<int>(isNullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn),
-                    Description = table.Column<string>(isNullable: true),
-                    ImageUrl = table.Column<string>(isNullable: true),
-                    Name = table.Column<string>(isNullable: false)
+                    CategoryId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Description = table.Column<string>(nullable: true),
+                    ImageUrl = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -68,20 +65,20 @@ namespace PartsUnlimited.Models.Migrations
                 name: "Order",
                 columns: table => new
                 {
-                    OrderId = table.Column<int>(isNullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn),
-                    Address = table.Column<string>(isNullable: false),
-                    City = table.Column<string>(isNullable: false),
-                    Country = table.Column<string>(isNullable: false),
-                    Email = table.Column<string>(isNullable: false),
-                    Name = table.Column<string>(isNullable: false),
-                    OrderDate = table.Column<DateTime>(isNullable: false),
-                    Phone = table.Column<string>(isNullable: false),
-                    PostalCode = table.Column<string>(isNullable: false),
-                    Processed = table.Column<bool>(isNullable: false),
-                    State = table.Column<string>(isNullable: false),
-                    Total = table.Column<decimal>(isNullable: false),
-                    Username = table.Column<string>(isNullable: false)
+                    OrderId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Address = table.Column<string>(nullable: false),
+                    City = table.Column<string>(nullable: false),
+                    Country = table.Column<string>(nullable: false),
+                    Email = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    OrderDate = table.Column<DateTime>(nullable: false),
+                    Phone = table.Column<string>(nullable: false),
+                    PostalCode = table.Column<string>(nullable: false),
+                    Processed = table.Column<bool>(nullable: false),
+                    State = table.Column<string>(nullable: false),
+                    Total = table.Column<decimal>(nullable: false),
+                    Username = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -91,9 +88,9 @@ namespace PartsUnlimited.Models.Migrations
                 name: "Store",
                 columns: table => new
                 {
-                    StoreId = table.Column<int>(isNullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn),
-                    Name = table.Column<string>(isNullable: true)
+                    StoreId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -103,11 +100,11 @@ namespace PartsUnlimited.Models.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(isNullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn),
-                    ClaimType = table.Column<string>(isNullable: true),
-                    ClaimValue = table.Column<string>(isNullable: true),
-                    RoleId = table.Column<string>(isNullable: true)
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ClaimType = table.Column<string>(nullable: true),
+                    ClaimValue = table.Column<string>(nullable: true),
+                    RoleId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -122,11 +119,11 @@ namespace PartsUnlimited.Models.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(isNullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn),
-                    ClaimType = table.Column<string>(isNullable: true),
-                    ClaimValue = table.Column<string>(isNullable: true),
-                    UserId = table.Column<string>(isNullable: true)
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ClaimType = table.Column<string>(nullable: true),
+                    ClaimValue = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -141,10 +138,10 @@ namespace PartsUnlimited.Models.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(isNullable: false),
-                    ProviderKey = table.Column<string>(isNullable: false),
-                    ProviderDisplayName = table.Column<string>(isNullable: true),
-                    UserId = table.Column<string>(isNullable: true)
+                    LoginProvider = table.Column<string>(nullable: false),
+                    ProviderKey = table.Column<string>(nullable: false),
+                    ProviderDisplayName = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -159,8 +156,8 @@ namespace PartsUnlimited.Models.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(isNullable: false),
-                    RoleId = table.Column<string>(isNullable: false)
+                    UserId = table.Column<string>(nullable: false),
+                    RoleId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -180,20 +177,20 @@ namespace PartsUnlimited.Models.Migrations
                 name: "Product",
                 columns: table => new
                 {
-                    ProductId = table.Column<int>(isNullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn),
-                    CategoryId = table.Column<int>(isNullable: false),
-                    Created = table.Column<DateTime>(isNullable: false),
-                    Description = table.Column<string>(isNullable: false),
-                    Inventory = table.Column<int>(isNullable: false),
-                    LeadTime = table.Column<int>(isNullable: false),
-                    Price = table.Column<decimal>(isNullable: false),
-                    ProductArtUrl = table.Column<string>(isNullable: false),
-                    ProductDetails = table.Column<string>(isNullable: false),
-                    RecommendationId = table.Column<int>(isNullable: false),
-                    SalePrice = table.Column<decimal>(isNullable: false),
-                    SkuNumber = table.Column<string>(isNullable: false),
-                    Title = table.Column<string>(isNullable: false)
+                    ProductId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CategoryId = table.Column<int>(nullable: false),
+                    Created = table.Column<DateTime>(nullable: false),
+                    Description = table.Column<string>(nullable: false),
+                    Inventory = table.Column<int>(nullable: false),
+                    LeadTime = table.Column<int>(nullable: false),
+                    Price = table.Column<decimal>(nullable: false),
+                    ProductArtUrl = table.Column<string>(nullable: false),
+                    ProductDetails = table.Column<string>(nullable: false),
+                    RecommendationId = table.Column<int>(nullable: false),
+                    SalePrice = table.Column<decimal>(nullable: false),
+                    SkuNumber = table.Column<string>(nullable: false),
+                    Title = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -208,12 +205,12 @@ namespace PartsUnlimited.Models.Migrations
                 name: "CartItem",
                 columns: table => new
                 {
-                    CartItemId = table.Column<int>(isNullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn),
-                    CartId = table.Column<string>(isNullable: false),
-                    Count = table.Column<int>(isNullable: false),
-                    DateCreated = table.Column<DateTime>(isNullable: false),
-                    ProductId = table.Column<int>(isNullable: false)
+                    CartItemId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CartId = table.Column<string>(nullable: false),
+                    Count = table.Column<int>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    ProductId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -228,12 +225,12 @@ namespace PartsUnlimited.Models.Migrations
                 name: "OrderDetail",
                 columns: table => new
                 {
-                    OrderDetailId = table.Column<int>(isNullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn),
-                    OrderId = table.Column<int>(isNullable: false),
-                    ProductId = table.Column<int>(isNullable: false),
-                    Quantity = table.Column<int>(isNullable: false),
-                    UnitPrice = table.Column<decimal>(isNullable: false)
+                    OrderDetailId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    OrderId = table.Column<int>(nullable: false),
+                    ProductId = table.Column<int>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false),
+                    UnitPrice = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -253,13 +250,13 @@ namespace PartsUnlimited.Models.Migrations
                 name: "Raincheck",
                 columns: table => new
                 {
-                    RaincheckId = table.Column<int>(isNullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerIdentityStrategy.IdentityColumn),
-                    Name = table.Column<string>(isNullable: true),
-                    ProductId = table.Column<int>(isNullable: false),
-                    Quantity = table.Column<int>(isNullable: false),
-                    SalePrice = table.Column<double>(isNullable: false),
-                    StoreId = table.Column<int>(isNullable: false)
+                    RaincheckId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    ProductId = table.Column<int>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false),
+                    SalePrice = table.Column<double>(nullable: false),
+                    StoreId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

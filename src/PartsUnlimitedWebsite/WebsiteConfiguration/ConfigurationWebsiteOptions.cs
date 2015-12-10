@@ -13,7 +13,7 @@ namespace PartsUnlimited.WebsiteConfiguration
         {
             try
             {
-                ShowRecommendations = config.Get<bool>("ShowRecommendations");
+                ShowRecommendations = Boolean.Parse(config["ShowRecommendations"]);
             }
             catch (InvalidCastException e)
             {

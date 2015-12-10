@@ -140,7 +140,7 @@ namespace PartsUnlimited.Controllers
                 if (result.Succeeded)
                 {
                     var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Context.Request.Scheme);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     await MessageServices.SendEmailAsync(model.Email, "Confirm your account",
                         "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
                     ViewBag.Link = callbackUrl;
@@ -201,7 +201,7 @@ namespace PartsUnlimited.Controllers
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
                 string code = await UserManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { code = code }, protocol: Context.Request.Scheme);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { code = code }, protocol: HttpContext.Request.Scheme);
 
                 await MessageServices.SendEmailAsync(model.Email, "Reset Password",
                                     "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
@@ -449,7 +449,7 @@ namespace PartsUnlimited.Controllers
 
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
-            return await UserManager.FindByIdAsync(Context.User.GetUserId());
+            return await UserManager.FindByIdAsync(HttpContext.User.GetUserId());
         }
 
         private ActionResult RedirectToLocal(string returnUrl)

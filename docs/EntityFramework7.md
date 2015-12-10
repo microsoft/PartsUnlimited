@@ -16,7 +16,7 @@ Entity Framework requires a connection string to the database to which the migra
 
 ```
     "Data": {
-        DefaultConnection": {
+        "DefaultConnection": {
             "ConnectionString": "Server=tcp:{server}.database.windows.net,1433;Database={database};User ID={AdminUserName};Password={password};Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
         }
     }
