@@ -98,9 +98,9 @@ if ($UploadArtifacts)
 	# Create DSC configuration archive
     if (Test-Path $DSCSourceFolder) {
     Add-Type -Assembly System.IO.Compression.FileSystem
-        $ArchiveFile = Join-Path $ArtifactStagingDirectory "dsc.zip"
-        Remove-Item -Path $ArchiveFile -ErrorAction SilentlyContinue
-        [System.IO.Compression.ZipFile]::CreateFromDirectory($DSCSourceFolder, $ArchiveFile)
+		$ArchiveFile = Join-Path $ArtifactStagingDirectory "dsc.zip"
+		Remove-Item -Path $ArchiveFile -ErrorAction SilentlyContinue
+		[System.IO.Compression.ZipFile]::CreateFromDirectory($DSCSourceFolder, $ArchiveFile)
     }
 
     # Generate the value for artifacts location if it is not provided in the parameter file
