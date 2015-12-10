@@ -9,8 +9,6 @@ Param(
   [Parameter(Mandatory=$true)][string] $Location
 )
 
-	Switch-AzureMode AzureServiceManagement
-
 	#Create storage account if needed
 	if (!(Test-AzureName -Storage $StorageAccountName)) {
 		Write-Verbose "Creating new storage account with name $StorageAccountName"
