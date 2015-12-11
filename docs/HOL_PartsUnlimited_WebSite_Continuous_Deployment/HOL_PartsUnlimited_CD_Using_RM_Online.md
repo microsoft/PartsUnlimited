@@ -176,91 +176,108 @@ Production.
 		* `Resource Group`: enter a name for your resource group. This must be unique in your Azure
 		subscription.
 		* `Location`: select an Azure location
-		* `Template`: click the "..." button and browse to the FullEnvironmentSetup.json file in the ARMTemplates
+		* `Template`: click the "..." button and browse to the FullEnvironmentSetupMerged.json file in the ARMTemplates
 		folder.
 		
 		![](media/43.png)
-		* `Template Parameters`: click the "..." button and browse to the FullEnvironmentSetup.param.json file
+		* `Template Parameters`: click the "..." button and browse to the FullEnvironmentSetupMerged.param.json file
 		in the ARMTemplates folder.
 		* `Override Template Parameters`: Enter the following in a single line (shown split here for convenience):
-		```
-		-WebsiteName $(WebsiteName)
-		-PartsUnlimitedServerName $(ServerName)
-		-PartsUnlimitedHostingPlanName $(HostingPlan)
-		-CdnStorageAccountName $(StorageAccountName)
-		-CdnStorageContainerName $(StorageAccountName)-cont
-		-CdnStorageAccountNameForDev $(DevStorageAccountName)
-		-CdnStorageContainerNameForDev $(DevStorageAccountName)-cont
-		-CdnStorageAccountNameForStaging $(StagingStorageAccountName)
-		-CdnStorageContainerNameForStaging $(StagingStorageAccountName)-cont
-		-PartsUnlimitedServerAdminLoginPassword (ConvertTo-SecureString $(AdminPassword) -AsPlainText -Force)
+		```powershell
+		-WebsiteName $(WebsiteName) 
+		-PartsUnlimitedServerName $(ServerName) 
+		-PartsUnlimitedHostingPlanName $(HostingPlan) 
+		-CdnStorageAccountName $(StorageAccountName) 
+		-CdnStorageContainerName $(ContainerName) 
+		-CdnStorageAccountNameForDev $(StorageAccountName)-dev 
+		-CdnStorageContainerNameForDev $(ContainerName)-dev
+		-CdnStorageAccountNameForStaging $(StorageAccountName)-stage 
+		-CdnStorageContainerNameForStaging $(ContainerName)-stage 
+		-PartsUnlimitedServerAdminLoginPassword (ConvertTo-SecureString $(AdminPassword) -AsPlainText -Force) 
 		-PartsUnlimitedServerAdminLoginPasswordForTest (ConvertTo-SecureString $(AdminTestPassword) -AsPlainText -Force)
 		```
 		You will shortly define the values for each parameter, like `$(ServerName)`, in the Environment variables.
 		
-		> **Note**: If you open the FullEnvironmentSetup.param.json file, you will see empty placeholders for these parameters.
-		You could hard code values in the file, but then you would have to update the file, commit and create a new
-		build in order to change the values. Overriding the values in the Release makes changing values easier.
+		> **Note**: If you open the FullEnvironmentSetupMerged.param.json file, you will see empty placeholders for these parameters.
+		> You could hard code values in the file - but then you would not be able to change values during a deployment - you'd have to
+		> edit the file, commit and create a new build in order to change the values. Overriding the values in the Release makes 
+		> changing values easier.
 		
-		* `Output -> Resource Group`: Enter "PartsUnlimitedRG". Subsequent tasks will be able to use this variable if
-		they require the name of the resource group created.
+		* Make sure the `Output -> Resource Group` parameter is empty. It is not required for this release.
 	
 	* Click on the ellipsis (...) button next to the Environment and select "Configure variables..."
-	
 		![](media/44.png)
-		* Create variables as follows:
 
-	* Save the definition.
+	* Create the following variables, adding values too.
+		* **WebsiteName** - Name of the website in Azure
+		* **ServerName** - Prefix for the name of the database servers. Will have `-dev` or `-stage` added for dev/staging
+		* **HostingPlan** - Name of the hosting plan for the website
+		* **StorageAccountName** - Storage account name prefix. Will have `-dev` or `-stage` added for dev/staging
+		* **ContainerName** - Container name prefix. Will have `-dev` or `-stage` added for dev/staging
+		* **AdminPassword** - Admin password for production database server
+		* **AdminTestPassword** - Admin password for dev and staging database servers
+
+		![](media/50.png)
+		> **Note**: You can hide passwords and other sensitive fields by clicking the padlock icon to the right of the value text box.
+
+		* Save the definition.
 
 2. Test the ARM Template Deployment
 
 	Before moving on, it is a good idea to test the template so far.
 	
 	* Click on "+ Release" in the toolbar and select "Create Release" to start a new release.
-	
 	![](media/45.png)
 	
 	* Select the latest build from the drop-down, and then select "Prep Env" as the target environment.
 	Click "Create" to start the release.
-	
 	![](media/46.png)
 	
 	* Click the "Release-x" link to open the release.
-	
 	![](media/47.png)
 	
 	* Click on the Logs link to open and monitor the deployment logs.
 	
+	* You should see a successful release after a few minutes.
+	![](media/51.png)
+	* If you log into the Azure Portal, you will see the Resource Group has been created.
+	![](media/52.png)
 	
-	
-3. Add Web Deployment Tasks to Deploy the Web App
+3. Add New Environments and Web Deployment Tasks to Deploy the Web App
 
 	Now that the deployment is configured, you can add tasks to deploy the web app.
 		
+	* Click on the "+ Add environments" button to add a Dev environment. Select "Azure Website Deployment" as the template.
+		* Change the name of the new Environment to Dev.
+	
 	* Click on the "Azure Web App Deployment" Task.
 		* Select the Azure Service Endpoint you created earlier in the Azure Subscription drop down.
-		* For Web App Name, enter the name of the Web App you created earlier in Azure.
-		* Select a region for your Web App.
+		* For Web App Name, enter the `$(WebsiteName)` to use a variable. We defined this variable in the "Prep Env" environment
+		in the previous step, but will shortly "promote" it to a Release variable so that it can be used in all Environments.
+		* Select the same Azure region for your Web App that you selected in the "Prep Env" Environment for the Resource Group.
 		* Enter "dev" for the Slot. This will deploy the site to the "dev" deployment slot. This allows you
 		to deploy the site to Azure without affecting the Production site.
 		* Click the ellipsis (...) button to set the Web Deploy Package location. Browse to the PartsUnlimitedWebsite.zip file and click OK.
 	
 		![](media/10.png)
+		* Clear the "Additional Arguments" parameter. The ARM template you deployed has already configured all the slot-specific
+		app settings and connection strings.
 		* The Task should look like this:
 	
 		![](media/11.png)
-		
-	* Click on the ellipsis (...) button next to the Environment and select "Configure variables..."
+	* Delete the "Visual Studio Test" task from the environment.
+	> **Note**: It is a good practice to run smoke tests to validate the website after deployment, or to run load tests. The code-base you are using
+	does not have any tests defined, so you can delete the task in this instance. You can also run quick cloud-performance tests
+	to validate that the site is up and running. For more information on quick load tests, see [this video](https://channel9.msdn.com/Events/Visual-Studio/Connect-event-2015/Cloud-Loading-Testing-in-Visual-Studio-Team-Service)
+	from the 6 minute mark. 
 	
-		![](media/13.png)
-		* These variables allow you to configure values for the Dev environment. Most of these variables are used to
-		set the database connection string in the "Additional Arguments" property of the Deploy Website to Azure Task.
-		Enter the values (these are the values you used to create the databases in Azure earlier) and click OK.
+	* Promote the WebSite Environment variable to a Release Variable
+		* Click on the "Prep Env" environment, click the ellipsis (...) button select "Configure Variables".
+		* Make a note of the `WebsiteName` variable value and delete it from this list. Click OK.
+		* Click on "Configuration" to open the Release variables. These are "global" variables that any environment can use.
+		* Enter "WebsiteName" for the name and enter the value for the Website in Azure.
+		![](media/53.png)
 		
-		![](media/14.png)
-		> The password is masked by setting it as a "secret" variable. To change the value, click the padlock icon 
-		to unlock the text box, enter the password and then click the padlock to lock and mask the password again.
-		> The ConnectionStringName is `DefaultConnectionString`. You can see this if you open the web.config of the website.
 	* Click Save to save the Release Definition.
 
 4. Test the Dev Environment
@@ -280,7 +297,7 @@ Production.
 	
 	![](media/21.png)
 	* Click on the Logs link to open the deployment logs.
-	
+		
 	![](media/22.png)
 	* Once the deployment completes, you can check that the site was in fact deployed successfully by navigating to the
 	site url.
@@ -392,6 +409,7 @@ managing database schema deployments.
 
 ## Further Reading
 1. [Release Management for Visual Studio Team Services](https://msdn.microsoft.com/Library/vs/alm/release/overview-rmpreview)
+2. [Cloud Load Testing in Visual Studio Team Services](https://channel9.msdn.com/Events/Visual-Studio/Connect-event-2015/Cloud-Loading-Testing-in-Visual-Studio-Team-Service)
 
 The following are more PartsUnlimited Hands on Labs:
 
