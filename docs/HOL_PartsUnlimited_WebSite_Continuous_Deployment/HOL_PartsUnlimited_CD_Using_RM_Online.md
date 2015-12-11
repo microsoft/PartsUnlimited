@@ -364,7 +364,7 @@ Production.
 	the target environment if you want to deploy to Production. This is of course 
 	configurable according to your own preference.
 
-### 6: Create a Release
+### 5: Create a Release
 Now that you have configured the Release Pipeline, you are ready to trigger a complete
 release.
 	
