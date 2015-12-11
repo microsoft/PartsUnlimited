@@ -439,7 +439,7 @@
                         "[resourceId('Microsoft.Web/sites/', parameters('WebSiteName'))]"
                     ],
                     "properties": {
-                        "DefaultConnection": { 
+                        "DefaultConnectionString": { 
                             "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('PartsUnlimitedServerName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', parameters('PartsUnlimitedDBName'), ';User Id=', parameters ('PartsUnlimitedServerAdminLogin'), '@', variables('PartsUnlimitedServerName'), ';Password=', parameters('PartsUnlimitedServerAdminLoginPassword'), ';')]",
                             "type": "SQLAzure" 
                         }
@@ -487,7 +487,7 @@
                                 "[resourceId('Microsoft.Web/sites/slots', parameters('WebSiteName'), 'Dev')]"
                             ],
                             "properties": {
-                                "DefaultConnection": {
+                                "DefaultConnectionString": {
                                     "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('PartsUnlimitedServerNameDev'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', parameters('PartsUnlimitedDBName'), ';User Id=', parameters ('PartsUnlimitedServerAdminLogin'), '@', variables('PartsUnlimitedServerNameDev'), ';Password=', parameters('PartsUnlimitedServerAdminLoginPasswordForTest'), ';')]",
                                     "type": "SQLAzure" 
                                 }
@@ -525,7 +525,7 @@
                                 "[resourceId('Microsoft.Web/sites/slots', parameters('WebSiteName'), 'Staging')]"
                             ],
                             "properties": {
-                                "DefaultConnection": { 
+                                "DefaultConnectionString": { 
                                     "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('PartsUnlimitedServerNameStage'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', parameters('PartsUnlimitedDBName'), ';User Id=', parameters ('PartsUnlimitedServerAdminLogin'), '@', variables('PartsUnlimitedServerNameStage'), ';Password=', parameters('PartsUnlimitedServerAdminLoginPasswordForTest'), ';')]", 
                                     "type": "SQLAzure" 
                                 }
