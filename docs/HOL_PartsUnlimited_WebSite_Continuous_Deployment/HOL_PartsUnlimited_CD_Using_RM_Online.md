@@ -76,7 +76,7 @@ group in order to minimize charges to your Azure account.
 	* This constrains the `drop` folder to contain only the WebDeploy zip file, which is a package containing
 	the website.
 4. Click "+ Add build step..." and add a new "Publish Build Artifacts" task. Configure it as follows:
-	![](media/48.png)
+	![](media/49.png)
 	* For `Path to Publish`, click the "..." button and browse to the PartsUnlimitedEnv/Templates folder
 	* For `Artifact Name`, enter "ARMTemplates"
 	* For `Artifact Type`, select "Server" 
@@ -222,7 +222,7 @@ Production.
 
 		* Save the definition.
 
-2. Test the ARM Template Deployment
+1. Test the ARM Template Deployment
 
 	Before moving on, it is a good idea to test the template so far.
 	
@@ -243,12 +243,14 @@ Production.
 	* If you log into the Azure Portal, you will see the Resource Group has been created.
 	![](media/52.png)
 	
-3. Add New Environments and Web Deployment Tasks to Deploy the Web App
+1. Add New Environments and Web Deployment Tasks to Deploy the Web App
 
 	Now that the deployment is configured, you can add tasks to deploy the web app.
 		
 	* Click on the "+ Add environments" button to add a Dev environment. Select "Azure Website Deployment" as the template.
 		* Change the name of the new Environment to Dev.
+	* Click on the ellipsis (...) and select "Configure variables". Remove all the variables.
+	> **Note**: If you had environment specific variables, you could define them here. It is not necessary in this case.
 	
 	* Click on the "Azure Web App Deployment" Task.
 		* Select the Azure Service Endpoint you created earlier in the Azure Subscription drop down.
@@ -280,7 +282,7 @@ Production.
 		
 	* Click Save to save the Release Definition.
 
-4. Test the Dev Environment
+1. Test the Dev Environment
 
 	You will shortly clone the Dev Environment into both Staging and Prod environments. However, before you do that
 	it's a good idea to test that the Dev Environment is correctly configured by creating a new Release.
@@ -308,8 +310,8 @@ Production.
 	* You will also have received an email confirmation that the Release to the Dev environment completed successfully. This
 	is because you are the owner of the Dev environment.
 		
-	3. Clone the Dev environment to Staging
-	Now that you have verified that the Dev Environment is configured correctly, you can clone it to Staging.
+1. Clone the Dev environment to Staging and Production
+	Now that you have verified that the Dev Environment is configured correctly, you can clone it to Staging and Production.
 	
 	* Click on the PartsUnlimited link and then the Edit link to open the Release Definition.
 	> **Note:** It is possible to change the definition for a Release without changing the Release Definition (i.e. the Release is an instance of the Release Definition that you can edit). You want to make sure that you are editing the Release Definition, not a Release.
@@ -320,41 +322,34 @@ Production.
 	* On the Azure Web App Deployment task, set the Slot to `staging`.
 	
 	![](media/29.png)
-	* Click the ellipsis (...) on the Staging Environment card and select "Configure variables..."
-		* Even though the `AdministratorLoginPassword` parameter shows a masked value, this is currently
-		a bug. You will need to re-enter the password since it is actually emptied after the clone operation.
-		* Change the DatabaseName variable to the Staging database you created earlier and click OK.
-		
-		![](media/30.png)
-
-	> **Note:** If you want to see the variables for all the environments in a single place,
-	click the Configuration link on the Release Definition. Then click the Release variables
-	link on the upper right and select "Environment variables".
-	![](media/31.png)
-	![](media/32.png)
+	
+	> **Note**: If you had environment-specific variables, you would be able to set Staging-specific values. It is not necessary in this case.
 	
 	* In the Dev Environment, you did not define any approvers. For Staging, however, you should
-	configure approvers. For this HOL, you can be both the incoming and outgoing approver.
-	> **Pre-deployment approvers** must approve a deployment coming _into_ the environment.
-	**Post-deployment approvers** approve deployments so that the _next_ Environment can begin.
-	Approvers can be individuals or groups.
+	configure approvers. For this HOL, you can be both incoming and the outgoing approver.
+	> **Pre-deployment approvers** must approve a deployment coming _into_ the environment. The deployment will stop and wait
+	before executing any tasks in the environment until approval is granted.<br/>
+	**Post-deployment approvers** approve deployments so that the _next_ Environment can begin. They act as sign-off
+	for the current environment.<br/>
+	**Approvers** can be individuals or groups.
 	
+	* In this case, you want to pause the deployment coming in. This ensures that if someone is testing in the Staging environment,
+	they don't suddenly get a new build unexpectedly.
 	* Configure approvers for the Staging environment
 	
 	![](media/33.png)
 	
 	* Save the Release Definition.
 
-5. Clone the Staging environment to Production
-	* Clone the Staging environment to a new Environment called Production.
-	* Update the Slot parameter to be empty (i.e. the site will deploy to the production slot)
-	* Update the database name in the Environment variables.
-	* Update the approvers.
+	* Clone the Staging environment to Production.
+		* Update the Slot parameter to be empty (i.e. the site will deploy to the production slot)
+		* Update the approvers - again, you can be both approvers.
+	
 	* Save the Release Definition.
 	
 	![](media/34.png)
-
-6. Configure Continuous Deployment for this Release Definition
+	
+1. Configure Continuous Deployment for this Release Definition
 	* Click on the Triggers link of the Release Definition.
 	* Check the "Continuous Deployment" check box.
 	* Set the Source Label and Target environment.
@@ -376,20 +371,26 @@ release.
 * Click on "+ Release" to create a new Release.
 * Select the latest build, set Production as the target Environment and click Create.
 	
-![](media/36.png)
+	![](media/36.png)
 	
 * Once the Dev stage has completed deployment, you will see a notification that
 an approval is pending (you will also have received an email to this effect).
 Check the dev slot of the PartsUnlimited site in Azure to ensure that the Dev
 environment is good, and then click Approve.
 	
-![](media/37.png)
+	![](media/37.png)
+* You can also see pending approvals in the overview pane:
+	![](media/32.png)
+
 
 * Optionally enter a comment and click the Approve button.
 
 	![](media/38.png)
 
 	* This will trigger the release into the Staging environment.
+	> **Note**: You can reassign the approval if required.
+* The deployment will immediately pause again - this time for an incoming approval to Staging.
+* Approve the incoming deployment for Staging.
 * Once the Staging deployment has completed, you will need to approve that
 staging is OK.
 * This will then trigger the pre-approval for Production. Once you've approved
