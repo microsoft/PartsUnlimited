@@ -464,7 +464,7 @@
                         "[resourceId('Microsoft.Web/sites', parameters('WebSiteName'))]"
                     ],
                     "properties": {
-                        "connectionStringNames": [ "defaultConnection" ],
+                        "connectionStringNames": [ "DefaultConnectionString" ],
                         "appSettingNames": [ "keys:ApplicationInsights:InstrumentationKey" ]
                     }
                 },
