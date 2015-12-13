@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 
@@ -15,7 +14,7 @@ namespace PartsUnlimited.Cache
         }
 
         private static readonly Lazy<ConnectionMultiplexer> _lazyConnection = new Lazy<ConnectionMultiplexer>(
-            () => ConnectionMultiplexer.Connect(_configuration.Options));
+            () => ConnectionMultiplexer.Connect(_configuration.BuildOptions()));
 
         private static IDatabase Database => _lazyConnection.Value.GetDatabase();
 

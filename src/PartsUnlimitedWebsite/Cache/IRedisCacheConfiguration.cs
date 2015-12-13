@@ -4,6 +4,6 @@ namespace PartsUnlimited.Cache
 {
     public interface IRedisCacheConfiguration
     {
-        ConfigurationOptions Options { get; }
+        ConfigurationOptions BuildOptions();
     }
 }

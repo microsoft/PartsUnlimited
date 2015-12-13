@@ -6,6 +6,8 @@ namespace PartsUnlimited.WebsiteConfiguration
 {
     public class RedisCacheConfig : IRedisCacheConfiguration
     {
+        private ConfigurationOptions _options;
+
         public RedisCacheConfig(IConfiguration config)
         {
             HostName = config["HostName"];
@@ -13,14 +15,6 @@ namespace PartsUnlimited.WebsiteConfiguration
             KeepAliveTimeSeconds = config.Get("KeepAliveTimeSeconds", 15);
             SslEnabled = config.Get("SSLEnabled", true);
             Port = config.Get("Port", 6380);
-
-            Options = new ConfigurationOptions
-            {
-                KeepAlive = KeepAliveTimeSeconds,
-                Ssl = SslEnabled,
-                Password = AccessKey
-            };
-            Options.EndPoints.Add(HostName, Port);
         }
 
         public string HostName { get; }
@@ -29,6 +23,20 @@ namespace PartsUnlimited.WebsiteConfiguration
         private bool SslEnabled { get; }
         private int Port { get; }
 
-        public ConfigurationOptions Options { get; }
+        public ConfigurationOptions BuildOptions()
+        {
+            if (_options == null)
+            {
+                var options = new ConfigurationOptions
+                {
+                    KeepAlive = KeepAliveTimeSeconds,
+                    Ssl = SslEnabled,
+                    Password = AccessKey
+                };
+                options.EndPoints.Add(HostName, Port);
+                _options = options;
+            }
+            return _options;
+        }
     }
 }
