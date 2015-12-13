@@ -6,18 +6,19 @@ using Microsoft.Framework.Caching.Memory;
 using PartsUnlimited.Models;
 using System;
 using System.Linq;
+using PartsUnlimited.Cache;
 
 namespace PartsUnlimited.Controllers
 {
     public class StoreController : Controller
     {
         private readonly IPartsUnlimitedContext _db;
-        private readonly IMemoryCache _cache;
+        private readonly IPartsUnlimitedCache _cache;
 
-        public StoreController(IPartsUnlimitedContext context, IMemoryCache memoryCache)
+        public StoreController(IPartsUnlimitedContext context, IPartsUnlimitedCache cache)
         {
             _db = context;
-            _cache = memoryCache;
+            _cache = cache;
         }
 
         //
@@ -47,16 +48,22 @@ namespace PartsUnlimited.Controllers
         public IActionResult Details(int id)
         {
             Product productData;
-
-            if (!_cache.TryGetValue(string.Format("product_{0}", id), out productData))
+            string productKey = $"product_{id}";
+            var productResult = _cache.TryGetValue<Product>(productKey);
+            if (!productResult.HasValue)
             {
                 productData = _db.Products.Single(a => a.ProductId == id);
                 productData.Category = _db.Categories.Single(g => g.CategoryId == productData.CategoryId);
 
                 if (productData != null)
                 {
-                    _cache.Set(string.Format("product_{0}", id), productData, new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10)));
+                    _cache.Set(
+                        productKey, productData, new PartsUnlimitedMemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10)));
                 }                
+            }
+            else
+            {
+                productData = productResult.Value;
             }
 
             return View(productData);

@@ -41,9 +41,16 @@ namespace Microsoft.Framework.Configuration
                 .ToLookup(o => o.Item1, o => o.Item2);
         }
 
-        public static T Get<T>(this IConfiguration configuration, string key)
+        public static T Get<T>(this IConfiguration configuration, string key, T defaultValue)
         {
-            return (T)Convert.ChangeType(configuration[key], typeof(T));
+            try
+            {
+                return (T)Convert.ChangeType(configuration[key], typeof(T));
+            }
+            catch (Exception)
+            {
+                return defaultValue;
+            }
         }
     }
 }

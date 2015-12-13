@@ -20,6 +20,7 @@ using PartsUnlimited.Security;
 using PartsUnlimited.Telemetry;
 using PartsUnlimited.WebsiteConfiguration;
 using System;
+using PartsUnlimited.Cache;
 
 namespace PartsUnlimited
 {
@@ -81,8 +82,8 @@ namespace PartsUnlimited
                         .Build());
             });
 
-            // Add implementations
-            services.AddSingleton<IMemoryCache, MemoryCache>();
+            SetupCache(services);
+            
             services.AddScoped<IOrdersQuery, OrdersQuery>();
             services.AddScoped<IRaincheckQuery, RaincheckQuery>();
 
@@ -115,9 +116,6 @@ namespace PartsUnlimited
             //Add all SignalR related services to IoC.
             services.AddSignalR();
 
-            //Add InMemoryCache
-            services.AddSingleton<IMemoryCache, MemoryCache>();
-
             // Add session related services.
             services.AddCaching();
             services.AddSession();
@@ -137,6 +135,24 @@ namespace PartsUnlimited
                 services.AddSingleton<IAzureMLAuthenticatedHttpClient, AzureMLAuthenticatedHttpClient>();
                 services.AddInstance<IAzureMLFrequentlyBoughtTogetherConfig>(azureMlConfig);
                 services.AddScoped<IRecommendationEngine, AzureMLFrequentlyBoughtTogetherRecommendationEngine>();
+            }
+        }
+
+        private void SetupCache(IServiceCollection services)
+        {
+            var redisConfig = new RedisCacheConfig(Configuration.GetSection("Keys:RedisCache"));
+
+            // If keys are not available for Redis Cache register in memory cache
+            if (string.IsNullOrEmpty(redisConfig.AccessKey) || string.IsNullOrEmpty(redisConfig.HostName))
+            {
+                services.AddSingleton<IMemoryCache, MemoryCache>();
+                services.AddSingleton<IPartsUnlimitedCache, PartsUnlimitedMemoryCache>();
+            }
+            else
+            {
+                services.AddInstance<IRedisCacheConfiguration>(redisConfig);
+                services.AddSingleton<PartsUnlimitedRedisCache>();
+                services.AddSingleton<IPartsUnlimitedCache, TransientRedisCacheWrapper>();
             }
         }
 

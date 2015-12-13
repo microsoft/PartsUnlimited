@@ -8,18 +8,19 @@ using PartsUnlimited.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PartsUnlimited.Cache;
 
 namespace PartsUnlimited.Controllers
 {
     public class HomeController : Controller
     {
         private readonly IPartsUnlimitedContext _db;
-        private readonly IMemoryCache _cache;
+        private readonly IPartsUnlimitedCache _cache;
 
-        public HomeController(IPartsUnlimitedContext context, IMemoryCache memoryCache)
+        public HomeController(IPartsUnlimitedContext context, IPartsUnlimitedCache cache)
         {
             _db = context;
-            _cache = memoryCache;
+            _cache = cache;
         }
 
         //
@@ -28,19 +29,32 @@ namespace PartsUnlimited.Controllers
         {
             // Get most popular products
             List<Product> topSellingProducts;
-            if (!_cache.TryGetValue("topselling", out topSellingProducts))
+            var topProductResult = _cache.TryGetValue<List<Product>>("topselling");
+            if (!topProductResult.HasValue)
             {
                 topSellingProducts = GetTopSellingProducts(4);
                 //Refresh it every 10 minutes. Let this be the last item to be removed by cache if cache GC kicks in.
-                _cache.Set("topselling", topSellingProducts, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)).SetPriority(CacheItemPriority.High));
+                _cache.Set("topselling", topSellingProducts, new PartsUnlimitedMemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)).SetPriority(PartsUnlimitedCacheItemPriority.High));
+            }
+            else
+            {
+                topSellingProducts = topProductResult.Value;
             }
             
             List<Product> newProducts;
-            if (!_cache.TryGetValue("newarrivals", out newProducts))
+            var newProductResult = _cache.TryGetValue<List<Product>>("newarrivals");
+            if (!newProductResult.HasValue)
             {
                 newProducts = GetNewProducts(4);
                 //Refresh it every 10 minutes. Let this be the last item to be removed by cache if cache GC kicks in.
-                _cache.Set("newarrivals", newProducts, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)).SetPriority(CacheItemPriority.High));
+                _cache.Set(
+                    "newarrivals", newProducts,
+                    new PartsUnlimitedMemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10))
+                        .SetPriority(PartsUnlimitedCacheItemPriority.High));
+            }
+            else
+            {
+                newProducts =newProductResult.Value;
             }
 
             var viewModel = new HomeViewModel

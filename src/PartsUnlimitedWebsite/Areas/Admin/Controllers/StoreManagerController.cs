@@ -14,6 +14,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using PartsUnlimited.Cache;
+using PartsUnlimited.Controllers;
 
 namespace PartsUnlimited.Areas.Admin.Controllers
 {
@@ -24,13 +26,13 @@ namespace PartsUnlimited.Areas.Admin.Controllers
     {
         private readonly IPartsUnlimitedContext _db;
         private readonly IHubContext _annoucementHub;
-        private readonly IMemoryCache _cache;
+        private readonly IPartsUnlimitedCache _cache;
 
-        public StoreManagerController(IPartsUnlimitedContext context, IConnectionManager connectionManager, IMemoryCache memoryCache)
+        public StoreManagerController(IPartsUnlimitedContext context, IConnectionManager connectionManager, IPartsUnlimitedCache cache)
         {
             _db = context;
             _annoucementHub = connectionManager.GetHubContext<AnnouncementHub>();
-            _cache = memoryCache;
+            _cache = cache;
         }
 
         //
@@ -111,16 +113,21 @@ namespace PartsUnlimited.Areas.Admin.Controllers
             string cacheId = string.Format("product_{0}", id);
 
             Product product;
-            if (!_cache.TryGetValue(cacheId, out product))
+            var productResult = _cache.TryGetValue<Product>(cacheId);
+            if (!productResult.HasValue)
             {
                 //If this returns null, don't stick it in the cache
                 product =  _db.Products.Where(a => a.ProductId == id).FirstOrDefault();
 
                 if (product != null)
                 {
-                    //                               Remove it from cache if not retrieved in last 10 minutes
-                    _cache.Set(cacheId, product, new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10)));
+                    //Remove it from cache if not retrieved in last 10 minutes
+                    _cache.Set(cacheId, product, new PartsUnlimitedMemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10)));
                 }
+            }
+            else
+            {
+                product = productResult.Value;
             }
 
             if (product == null)

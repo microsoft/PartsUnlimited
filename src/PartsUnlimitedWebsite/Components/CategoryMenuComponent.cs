@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using PartsUnlimited.Cache;
+using PartsUnlimited.Controllers;
 
 namespace PartsUnlimited.Components
 {
@@ -16,26 +18,34 @@ namespace PartsUnlimited.Components
     public class CategoryMenuComponent : ViewComponent
     {
         private readonly IPartsUnlimitedContext _db;
-        private readonly IMemoryCache _cache;
+        private readonly IPartsUnlimitedCache _cache;
 
-        public CategoryMenuComponent(IPartsUnlimitedContext context, IMemoryCache memoryCache)
+        public CategoryMenuComponent(IPartsUnlimitedContext context, IPartsUnlimitedCache cache)
         {
             _db = context;
-            _cache = memoryCache;
+            _cache = cache;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            List<Category> categoryList;
-            if (!_cache.TryGetValue("category", out categoryList))
+            List<Category> categoryList = null;
+            var categoryResult = _cache.TryGetValue<List<Category>>("category");
+            if (!categoryResult.HasValue)
             {
-                categoryList = await GetCategories(); 
+                categoryList = await GetCategories();
 
                 if (categoryList != null)
                 {
-                    _cache.Set("categoryList", categoryList, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)));
+                    _cache.Set(
+                        "categoryList", categoryList,
+                        new PartsUnlimitedMemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)));
                 }
             }
+            else
+            {
+                categoryList = categoryResult.Value;
+            }
+
             return View(categoryList);
         }
 

@@ -37,6 +37,13 @@
     },
     "ApplicationInsights": {
       "InstrumentationKey": "efc04167-3227-40ff-aa88-46a271dba379"
+    },
+    "RedisCache": {
+      "HostName" :  "docdbaccelerator.redis.cache.windows.net",
+      "AccessKey": "ZKEA0yctqlGj1EOCIDSbZkoI0X2LgDuQs3e0q3YYujE=",
+      "KeepAliveTimeSeconds": 5,
+      "SSLEnabled": true,
+      "Port": 6380
     }
   }
 }
