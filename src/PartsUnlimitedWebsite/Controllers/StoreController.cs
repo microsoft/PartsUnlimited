@@ -2,10 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.AspNet.Mvc;
-using Microsoft.Framework.Caching.Memory;
 using PartsUnlimited.Models;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using PartsUnlimited.Cache;
 
 namespace PartsUnlimited.Controllers
@@ -45,11 +45,11 @@ namespace PartsUnlimited.Controllers
             return View(categoryModel);
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
             Product productData;
             string productKey = $"product_{id}";
-            var productResult = _cache.TryGetValue<Product>(productKey);
+            var productResult = await _cache.TryGetValue<Product>(productKey);
             if (!productResult.HasValue)
             {
                 productData = _db.Products.Single(a => a.ProductId == id);
@@ -57,7 +57,7 @@ namespace PartsUnlimited.Controllers
 
                 if (productData != null)
                 {
-                    _cache.Set(
+                    await _cache.Set(
                         productKey, productData, new PartsUnlimitedMemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10)));
                 }                
             }

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace PartsUnlimited.Cache
 {
@@ -11,7 +12,7 @@ namespace PartsUnlimited.Cache
         /// <returns>
         /// The object that was cached.
         /// </returns>
-        void Set<T>(string key, T value, PartsUnlimitedMemoryCacheEntryOptions options);
+        Task Set<T>(string key, T value, PartsUnlimitedMemoryCacheEntryOptions options);
 
         /// <summary>
         /// Gets the item associated with this key if present.
@@ -20,12 +21,12 @@ namespace PartsUnlimited.Cache
         /// <returns>
         /// True if the key was found.
         /// </returns>
-        CacheResult<T> TryGetValue<T>(string key);
+        Task<CacheResult<T>> TryGetValue<T>(string key);
 
         /// <summary>
         /// Removes the object associated with the given key.
         /// </summary>
         /// <param name="key">An object identifying the entry.</param>
-        void Remove(string key);
+        Task Remove(string key);
     }
 }

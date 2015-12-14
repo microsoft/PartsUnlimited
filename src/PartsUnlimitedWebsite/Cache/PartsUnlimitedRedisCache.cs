@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 
@@ -18,7 +19,7 @@ namespace PartsUnlimited.Cache
 
         private static IDatabase Database => _lazyConnection.Value.GetDatabase();
 
-        public void Set<T>(string key, T value, PartsUnlimitedMemoryCacheEntryOptions options)
+        public Task Set<T>(string key, T value, PartsUnlimitedMemoryCacheEntryOptions options)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
             if (value == null) throw new ArgumentNullException(nameof(value));
@@ -42,7 +43,7 @@ namespace PartsUnlimited.Cache
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
             string stringValue= JsonConvert.SerializeObject(cacheItem, Formatting.Indented, settings);
-            Database.StringSet(key, stringValue, span, When.Always, commandFlags);
+            return Database.StringSetAsync(key, stringValue, span, When.Always, commandFlags);
         }
 
         private static CommandFlags BuildFlags(PartsUnlimitedMemoryCacheEntryOptions options)
@@ -56,7 +57,7 @@ namespace PartsUnlimited.Cache
             }
         }
 
-        public CacheResult<T> TryGetValue<T>(string key)
+        public async Task<CacheResult<T>>  TryGetValue<T>(string key)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
 
@@ -67,7 +68,7 @@ namespace PartsUnlimited.Cache
                 if (cacheValue.SlidingCacheTime.HasValue)
                 {
                     var timeSpan = cacheValue.SlidingCacheTime.Value;
-                    Database.KeyExpire(key, timeSpan, cacheValue.Flags);
+                    await Database.KeyExpireAsync(key, timeSpan, cacheValue.Flags);
                 }
                 return new CacheResult<T>(cacheValue.Value);
             }
@@ -75,10 +76,10 @@ namespace PartsUnlimited.Cache
             return CacheResult<T>.Empty();
         }
 
-        public void Remove(string key)
+        public Task Remove(string key)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
-            Database.KeyDelete(key);
+            return Database.KeyDeleteAsync(key);
         }
 
         public void Dispose()

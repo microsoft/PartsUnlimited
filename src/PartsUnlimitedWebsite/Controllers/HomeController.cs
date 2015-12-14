@@ -8,6 +8,7 @@ using PartsUnlimited.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using PartsUnlimited.Cache;
 
 namespace PartsUnlimited.Controllers
@@ -25,16 +26,16 @@ namespace PartsUnlimited.Controllers
 
         //
         // GET: /Home/
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             // Get most popular products
             List<Product> topSellingProducts;
-            var topProductResult = _cache.TryGetValue<List<Product>>("topselling");
+            var topProductResult = await _cache.TryGetValue<List<Product>>("topselling");
             if (!topProductResult.HasValue)
             {
                 topSellingProducts = GetTopSellingProducts(4);
                 //Refresh it every 10 minutes. Let this be the last item to be removed by cache if cache GC kicks in.
-                _cache.Set("topselling", topSellingProducts, new PartsUnlimitedMemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)).SetPriority(PartsUnlimitedCacheItemPriority.High));
+                await _cache.Set("topselling", topSellingProducts, new PartsUnlimitedMemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)).SetPriority(PartsUnlimitedCacheItemPriority.High));
             }
             else
             {
@@ -42,12 +43,12 @@ namespace PartsUnlimited.Controllers
             }
             
             List<Product> newProducts;
-            var newProductResult = _cache.TryGetValue<List<Product>>("newarrivals");
+            var newProductResult = await _cache.TryGetValue<List<Product>>("newarrivals");
             if (!newProductResult.HasValue)
             {
                 newProducts = GetNewProducts(4);
                 //Refresh it every 10 minutes. Let this be the last item to be removed by cache if cache GC kicks in.
-                _cache.Set(
+                await _cache.Set(
                     "newarrivals", newProducts,
                     new PartsUnlimitedMemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10))
                         .SetPriority(PartsUnlimitedCacheItemPriority.High));

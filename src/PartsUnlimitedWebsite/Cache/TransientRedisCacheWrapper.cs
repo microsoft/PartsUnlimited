@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 
 namespace PartsUnlimited.Cache
@@ -15,19 +16,19 @@ namespace PartsUnlimited.Cache
             _retryPolicy = new RetryPolicy<RedisTransientErrorDetectionStrategy>(retryStrategy);
         }
 
-        public void Set<T>(string key, T value, PartsUnlimitedMemoryCacheEntryOptions options)
+        public Task Set<T>(string key, T value, PartsUnlimitedMemoryCacheEntryOptions options)
         {
-            _retryPolicy.ExecuteAction(() => _cache.Set(key, value, options));
+            return _retryPolicy.ExecuteAction(() => _cache.Set(key, value, options));
         }
 
-        public CacheResult<T> TryGetValue<T>(string key)
+        public Task<CacheResult<T>> TryGetValue<T>(string key)
         {
             return _retryPolicy.ExecuteAction(() => _cache.TryGetValue<T>(key));
         }
 
-        public void Remove(string key)
+        public Task Remove(string key)
         {
-            _retryPolicy.ExecuteAction(() => _cache.Remove(key));
+            return _retryPolicy.ExecuteAction(() => _cache.Remove(key));
         }
     }
 }

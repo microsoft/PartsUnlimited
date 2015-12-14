@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using Microsoft.Framework.Caching.Memory;
 
 namespace PartsUnlimited.Cache
@@ -11,21 +13,21 @@ namespace PartsUnlimited.Cache
             _memoryCache = memoryCache;
         }
 
-        public void Set<T>(string key, T value, PartsUnlimitedMemoryCacheEntryOptions options)
+        public Task Set<T>(string key, T value, PartsUnlimitedMemoryCacheEntryOptions options)
         {
             var memCacheOptions = BuildOptions(options);
-            _memoryCache.Set(key, value, memCacheOptions);
+            return Task.Run(() => _memoryCache.Set(key, value, memCacheOptions));
         }
 
-        public CacheResult<T> TryGetValue<T>(string key)
+        public Task<CacheResult<T>> TryGetValue<T>(string key)
         {
             T value;
             if (_memoryCache.TryGetValue(key, out value))
             {
-                return new CacheResult<T>(value);
+                return Task.FromResult(new CacheResult<T>(value));
             }
 
-            return CacheResult<T>.Empty();
+            return Task.FromResult(CacheResult<T>.Empty());
         }
 
         private static MemoryCacheEntryOptions BuildOptions(PartsUnlimitedMemoryCacheEntryOptions options)
@@ -49,9 +51,9 @@ namespace PartsUnlimited.Cache
             return memCacheOptions;
         }
 
-        public void Remove(string key)
+        public Task Remove(string key)
         {
-            _memoryCache.Remove(key);
+            return Task.Run(() => _memoryCache.Remove(key));
         }
     }
 }

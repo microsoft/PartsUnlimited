@@ -29,15 +29,15 @@ namespace PartsUnlimited.Components
         public async Task<IViewComponentResult> InvokeAsync()
         {
             List<Category> categoryList = null;
-            var categoryResult = _cache.TryGetValue<List<Category>>("category");
+            var categoryResult = await _cache.TryGetValue<List<Category>>("category");
             if (!categoryResult.HasValue)
             {
                 categoryList = await GetCategories();
 
                 if (categoryList != null)
                 {
-                    _cache.Set(
-                        "categoryList", categoryList,
+                    await _cache.Set(
+                        "category", categoryList,
                         new PartsUnlimitedMemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)));
                 }
             }

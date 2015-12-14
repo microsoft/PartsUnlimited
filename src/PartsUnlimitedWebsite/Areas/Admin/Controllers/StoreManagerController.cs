@@ -108,12 +108,12 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         //
         // GET: /StoreManager/Details/5
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
             string cacheId = string.Format("product_{0}", id);
 
             Product product;
-            var productResult = _cache.TryGetValue<Product>(cacheId);
+            var productResult = await _cache.TryGetValue<Product>(cacheId);
             if (!productResult.HasValue)
             {
                 //If this returns null, don't stick it in the cache
@@ -122,7 +122,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
                 if (product != null)
                 {
                     //Remove it from cache if not retrieved in last 10 minutes
-                    _cache.Set(cacheId, product, new PartsUnlimitedMemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10)));
+                    await _cache.Set(cacheId, product, new PartsUnlimitedMemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10)));
                 }
             }
             else
@@ -132,7 +132,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
 
             if (product == null)
             {
-                _cache.Remove(cacheId);
+                await _cache.Remove(cacheId);
                 return View(product);
             }
 
@@ -159,7 +159,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
                 _db.Products.Add(product);
                 await _db.SaveChangesAsync(HttpContext.RequestAborted);
                 _annoucementHub.Clients.All.announcement(new ProductData() { Title = product.Title, Url = Url.Action("Details", "Store", new { id = product.ProductId }) });
-                _cache.Remove("announcementProduct");
+                await _cache.Remove("announcementProduct");
                 return RedirectToAction("Index");
             }
 
@@ -193,7 +193,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
                 _db.Entry(product).State = EntityState.Modified;
                 await _db.SaveChangesAsync(HttpContext.RequestAborted);
                 //Invalidate the cache entry as it is modified
-                _cache.Remove(string.Format("product_{0}", product.ProductId));
+                await _cache.Remove(string.Format("product_{0}", product.ProductId));
                 return RedirectToAction("Index");
             }
 
@@ -242,7 +242,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
                 _db.Products.Remove(product);
                 await _db.SaveChangesAsync(HttpContext.RequestAborted);
                 //Remove the cache entry as it is removed
-                _cache.Remove(string.Format("product_{0}", id));
+                await _cache.Remove(string.Format("product_{0}", id));
             }
 
             return RedirectToAction("Index");

@@ -27,14 +27,14 @@ namespace PartsUnlimited.Components
         public async Task<IViewComponentResult> InvokeAsync()
         {
             Product announcementProduct = null;
-            var cacheResult = _cache.TryGetValue<Product>("announcementProduct");
+            var cacheResult = await _cache.TryGetValue<Product>("announcementProduct");
             if (!cacheResult.HasValue)
             {
                 announcementProduct = await GetLatestProduct();
 
                 if (announcementProduct != null)
                 {
-                    _cache.Set("announcementProduct", announcementProduct, new PartsUnlimitedMemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)));
+                    await _cache.Set("announcementProduct", announcementProduct, new PartsUnlimitedMemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)));
                 }
             }
             else
