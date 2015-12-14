@@ -9,7 +9,7 @@ namespace PartsUnlimited.Cache
         /// 
         /// </summary>
         /// <param name="options"/><param name="priority"/>
-        public static PartsUnlimitedMemoryCacheEntryOptions SetPriority(this PartsUnlimitedMemoryCacheEntryOptions options, PartsUnlimitedCacheItemPriority priority)
+        public static PartsUnlimitedCacheOptions SetPriority(this PartsUnlimitedCacheOptions options, PartsUnlimitedCacheItemPriority priority)
         {
             options.Priority = priority;
             return options;
@@ -20,7 +20,7 @@ namespace PartsUnlimited.Cache
         /// 
         /// </summary>
         /// <param name="options"/><param name="relative"/>
-        public static PartsUnlimitedMemoryCacheEntryOptions SetAbsoluteExpiration(this PartsUnlimitedMemoryCacheEntryOptions options, TimeSpan relative)
+        public static PartsUnlimitedCacheOptions SetAbsoluteExpiration(this PartsUnlimitedCacheOptions options, TimeSpan relative)
         {
             options.AbsoluteExpirationRelativeToNow = relative;
             return options;
@@ -32,7 +32,7 @@ namespace PartsUnlimited.Cache
         /// 
         /// </summary>
         /// <param name="options"/><param name="offset"/>
-        public static PartsUnlimitedMemoryCacheEntryOptions SetSlidingExpiration(this PartsUnlimitedMemoryCacheEntryOptions options, TimeSpan offset)
+        public static PartsUnlimitedCacheOptions SetSlidingExpiration(this PartsUnlimitedCacheOptions options, TimeSpan offset)
         {
             options.SlidingExpiration = offset;
             return options;

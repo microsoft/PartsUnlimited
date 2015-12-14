@@ -1,21 +1,19 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.Data.Entity;
-using Microsoft.Framework.Caching.Memory;
+using PartsUnlimited.Cache;
 using PartsUnlimited.Hubs;
 using PartsUnlimited.Models;
 using PartsUnlimited.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using PartsUnlimited.Cache;
-using PartsUnlimited.Controllers;
 
 namespace PartsUnlimited.Areas.Admin.Controllers
 {
@@ -26,13 +24,14 @@ namespace PartsUnlimited.Areas.Admin.Controllers
     {
         private readonly IPartsUnlimitedContext _db;
         private readonly IHubContext _annoucementHub;
-        private readonly IPartsUnlimitedCache _cache;
+        private readonly ICacheCoordinator _cacheCoordinator;
 
-        public StoreManagerController(IPartsUnlimitedContext context, IConnectionManager connectionManager, IPartsUnlimitedCache cache)
+        public StoreManagerController(IPartsUnlimitedContext context, IConnectionManager connectionManager, 
+            ICacheCoordinator cacheCoordinator)
         {
             _db = context;
             _annoucementHub = connectionManager.GetHubContext<AnnouncementHub>();
-            _cache = cache;
+            _cacheCoordinator = cacheCoordinator;
         }
 
         //
@@ -70,10 +69,8 @@ namespace PartsUnlimited.Areas.Admin.Controllers
                 {
                     return products.OrderBy(o => o.Category.Name);
                 }
-                else
-                {
-                    return products.OrderByDescending(o => o.Category.Name);
-                }
+
+                return products.OrderByDescending(o => o.Category.Name);
             }
 
             if (sortField == SortField.Price)
@@ -82,10 +79,8 @@ namespace PartsUnlimited.Areas.Admin.Controllers
                 {
                     return products.OrderBy(o => o.Price);
                 }
-                else
-                {
-                    return products.OrderByDescending(o => o.Price);
-                }
+
+                return products.OrderByDescending(o => o.Price);
             }
 
             if (sortField == SortField.Title)
@@ -94,10 +89,8 @@ namespace PartsUnlimited.Areas.Admin.Controllers
                 {
                     return products.OrderBy(o => o.Title);
                 }
-                else
-                {
-                    return products.OrderByDescending(o => o.Title);
-                }
+
+                return products.OrderByDescending(o => o.Title);
             }
 
             // Should not reach here, but return products for compiler
@@ -107,38 +100,25 @@ namespace PartsUnlimited.Areas.Admin.Controllers
 
         //
         // GET: /StoreManager/Details/5
-
+        //
         public async Task<IActionResult> Details(int id)
         {
-            string cacheId = string.Format("product_{0}", id);
-
-            Product product;
-            var productResult = await _cache.TryGetValue<Product>(cacheId);
-            if (!productResult.HasValue)
+            string cacheId = CacheConstants.Key.ProductKey(id);
+            var options = new PartsUnlimitedCacheOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10));
+            Product product = await _cacheCoordinator.GetAsync(cacheId, LoadProductWithId(id), new CacheCoordinatorOptions().WithCacheOptions(options).WhichRemovesIfNull());
+            
+            if (product != null)
             {
-                //If this returns null, don't stick it in the cache
-                product =  _db.Products.Where(a => a.ProductId == id).FirstOrDefault();
-
-                if (product != null)
-                {
-                    //Remove it from cache if not retrieved in last 10 minutes
-                    await _cache.Set(cacheId, product, new PartsUnlimitedMemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10)));
-                }
+                // TODO [EF] We don't query related data as yet. We have to populate this until we do automatically.
+                product.Category = _db.Categories.Single(g => g.CategoryId == product.CategoryId);
             }
-            else
-            {
-                product = productResult.Value;
-            }
-
-            if (product == null)
-            {
-                await _cache.Remove(cacheId);
-                return View(product);
-            }
-
-            // TODO [EF] We don't query related data as yet. We have to populate this until we do automatically.
-            product.Category = _db.Categories.Single(g => g.CategoryId == product.CategoryId);
+            
             return View(product);
+        }
+
+        private Func<Product> LoadProductWithId(int id)
+        {
+            return delegate { return _db.Products.FirstOrDefault(a => a.ProductId == id); };
         }
 
         //
@@ -158,8 +138,8 @@ namespace PartsUnlimited.Areas.Admin.Controllers
             {
                 _db.Products.Add(product);
                 await _db.SaveChangesAsync(HttpContext.RequestAborted);
-                _annoucementHub.Clients.All.announcement(new ProductData() { Title = product.Title, Url = Url.Action("Details", "Store", new { id = product.ProductId }) });
-                await _cache.Remove("announcementProduct");
+                _annoucementHub.Clients.All.announcement(new ProductData { Title = product.Title, Url = Url.Action("Details", "Store", new { id = product.ProductId }) });
+                await _cacheCoordinator.Remove(CacheConstants.Key.AnnouncementProduct);
                 return RedirectToAction("Index");
             }
 
@@ -171,14 +151,8 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         // GET: /StoreManager/Edit/5
         public IActionResult Edit(int id)
         {
-            Product product = _db.Products.Where(a => a.ProductId == id).FirstOrDefault();
+            Product product = _db.Products.FirstOrDefault(a => a.ProductId == id);
             ViewBag.Categories = new SelectList(_db.Categories, "CategoryId", "Name", product.CategoryId).ToList();
-
-            if (product == null)
-            {
-                return View(product);
-            }
-
             return View(product);
         }
 
@@ -193,7 +167,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
                 _db.Entry(product).State = EntityState.Modified;
                 await _db.SaveChangesAsync(HttpContext.RequestAborted);
                 //Invalidate the cache entry as it is modified
-                await _cache.Remove(string.Format("product_{0}", product.ProductId));
+                await _cacheCoordinator.Remove(CacheConstants.Key.ProductKey(product.ProductId));
                 return RedirectToAction("Index");
             }
 
@@ -205,7 +179,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         // GET: /StoreManager/RemoveProduct/5
         public IActionResult RemoveProduct(int id)
         {
-            Product product = _db.Products.Where(a => a.ProductId == id).FirstOrDefault();
+            Product product = _db.Products.FirstOrDefault(a => a.ProductId == id);
             return View(product);
         }
 
@@ -214,8 +188,8 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         [HttpPost, ActionName("RemoveProduct")]
         public async Task<IActionResult> RemoveProductConfirmed(int id)
         {
-            Product product = _db.Products.Where(a => a.ProductId == id).FirstOrDefault();
-            CartItem cartItem = _db.CartItems.Where(a => a.ProductId == id).FirstOrDefault();
+            Product product = _db.Products.FirstOrDefault(a => a.ProductId == id);
+            CartItem cartItem = _db.CartItems.FirstOrDefault(a => a.ProductId == id);
             List<OrderDetail> orderDetail = _db.OrderDetails.Where(a => a.ProductId == id).ToList();
             List<Raincheck> rainCheck = _db.RainChecks.Where(a => a.ProductId == id).ToList();
 
@@ -242,7 +216,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
                 _db.Products.Remove(product);
                 await _db.SaveChangesAsync(HttpContext.RequestAborted);
                 //Remove the cache entry as it is removed
-                await _cache.Remove(string.Format("product_{0}", id));
+                await _cacheCoordinator.Remove(CacheConstants.Key.ProductKey(id));
             }
 
             return RedirectToAction("Index");

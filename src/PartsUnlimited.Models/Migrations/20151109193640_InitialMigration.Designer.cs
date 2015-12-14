@@ -366,6 +366,13 @@ namespace PartsUnlimited.Models.Migrations
                         .ForeignKey("CategoryId");
                 });
 
+            modelBuilder.Entity("PartsUnlimited.Models.Order", b =>
+            {
+                b.HasOne("PartsUnlimited.Models.Promo")
+                    .WithMany()
+                    .ForeignKey("PromoId");
+            });
+
             modelBuilder.Entity("PartsUnlimited.Models.Raincheck", b =>
                 {
                     b.HasOne("PartsUnlimited.Models.Product")

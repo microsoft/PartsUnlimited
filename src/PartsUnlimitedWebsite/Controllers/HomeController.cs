@@ -1,27 +1,27 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Mvc;
-using Microsoft.Framework.Caching.Memory;
-using PartsUnlimited.Models;
-using PartsUnlimited.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Mvc;
+using Microsoft.Data.Entity;
 using PartsUnlimited.Cache;
+using PartsUnlimited.Models;
+using PartsUnlimited.ViewModels;
 
 namespace PartsUnlimited.Controllers
 {
     public class HomeController : Controller
     {
         private readonly IPartsUnlimitedContext _db;
-        private readonly IPartsUnlimitedCache _cache;
+        private readonly ICacheCoordinator _cacheCoordinator;
 
-        public HomeController(IPartsUnlimitedContext context, IPartsUnlimitedCache cache)
+        public HomeController(IPartsUnlimitedContext context, ICacheCoordinator cacheCoordinator)
         {
             _db = context;
-            _cache = cache;
+            _cacheCoordinator = cacheCoordinator;
         }
 
         //
@@ -29,34 +29,14 @@ namespace PartsUnlimited.Controllers
         public async Task<IActionResult> Index()
         {
             // Get most popular products
-            List<Product> topSellingProducts;
-            var topProductResult = await _cache.TryGetValue<List<Product>>("topselling");
-            if (!topProductResult.HasValue)
-            {
-                topSellingProducts = GetTopSellingProducts(4);
-                //Refresh it every 10 minutes. Let this be the last item to be removed by cache if cache GC kicks in.
-                await _cache.Set("topselling", topSellingProducts, new PartsUnlimitedMemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)).SetPriority(PartsUnlimitedCacheItemPriority.High));
-            }
-            else
-            {
-                topSellingProducts = topProductResult.Value;
-            }
-            
-            List<Product> newProducts;
-            var newProductResult = await _cache.TryGetValue<List<Product>>("newarrivals");
-            if (!newProductResult.HasValue)
-            {
-                newProducts = GetNewProducts(4);
-                //Refresh it every 10 minutes. Let this be the last item to be removed by cache if cache GC kicks in.
-                await _cache.Set(
-                    "newarrivals", newProducts,
-                    new PartsUnlimitedMemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10))
-                        .SetPriority(PartsUnlimitedCacheItemPriority.High));
-            }
-            else
-            {
-                newProducts =newProductResult.Value;
-            }
+            var topSellingKey = CacheConstants.Key.TopSellingProducts;
+            var topSellingOptions = new PartsUnlimitedCacheOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
+            List<Product> topSellingProducts = await _cacheCoordinator.GetAsync(topSellingKey, () => GetTopSellingProducts(4), new CacheCoordinatorOptions().WithCacheOptions(topSellingOptions));
+
+            // Get most new arrival products
+            var newArrivalKey = CacheConstants.Key.NewArrivalProducts;
+            var newArrivalOptions = new PartsUnlimitedCacheOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)).SetPriority(PartsUnlimitedCacheItemPriority.High);
+            List<Product> newProducts = await _cacheCoordinator.GetAsync(newArrivalKey, () => GetNewProducts(4), new CacheCoordinatorOptions().WithCacheOptions(newArrivalOptions));
 
             var viewModel = new HomeViewModel
             {
@@ -75,7 +55,7 @@ namespace PartsUnlimited.Controllers
             return View("~/Views/Shared/Error.cshtml");
         }
 
-        private List<Product> GetTopSellingProducts(int count)
+        private Task<List<Product>> GetTopSellingProducts(int count)
         {
             // Group the order details by product and return
             // the products with the highest count
@@ -84,15 +64,15 @@ namespace PartsUnlimited.Controllers
             return _db.Products
                 .OrderByDescending(a => a.OrderDetails.Count())
                 .Take(count)
-                .ToList();
+                .ToListAsync();
         }
 
-        private List<Product> GetNewProducts(int count)
+        private Task<List<Product>> GetNewProducts(int count)
         {
             return _db.Products
                 .OrderByDescending(a => a.Created)
                 .Take(count)
-                .ToList();
+                .ToListAsync();
         }
 
         private List<CommunityPost> GetCommunityPosts()

@@ -16,14 +16,14 @@ namespace PartsUnlimited.Cache
             _retryPolicy = new RetryPolicy<RedisTransientErrorDetectionStrategy>(retryStrategy);
         }
 
-        public Task Set<T>(string key, T value, PartsUnlimitedMemoryCacheEntryOptions options)
+        public Task SetValue<T>(string key, T value, PartsUnlimitedCacheOptions options)
         {
-            return _retryPolicy.ExecuteAction(() => _cache.Set(key, value, options));
+            return _retryPolicy.ExecuteAction(() => _cache.SetValue(key, value, options));
         }
 
-        public Task<CacheResult<T>> TryGetValue<T>(string key)
+        public Task<CacheResult<T>> GetValue<T>(string key)
         {
-            return _retryPolicy.ExecuteAction(() => _cache.TryGetValue<T>(key));
+            return _retryPolicy.ExecuteAction(() => _cache.GetValue<T>(key));
         }
 
         public Task Remove(string key)

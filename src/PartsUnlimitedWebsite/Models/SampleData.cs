@@ -45,6 +45,9 @@ namespace PartsUnlimited.Models
 
         public static async Task InsertTestData(IServiceProvider serviceProvider)
         {
+            var promo = GetPromo().ToList();
+            await AddOrUpdateAsync(serviceProvider, a => a.PromoId, promo);
+
             var categories = GetCategories().ToList();
             await AddOrUpdateAsync(serviceProvider, g => g.Name, categories);
 
@@ -57,7 +60,13 @@ namespace PartsUnlimited.Models
             var rainchecks = GetRainchecks(stores, products).ToList();
             await AddOrUpdateAsync(serviceProvider, a => a.RaincheckId, rainchecks);
 
-            PopulateOrderHistory(serviceProvider, products);
+            PopulateOrderHistory(serviceProvider, products, promo);
+        }
+
+        private static IEnumerable<Promo> GetPromo()
+        {
+            yield return new Promo {Name = "FREE"};
+            yield return new Promo {Name = "Promo100"};
         }
 
         private static async Task AddOrUpdateAsync<TEntity>(
@@ -160,7 +169,7 @@ namespace PartsUnlimited.Models
             yield return new Category { Name = "Oil", Description = "Oil description", ImageUrl = "product_oil_premium-oil.jpg" };
         }
 
-        public static void PopulateOrderHistory(IServiceProvider serviceProvider, IEnumerable<Product> products)
+        public static void PopulateOrderHistory(IServiceProvider serviceProvider, IEnumerable<Product> products, List<Promo> promo)
         {
             var random = new Random(1234);
             var recomendationCombinations = new[] {
@@ -186,7 +195,6 @@ namespace PartsUnlimited.Models
             {
                 var db = serviceScope.ServiceProvider.GetService<PartsUnlimitedContext>();
 
-                var orders = new List<Order>();
                 foreach (var combination in recomendationCombinations)
                 {
                     for (int i = 0; i < combination.Multiplier; i++)
@@ -202,7 +210,8 @@ namespace PartsUnlimited.Models
                             PostalCode = "98052",
                             Country = "United States",
                             Phone = "425-703-6214",
-                            Email = userName
+                            Email = userName,
+                            PromoId = promo.First().PromoId
                         };
 
                         db.Orders.Add(order);

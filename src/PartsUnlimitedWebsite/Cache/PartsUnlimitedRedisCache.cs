@@ -19,7 +19,7 @@ namespace PartsUnlimited.Cache
 
         private static IDatabase Database => _lazyConnection.Value.GetDatabase();
 
-        public Task Set<T>(string key, T value, PartsUnlimitedMemoryCacheEntryOptions options)
+        public Task SetValue<T>(string key, T value, PartsUnlimitedCacheOptions options)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
             if (value == null) throw new ArgumentNullException(nameof(value));
@@ -46,7 +46,7 @@ namespace PartsUnlimited.Cache
             return Database.StringSetAsync(key, stringValue, span, When.Always, commandFlags);
         }
 
-        private static CommandFlags BuildFlags(PartsUnlimitedMemoryCacheEntryOptions options)
+        private static CommandFlags BuildFlags(PartsUnlimitedCacheOptions options)
         {
             switch (options.Priority)
             {
@@ -57,7 +57,7 @@ namespace PartsUnlimited.Cache
             }
         }
 
-        public async Task<CacheResult<T>>  TryGetValue<T>(string key)
+        public async Task<CacheResult<T>>  GetValue<T>(string key)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
 

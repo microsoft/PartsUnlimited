@@ -180,6 +180,7 @@ namespace PartsUnlimited.Models.Migrations
                     ProductId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CategoryId = table.Column<int>(nullable: false),
+                    PromoId = table.Column<int>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(nullable: false),
                     Inventory = table.Column<int>(nullable: false),
@@ -200,6 +201,11 @@ namespace PartsUnlimited.Models.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Category",
                         principalColumn: "CategoryId");
+                    table.ForeignKey(
+                        name: "FK_Product_Promo_PromoId",
+                        column: x => x.PromoId,
+                        principalTable: "Promo",
+                        principalColumn: "PromoId");
                 });
             migrationBuilder.CreateTable(
                 name: "CartItem",
@@ -284,6 +290,19 @@ namespace PartsUnlimited.Models.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName");
+
+            migrationBuilder.CreateTable(
+                name: "Promo",
+                columns: table => new
+                {
+                    PromoId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Promo", x => x.PromoId);
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -301,6 +320,7 @@ namespace PartsUnlimited.Models.Migrations
             migrationBuilder.DropTable("Product");
             migrationBuilder.DropTable("Store");
             migrationBuilder.DropTable("Category");
+            migrationBuilder.DropTable("Promo");
         }
     }
 }

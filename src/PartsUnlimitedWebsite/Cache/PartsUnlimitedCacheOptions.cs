@@ -2,7 +2,7 @@ using System;
 
 namespace PartsUnlimited.Cache
 {
-    public class PartsUnlimitedMemoryCacheEntryOptions
+    public class PartsUnlimitedCacheOptions
     {
         private TimeSpan? _slidingExpiration;
         private TimeSpan? _absoluteExpirationRelativeToNow;
@@ -55,7 +55,7 @@ namespace PartsUnlimited.Cache
 
         /// <summary>
         /// Gets or sets the priority for keeping the cache entry in the cache during a
-        /// memory pressure triggered cleanup. The default is <see cref="CacheItemPriority.Normal"/>.
+        /// memory pressure triggered cleanup. The default is <see cref="PartsUnlimitedCacheItemPriority.Normal"/>.
         /// </summary>
         public PartsUnlimitedCacheItemPriority Priority { get; set; } = PartsUnlimitedCacheItemPriority.Normal;
     }

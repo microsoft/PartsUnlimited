@@ -4,7 +4,6 @@
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Diagnostics.Entity;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using Microsoft.Framework.Caching.Memory;
@@ -154,6 +153,8 @@ namespace PartsUnlimited
                 services.AddSingleton<PartsUnlimitedRedisCache>();
                 services.AddSingleton<IPartsUnlimitedCache, TransientRedisCacheWrapper>();
             }
+
+            services.AddSingleton<ICacheCoordinator, CacheCoordinator>();
         }
 
         //This method is invoked when KRE_ENV is 'Development' or is not defined
