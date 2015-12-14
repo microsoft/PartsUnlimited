@@ -31,12 +31,12 @@ namespace PartsUnlimited.Controllers
             // Get most popular products
             var topSellingKey = CacheConstants.Key.TopSellingProducts;
             var topSellingOptions = new PartsUnlimitedCacheOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
-            List<Product> topSellingProducts = await _cacheCoordinator.GetAsync(topSellingKey, () => GetTopSellingProducts(4), new InvokerOptions().WithCacheOptions(topSellingOptions));
+            List<Product> topSellingProducts = await _cacheCoordinator.GetAsync(topSellingKey, () => GetTopSellingProducts(4), new CacheCoordinatorOptions().WithCacheOptions(topSellingOptions));
 
             // Get most new arrival products
             var newArrivalKey = CacheConstants.Key.NewArrivalProducts;
             var newArrivalOptions = new PartsUnlimitedCacheOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)).SetPriority(PartsUnlimitedCacheItemPriority.High);
-            List<Product> newProducts = await _cacheCoordinator.GetAsync(newArrivalKey, () => GetNewProducts(4), new InvokerOptions().WithCacheOptions(newArrivalOptions));
+            List<Product> newProducts = await _cacheCoordinator.GetAsync(newArrivalKey, () => GetNewProducts(4), new CacheCoordinatorOptions().WithCacheOptions(newArrivalOptions));
 
             var viewModel = new HomeViewModel
             {

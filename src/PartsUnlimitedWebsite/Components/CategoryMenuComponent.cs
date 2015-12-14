@@ -27,7 +27,7 @@ namespace PartsUnlimited.Components
         {
             var options = new PartsUnlimitedCacheOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
             List<Category> categoryList = await _cacheCoordinator.GetAsync(CacheConstants.Key.Category, 
-                GetCategories(), new InvokerOptions().WithCacheOptions(options));
+                GetCategories(), new CacheCoordinatorOptions().WithCacheOptions(options));
             return View(categoryList);
         }
 

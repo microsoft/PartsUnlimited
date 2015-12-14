@@ -26,7 +26,7 @@ namespace PartsUnlimited.Components
         {
             var key = CacheConstants.Key.AnnouncementProduct;
             var options = new PartsUnlimitedCacheOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
-            Product announcementProduct = await _cacheCoordinator.GetAsync(key, GetLatestProduct, new InvokerOptions().WithCacheOptions(options));
+            Product announcementProduct = await _cacheCoordinator.GetAsync(key, GetLatestProduct, new CacheCoordinatorOptions().WithCacheOptions(options));
             return View(announcementProduct);
         }
 

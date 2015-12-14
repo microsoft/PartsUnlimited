@@ -26,7 +26,8 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         private readonly IHubContext _annoucementHub;
         private readonly ICacheCoordinator _cacheCoordinator;
 
-        public StoreManagerController(IPartsUnlimitedContext context, IConnectionManager connectionManager, ICacheCoordinator cacheCoordinator)
+        public StoreManagerController(IPartsUnlimitedContext context, IConnectionManager connectionManager, 
+            ICacheCoordinator cacheCoordinator)
         {
             _db = context;
             _annoucementHub = connectionManager.GetHubContext<AnnouncementHub>();
@@ -104,7 +105,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         {
             string cacheId = CacheConstants.Key.ProductKey(id);
             var options = new PartsUnlimitedCacheOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10));
-            Product product = await _cacheCoordinator.GetAsync(cacheId, LoadProductWithId(id), new InvokerOptions().WithCacheOptions(options).WhichRemovesIfNull());
+            Product product = await _cacheCoordinator.GetAsync(cacheId, LoadProductWithId(id), new CacheCoordinatorOptions().WithCacheOptions(options).WhichRemovesIfNull());
             
             if (product != null)
             {

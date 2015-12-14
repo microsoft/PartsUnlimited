@@ -15,8 +15,14 @@ namespace PartsUnlimited.Cache
             _telemetryProvider = telemetryProvider;
         }
 
-        public async Task<T> GetAsync<T>(string key, Func<Task<T>> fallback, InvokerOptions options)
+        public async Task<T> GetAsync<T>(string key, Func<Task<T>> fallback, CacheCoordinatorOptions options)
         {
+            Lazy<T> sourceLoader = new Lazy<T>(delegate
+            {
+                Task<T> task = fallback.Invoke();
+                return task.Result;
+            });
+
             try
             {
                 var result = await _cache.GetValue<T>(key);
@@ -24,36 +30,33 @@ namespace PartsUnlimited.Cache
                 {
                     return result.Value;
                 }
+
+                //initial population.
+                var fallbackResult = sourceLoader.Value;
+                await _cache.SetValue(key, fallbackResult, options.CacheOption);
+
+                if (fallbackResult == null && options.RemoveIfNull)
+                {
+                    await Remove(key);
+                }
+
+                return fallbackResult;
             }
             catch (Exception ex)
             {
                 _telemetryProvider.TrackException(ex);
             }
 
-            //bubble exceptions from the load up to caller if they occur
-            var fallBackResult = await fallback.Invoke();
-
-            try
+            //Cache has failed, fail back to source system.
+            if (options.CallFailOverOnError || sourceLoader.IsValueCreated)
             {
-                if (options.ShouldPopulateCache && fallBackResult != null)
-                {
-                    await _cache.SetValue(key, fallBackResult, options.CacheOption);
-                }
-
-                if (fallBackResult == null && options.RemoveIfNull)
-                {
-                    await _cache.Remove(key);
-                }
-            }
-            catch (Exception ex)
-            {
-                _telemetryProvider.TrackException(ex);
+                return sourceLoader.Value;
             }
 
-            return fallBackResult;
+            throw new InvalidOperationException($"Item in cache with key '{key}' not found");
         }
 
-        public Task<T> GetAsync<T>(string key, Func<T> fallback, InvokerOptions options)
+        public Task<T> GetAsync<T>(string key, Func<T> fallback, CacheCoordinatorOptions options)
         {
             return GetAsync(key, () => Task.FromResult(fallback()), options);
         }

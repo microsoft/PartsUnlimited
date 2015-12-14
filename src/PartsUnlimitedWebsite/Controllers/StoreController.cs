@@ -44,10 +44,10 @@ namespace PartsUnlimited.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            string productKey = $"product_{id}";
+            string productKey = CacheConstants.Key.ProductKey(id);
             var options = new PartsUnlimitedCacheOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10));
             var productData = await _cacheCoordinator.GetAsync(productKey, LoadProductWithId(id), 
-                new InvokerOptions().WithCacheOptions(options));
+                new CacheCoordinatorOptions().WithCacheOptions(options));
             return View(productData);
         }
 
