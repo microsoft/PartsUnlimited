@@ -13,13 +13,13 @@ namespace PartsUnlimited.Cache
             _memoryCache = memoryCache;
         }
 
-        public Task Set<T>(string key, T value, PartsUnlimitedMemoryCacheEntryOptions options)
+        public Task SetValue<T>(string key, T value, PartsUnlimitedCacheOptions options)
         {
             var memCacheOptions = BuildOptions(options);
             return Task.Run(() => _memoryCache.Set(key, value, memCacheOptions));
         }
 
-        public Task<CacheResult<T>> TryGetValue<T>(string key)
+        public Task<CacheResult<T>> GetValue<T>(string key)
         {
             T value;
             if (_memoryCache.TryGetValue(key, out value))
@@ -30,7 +30,20 @@ namespace PartsUnlimited.Cache
             return Task.FromResult(CacheResult<T>.Empty());
         }
 
-        private static MemoryCacheEntryOptions BuildOptions(PartsUnlimitedMemoryCacheEntryOptions options)
+        public async Task<CacheResult<T>> GetValue<T>(string key, Func<T> fallback)
+        {
+            var result = await GetValue<T>(key);
+
+            if (result.HasValue)
+            {
+                return result;
+            }
+
+            var fallBackResult = fallback.Invoke();
+            return new CacheResult<T>(fallBackResult);
+        }
+
+        private static MemoryCacheEntryOptions BuildOptions(PartsUnlimitedCacheOptions options)
         {
             CacheItemPriority pri;
             switch (options.Priority)

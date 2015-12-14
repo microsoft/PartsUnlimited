@@ -1,16 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Mvc;
-using Microsoft.Data.Entity;
-using Microsoft.Framework.Caching.Memory;
-using PartsUnlimited.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Mvc;
+using Microsoft.Data.Entity;
 using PartsUnlimited.Cache;
-using PartsUnlimited.Controllers;
+using PartsUnlimited.Models;
 
 namespace PartsUnlimited.Components
 {
@@ -18,41 +15,25 @@ namespace PartsUnlimited.Components
     public class CategoryMenuComponent : ViewComponent
     {
         private readonly IPartsUnlimitedContext _db;
-        private readonly IPartsUnlimitedCache _cache;
+        private readonly ICacheCoordinator _cacheCoordinator;
 
-        public CategoryMenuComponent(IPartsUnlimitedContext context, IPartsUnlimitedCache cache)
+        public CategoryMenuComponent(IPartsUnlimitedContext context, ICacheCoordinator cacheCoordinator)
         {
             _db = context;
-            _cache = cache;
+            _cacheCoordinator = cacheCoordinator;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            List<Category> categoryList = null;
-            var categoryResult = await _cache.TryGetValue<List<Category>>("category");
-            if (!categoryResult.HasValue)
-            {
-                categoryList = await GetCategories();
-
-                if (categoryList != null)
-                {
-                    await _cache.Set(
-                        "category", categoryList,
-                        new PartsUnlimitedMemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)));
-                }
-            }
-            else
-            {
-                categoryList = categoryResult.Value;
-            }
-
+            var options = new PartsUnlimitedCacheOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
+            List<Category> categoryList = await _cacheCoordinator.GetAsync(CacheConstants.Key.Category, 
+                GetCategories(), new InvokerOptions().WithCacheOptions(options));
             return View(categoryList);
         }
 
-        private async Task<List<Category>> GetCategories()
+        private Func<Task<List<Category>>> GetCategories()
         {
-            var category = await _db.Categories.ToListAsync();
-            return category;
+            return async () => await _db.Categories.ToListAsync();
         }
     }
 }
