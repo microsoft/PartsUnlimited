@@ -8,6 +8,7 @@ namespace PartsUnlimited.Cache
             public static string AnnouncementProduct = "announcementProduct";
             public static string TopSellingProducts = "topselling";
             public static string NewArrivalProducts = "newarrivals";
+            public static string Promos = "promo";
 
             public static string ProductKey(int id)
             {

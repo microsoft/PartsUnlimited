@@ -71,5 +71,10 @@ namespace PartsUnlimited.Models
 
         [BindNever]
         public List<OrderDetail> OrderDetails { get; set; }
+
+        public virtual Promo Promo { get; set; }
+
+        [ScaffoldColumn(false)]
+        public int? PromoId { get; set; }
     }
 }

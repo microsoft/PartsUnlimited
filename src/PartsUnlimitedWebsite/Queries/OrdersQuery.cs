@@ -73,9 +73,13 @@ namespace PartsUnlimited.Queries
 
         private async Task FillOrderDetails(IEnumerable<Order> orders)
         {
-
+            var promo = await LoadPromoCodes();
             foreach (var order in orders)
             {
+                if (order.PromoId.HasValue)
+                {
+                    order.Promo = promo.First(s => s.PromoId == order.PromoId);
+                }
                 order.OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == order.OrderId).ToListAsync();
 
                 foreach (var details in order.OrderDetails)
@@ -87,6 +91,15 @@ namespace PartsUnlimited.Queries
                     details.Product = product;
                 }
             }
+        }
+
+        private async Task<List<Promo>> LoadPromoCodes()
+        {
+            var key = CacheConstants.Key.Promos;
+            var cacheOptions = new PartsUnlimitedCacheOptions().SetSlidingExpiration(TimeSpan.FromMinutes(60));
+            var invokerOptions = new CacheCoordinatorOptions().WithCacheOptions(cacheOptions).WhichFailsOver();
+            List<Promo> product = await _cacheCoordinator.GetAsync(key, () => _db.Promo.ToListAsync(), invokerOptions);
+            return product;
         }
     }
 }

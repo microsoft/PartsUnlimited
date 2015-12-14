@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using PartsUnlimited.Cache;
 
 namespace PartsUnlimited.Controllers
 {
@@ -16,13 +17,13 @@ namespace PartsUnlimited.Controllers
     public class CheckoutController : Controller
     {
         private readonly IPartsUnlimitedContext _db;
+        private readonly ICacheCoordinator _cacheCoordinator;
 
-        public CheckoutController(IPartsUnlimitedContext context)
+        public CheckoutController(IPartsUnlimitedContext context, ICacheCoordinator cacheCoordinator)
         {
             _db = context;
+            _cacheCoordinator = cacheCoordinator;
         }
-
-        private const string PromoCode = "FREE";
 
         //
         // GET: /Checkout/
@@ -53,29 +54,31 @@ namespace PartsUnlimited.Controllers
 
             try
             {
-                if (string.Equals(formCollection["PromoCode"].FirstOrDefault(), PromoCode,
-                    StringComparison.OrdinalIgnoreCase) == false)
+                var cacheOptions = new PartsUnlimitedCacheOptions().SetSlidingExpiration(TimeSpan.FromMinutes(60));
+                var promos = await _cacheCoordinator.GetAsync(CacheConstants.Key.Promos, () => _db.Promo.ToListAsync(), 
+                    new CacheCoordinatorOptions().WithCacheOptions(cacheOptions));
+                var promoCode = formCollection["PromoCode"].FirstOrDefault();
+                var promo = promos.FirstOrDefault(p => p.Name.Equals(promoCode, StringComparison.InvariantCultureIgnoreCase));
+                if (promo == null)
                 {
                     return View(order);
                 }
-                else
-                {
-                    order.Username = HttpContext.User.GetUserName();
-                    order.OrderDate = DateTime.Now;
 
-                    //Add the Order
-                    _db.Orders.Add(order);
+                order.Username = HttpContext.User.GetUserName();
+                order.OrderDate = DateTime.Now;
+                order.PromoId = promo.PromoId;
 
-                    //Process the order
-                    var cart = ShoppingCart.GetCart(_db, HttpContext);
-                    cart.CreateOrder(order);
+                //Add the Order
+                _db.Orders.Add(order);
 
-                    // Save all changes
-                    await _db.SaveChangesAsync(HttpContext.RequestAborted);
+                //Process the order
+                var cart = ShoppingCart.GetCart(_db, HttpContext);
+                cart.CreateOrder(order);
 
-                    return RedirectToAction("Complete",
-                        new { id = order.OrderId });
-                }
+                // Save all changes
+                await _db.SaveChangesAsync(HttpContext.RequestAborted);
+
+                return RedirectToAction("Complete", new { id = order.OrderId });
             }
             catch
             {
