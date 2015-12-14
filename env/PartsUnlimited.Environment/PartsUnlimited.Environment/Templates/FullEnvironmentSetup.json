@@ -77,15 +77,10 @@
         },
         "CdnStorageContainerNameForStaging": {
             "type": "string"
-        },
-        "_artifactsLocation": {
-            "type": "string"
-        },
-        "_artifactsLocationSasToken": {
-            "type": "securestring"
         }
     },
     "variables": {
+        "sharedTemplateUrl": "[uri(deployment().properties.templateLink.uri)]",
         "sqlServerAndDbTemplateFile": "PartsUnlimited.Environment/Templates/SqlServerAndDb.json",
         "appInsightsTemplateFile": "PartsUnlimited.Environment/Templates/AppInsights.json",
         "hostingPlanTemplateFile": "PartsUnlimited.Environment/Templates/HostingPlanAndRules.json",
@@ -96,11 +91,11 @@
         {
             "name": "SqlServerAndDb",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-01-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('sqlServerAndDbTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "uri": "[concat(variables('sharedTemplateUrl'), '/', variables('sqlServerAndDbTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -116,11 +111,11 @@
         {
             "name": "SqlServerAndDb-Dev",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-01-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('sqlServerAndDbTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "uri": "[concat(variables('sharedTemplateUrl'), '/', variables('sqlServerAndDbTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -136,11 +131,11 @@
         {
             "name": "SqlServerAndDb-Stage",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-01-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('sqlServerAndDbTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "uri": "[concat(variables('sharedTemplateUrl'), '/', variables('sqlServerAndDbTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -156,11 +151,11 @@
         {
             "name": "AppInsights",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-01-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('appInsightsTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "uri": "[concat(variables('sharedTemplateUrl'), '/', variables('appInsightsTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -171,11 +166,11 @@
         {
             "name": "AppInsights-Dev",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-01-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('appInsightsTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "uri": "[concat(variables('sharedTemplateUrl'), '/', variables('appInsightsTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -186,11 +181,11 @@
         {
             "name": "AppInsights-Stage",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-01-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('appInsightsTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "uri": "[concat(variables('sharedTemplateUrl'), '/', variables('appInsightsTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -201,11 +196,11 @@
         {
             "name": "HostingPlan",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-01-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('hostingPlanTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "uri": "[concat(variables('sharedTemplateUrl'), '/', variables('hostingPlanTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -219,7 +214,7 @@
         {
             "name": "Website",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-01-01",
             "dependsOn": [
                 "Microsoft.Resources/deployments/HostingPlan",
                 "Microsoft.Resources/deployments/SqlServerAndDb",
@@ -232,7 +227,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('websiteTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "uri": "[concat(variables('sharedTemplateUrl'), '/', variables('websiteTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -250,14 +245,14 @@
         {
             "name": "WebsiteRules",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2014-04-01-preview",
+            "apiVersion": "2015-01-01",
             "dependsOn": [
                 "Microsoft.Resources/deployments/Website"
             ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('websiteRulesTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "uri": "[concat(variables('sharedTemplateUrl'), '/', variables('websiteRulesTemplateFile'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
