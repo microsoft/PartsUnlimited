@@ -7,7 +7,7 @@ namespace PartsUnlimited.Cache
     {
         Task<T> GetAsync<T>(string key, Func<T> fallback, CacheCoordinatorOptions options);
 
-        Task<T> GetAsync<T>(string key, Func<Task<T>> fallback, CacheCoordinatorOptions options);
+        Task<T> GetAsync<T>(string key, Func<Task<T>> loadFromSource, CacheCoordinatorOptions options);
 
         Task Remove(string key);
     }

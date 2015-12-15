@@ -45,7 +45,7 @@ namespace PartsUnlimited.Controllers
         public async Task<IActionResult> Details(int id)
         {
             string productKey = CacheConstants.Key.ProductKey(id);
-            var options = new PartsUnlimitedCacheOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10));
+            var options = new PartsUnlimitedCacheOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10)).WithSecondLevelCache(1.0m);
             var productData = await _cacheCoordinator.GetAsync(productKey, LoadProductWithId(id), 
                 new CacheCoordinatorOptions().WithCacheOptions(options));
             return View(productData);
