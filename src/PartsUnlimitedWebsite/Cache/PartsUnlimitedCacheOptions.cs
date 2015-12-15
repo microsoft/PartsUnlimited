@@ -67,7 +67,7 @@ namespace PartsUnlimited.Cache
         /// Applies a configuration for a second level cache by applying the ratio to the current options.
         /// If the ratio equal 0 then it's the same as not applying a second level cache.
         /// </summary>
-        public PartsUnlimitedCacheOptions WithSecondLevelCache(decimal ratio)
+        public PartsUnlimitedCacheOptions WithSecondLevelCacheAsRatio(decimal ratio)
         {
             if (ratio == 0)
             {

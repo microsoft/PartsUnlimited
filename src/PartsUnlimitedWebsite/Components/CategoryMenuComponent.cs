@@ -26,7 +26,7 @@ namespace PartsUnlimited.Components
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var options = new PartsUnlimitedCacheOptions()
-                .SetAbsoluteExpiration(TimeSpan.FromMinutes(10)).WithSecondLevelCache(0.5m);
+                .SetAbsoluteExpiration(TimeSpan.FromMinutes(10)).WithSecondLevelCacheAsRatio(0.5m);
             List<Category> categoryList = await _cacheCoordinator.GetAsync(CacheConstants.Key.Category, 
                 GetCategories(), new CacheCoordinatorOptions().WithCacheOptions(options));
             return View(categoryList);

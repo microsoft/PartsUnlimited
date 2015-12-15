@@ -142,7 +142,7 @@ namespace PartsUnlimited
             var redisConfig = new RedisCacheConfig(Configuration.GetSection("Keys:RedisCache"));
             services.AddSingleton<IMemoryCache, MemoryCache>();
 
-            // If keys are not available for Redis Cache register in memory cache
+            // If keys are not available for Redis Cache use in memory cache as primary cache.
             if (string.IsNullOrEmpty(redisConfig.AccessKey) || string.IsNullOrEmpty(redisConfig.HostName))
             {
                 services.AddSingleton<IPartsUnlimitedCache, PartsUnlimitedMemoryCache>();
