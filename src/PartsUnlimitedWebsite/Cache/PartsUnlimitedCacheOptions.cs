@@ -58,5 +58,30 @@ namespace PartsUnlimited.Cache
         /// memory pressure triggered cleanup. The default is <see cref="PartsUnlimitedCacheItemPriority.Normal"/>.
         /// </summary>
         public PartsUnlimitedCacheItemPriority Priority { get; set; } = PartsUnlimitedCacheItemPriority.Normal;
+
+        public PartsUnlimitedCacheOptions SecondLevelCacheOptions { get; private set; }
+
+        public bool ShouldApplyToMultiLevelCache => SecondLevelCacheOptions != null;
+
+        /// <summary>
+        /// Applies a configuration for a second level cache by applying the ratio to the current options.
+        /// If the ratio equal 0 then it's the same as not applying a second level cache.
+        /// </summary>
+        public PartsUnlimitedCacheOptions WithSecondLevelCacheAsRatio(decimal ratio)
+        {
+            if (ratio == 0)
+            {
+                // 0 ratio = no second level caching
+                return this;
+            }
+
+            SecondLevelCacheOptions = new PartsUnlimitedCacheOptions
+            {
+                Priority = Priority,
+                SlidingExpiration = SlidingExpiration.HasValue ? new TimeSpan((long)(SlidingExpiration.Value.Ticks * ratio)) : (TimeSpan?)null,
+                AbsoluteExpirationRelativeToNow = AbsoluteExpirationRelativeToNow.HasValue ? new TimeSpan((long)(AbsoluteExpirationRelativeToNow.Value.Ticks * ratio)) : (TimeSpan?)null
+            } ;
+            return this;
+        }
     }
 }

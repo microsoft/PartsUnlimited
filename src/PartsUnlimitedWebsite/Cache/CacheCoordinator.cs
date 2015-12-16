@@ -15,13 +15,9 @@ namespace PartsUnlimited.Cache
             _telemetryProvider = telemetryProvider;
         }
 
-        public async Task<T> GetAsync<T>(string key, Func<Task<T>> fallback, CacheCoordinatorOptions options)
+        public async Task<T> GetAsync<T>(string key, Func<Task<T>> loadFromSource, CacheCoordinatorOptions options)
         {
-            Lazy<T> sourceLoader = new Lazy<T>(delegate
-            {
-                Task<T> task = fallback.Invoke();
-                return task.Result;
-            });
+            Lazy<Task<T>> sourceLoader = new Lazy<Task<T>>(loadFromSource.Invoke);
 
             try
             {
@@ -32,15 +28,15 @@ namespace PartsUnlimited.Cache
                 }
 
                 //initial population.
-                var fallbackResult = sourceLoader.Value;
-                await _cache.SetValue(key, fallbackResult, options.CacheOption);
+                var sourceValue = await sourceLoader.Value;
+                await _cache.SetValue(key, sourceValue, options.CacheOption);
 
-                if (fallbackResult == null && options.RemoveIfNull)
+                if (sourceValue == null && options.RemoveIfNull)
                 {
                     await Remove(key);
                 }
 
-                return fallbackResult;
+                return sourceValue;
             }
             catch (Exception ex)
             {
@@ -50,7 +46,7 @@ namespace PartsUnlimited.Cache
             //Cache has failed, fail back to source system.
             if (options.CallFailOverOnError || sourceLoader.IsValueCreated)
             {
-                return sourceLoader.Value;
+                return await sourceLoader.Value;
             }
 
             throw new InvalidOperationException($"Item in cache with key '{key}' not found");

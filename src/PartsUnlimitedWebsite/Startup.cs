@@ -140,18 +140,19 @@ namespace PartsUnlimited
         private void SetupCache(IServiceCollection services)
         {
             var redisConfig = new RedisCacheConfig(Configuration.GetSection("Keys:RedisCache"));
+            services.AddSingleton<IMemoryCache, MemoryCache>();
 
-            // If keys are not available for Redis Cache register in memory cache
+            // If keys are not available for Redis Cache use in memory cache as primary cache.
             if (string.IsNullOrEmpty(redisConfig.AccessKey) || string.IsNullOrEmpty(redisConfig.HostName))
             {
-                services.AddSingleton<IMemoryCache, MemoryCache>();
                 services.AddSingleton<IPartsUnlimitedCache, PartsUnlimitedMemoryCache>();
             }
             else
             {
-                services.AddInstance<IRedisCacheConfiguration>(redisConfig);
+                services.AddSingleton<PartsUnlimitedMemoryCache>();
                 services.AddSingleton<PartsUnlimitedRedisCache>();
-                services.AddSingleton<IPartsUnlimitedCache, TransientRedisCacheWrapper>();
+                services.AddInstance<IRedisCacheConfiguration>(redisConfig);
+                services.AddSingleton<IPartsUnlimitedCache, PartUnlimitedMultilevelCache>();
             }
 
             services.AddSingleton<ICacheCoordinator, CacheCoordinator>();
