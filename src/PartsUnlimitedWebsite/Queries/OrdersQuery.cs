@@ -16,11 +16,13 @@ namespace PartsUnlimited.Queries
     {
         private readonly IPartsUnlimitedContext _db;
         private readonly ICacheCoordinator _cacheCoordinator;
+        private readonly IProductLoader _productLoader;
 
-        public OrdersQuery(IPartsUnlimitedContext context, ICacheCoordinator cacheCoordinator)
+        public OrdersQuery(IPartsUnlimitedContext context, ICacheCoordinator cacheCoordinator, IProductLoader productLoader)
         {
             _db = context;
             _cacheCoordinator = cacheCoordinator;
+            _productLoader = productLoader;
         }
 
         public async Task<OrdersModel> IndexHelperAsync(string username, DateTime? start, DateTime? end, int count, string invalidOrderSearch, bool isAdminSearch)
@@ -87,7 +89,7 @@ namespace PartsUnlimited.Queries
                     var key = CacheConstants.Key.ProductKey(details.ProductId);
                     var cacheOptions = new PartsUnlimitedCacheOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10));
                     var invokerOptions = new CacheCoordinatorOptions().WithCacheOptions(cacheOptions).WhichFailsOver();
-                    var product = await _cacheCoordinator.GetAsync( key, () => _db.Products.FirstOrDefaultAsync(o => o.ProductId == details.ProductId), invokerOptions);
+                    var product = await _cacheCoordinator.GetAsync( key, () => _productLoader.Load(details.ProductId), invokerOptions);
                     details.Product = product;
                 }
             }

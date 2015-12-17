@@ -20,6 +20,7 @@ using PartsUnlimited.Telemetry;
 using PartsUnlimited.WebsiteConfiguration;
 using System;
 using PartsUnlimited.Cache;
+using PartsUnlimited.Repository;
 
 namespace PartsUnlimited
 {
@@ -82,6 +83,7 @@ namespace PartsUnlimited
             });
 
             SetupCache(services);
+            SetupRepository(services);
             
             services.AddScoped<IOrdersQuery, OrdersQuery>();
             services.AddScoped<IRaincheckQuery, RaincheckQuery>();
@@ -156,6 +158,13 @@ namespace PartsUnlimited
             }
 
             services.AddSingleton<ICacheCoordinator, CacheCoordinator>();
+        }
+
+        private void SetupRepository(IServiceCollection services)
+        {
+            services.AddSingleton<SqlProductRepository>();
+            services.AddScoped<IProductRepository, SqlProductRepository>();
+            services.AddScoped<IProductLoader, SqlProductRepository>();
         }
 
         //This method is invoked when KRE_ENV is 'Development' or is not defined

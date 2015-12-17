@@ -18,22 +18,25 @@ namespace PartsUnlimited.Controllers
         private readonly IPartsUnlimitedContext _db;
         private readonly ITelemetryProvider _telemetry;
         private readonly IAntiforgery _antiforgery;
+        private readonly IProductLoader _productLoader;
 
-        public ShoppingCartController(IPartsUnlimitedContext context, ITelemetryProvider telemetryProvider, IAntiforgery antiforgery)
+        public ShoppingCartController(IPartsUnlimitedContext context, ITelemetryProvider telemetryProvider, 
+            IAntiforgery antiforgery, IProductLoader productLoader)
         {
             _db = context;
             _telemetry = telemetryProvider;
             _antiforgery = antiforgery;
+            _productLoader = productLoader;
         }
 
         //
         // GET: /ShoppingCart/
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var cart = ShoppingCart.GetCart(_db, HttpContext);
+            var cart = ShoppingCart.GetCart(_db, HttpContext, _productLoader);
 
-            var items = cart.GetCartItems();
+            var items = await cart.GetCartItems();
             var itemsCount = items.Sum(x => x.Count);
             var subTotal = items.Sum(x => x.Count * x.Product.Price);
             var shipping = itemsCount * (decimal)5.00;
@@ -70,14 +73,13 @@ namespace PartsUnlimited.Controllers
         public async Task<IActionResult> AddToCart(int id)
         {
             // Retrieve the product from the database
-            var addedProduct = _db.Products
-                .Single(product => product.ProductId == id);
+            var addedProduct = await _productLoader.Load(id);
 
             // Start timer for save process telemetry
             var startTime = System.DateTime.Now;
 
             // Add it to the shopping cart
-            var cart = ShoppingCart.GetCart(_db, HttpContext);
+            var cart = ShoppingCart.GetCart(_db, HttpContext, _productLoader);
 
             cart.AddToCart(addedProduct);
 
@@ -121,12 +123,12 @@ namespace PartsUnlimited.Controllers
             var startTime = System.DateTime.Now;
 
             // Retrieve the current user's shopping cart
-            var cart = ShoppingCart.GetCart(_db, HttpContext);
+            var cart = ShoppingCart.GetCart(_db, HttpContext, _productLoader);
 
             // Get the name of the product to display confirmation
             // TODO [EF] Turn into one query once query of related data is enabled
             int productId = _db.CartItems.Single(item => item.CartItemId == id).ProductId;
-            string productName = _db.Products.Single(a => a.ProductId == productId).Title;
+            dynamic product = await _productLoader.Load(productId);
 
             // Remove from cart
             int itemCount = cart.RemoveFromCart(id);
@@ -143,7 +145,7 @@ namespace PartsUnlimited.Controllers
             _telemetry.TrackEvent("Cart/Server/Remove", null, measurements);
 
             // Display the confirmation message
-            var items = cart.GetCartItems();
+            var items = await cart.GetCartItems();
             var itemsCount = items.Sum(x => x.Count);
             var subTotal = items.Sum(x => x.Count * x.Product.Price);
             var shipping = itemsCount * (decimal)5.00;
@@ -152,7 +154,7 @@ namespace PartsUnlimited.Controllers
 
             var results = new ShoppingCartRemoveViewModel
             {
-                Message = removed + productName +
+                Message = removed + product.Title +
                     " has been removed from your shopping cart.",
                 CartSubTotal = subTotal.ToString("C"),
                 CartShipping = shipping.ToString("C"),

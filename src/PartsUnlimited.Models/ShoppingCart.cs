@@ -1,27 +1,30 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Http;
-using Microsoft.Data.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Http;
+using Microsoft.Data.Entity;
 
 namespace PartsUnlimited.Models
 {
-    public partial class ShoppingCart
+    public class ShoppingCart
     {
         private readonly IPartsUnlimitedContext _db;
+        private readonly IProductLoader _productLoader;
         private string ShoppingCartId { get; set; }
 
-        public ShoppingCart(IPartsUnlimitedContext db)
+        public ShoppingCart(IPartsUnlimitedContext db, IProductLoader productLoader)
         {
             _db = db;
+            _productLoader = productLoader;
         }
 
-        public static ShoppingCart GetCart(IPartsUnlimitedContext db, HttpContext context)
+        public static ShoppingCart GetCart(IPartsUnlimitedContext db, HttpContext context, IProductLoader loader)
         {
-            var cart = new ShoppingCart(db);
+            var cart = new ShoppingCart(db, loader);
             cart.ShoppingCartId = cart.GetCartId(context);
             return cart;
         }
@@ -84,13 +87,13 @@ namespace PartsUnlimited.Models
             _db.CartItems.RemoveRange(cartItems.ToArray());
         }
 
-        public List<CartItem> GetCartItems()
+        public async Task<List<CartItem>> GetCartItems()
         {
             var cartItems = _db.CartItems.Where(cart => cart.CartId == ShoppingCartId).ToList();
             //TODO: Auto population of the related product data not available until EF feature is lighted up.
             foreach (var cartItem in cartItems)
             {
-                cartItem.Product = _db.Products.Single(a => a.ProductId == cartItem.ProductId);
+                cartItem.Product = await _productLoader.Load(cartItem.ProductId);
             }
 
             return cartItems;
@@ -117,34 +120,17 @@ namespace PartsUnlimited.Models
             return sum;
         }
 
-        public decimal GetTotal()
-        {
-            // Multiply product price by count of that product to get 
-            // the current price for each of those products in the cart
-            // sum all product price totals to get the cart total
-
-            // TODO Collapse to a single query once EF supports querying related data
-            decimal total = 0;
-            foreach (var item in _db.CartItems.Where(c => c.CartId == ShoppingCartId).ToList())
-            {
-                var product = _db.Products.First(a => a.ProductId == item.ProductId);
-                total += item.Count * product.Price;
-            }
-
-            return total;
-        }
-
-        public int CreateOrder(Order order)
+       public async Task<int> CreateOrder(Order order)
         {
             decimal orderTotal = 0;
 
-            var cartItems = GetCartItems();
+            var cartItems = await GetCartItems();
 
             // Iterate over the items in the cart, adding the order details for each
             foreach (var item in cartItems)
             {
-                //var product = _db.Products.Find(item.ProductId);
-                var product = _db.Products.Single(a => a.ProductId == item.ProductId);
+                var product = await _productLoader.Load(item.ProductId);
+                    
 
                 var orderDetail = new OrderDetail
                 {

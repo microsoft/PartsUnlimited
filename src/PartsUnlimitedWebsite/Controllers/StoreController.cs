@@ -14,11 +14,13 @@ namespace PartsUnlimited.Controllers
     {
         private readonly IPartsUnlimitedContext _db;
         private readonly ICacheCoordinator _cacheCoordinator;
+        private readonly IProductLoader _productLoader;
 
-        public StoreController(IPartsUnlimitedContext context, ICacheCoordinator cacheCoordinator)
+        public StoreController(IPartsUnlimitedContext context, ICacheCoordinator cacheCoordinator, IProductLoader productLoader)
         {
             _db = context;
             _cacheCoordinator = cacheCoordinator;
+            _productLoader = productLoader;
         }
 
         //
@@ -53,12 +55,13 @@ namespace PartsUnlimited.Controllers
             return View(productData);
         }
 
-        private Func<Product> LoadProductWithId(int id)
+        private Func<Task<dynamic>> LoadProductWithId(int id)
         {
-            return delegate
+            return async () =>
             {
-                var productData = _db.Products.Single(a => a.ProductId == id);
-                productData.Category = _db.Categories.Single(g => g.CategoryId == productData.CategoryId);
+                dynamic productData = await _productLoader.Load(id);
+                int categoryId = productData.CategoryId;
+                productData.Category = _db.Categories.Single(g => g.CategoryId == categoryId);
                 return productData;
             };
         }

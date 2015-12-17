@@ -1,10 +1,12 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
 using Microsoft.AspNet.Mvc;
 using PartsUnlimited.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using PartsUnlimited.Repository;
 
 namespace PartsUnlimited.Components
 {
@@ -12,10 +14,12 @@ namespace PartsUnlimited.Components
     public class CartSummaryComponent : ViewComponent
     {
         private readonly IPartsUnlimitedContext _db;
+        private readonly IProductLoader _loader;
 
-        public CartSummaryComponent(IPartsUnlimitedContext context)
+        public CartSummaryComponent(IPartsUnlimitedContext context, IProductLoader loader)
         {
             _db = context;
+            _loader = loader;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
@@ -28,15 +32,13 @@ namespace PartsUnlimited.Components
             return View();
         }
 
-        private Task<IOrderedEnumerable<CartSummeryComponentModel>> GetCartItems()
+        private async Task<IOrderedEnumerable<CartSummeryComponentModel>> GetCartItems()
         {
-            var cart = ShoppingCart.GetCart(_db, Context);
-
-            var cartItems = cart.GetCartItems()
+            var cart = ShoppingCart.GetCart(_db, Context, _loader);
+            List<CartItem> cartItems = await cart.GetCartItems();
+            return cartItems
                 .Select(a => new CartSummeryComponentModel { Title = a.Product.Title, Count = a.Count })
                 .OrderBy(x => x.Title);
-
-            return Task.FromResult(cartItems);
         }
     }
 

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Data.Entity;
+using PartsUnlimited.Repository;
 
 namespace PartsUnlimited.api.Controllers
 {
@@ -14,27 +15,29 @@ namespace PartsUnlimited.api.Controllers
     public class ProductsController : Controller
     {
         private readonly IPartsUnlimitedContext _context;
+        private readonly IProductRepository _productRepository;
 
-        public ProductsController(IPartsUnlimitedContext context)
+        public ProductsController(IPartsUnlimitedContext context, IProductRepository productRepository)
         {
             _context = context;
+            _productRepository = productRepository;
         }
 
         [HttpGet]
-        public IEnumerable<Product> Get(bool sale = false)
+        public async Task<IEnumerable<dynamic>> Get(bool sale = false)
         {
             if (!sale)
             {
-                return _context.Products;
+                return await _productRepository.LoadAllProducts();
             }
 
-            return _context.Products.Where(p => p.Price != p.SalePrice);
+            return await _productRepository.LoadSaleProducts();
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == id);
+            var product = await _productRepository.Load(id);
 
             if (product == null)
             {
