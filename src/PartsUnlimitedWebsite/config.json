@@ -39,8 +39,8 @@
       "InstrumentationKey": "efc04167-3227-40ff-aa88-46a271dba379"
     },
     "RedisCache": {
-      "HostName" :  "dsrediscache.redis.cache.windows.net",
-      "AccessKey": "u9sBm92gQbGYtplmU91ERTaZXPL7neMywnLN+Ysz+Io=",
+      "HostName" :  "",
+      "AccessKey": "",
       "KeepAliveTimeSeconds": 5,
       "SSLEnabled": true,
       "Port": 6380,
