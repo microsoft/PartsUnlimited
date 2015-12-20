@@ -3,11 +3,12 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using PartsUnlimited.Models;
 
 namespace PartsUnlimited.Search
 {
     public interface IProductSearch
     {
-        Task<IEnumerable<dynamic>> Search(string query);
+        Task<IEnumerable<IProduct>> Search(string query);
     }
 }

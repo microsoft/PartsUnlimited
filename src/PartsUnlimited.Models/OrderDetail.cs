@@ -15,7 +15,7 @@ namespace PartsUnlimited.Models
 
         public decimal UnitPrice { get; set; }
 
-        public virtual Product Product { get; set; }
+        public virtual IProduct Product { get; set; }
 
         public virtual Order Order { get; set; }
     }

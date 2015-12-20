@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PartsUnlimited.Models
 {
-    public class Product
+    public class Product : IProduct
     {
         [Required]
         [Display(Name = "Sku Number")]

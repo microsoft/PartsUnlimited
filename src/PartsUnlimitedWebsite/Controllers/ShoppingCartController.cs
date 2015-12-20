@@ -72,16 +72,13 @@ namespace PartsUnlimited.Controllers
 
         public async Task<IActionResult> AddToCart(int id)
         {
-            // Retrieve the product from the database
-            var addedProduct = await _productLoader.Load(id);
-
             // Start timer for save process telemetry
             var startTime = System.DateTime.Now;
 
             // Add it to the shopping cart
             var cart = ShoppingCart.GetCart(_db, HttpContext, _productLoader);
 
-            cart.AddToCart(addedProduct);
+            cart.AddToCart(id);
 
             await _db.SaveChangesAsync(HttpContext.RequestAborted);
 

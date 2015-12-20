@@ -9,7 +9,6 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
-using Microsoft.Data.Entity;
 using PartsUnlimited.Cache;
 using PartsUnlimited.Hubs;
 using PartsUnlimited.Models;
@@ -40,66 +39,11 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         //
         // GET: /StoreManager/
 
-        public IActionResult Index(SortField sortField = SortField.Name, SortDirection sortDirection = SortDirection.Up)
+        public async Task<IActionResult > Index(SortField sortField = SortField.Name, SortDirection sortDirection = SortDirection.Up)
         {
-            // TODO [EF] Swap to native support for loading related data when available
-            var products = from product in _db.Products
-                           join category in _db.Categories on product.CategoryId equals category.CategoryId
-                           select new Product()
-                           {
-                               ProductArtUrl = product.ProductArtUrl,
-                               ProductId = product.ProductId,
-                               CategoryId = product.CategoryId,
-                               Price = product.Price,
-                               Title = product.Title,
-                               Category = new Category()
-                               {
-                                   CategoryId = product.CategoryId,
-                                   Name = category.Name
-                               }
-                           };
-
-            var sorted = Sort(products, sortField, sortDirection);
-
-            return View(sorted);
+            IEnumerable<IProduct> products = await _productRepository.LoadAllProducts(sortField, sortDirection);
+            return View(products);
         }
-
-        private IQueryable<Product> Sort(IQueryable<Product> products, SortField sortField, SortDirection sortDirection)
-        {
-            if (sortField == SortField.Name)
-            {
-                if (sortDirection == SortDirection.Up)
-                {
-                    return products.OrderBy(o => o.Category.Name);
-                }
-
-                return products.OrderByDescending(o => o.Category.Name);
-            }
-
-            if (sortField == SortField.Price)
-            {
-                if (sortDirection == SortDirection.Up)
-                {
-                    return products.OrderBy(o => o.Price);
-                }
-
-                return products.OrderByDescending(o => o.Price);
-            }
-
-            if (sortField == SortField.Title)
-            {
-                if (sortDirection == SortDirection.Up)
-                {
-                    return products.OrderBy(o => o.Title);
-                }
-
-                return products.OrderByDescending(o => o.Title);
-            }
-
-            // Should not reach here, but return products for compiler
-            return products;
-        }
-
 
         //
         // GET: /StoreManager/Details/5
@@ -108,7 +52,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         {
             string cacheId = CacheConstants.Key.ProductKey(id);
             var options = new PartsUnlimitedCacheOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10));
-            dynamic product = await _cacheCoordinator.GetAsync(cacheId, LoadProductWithId(id), new CacheCoordinatorOptions().WithCacheOptions(options).WhichRemovesIfNull());
+            IProduct product = await _cacheCoordinator.GetAsync(cacheId, LoadProductWithId(id), new CacheCoordinatorOptions().WithCacheOptions(options).WhichRemovesIfNull());
             
             if (product != null)
             {
@@ -120,7 +64,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
             return View(product);
         }
 
-        private Func<Task<dynamic>> LoadProductWithId(int id)
+        private Func<Task<IProduct>> LoadProductWithId(int id)
         {
             return async () => await _productRepository.Load(id);
         }
@@ -136,9 +80,9 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         // POST: /StoreManager/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Product product)
+        public async Task<IActionResult> Create([ModelBinder(BinderType = typeof(ProductModelBinder))]IProduct product)
         {
-            if (ModelState.IsValid)
+            if (TryValidateModel(product) && ModelState.IsValid)
             {
                 await _productRepository.Add(product, HttpContext.RequestAborted);
                 _annoucementHub.Clients.All.announcement(new ProductData { Title = product.Title, Url = Url.Action("Details", "Store", new { id = product.ProductId }) });
@@ -154,7 +98,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         // GET: /StoreManager/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            dynamic product = await _productRepository.Load(id);
+            IProduct product = await _productRepository.Load(id);
             ViewBag.Categories = new SelectList(_db.Categories, "CategoryId", "Name", product.CategoryId).ToList();
             return View(product);
         }
@@ -163,12 +107,12 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         // POST: /StoreManager/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Product product)
+        
+        public async Task<IActionResult> Edit([ModelBinder(BinderType = typeof(ProductModelBinder))]IProduct product)
         {
-            if (ModelState.IsValid)
+            if (TryValidateModel(product) && ModelState.IsValid)
             {
-                _db.Entry(product).State = EntityState.Modified;
-                await _db.SaveChangesAsync(HttpContext.RequestAborted);
+                await _productRepository.Save(product, HttpContext.RequestAborted);
                 //Invalidate the cache entry as it is modified
                 await _cacheCoordinator.Remove(CacheConstants.Key.ProductKey(product.ProductId));
                 return RedirectToAction("Index");
@@ -182,7 +126,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         // GET: /StoreManager/RemoveProduct/5
         public async Task<IActionResult> RemoveProduct(int id)
         {
-            dynamic product = await _productRepository.Load(id);
+            IProduct product = await _productRepository.Load(id);
             return View(product);
         }
 
@@ -191,7 +135,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         [HttpPost, ActionName("RemoveProduct")]
         public async Task<IActionResult> RemoveProductConfirmed(int id)
         {
-            dynamic product = await _productRepository.Load(id);
+            IProduct product = await _productRepository.Load(id);
             CartItem cartItem = _db.CartItems.FirstOrDefault(a => a.ProductId == id);
             List<OrderDetail> orderDetail = _db.OrderDetails.Where(a => a.ProductId == id).ToList();
             List<Raincheck> rainCheck = _db.RainChecks.Where(a => a.ProductId == id).ToList();

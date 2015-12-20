@@ -16,60 +16,17 @@ using System.Threading.Tasks;
 
 namespace PartsUnlimited.Models
 {
-    public static class SampleData
+    public interface IDataSeeder
     {
-        private static string AdminRoleSectionName = "AdminRole";
-        private static string DefaultAdminNameKey = "UserName";
-        private static string DefaultAdminPasswordKey = "Password";
+        Task AddOrUpdateAsync<TEntity>(
+            IServiceProvider serviceProvider,
+            Func<TEntity, object> propertyToMatch, IEnumerable<TEntity> entities)
+            where TEntity : class;
+    }
 
-        public static async Task InitializePartsUnlimitedDatabaseAsync(IServiceProvider serviceProvider, bool createUser = true)
-        {
-            using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var db = serviceScope.ServiceProvider.GetService<PartsUnlimitedContext>();
-
-
-                bool dbNewlyCreated = await db.Database.EnsureCreatedAsync();
-
-                //Seeding a database using migrations is not yet supported. (https://github.com/aspnet/EntityFramework/issues/629.)
-                //Add seed data, only if the tables are empty.
-                bool tablesEmpty = !db.Products.Any() && !db.Orders.Any() && !db.Categories.Any() && !db.Stores.Any();
-
-                if (dbNewlyCreated || tablesEmpty)
-                {
-                    await InsertTestData(serviceProvider);
-                    await CreateAdminUser(serviceProvider);
-                }
-            }
-        }
-
-        public static async Task InsertTestData(IServiceProvider serviceProvider)
-        {
-            var promo = GetPromo().ToList();
-            await AddOrUpdateAsync(serviceProvider, a => a.PromoId, promo);
-
-            var categories = GetCategories().ToList();
-            await AddOrUpdateAsync(serviceProvider, g => g.Name, categories);
-
-            var products = GetProducts(categories).ToList();
-            await AddOrUpdateAsync(serviceProvider, a => a.Title, products);
-
-            var stores = GetStores().ToList();
-            await AddOrUpdateAsync(serviceProvider, a => a.Name, stores);
-
-            var rainchecks = GetRainchecks(stores, products).ToList();
-            await AddOrUpdateAsync(serviceProvider, a => a.RaincheckId, rainchecks);
-
-            PopulateOrderHistory(serviceProvider, products, promo);
-        }
-
-        private static IEnumerable<Promo> GetPromo()
-        {
-            yield return new Promo {Name = "FREE"};
-            yield return new Promo {Name = "Promo100"};
-        }
-
-        private static async Task AddOrUpdateAsync<TEntity>(
+    public class SQLDataSeeder : IDataSeeder
+    {
+        public async Task AddOrUpdateAsync<TEntity>(
             IServiceProvider serviceProvider,
             Func<TEntity, object> propertyToMatch, IEnumerable<TEntity> entities)
             where TEntity : class
@@ -93,6 +50,68 @@ namespace PartsUnlimited.Models
                 }
                 await db.SaveChangesAsync();
             }
+        }
+    }
+
+
+    public class SampleData
+    {
+        private readonly IDataSeeder _dataSeeder;
+
+        public SampleData(IDataSeeder dataSeeder)
+        {
+            _dataSeeder = dataSeeder;
+        }
+
+        private static string AdminRoleSectionName = "AdminRole";
+        private static string DefaultAdminNameKey = "UserName";
+        private static string DefaultAdminPasswordKey = "Password";
+
+        public async Task InitializePartsUnlimitedDatabaseAsync(IServiceProvider serviceProvider, bool createUser = true)
+        {
+            using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var db = serviceScope.ServiceProvider.GetService<PartsUnlimitedContext>();
+
+
+                bool dbNewlyCreated = await db.Database.EnsureCreatedAsync();
+
+                //Seeding a database using migrations is not yet supported. (https://github.com/aspnet/EntityFramework/issues/629.)
+                //Add seed data, only if the tables are empty.
+                bool tablesEmpty = !db.Products.Any() && !db.Orders.Any() && !db.Categories.Any() && !db.Stores.Any();
+
+                if (dbNewlyCreated || tablesEmpty)
+                {
+                    await InsertTestData(serviceProvider);
+                    await CreateAdminUser(serviceProvider);
+                }
+            }
+        }
+
+        private async Task InsertTestData(IServiceProvider serviceProvider)
+        {
+            var promo = GetPromo().ToList();
+            await _dataSeeder.AddOrUpdateAsync(serviceProvider, a => a.PromoId, promo);
+
+            var categories = GetCategories().ToList();
+            await _dataSeeder.AddOrUpdateAsync(serviceProvider, g => g.Name, categories);
+
+            var products = GetProducts(categories).ToList();
+            await _dataSeeder.AddOrUpdateAsync(serviceProvider, a => a.Title, products);
+
+            var stores = GetStores().ToList();
+            await _dataSeeder.AddOrUpdateAsync(serviceProvider, a => a.Name, stores);
+
+            var rainchecks = GetRainchecks(stores, products).ToList();
+            await _dataSeeder.AddOrUpdateAsync(serviceProvider, a => a.RaincheckId, rainchecks);
+
+            PopulateOrderHistory(serviceProvider, products, promo);
+        }
+
+        private static IEnumerable<Promo> GetPromo()
+        {
+            yield return new Promo {Name = "FREE"};
+            yield return new Promo {Name = "Promo100"};
         }
 
        /// <summary>

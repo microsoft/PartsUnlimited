@@ -29,19 +29,19 @@ namespace PartsUnlimited.Models
             return cart;
         }
 
-        public void AddToCart(Product product)
+        public void AddToCart(int productId)
         {
             // Get the matching cart and product instances
             var cartItem = _db.CartItems.SingleOrDefault(
                 c => c.CartId == ShoppingCartId
-                && c.ProductId == product.ProductId);
+                && c.ProductId == productId);
 
             if (cartItem == null)
             {
                 // Create a new cart item if no cart item exists
                 cartItem = new CartItem
                 {
-                    ProductId = product.ProductId,
+                    ProductId = productId,
                     CartId = ShoppingCartId,
                     Count = 1,
                     DateCreated = DateTime.Now

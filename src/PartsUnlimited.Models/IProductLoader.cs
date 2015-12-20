@@ -4,6 +4,6 @@ namespace PartsUnlimited.Models
 {
     public interface IProductLoader
     {
-        Task<dynamic> Load(int productId);
+        Task<IProduct> Load(int productId);
     }
 }

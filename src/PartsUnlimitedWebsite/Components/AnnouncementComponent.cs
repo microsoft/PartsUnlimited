@@ -29,11 +29,11 @@ namespace PartsUnlimited.Components
         {
             var key = CacheConstants.Key.AnnouncementProduct;
             var options = new PartsUnlimitedCacheOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
-            Product announcementProduct = await _cacheCoordinator.GetAsync(key, GetLatestProduct, new CacheCoordinatorOptions().WithCacheOptions(options));
+            dynamic announcementProduct = await _cacheCoordinator.GetAsync(key, GetLatestProduct, new CacheCoordinatorOptions().WithCacheOptions(options));
             return View(announcementProduct);
         }
 
-        private async Task<Product> GetLatestProduct()
+        private async Task<dynamic> GetLatestProduct()
         {
             return await _productRepository.GetLatestProduct();
             

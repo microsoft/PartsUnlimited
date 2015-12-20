@@ -24,7 +24,7 @@ namespace PartsUnlimited.api.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<dynamic>> Get(bool sale = false)
+        public async Task<IEnumerable<IProduct>> Get(bool sale = false)
         {
             if (!sale)
             {

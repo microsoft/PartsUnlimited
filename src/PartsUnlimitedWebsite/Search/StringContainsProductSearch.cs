@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using PartsUnlimited.Models;
 using PartsUnlimited.Repository;
 
 namespace PartsUnlimited.Search
@@ -16,7 +17,7 @@ namespace PartsUnlimited.Search
             _repository = repository;
         }
 
-        public Task<IEnumerable<dynamic>> Search(string query)
+        public Task<IEnumerable<IProduct>> Search(string query)
         {
             var searchCriteria = new ProductSearchCriteria { TitleSearch = query.ToLower() };
             return _repository.Search(searchCriteria);   

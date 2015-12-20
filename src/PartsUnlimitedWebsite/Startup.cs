@@ -162,7 +162,8 @@ namespace PartsUnlimited
 
         private void SetupRepository(IServiceCollection services)
         {
-            services.AddSingleton<SqlProductRepository>();
+            services.AddScoped<SqlProductRepository>();
+            services.AddScoped<IProductBuilder, SqlProductBuilder>();
             services.AddScoped<IProductRepository, SqlProductRepository>();
             services.AddScoped<IProductLoader, SqlProductRepository>();
         }
@@ -236,7 +237,7 @@ namespace PartsUnlimited
             });
 
             //Populates the PartsUnlimited sample data
-            SampleData.InitializePartsUnlimitedDatabaseAsync(app.ApplicationServices).Wait();
+            new SampleData(new SQLDataSeeder()).InitializePartsUnlimitedDatabaseAsync(app.ApplicationServices).Wait();
         }
     }
 }
