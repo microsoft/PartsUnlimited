@@ -5,12 +5,19 @@ using System.Threading.Tasks;
 using PartsUnlimited.Areas.Admin.Controllers;
 using PartsUnlimited.Models;
 using PartsUnlimited.Search;
+using PartsUnlimited.WebsiteConfiguration;
 
 namespace PartsUnlimited.Repository
 {
-
     public class DocDbProductRepository : IProductRepository
     {
+        private readonly IDocDbConfiguration _configuration;
+
+        public DocDbProductRepository(IDocDbConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public Task<IEnumerable<IProduct>> Search(ProductSearchCriteria searchCriteria)
         {
             throw new System.NotImplementedException();
