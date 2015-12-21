@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using PartsUnlimited.Areas.Admin.Controllers;
@@ -29,11 +28,6 @@ namespace PartsUnlimited.Repository
         }
 
         public Task<IEnumerable<IProduct>> LoadAllProducts()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<IQueryable<IProduct>> LoadQueryableProducts(object order)
         {
             throw new System.NotImplementedException();
         }

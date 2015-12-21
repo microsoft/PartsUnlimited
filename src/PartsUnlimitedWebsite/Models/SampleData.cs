@@ -53,7 +53,7 @@ namespace PartsUnlimited.Models
             yield return new Category { Name = "Oil", Description = "Oil description", ImageUrl = "product_oil_premium-oil.jpg" };
         }
 
-        public IEnumerable<Order> BuildOrders(int count, string userName, List<Promo> promo)
+        public IEnumerable<Order> BuildOrders(int count, string userName, IEnumerable<Promo> promo)
         {
             var random = new Random(1234);
             for (int i = count - 1; i >= 0; i--)

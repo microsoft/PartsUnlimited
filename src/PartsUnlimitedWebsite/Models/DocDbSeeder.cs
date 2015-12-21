@@ -1,11 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
-using Microsoft.Azure.Documents.Linq;
+using Newtonsoft.Json;
 using PartsUnlimited.WebsiteConfiguration;
 
 namespace PartsUnlimited.Models
@@ -23,40 +22,46 @@ namespace PartsUnlimited.Models
 
         public async Task Seed(SampleData data)
         {
-            IList<IProduct> products = new List<IProduct>();
+            //See remaining items which exist within sql.
+            await _sqlDataSeeder.Seed(data, categories => CreateDocDbProducts(data, categories));            
+        }
 
+        private async Task<IEnumerable<IProduct>> CreateDocDbProducts(SampleData data, IEnumerable<Category> categories)
+        {
             var serviceEndpoint = new Uri(_configuration.URI);
             var client = new DocumentClient(serviceEndpoint, _configuration.Key, ConnectionPolicy.Default);
 
             try
             {
-                await SeedintoDocDb(client, data);
+                await CreateDatabaseIfNotExists(client);
+                await CreateCollectionIfNotExists(client);
+                return await CreateProducts(client, data, categories);
             }
             catch (DocumentClientException de)
             {
                 Exception baseException = de.GetBaseException();
                 Console.WriteLine("{0} error occurred: {1}, Message: {2}", de.StatusCode, de.Message, baseException.Message);
+                throw;
             }
             catch (Exception e)
             {
                 Exception baseException = e.GetBaseException();
                 Console.WriteLine(baseException.Message);
+                throw;
+            }
+        }
+
+        private async Task<IEnumerable<IProduct>> CreateProducts(DocumentClient client, SampleData data, IEnumerable<Category> categories)
+        {
+            var collectionId = UriFactory.CreateDocumentCollectionUri(_configuration.DatabaseId, _configuration.CollectionId);
+            IEnumerable<IProduct> products = data.GetProducts(categories);
+
+            foreach (var prod in products)
+            {
+                await client.CreateDocumentAsync(collectionId, prod);
             }
 
-            //See remaining items which exist within sql.
-            await _sqlDataSeeder.Seed(data, products);
-        }
-
-        private async Task SeedintoDocDb(DocumentClient client, SampleData data)
-        {
-            await CreateDatabaseIfNotExists(client);
-            await CreateCollectionIfNotExists(client);
-            await CreateProducts(client, data);
-        }
-
-        private Task CreateProducts(DocumentClient client, SampleData data)
-        {
-            return Task.FromResult(1);
+            return products;
         }
 
         private async Task CreateDatabaseIfNotExists(DocumentClient client)

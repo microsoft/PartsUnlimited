@@ -29,13 +29,15 @@ namespace PartsUnlimited.Models
             await SeedInternal(data, null);
         }
 
-        public async Task Seed(SampleData data, IList<IProduct> products)
+        public async Task Seed(SampleData data, Func<IEnumerable<Category>, Task<IEnumerable<IProduct>>> loadProducts)
         {
-            await SeedInternal(data, products);
+            await SeedInternal(data, loadProducts);
         }
 
-        private async Task SeedInternal(SampleData data, IList<IProduct> products)
+        private async Task SeedInternal(SampleData data, Func<IEnumerable<Category>, Task<IEnumerable<IProduct>>> products)
         {
+            bool createProductsInSQl= products == null;
+
             using (var serviceScope = _serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var db = serviceScope.ServiceProvider.GetService<PartsUnlimitedContext>();
@@ -43,11 +45,21 @@ namespace PartsUnlimited.Models
 
                 //Seeding a database using migrations is not yet supported. (https://github.com/aspnet/EntityFramework/issues/629.)
                 //Add seed data, only if the tables are empty.
-                bool tablesEmpty = !db.Products.Any() && !db.Orders.Any() && !db.Categories.Any() && !db.Stores.Any();
+                bool tablesEmpty = !db.Products.Any() && !db.Orders.Any() && !db.Categories.Any() && !db.Stores.Any() && !db.Promo.Any();
 
                 if (dbNewlyCreated || tablesEmpty)
                 {
-                    await InsertTestData(data, _serviceProvider, products);
+                    await InsertReferenceData(data);
+                    IEnumerable<IProduct> createdProducts;
+                    if (createProductsInSQl)
+                    {
+                        createdProducts = await InsertProductData(data, db.Categories.AsEnumerable());
+                    }
+                    else
+                    {
+                        createdProducts = await products.Invoke(db.Categories.AsEnumerable());
+                    }
+                    await InsertHistoricalData(data, _serviceProvider, createdProducts, db.Stores, db.Promo);
                     await CreateAdminUser(_serviceProvider);
                 }
             }
@@ -89,33 +101,36 @@ namespace PartsUnlimited.Models
             }
         }
 
-        private async Task InsertTestData(SampleData data, IServiceProvider serviceProvider, IList<IProduct> products)
+        private async Task<IEnumerable<IProduct>> InsertProductData(SampleData data, IEnumerable<Category> categories)
         {
-            bool createProducts = products==null;
+            var seededProducts = data.GetProducts(categories).ToList();
+            var typedProducts = seededProducts.OfType<Product>();
+            await AddOrUpdateAsync(a => a.Title, typedProducts);
+            return typedProducts;
+        }
+
+        private async Task InsertReferenceData(SampleData data)
+        {
             var promo = data.GetPromo().ToList();
             await AddOrUpdateAsync(a => a.PromoId, promo);
 
             var categories = data.GetCategories().ToList();
             await AddOrUpdateAsync(g => g.Name, categories);
 
-            if (createProducts)
-            {
-                var seededProducts = data.GetProducts(categories).ToList();
-                var typedProducts = seededProducts.OfType<Product>();
-                await AddOrUpdateAsync(a => a.Title, typedProducts);
-                products = seededProducts;
-            }
-
             var stores = data.GetStores().ToList();
             await AddOrUpdateAsync(a => a.Name, stores);
-
-            var rainchecks = data.GetRainchecks(stores, products).ToList();
-            await AddOrUpdateAsync(a => a.RaincheckId, rainchecks);
-
-            PopulateOrderHistory(serviceProvider, products, promo, data);
         }
 
-        private void PopulateOrderHistory(IServiceProvider serviceProvider, IList<IProduct> products, List<Promo> promo, SampleData data)
+        private async Task InsertHistoricalData(SampleData data, IServiceProvider serviceProvider, IEnumerable<IProduct> products, IEnumerable<Store> stores, IEnumerable<Promo> promos)
+        {
+            var workingProducts = products.ToList();
+            var rainchecks = data.GetRainchecks(stores, workingProducts).ToList();
+            await AddOrUpdateAsync(a => a.RaincheckId, rainchecks);
+
+            PopulateOrderHistory(serviceProvider, workingProducts, promos.ToList(), data);
+        }
+
+        private void PopulateOrderHistory(IServiceProvider serviceProvider, IList<IProduct> products, IList<Promo> promo, SampleData data)
         {
             IConfigurationSection configuration = GetAdminRoleConfiguration(serviceProvider);
             string userName = configuration[DefaultAdminNameKey];
