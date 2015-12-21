@@ -37,7 +37,8 @@
     "Microsoft.Framework.Configuration.Json": "1.0.0-beta8",
     "Microsoft.Framework.OptionsModel": "1.0.0-beta8",
     "PartsUnlimited.Models": "",
-    "StackExchange.Redis": "1.1.0-alpha2"
+    "StackExchange.Redis": "1.1.0-alpha2",
+    "Microsoft.Azure.DocumentDB" :  "1.5.2"
   },
   "commands": {
     "WebListener": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls http://localhost:5001",

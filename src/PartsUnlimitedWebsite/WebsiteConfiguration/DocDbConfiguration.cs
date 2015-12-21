@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Framework.Configuration;
 
 namespace PartsUnlimited.WebsiteConfiguration
@@ -8,9 +9,13 @@ namespace PartsUnlimited.WebsiteConfiguration
         {
             URI = config["URI"];
             Key = config["Key"];
+            DatabaseId = "PartsUnlimited";
+            CollectionId = "ProductCollection";
         }
 
         public string URI { get; }
         public string Key { get; }
+        public string DatabaseId { get; }
+        public string CollectionId { get; }
     }
 }

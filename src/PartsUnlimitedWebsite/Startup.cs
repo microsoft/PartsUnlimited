@@ -176,6 +176,7 @@ namespace PartsUnlimited
             }
             else
             {
+                services.AddScoped<SQLDataSeeder>();
                 services.AddInstance<IDocDbConfiguration>(docDbConfig);
                 services.AddScoped<DocDbProductRepository>();
                 services.AddScoped<IProductBuilder, DocDbProductBuilder>();

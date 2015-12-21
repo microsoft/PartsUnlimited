@@ -49,8 +49,8 @@
       "ConnectTimeoutMilliseconds": 3000
     },
     "DocDb": {
-      "URI": "",//"https://docdbaccelerator.documents.azure.com:443/",
-      "Key": "" //"qnqp2PpP9r993Egjjyma8XybgpqNQQ1d5+mT6QoblsNxNdPBnrB3U3IJ2AWTkDEsUKpF6AIKX2fXKHDBpJ7jSw=="
+      "URI": "https://docdbaccelerator.documents.azure.com:443/",
+      "Key": "qnqp2PpP9r993Egjjyma8XybgpqNQQ1d5+mT6QoblsNxNdPBnrB3U3IJ2AWTkDEsUKpF6AIKX2fXKHDBpJ7jSw=="
     }
   }
 }

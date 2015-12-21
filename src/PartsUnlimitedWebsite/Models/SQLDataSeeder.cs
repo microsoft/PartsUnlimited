@@ -26,9 +26,19 @@ namespace PartsUnlimited.Models
 
         public async Task Seed(SampleData data)
         {
+            await SeedInternal(data, null);
+        }
+
+        public async Task Seed(SampleData data, IList<IProduct> products)
+        {
+            await SeedInternal(data, products);
+        }
+
+        private async Task SeedInternal(SampleData data, IList<IProduct> products)
+        {
             using (var serviceScope = _serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var db = _serviceProvider.GetService<PartsUnlimitedContext>();
+                var db = serviceScope.ServiceProvider.GetService<PartsUnlimitedContext>();
                 bool dbNewlyCreated = await db.Database.EnsureCreatedAsync();
 
                 //Seeding a database using migrations is not yet supported. (https://github.com/aspnet/EntityFramework/issues/629.)
@@ -37,7 +47,7 @@ namespace PartsUnlimited.Models
 
                 if (dbNewlyCreated || tablesEmpty)
                 {
-                    await InsertTestData(data, _serviceProvider);
+                    await InsertTestData(data, _serviceProvider, products);
                     await CreateAdminUser(_serviceProvider);
                 }
             }
@@ -79,17 +89,22 @@ namespace PartsUnlimited.Models
             }
         }
 
-        private async Task InsertTestData(SampleData data, IServiceProvider serviceProvider)
+        private async Task InsertTestData(SampleData data, IServiceProvider serviceProvider, IList<IProduct> products)
         {
+            bool createProducts = products==null;
             var promo = data.GetPromo().ToList();
             await AddOrUpdateAsync(a => a.PromoId, promo);
 
             var categories = data.GetCategories().ToList();
             await AddOrUpdateAsync(g => g.Name, categories);
 
-            var products = data.GetProducts(categories).ToList();
-            var typedProducts = products.OfType<Product>();
-            await AddOrUpdateAsync(a => a.Title, typedProducts);
+            if (createProducts)
+            {
+                var seededProducts = data.GetProducts(categories).ToList();
+                var typedProducts = seededProducts.OfType<Product>();
+                await AddOrUpdateAsync(a => a.Title, typedProducts);
+                products = seededProducts;
+            }
 
             var stores = data.GetStores().ToList();
             await AddOrUpdateAsync(a => a.Name, stores);
@@ -100,7 +115,7 @@ namespace PartsUnlimited.Models
             PopulateOrderHistory(serviceProvider, products, promo, data);
         }
 
-        private void PopulateOrderHistory(IServiceProvider serviceProvider, List<IProduct> products, List<Promo> promo, SampleData data)
+        private void PopulateOrderHistory(IServiceProvider serviceProvider, IList<IProduct> products, List<Promo> promo, SampleData data)
         {
             IConfigurationSection configuration = GetAdminRoleConfiguration(serviceProvider);
             string userName = configuration[DefaultAdminNameKey];
