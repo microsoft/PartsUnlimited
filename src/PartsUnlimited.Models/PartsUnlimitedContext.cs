@@ -29,7 +29,7 @@ namespace PartsUnlimited.Models
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Product>().HasKey(a => a.ProductId);
+            builder.Entity<Product>().Ignore(a => a.ProductDetailList).HasKey(a => a.ProductId);
             builder.Entity<Order>().HasKey(o => o.OrderId);
             builder.Entity<Category>().HasKey(g => g.CategoryId);
             builder.Entity<CartItem>().HasKey(c => c.CartItemId);

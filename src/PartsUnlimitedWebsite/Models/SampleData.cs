@@ -3,9 +3,9 @@
 
 using Microsoft.AspNet.Identity;
 using Microsoft.Data.Entity;
-using Microsoft.Dnx.Runtime;
-using Microsoft.Framework.Configuration;
-using Microsoft.Framework.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.PlatformAbstractions;
 using PartsUnlimited.Areas.Admin;
 using System;
 using System.Collections.Generic;
@@ -31,7 +31,7 @@ namespace PartsUnlimited.Models
 
                 bool dbNewlyCreated = await db.Database.EnsureCreatedAsync();
 
-                //Seeding a database using migrations is not yet supported. (https://github.com/aspnet/EntityFramework/issues/629.)
+                //Seeding a database using migrations is not yet supported. (https://github.com/aspnet/EntityFramework/issues/629)
                 //Add seed data, only if the tables are empty.
                 bool tablesEmpty = !db.Products.Any() && !db.Orders.Any() && !db.Categories.Any() && !db.Stores.Any();
 

@@ -39,3 +39,4 @@ src/*/wwwroot
 project.lock.json
 .vs
 env/PartsUnlimited.Environment/PartsUnlimited.Environment/Tools
+/src/PartsUnlimitedWebsite/Properties/launchSettings.json
