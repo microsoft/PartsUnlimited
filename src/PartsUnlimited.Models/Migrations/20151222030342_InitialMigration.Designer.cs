@@ -8,14 +8,14 @@ using PartsUnlimited.Models;
 namespace PartsUnlimited.Models.Migrations
 {
     [DbContext(typeof(PartsUnlimitedContext))]
-    [Migration("20151109193640_InitialMigration")]
+    [Migration("20151222030342_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .Annotation("ProductVersion", "7.0.0-beta8-15964")
-                .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRole", b =>
                 {
@@ -25,17 +25,17 @@ namespace PartsUnlimited.Models.Migrations
                         .IsConcurrencyToken();
 
                     b.Property<string>("Name")
-                        .Annotation("MaxLength", 256);
+                        .HasAnnotation("MaxLength", 256);
 
                     b.Property<string>("NormalizedName")
-                        .Annotation("MaxLength", 256);
+                        .HasAnnotation("MaxLength", 256);
 
                     b.HasKey("Id");
 
-                    b.Index("NormalizedName")
-                        .Annotation("Relational:Name", "RoleNameIndex");
+                    b.HasIndex("NormalizedName")
+                        .HasAnnotation("Relational:Name", "RoleNameIndex");
 
-                    b.Annotation("Relational:TableName", "AspNetRoles");
+                    b.HasAnnotation("Relational:TableName", "AspNetRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
@@ -47,11 +47,12 @@ namespace PartsUnlimited.Models.Migrations
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("RoleId");
+                    b.Property<string>("RoleId")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
-                    b.Annotation("Relational:TableName", "AspNetRoleClaims");
+                    b.HasAnnotation("Relational:TableName", "AspNetRoleClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserClaim<string>", b =>
@@ -63,11 +64,12 @@ namespace PartsUnlimited.Models.Migrations
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
-                    b.Annotation("Relational:TableName", "AspNetUserClaims");
+                    b.HasAnnotation("Relational:TableName", "AspNetUserClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserLogin<string>", b =>
@@ -78,11 +80,12 @@ namespace PartsUnlimited.Models.Migrations
 
                     b.Property<string>("ProviderDisplayName");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.Annotation("Relational:TableName", "AspNetUserLogins");
+                    b.HasAnnotation("Relational:TableName", "AspNetUserLogins");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserRole<string>", b =>
@@ -93,7 +96,7 @@ namespace PartsUnlimited.Models.Migrations
 
                     b.HasKey("UserId", "RoleId");
 
-                    b.Annotation("Relational:TableName", "AspNetUserRoles");
+                    b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
             modelBuilder.Entity("PartsUnlimited.Models.ApplicationUser", b =>
@@ -106,7 +109,7 @@ namespace PartsUnlimited.Models.Migrations
                         .IsConcurrencyToken();
 
                     b.Property<string>("Email")
-                        .Annotation("MaxLength", 256);
+                        .HasAnnotation("MaxLength", 256);
 
                     b.Property<bool>("EmailConfirmed");
 
@@ -117,10 +120,10 @@ namespace PartsUnlimited.Models.Migrations
                     b.Property<string>("Name");
 
                     b.Property<string>("NormalizedEmail")
-                        .Annotation("MaxLength", 256);
+                        .HasAnnotation("MaxLength", 256);
 
                     b.Property<string>("NormalizedUserName")
-                        .Annotation("MaxLength", 256);
+                        .HasAnnotation("MaxLength", 256);
 
                     b.Property<string>("PasswordHash");
 
@@ -133,17 +136,17 @@ namespace PartsUnlimited.Models.Migrations
                     b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")
-                        .Annotation("MaxLength", 256);
+                        .HasAnnotation("MaxLength", 256);
 
                     b.HasKey("Id");
 
-                    b.Index("NormalizedEmail")
-                        .Annotation("Relational:Name", "EmailIndex");
+                    b.HasIndex("NormalizedEmail")
+                        .HasAnnotation("Relational:Name", "EmailIndex");
 
-                    b.Index("NormalizedUserName")
-                        .Annotation("Relational:Name", "UserNameIndex");
+                    b.HasIndex("NormalizedUserName")
+                        .HasAnnotation("Relational:Name", "UserNameIndex");
 
-                    b.Annotation("Relational:TableName", "AspNetUsers");
+                    b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
             modelBuilder.Entity("PartsUnlimited.Models.CartItem", b =>
@@ -185,38 +188,38 @@ namespace PartsUnlimited.Models.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .Annotation("MaxLength", 70);
+                        .HasAnnotation("MaxLength", 70);
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .Annotation("MaxLength", 40);
+                        .HasAnnotation("MaxLength", 40);
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .Annotation("MaxLength", 40);
+                        .HasAnnotation("MaxLength", 40);
 
                     b.Property<string>("Email")
                         .IsRequired();
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .Annotation("MaxLength", 160);
+                        .HasAnnotation("MaxLength", 160);
 
                     b.Property<DateTime>("OrderDate");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .Annotation("MaxLength", 24);
+                        .HasAnnotation("MaxLength", 24);
 
                     b.Property<string>("PostalCode")
                         .IsRequired()
-                        .Annotation("MaxLength", 10);
+                        .HasAnnotation("MaxLength", 10);
 
                     b.Property<bool>("Processed");
 
                     b.Property<string>("State")
                         .IsRequired()
-                        .Annotation("MaxLength", 40);
+                        .HasAnnotation("MaxLength", 40);
 
                     b.Property<decimal>("Total");
 
@@ -262,7 +265,7 @@ namespace PartsUnlimited.Models.Migrations
 
                     b.Property<string>("ProductArtUrl")
                         .IsRequired()
-                        .Annotation("MaxLength", 1024);
+                        .HasAnnotation("MaxLength", 1024);
 
                     b.Property<string>("ProductDetails")
                         .IsRequired();
@@ -276,7 +279,7 @@ namespace PartsUnlimited.Models.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .Annotation("MaxLength", 160);
+                        .HasAnnotation("MaxLength", 160);
 
                     b.HasKey("ProductId");
                 });
@@ -313,68 +316,68 @@ namespace PartsUnlimited.Models.Migrations
                 {
                     b.HasOne("Microsoft.AspNet.Identity.EntityFramework.IdentityRole")
                         .WithMany()
-                        .ForeignKey("RoleId");
+                        .HasForeignKey("RoleId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserClaim<string>", b =>
                 {
                     b.HasOne("PartsUnlimited.Models.ApplicationUser")
                         .WithMany()
-                        .ForeignKey("UserId");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserLogin<string>", b =>
                 {
                     b.HasOne("PartsUnlimited.Models.ApplicationUser")
                         .WithMany()
-                        .ForeignKey("UserId");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserRole<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNet.Identity.EntityFramework.IdentityRole")
                         .WithMany()
-                        .ForeignKey("RoleId");
+                        .HasForeignKey("RoleId");
 
                     b.HasOne("PartsUnlimited.Models.ApplicationUser")
                         .WithMany()
-                        .ForeignKey("UserId");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("PartsUnlimited.Models.CartItem", b =>
                 {
                     b.HasOne("PartsUnlimited.Models.Product")
                         .WithMany()
-                        .ForeignKey("ProductId");
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("PartsUnlimited.Models.OrderDetail", b =>
                 {
                     b.HasOne("PartsUnlimited.Models.Order")
                         .WithMany()
-                        .ForeignKey("OrderId");
+                        .HasForeignKey("OrderId");
 
                     b.HasOne("PartsUnlimited.Models.Product")
                         .WithMany()
-                        .ForeignKey("ProductId");
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("PartsUnlimited.Models.Product", b =>
                 {
                     b.HasOne("PartsUnlimited.Models.Category")
                         .WithMany()
-                        .ForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("PartsUnlimited.Models.Raincheck", b =>
                 {
                     b.HasOne("PartsUnlimited.Models.Product")
                         .WithMany()
-                        .ForeignKey("ProductId");
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("PartsUnlimited.Models.Store")
                         .WithMany()
-                        .ForeignKey("StoreId");
+                        .HasForeignKey("StoreId");
                 });
         }
     }

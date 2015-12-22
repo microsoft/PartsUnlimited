@@ -3,7 +3,7 @@
 
 using Microsoft.AspNet.Antiforgery;
 using Microsoft.AspNet.Mvc;
-using Microsoft.Framework.Primitives;
+using Microsoft.Extensions.Primitives;
 using PartsUnlimited.Models;
 using PartsUnlimited.Telemetry;
 using PartsUnlimited.ViewModels;

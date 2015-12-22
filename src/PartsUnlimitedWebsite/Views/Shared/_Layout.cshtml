@@ -1,6 +1,5 @@
 ﻿@using PartsUnlimited
-@inject Microsoft.Dnx.Runtime.IRuntimeEnvironment RuntimeEnvironment
-
+@inject Microsoft.Extensions.PlatformAbstractions.IRuntimeEnvironment RuntimeEnvironment
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title – Parts Unlimited</title>
     @await Component.InvokeAsync("Configuration")
-
     @Html.Styles("bootstrap")
     @Html.Styles("jquery-ui")
     @Html.Styles("site")
@@ -28,7 +26,6 @@
                             <h1>Parts Unlimited</h1>
                             <h2>a Fabrikam subsidiary</h2>
                         </a>
-
                         <div class="visible-xs cart">
                             <a href="@Url.Action("Index", "ShoppingCart")" class="head-link" id="shopping-cart-link"></a>
                         </div>
@@ -87,13 +84,11 @@
             }
         </div>
     </header>
-
     @RenderSection("prebody", false)
     <div class="container">
         @RenderBody()
     </div>
     <div class="clearfix"></div>
-
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -134,7 +129,6 @@
                     </div>
                 </div>
                 <hr />
-
                 <div class="row">
                     <div class="col-md-6">
                         <div class="pull-left-sm">
@@ -162,7 +156,6 @@
     @Html.Script("signalr-hubs")
     @Html.Script("site")
     @Html.Script("respond")
-
     @RenderSection("scripts", required: false)
 </body>
 </html>
