@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace Microsoft.Framework.Configuration
+namespace Microsoft.Extensions.Configuration
 {
     public static class ConfigurationExtensions
     {

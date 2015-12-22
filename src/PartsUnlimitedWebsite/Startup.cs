@@ -1,16 +1,14 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Diagnostics.Entity;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
-using Microsoft.Framework.Caching.Memory;
-using Microsoft.Framework.Configuration;
-using Microsoft.Framework.DependencyInjection;
-using Microsoft.Dnx.Runtime;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.PlatformAbstractions;
 using PartsUnlimited.Areas.Admin;
 using PartsUnlimited.Models;
 using PartsUnlimited.Queries;
@@ -27,12 +25,11 @@ namespace PartsUnlimited
     {
         public IConfiguration Configuration { get; private set; }
 
-        public Startup(IApplicationEnvironment env)
+        public Startup(IHostingEnvironment env)
         {
             //Below code demonstrates usage of multiple configuration sources. For instance a setting say 'setting1' is found in both the registered sources, 
             //then the later source will win. By this way a Local config can be overridden by a different setting while deployed remotely.
             var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ApplicationBasePath)
                 .AddJsonFile("config.json")
                 .AddEnvironmentVariables(); //All environment variables in the process's context flow in as configuration values.
 
@@ -58,7 +55,7 @@ namespace PartsUnlimited
             }
             else
             {
-                services.AddEntityFramework()
+                services.AddEntityFramework()                
                         .AddSqlServer()
                         .AddDbContext<PartsUnlimitedContext>(options =>
                         {
@@ -76,9 +73,11 @@ namespace PartsUnlimited
             services.AddAuthorization(auth =>
             {
                 auth.AddPolicy(AdminConstants.Role,
-                    new AuthorizationPolicyBuilder()
-                        .RequireClaim(AdminConstants.ManageStore.Name, AdminConstants.ManageStore.Allowed)
-                        .Build());
+                    authBuilder =>
+                    {
+                        authBuilder.RequireClaim(AdminConstants.ManageStore.Name, AdminConstants.ManageStore.Allowed);
+                    });
+                 
             });
 
             // Add implementations
@@ -147,7 +146,7 @@ namespace PartsUnlimited
             //Display custom error page in production when error occurs
             //During development use the ErrorPage middleware to display error information in the browser
             app.UseDeveloperExceptionPage();
-            app.UseDatabaseErrorPage(DatabaseErrorPageOptions.ShowAll);
+            app.UseDatabaseErrorPage(DatabaseErrorPageExtensions.EnableAll);
 
             // Add the runtime information page that can be used by developers
             // to see what packages are used by the application

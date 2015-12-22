@@ -15,8 +15,6 @@ namespace PartsUnlimited.Security
                 {
                     options.ClientId = loginProviders.Azure.ClientId;
                     options.Authority = loginProviders.Azure.Authority;
-                    options.RedirectUri = loginProviders.Azure.RedirectUri;
-
                 });
             }
 

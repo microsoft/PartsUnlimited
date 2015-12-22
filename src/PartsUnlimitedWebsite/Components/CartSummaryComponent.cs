@@ -30,7 +30,7 @@ namespace PartsUnlimited.Components
 
         private Task<IOrderedEnumerable<CartSummeryComponentModel>> GetCartItems()
         {
-            var cart = ShoppingCart.GetCart(_db, Context);
+            var cart = ShoppingCart.GetCart(_db, HttpContext);
 
             var cartItems = cart.GetCartItems()
                 .Select(a => new CartSummeryComponentModel { Title = a.Product.Title, Count = a.Count })

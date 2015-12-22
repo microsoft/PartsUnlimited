@@ -63,25 +63,25 @@ namespace PartsUnlimited.Models
 
         public int LeadTime { get; set; }
 
-        public Dictionary<string, string> ProductDetailList
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(ProductDetails))
-                {
-                    return new Dictionary<string, string>();
-                }
-                try
-                {
-                    var obj = JToken.Parse(ProductDetails);
-                }
-                catch (Exception)
-                {
-                    throw new FormatException("Product Details only accepts json format.");
-                }
-                return JsonConvert.DeserializeObject<Dictionary<string, string>>(ProductDetails);
-            }
-        }
+        //public Dictionary<string, string> ProductDetailList
+        //{
+        //    get
+        //    {
+        //        if (string.IsNullOrWhiteSpace(ProductDetails))
+        //        {
+        //            return new Dictionary<string, string>();
+        //        }
+        //        try
+        //        {
+        //            var obj = JToken.Parse(ProductDetails);
+        //        }
+        //        catch (Exception)
+        //        {
+        //            throw new FormatException("Product Details only accepts json format.");
+        //        }
+        //        return JsonConvert.DeserializeObject<Dictionary<string, string>>(ProductDetails);
+        //    }
+        //}
 
         /// <summary>
         /// TODO: Temporary hack to populate the orderdetails until EF does this automatically. 
