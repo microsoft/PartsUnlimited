@@ -55,7 +55,7 @@ namespace PartsUnlimited
             }
             else
             {
-                services.AddEntityFramework()
+                services.AddEntityFramework()                
                         .AddSqlServer()
                         .AddDbContext<PartsUnlimitedContext>(options =>
                         {
