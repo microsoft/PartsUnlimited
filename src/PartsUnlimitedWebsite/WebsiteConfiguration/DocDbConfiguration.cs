@@ -32,5 +32,15 @@ namespace PartsUnlimited.WebsiteConfiguration
 
             return _client;
         }
+
+        public Uri BuildProductCollectionLink()
+        {
+            return UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId);
+        }
+
+        public Uri BuildDatabaseLink()
+        {
+            return UriFactory.CreateDatabaseUri(DatabaseId);
+        }
     }
 }

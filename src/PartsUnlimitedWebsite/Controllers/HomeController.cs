@@ -14,14 +14,11 @@ namespace PartsUnlimited.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IPartsUnlimitedContext _db;
         private readonly ICacheCoordinator _cacheCoordinator;
         private readonly IProductRepository _productRepository;
 
-        public HomeController(IPartsUnlimitedContext context, 
-            ICacheCoordinator cacheCoordinator, IProductRepository productRepository)
+        public HomeController(ICacheCoordinator cacheCoordinator, IProductRepository productRepository)
         {
-            _db = context;
             _cacheCoordinator = cacheCoordinator;
             _productRepository = productRepository;
         }

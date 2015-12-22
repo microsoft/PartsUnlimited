@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents.Client;
-using Microsoft.Data.Entity;
 using PartsUnlimited.Areas.Admin.Controllers;
 using PartsUnlimited.Models;
 using PartsUnlimited.Search;
@@ -25,75 +24,113 @@ namespace PartsUnlimited.Repository
             _client = _configuration.BuildClient();
         }
 
-        public Task<IEnumerable<IProduct>> Search(ProductSearchCriteria searchCriteria)
+        public async Task<IEnumerable<IProduct>> Search(ProductSearchCriteria searchCriteria)
         {
-            throw new System.NotImplementedException();
+            var collection = _configuration.BuildProductCollectionLink();
+            return await _client.CreateDocumentQuery<Product>(collection)
+                .ToAsyncEnumerable().ToList();
         }
 
-        public Task<IEnumerable<IProduct>> LoadSaleProducts()
+        public async Task<IEnumerable<IProduct>> LoadSaleProducts()
         {
-            throw new System.NotImplementedException();
+            var collection = _configuration.BuildProductCollectionLink();
+            return await _client.CreateDocumentQuery<Product>(collection)
+                .Where(p => p.SalePrice != p.Price)
+                .ToAsyncEnumerable().ToList();
         }
 
-        public Task<IEnumerable<IProduct>> LoadAllProducts()
+        public async Task<IEnumerable<IProduct>> LoadAllProducts()
         {
-            throw new System.NotImplementedException();
+            var collection = _configuration.BuildProductCollectionLink();
+            return await _client.CreateDocumentQuery<Product>(collection)
+                .ToAsyncEnumerable().ToList();
         }
 
         public Task Add(IProduct product, CancellationToken requestAborted)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public Task<IProduct> GetLatestProduct()
+        public async Task<IProduct> GetLatestProduct()
         {
-            throw new System.NotImplementedException();
+            var collection = _configuration.BuildProductCollectionLink();
+            var latestProduct = await _client.CreateDocumentQuery<Product>(collection, "SELECT TOP 1 * FROM p ORDER BY p._ts DESC").ToAsyncEnumerable().ToList();
+
+            if (latestProduct.Any())
+            {
+                var firstProduct = latestProduct.First();
+                if ((firstProduct != null) && ((firstProduct.Created - DateTime.UtcNow).TotalDays <= 2))
+                {
+                    return firstProduct;
+                }
+            }
+
+            return null;
         }
 
         public Task Delete(IProduct product, CancellationToken requestAborted)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<IProduct>> LoadProductsForCategory(int categoryId)
+        public async Task<IEnumerable<IProduct>> LoadProductsForCategory(int categoryId)
         {
-            throw new System.NotImplementedException();
+            var collection = _configuration.BuildProductCollectionLink();
+            var productsInCategory = await _client.CreateDocumentQuery<Product>(collection)
+                .Where(p => p.CategoryId == categoryId)
+                .ToAsyncEnumerable().ToList();
+            return productsInCategory;
         }
 
-        public Task<IEnumerable<IProduct>> LoadProductsFromRecommendation(IEnumerable<string> recommendedProductIds)
+        public async Task<IEnumerable<IProduct>> LoadProductsFromRecommendation(IEnumerable<string> recommendedProductIds)
         {
-            throw new System.NotImplementedException();
+            var collection = _configuration.BuildProductCollectionLink();
+            var products = await _client.CreateDocumentQuery<Product>(collection)
+                .Where(p => recommendedProductIds.Contains(p.RecommendationId.ToString()))
+                .ToAsyncEnumerable().ToList();
+
+            return products;
         }
 
         public async Task<IEnumerable<IProduct>> LoadTopSellingProducts(int count)
         {
             IEnumerable<int> productIds = await _sqlProductRepository.LoadTopSellingProduct(count);
             productIds = productIds.ToList();
-            var collection = UriFactory.CreateDocumentCollectionUri(_configuration.DatabaseId, _configuration.CollectionId);
+            var collection = _configuration.BuildProductCollectionLink();
             IEnumerable<Product> products = _client.CreateDocumentQuery<Product>(collection)
                 .Where(s => productIds.Contains(s.ProductId))
                 .AsEnumerable().ToList();
             return await Task.FromResult(products);
         }
 
-        public Task<IEnumerable<IProduct>> LoadNewProducts(int count)
+        public async Task<IEnumerable<IProduct>> LoadNewProducts(int count)
         {
-            throw new System.NotImplementedException();
+            var collection = _configuration.BuildProductCollectionLink();
+            IEnumerable<Product> products = await _client.CreateDocumentQuery<Product>(collection,
+                $"SELECT TOP {count} * FROM p ORDER BY p._ts DESC")
+                .ToAsyncEnumerable().ToList();
+
+            return products;
         }
 
         public Task<IEnumerable<IProduct>> LoadAllProducts(SortField sortField, SortDirection sortDirection)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Task Save(IProduct product, CancellationToken token)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public Task<IProduct> Load(int id)
+        public async Task<IProduct> Load(int id)
         {
-            throw new System.NotImplementedException();
+            var collection = _configuration.BuildProductCollectionLink();
+            var products = await _client.CreateDocumentQuery<Product>(collection)
+                .Where(p => p.ProductId == id)
+                .ToAsyncEnumerable().ToList();
+
+            return products.Any() ? products.First() : null;
         }
     }
 }

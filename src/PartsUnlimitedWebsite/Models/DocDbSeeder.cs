@@ -50,8 +50,8 @@ namespace PartsUnlimited.Models
 
         private async Task<IEnumerable<IProduct>> CreateProducts(DocumentClient client, SampleData data, IEnumerable<Category> categories)
         {
-            var collectionId = UriFactory.CreateDocumentCollectionUri(_configuration.DatabaseId, _configuration.CollectionId);
-            List<dynamic> docDbProducts = client.CreateDocumentQuery(collectionId, "SELECT * FROM Products").AsEnumerable().ToList();
+            var collectionId = _configuration.BuildProductCollectionLink();
+            List<Product> docDbProducts = client.CreateDocumentQuery<Product>(collectionId, "SELECT * FROM Products").AsEnumerable().ToList();
 
             if (!docDbProducts.Any())
             {
@@ -65,7 +65,7 @@ namespace PartsUnlimited.Models
                 return products;
             }
 
-            return docDbProducts.Select(s => new DocDbProduct(s));
+            return docDbProducts;
 
         }
 
@@ -82,7 +82,7 @@ namespace PartsUnlimited.Models
 
         private async Task CreateCollectionIfNotExists(DocumentClient client)
         {
-            var databaseLink = UriFactory.CreateDatabaseUri(_configuration.DatabaseId);
+            var databaseLink = _configuration.BuildDatabaseLink();
             var collection = client.CreateDocumentCollectionQuery(databaseLink).Where(c => c.Id == _configuration.CollectionId).ToArray().FirstOrDefault();
             if (collection == null)
             {
