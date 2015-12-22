@@ -15,7 +15,7 @@ namespace PartsUnlimited.Repository
     {
         private readonly IDocDbConfiguration _configuration;
         private readonly SqlProductRepository _sqlProductRepository;
-        private DocumentClient _client;
+        private readonly DocumentClient _client;
 
         public DocDbProductRepository(IDocDbConfiguration configuration, SqlProductRepository sqlProductRepository)
         {
@@ -54,7 +54,8 @@ namespace PartsUnlimited.Repository
         public async Task<IProduct> GetLatestProduct()
         {
             var collection = _configuration.BuildProductCollectionLink();
-            var latestProduct = await _client.CreateDocumentQuery<Product>(collection, "SELECT TOP 1 * FROM p ORDER BY p._ts DESC").ToAsyncEnumerable().ToList();
+            var sql = "SELECT TOP 1 * FROM p ORDER BY p._ts DESC";
+            var latestProduct = await _client.CreateDocumentQuery<Product>(collection, sql).ToAsyncEnumerable().ToList();
 
             if (latestProduct.Any())
             {
@@ -106,8 +107,8 @@ namespace PartsUnlimited.Repository
         public async Task<IEnumerable<IProduct>> LoadNewProducts(int count)
         {
             var collection = _configuration.BuildProductCollectionLink();
-            IEnumerable<Product> products = await _client.CreateDocumentQuery<Product>(collection,
-                $"SELECT TOP {count} * FROM p ORDER BY p._ts DESC")
+            string sql = $"SELECT TOP {count} * FROM p ORDER BY p._ts DESC";
+            IEnumerable<Product> products = await _client.CreateDocumentQuery<Product>(collection,sql)
                 .ToAsyncEnumerable().ToList();
 
             return products;
