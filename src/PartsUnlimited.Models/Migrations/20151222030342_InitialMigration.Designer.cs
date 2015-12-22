@@ -8,7 +8,7 @@ using PartsUnlimited.Models;
 namespace PartsUnlimited.Models.Migrations
 {
     [DbContext(typeof(PartsUnlimitedContext))]
-    [Migration("20151221235932_InitialMigration")]
+    [Migration("20151222030342_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

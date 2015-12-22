@@ -36,6 +36,7 @@
     "Microsoft.Extensions.Caching.Memory": "1.0.0-rc1-final",
     "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
     "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
+    "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final",
     "PartsUnlimited.Models": ""
   },
   "commands": {
