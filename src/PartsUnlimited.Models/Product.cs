@@ -10,36 +10,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PartsUnlimited.Models
 {
-    public class DocDbProduct : IProduct
-    {
-        public DocDbProduct(dynamic product)
-        {
-            SkuNumber = product.SkuNumber;
-            ProductId = (int)product.ProductId;
-            RecommendationId = (int)product.RecommendationId;
-            CategoryId = (int)product.CategoryId;
-            Title = product.Title;
-            Price = (decimal)product.Price;
-            SalePrice = (decimal)product.SalePrice;
-            ProductArtUrl = product.ProductArtUrl;
-            Category = null;
-            Description = product.Description;
-            ProductDetails = product.ProductDetails;
-        }
-
-        public string SkuNumber { get; }
-        public int ProductId { get; }
-        public int RecommendationId { get; }
-        public int CategoryId { get; }
-        public string Title { get; }
-        public decimal Price { get; }
-        public decimal SalePrice { get; }
-        public string ProductArtUrl { get; }
-        public Category Category { get; set; }
-        public string Description { get; }
-        public string ProductDetails { get; }
-    }
-
     public class Product : IProduct
     {
         [Required]

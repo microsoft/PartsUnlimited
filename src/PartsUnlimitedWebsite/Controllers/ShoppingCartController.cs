@@ -125,7 +125,7 @@ namespace PartsUnlimited.Controllers
             // Get the name of the product to display confirmation
             // TODO [EF] Turn into one query once query of related data is enabled
             int productId = _db.CartItems.Single(item => item.CartItemId == id).ProductId;
-            dynamic product = await _productLoader.Load(productId);
+            IProduct product = await _productLoader.Load(productId);
 
             // Remove from cart
             int itemCount = cart.RemoveFromCart(id);

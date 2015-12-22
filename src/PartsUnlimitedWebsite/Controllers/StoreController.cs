@@ -56,11 +56,11 @@ namespace PartsUnlimited.Controllers
             return View(productData);
         }
 
-        private Func<Task<dynamic>> LoadProductWithId(int id)
+        private Func<Task<IProduct>> LoadProductWithId(int id)
         {
             return async () =>
             {
-                dynamic productData = await _productRepository.Load(id);
+                IProduct productData = await _productRepository.Load(id);
                 int categoryId = productData.CategoryId;
                 productData.Category = _db.Categories.Single(g => g.CategoryId == categoryId);
                 return productData;

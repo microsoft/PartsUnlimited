@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
@@ -87,6 +88,19 @@ namespace PartsUnlimited.Models
             if (collection == null)
             {
                 var productCollection = new DocumentCollection {Id = _configuration.CollectionId };
+
+                //Add indexing across all items for ordering and searching.
+                productCollection.IndexingPolicy.IncludedPaths.Add(
+                    new IncludedPath
+                    {
+                        Path = "/*",
+                        Indexes = new Collection<Index>
+                        {
+                            new RangeIndex(DataType.String) { Precision = -1 },
+                            new RangeIndex(DataType.Number) { Precision = -1 }
+                        }
+                    });
+                
                 await client.CreateDocumentCollectionAsync(databaseLink, productCollection);
             }
         }

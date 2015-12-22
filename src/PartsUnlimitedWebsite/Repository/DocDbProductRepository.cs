@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents.Client;
-using PartsUnlimited.Areas.Admin.Controllers;
 using PartsUnlimited.Models;
 using PartsUnlimited.Search;
 using PartsUnlimited.WebsiteConfiguration;
@@ -27,7 +26,9 @@ namespace PartsUnlimited.Repository
         public async Task<IEnumerable<IProduct>> Search(ProductSearchCriteria searchCriteria)
         {
             var collection = _configuration.BuildProductCollectionLink();
+            var lowercaseQuery = searchCriteria.TitleSearch.ToLower();
             return await _client.CreateDocumentQuery<Product>(collection)
+                .Where(p => p.Title.ToLower().Contains(lowercaseQuery))
                 .ToAsyncEnumerable().ToList();
         }
 
@@ -54,8 +55,10 @@ namespace PartsUnlimited.Repository
         public async Task<IProduct> GetLatestProduct()
         {
             var collection = _configuration.BuildProductCollectionLink();
-            var sql = "SELECT TOP 1 * FROM p ORDER BY p._ts DESC";
-            var latestProduct = await _client.CreateDocumentQuery<Product>(collection, sql).ToAsyncEnumerable().ToList();
+            var latestProduct = await _client.CreateDocumentQuery<Product>(collection)
+                .OrderByDescending(p => p.Created)
+                .Take(1)
+                .ToAsyncEnumerable().ToList();
 
             if (latestProduct.Any())
             {
@@ -107,16 +110,21 @@ namespace PartsUnlimited.Repository
         public async Task<IEnumerable<IProduct>> LoadNewProducts(int count)
         {
             var collection = _configuration.BuildProductCollectionLink();
-            string sql = $"SELECT TOP {count} * FROM p ORDER BY p._ts DESC";
-            IEnumerable<Product> products = await _client.CreateDocumentQuery<Product>(collection,sql)
+            IEnumerable<Product> products = await _client.CreateDocumentQuery<Product>(collection)
+                .OrderByDescending(p => p.Created)
+                .Take(count)
                 .ToAsyncEnumerable().ToList();
 
             return products;
         }
 
-        public Task<IEnumerable<IProduct>> LoadAllProducts(SortField sortField, SortDirection sortDirection)
+        public async Task<IEnumerable<IProduct>> LoadAllProducts(SortField sortField, SortDirection sortDirection)
         {
-            throw new NotImplementedException();
+            var collection = _configuration.BuildProductCollectionLink();
+            var products = _client.CreateDocumentQuery<Product>(collection);
+            var sortedQuery = products.Sort(sortField, sortDirection);
+            var sortedProducts = await sortedQuery.ToAsyncEnumerable().ToList();
+            return sortedProducts;
         }
 
         public Task Save(IProduct product, CancellationToken token)
