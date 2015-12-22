@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
-using Newtonsoft.Json;
 using PartsUnlimited.WebsiteConfiguration;
 
 namespace PartsUnlimited.Models
@@ -28,11 +27,9 @@ namespace PartsUnlimited.Models
 
         private async Task<IEnumerable<IProduct>> CreateDocDbProducts(SampleData data, IEnumerable<Category> categories)
         {
-            var serviceEndpoint = new Uri(_configuration.URI);
-            var client = new DocumentClient(serviceEndpoint, _configuration.Key, ConnectionPolicy.Default);
-
             try
             {
+                var client = _configuration.BuildClient();
                 await CreateDatabaseIfNotExists(client);
                 await CreateCollectionIfNotExists(client);
                 return await CreateProducts(client, data, categories);
@@ -54,14 +51,22 @@ namespace PartsUnlimited.Models
         private async Task<IEnumerable<IProduct>> CreateProducts(DocumentClient client, SampleData data, IEnumerable<Category> categories)
         {
             var collectionId = UriFactory.CreateDocumentCollectionUri(_configuration.DatabaseId, _configuration.CollectionId);
-            IEnumerable<IProduct> products = data.GetProducts(categories);
+            List<dynamic> docDbProducts = client.CreateDocumentQuery(collectionId, "SELECT * FROM Products").AsEnumerable().ToList();
 
-            foreach (var prod in products)
+            if (!docDbProducts.Any())
             {
-                await client.CreateDocumentAsync(collectionId, prod);
+                IEnumerable<IProduct> products = data.GetProducts(categories, true);
+
+                foreach (var prod in products)
+                {
+                    await client.CreateDocumentAsync(collectionId, prod);
+                }
+
+                return products;
             }
 
-            return products;
+            return docDbProducts.Select(s => new DocDbProduct(s));
+
         }
 
         private async Task CreateDatabaseIfNotExists(DocumentClient client)

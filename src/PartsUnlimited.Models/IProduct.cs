@@ -2,16 +2,16 @@ namespace PartsUnlimited.Models
 {
     public interface IProduct
     {
-        string SkuNumber { get; set; }
-        int ProductId { get; set; }
-        int RecommendationId { get; set; }
-        int CategoryId { get; set; }
-        string Title { get; set; }
-        decimal Price { get; set; }
-        decimal SalePrice { get; set; }
-        string ProductArtUrl { get; set; }
+        string SkuNumber { get; }
+        int ProductId { get; }
+        int RecommendationId { get; }
+        int CategoryId { get; }
+        string Title { get; }
+        decimal Price { get; }
+        decimal SalePrice { get; }
+        string ProductArtUrl { get; }
         Category Category { get; set; }
-        string Description { get; set; }
-        string ProductDetails { get; set; }
+        string Description { get; }
+        string ProductDetails { get; }
     }
 }

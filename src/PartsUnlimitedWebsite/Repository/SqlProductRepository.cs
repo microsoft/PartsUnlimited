@@ -84,6 +84,19 @@ namespace PartsUnlimited.Repository
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<int>> LoadTopSellingProduct(int count)
+        {
+            // TODO [EF] We don't query related data as yet, so the OrderByDescending isn't doing anything
+            IQueryable<int> pl = (from r in _context.OrderDetails
+                     group r by r.ProductId into grp
+                     select new { productId = grp.Key, count = grp.Count() })
+                     .OrderByDescending(t => t.count)
+                     .Take(count)
+                     .Select(s => s.productId);
+
+            return await pl.ToListAsync();
+        }
+
         public async Task<IEnumerable<IProduct>> LoadNewProducts(int count)
         {
             return await _context.Products

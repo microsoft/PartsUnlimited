@@ -1,6 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Azure.Documents.Client;
+using Microsoft.Data.Entity;
 using PartsUnlimited.Areas.Admin.Controllers;
 using PartsUnlimited.Models;
 using PartsUnlimited.Search;
@@ -11,10 +15,14 @@ namespace PartsUnlimited.Repository
     public class DocDbProductRepository : IProductRepository
     {
         private readonly IDocDbConfiguration _configuration;
+        private readonly SqlProductRepository _sqlProductRepository;
+        private DocumentClient _client;
 
-        public DocDbProductRepository(IDocDbConfiguration configuration)
+        public DocDbProductRepository(IDocDbConfiguration configuration, SqlProductRepository sqlProductRepository)
         {
             _configuration = configuration;
+            _sqlProductRepository = sqlProductRepository;
+            _client = _configuration.BuildClient();
         }
 
         public Task<IEnumerable<IProduct>> Search(ProductSearchCriteria searchCriteria)
@@ -57,9 +65,15 @@ namespace PartsUnlimited.Repository
             throw new System.NotImplementedException();
         }
 
-        public Task<IEnumerable<IProduct>> LoadTopSellingProducts(int count)
+        public async Task<IEnumerable<IProduct>> LoadTopSellingProducts(int count)
         {
-            throw new System.NotImplementedException();
+            IEnumerable<int> productIds = await _sqlProductRepository.LoadTopSellingProduct(count);
+            productIds = productIds.ToList();
+            var collection = UriFactory.CreateDocumentCollectionUri(_configuration.DatabaseId, _configuration.CollectionId);
+            IEnumerable<Product> products = _client.CreateDocumentQuery<Product>(collection)
+                .Where(s => productIds.Contains(s.ProductId))
+                .AsEnumerable().ToList();
+            return await Task.FromResult(products);
         }
 
         public Task<IEnumerable<IProduct>> LoadNewProducts(int count)

@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Microsoft.Azure.Documents.Client;
 
 namespace PartsUnlimited.WebsiteConfiguration
 {
     public interface IDocDbConfiguration
     {
-        string URI { get; }
-        string Key { get; }
-
         string DatabaseId { get; }
         string CollectionId { get; }
+
+        DocumentClient BuildClient();
     }
 }
