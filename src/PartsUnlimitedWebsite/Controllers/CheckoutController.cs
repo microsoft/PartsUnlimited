@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using PartsUnlimited.Cache;
+using PartsUnlimited.Repository;
 
 namespace PartsUnlimited.Controllers
 {
@@ -18,11 +19,13 @@ namespace PartsUnlimited.Controllers
     {
         private readonly IPartsUnlimitedContext _db;
         private readonly ICacheCoordinator _cacheCoordinator;
+        private readonly IProductRepository _productRepository;
 
-        public CheckoutController(IPartsUnlimitedContext context, ICacheCoordinator cacheCoordinator)
+        public CheckoutController(IPartsUnlimitedContext context, ICacheCoordinator cacheCoordinator, IProductRepository productRepository)
         {
             _db = context;
             _cacheCoordinator = cacheCoordinator;
+            _productRepository = productRepository;
         }
 
         //
@@ -72,8 +75,8 @@ namespace PartsUnlimited.Controllers
                 _db.Orders.Add(order);
 
                 //Process the order
-                var cart = ShoppingCart.GetCart(_db, HttpContext);
-                cart.CreateOrder(order);
+                var cart = ShoppingCart.GetCart(_db, HttpContext, _productRepository);
+                await cart.CreateOrder(order);
 
                 // Save all changes
                 await _db.SaveChangesAsync(HttpContext.RequestAborted);

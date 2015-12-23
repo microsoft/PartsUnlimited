@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using PartsUnlimited.Cache;
+using PartsUnlimited.Repository;
 
 namespace PartsUnlimited.Controllers
 {
@@ -14,11 +15,13 @@ namespace PartsUnlimited.Controllers
     {
         private readonly IPartsUnlimitedContext _db;
         private readonly ICacheCoordinator _cacheCoordinator;
+        private readonly IProductRepository _productRepository;
 
-        public StoreController(IPartsUnlimitedContext context, ICacheCoordinator cacheCoordinator)
+        public StoreController(IPartsUnlimitedContext context, ICacheCoordinator cacheCoordinator, IProductRepository productRepository)
         {
             _db = context;
             _cacheCoordinator = cacheCoordinator;
+            _productRepository = productRepository;
         }
 
         //
@@ -32,14 +35,14 @@ namespace PartsUnlimited.Controllers
 
         //
         // GET: /Store/Browse?category=Brakes
-        public IActionResult Browse(int categoryId)
+        public async Task<IActionResult> Browse(int categoryId)
         {
             // Retrieve Category category and its Associated associated Products products from database
             // TODO [EF] Swap to native support for loading related data when available
             var categoryModel = _db.Categories.Single(g => g.CategoryId == categoryId);
-            categoryModel.Products = _db.Products.Where(a => a.CategoryId == categoryModel.CategoryId).ToList();
-
-            return View(categoryModel);
+            var products = await _productRepository.LoadProductsForCategory(categoryModel.CategoryId);
+            var browse = new Browse { Products  = products, Category = categoryModel};
+            return View(browse);
         }
 
         public async Task<IActionResult> Details(int id)
@@ -53,12 +56,13 @@ namespace PartsUnlimited.Controllers
             return View(productData);
         }
 
-        private Func<Product> LoadProductWithId(int id)
+        private Func<Task<IProduct>> LoadProductWithId(int id)
         {
-            return delegate
+            return async () =>
             {
-                var productData = _db.Products.Single(a => a.ProductId == id);
-                productData.Category = _db.Categories.Single(g => g.CategoryId == productData.CategoryId);
+                IProduct productData = await _productRepository.Load(id);
+                int categoryId = productData.CategoryId;
+                productData.Category = _db.Categories.Single(g => g.CategoryId == categoryId);
                 return productData;
             };
         }

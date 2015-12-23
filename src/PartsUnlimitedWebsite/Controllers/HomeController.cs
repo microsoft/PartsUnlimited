@@ -3,25 +3,24 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-using Microsoft.Data.Entity;
 using PartsUnlimited.Cache;
 using PartsUnlimited.Models;
+using PartsUnlimited.Repository;
 using PartsUnlimited.ViewModels;
 
 namespace PartsUnlimited.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IPartsUnlimitedContext _db;
         private readonly ICacheCoordinator _cacheCoordinator;
+        private readonly IProductRepository _productRepository;
 
-        public HomeController(IPartsUnlimitedContext context, ICacheCoordinator cacheCoordinator)
+        public HomeController(ICacheCoordinator cacheCoordinator, IProductRepository productRepository)
         {
-            _db = context;
             _cacheCoordinator = cacheCoordinator;
+            _productRepository = productRepository;
         }
 
         //
@@ -31,12 +30,12 @@ namespace PartsUnlimited.Controllers
             // Get most popular products
             var topSellingKey = CacheConstants.Key.TopSellingProducts;
             var topSellingOptions = new PartsUnlimitedCacheOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
-            List<Product> topSellingProducts = await _cacheCoordinator.GetAsync(topSellingKey, () => GetTopSellingProducts(4), new CacheCoordinatorOptions().WithCacheOptions(topSellingOptions));
+            IEnumerable<IProduct> topSellingProducts = await _cacheCoordinator.GetAsync(topSellingKey, () => GetTopSellingProducts(4), new CacheCoordinatorOptions().WithCacheOptions(topSellingOptions));
 
             // Get most new arrival products
             var newArrivalKey = CacheConstants.Key.NewArrivalProducts;
             var newArrivalOptions = new PartsUnlimitedCacheOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)).SetPriority(PartsUnlimitedCacheItemPriority.High);
-            List<Product> newProducts = await _cacheCoordinator.GetAsync(newArrivalKey, () => GetNewProducts(4), new CacheCoordinatorOptions().WithCacheOptions(newArrivalOptions));
+            IEnumerable<IProduct> newProducts = await _cacheCoordinator.GetAsync(newArrivalKey, () => GetNewProducts(4), new CacheCoordinatorOptions().WithCacheOptions(newArrivalOptions));
 
             var viewModel = new HomeViewModel
             {
@@ -55,24 +54,16 @@ namespace PartsUnlimited.Controllers
             return View("~/Views/Shared/Error.cshtml");
         }
 
-        private Task<List<Product>> GetTopSellingProducts(int count)
+        private Task<IEnumerable<IProduct>> GetTopSellingProducts(int count)
         {
             // Group the order details by product and return
             // the products with the highest count
-
-            // TODO [EF] We don't query related data as yet, so the OrderByDescending isn't doing anything
-            return _db.Products
-                .OrderByDescending(a => a.OrderDetails.Count())
-                .Take(count)
-                .ToListAsync();
+            return _productRepository.LoadTopSellingProducts(count);
         }
 
-        private Task<List<Product>> GetNewProducts(int count)
+        private Task<IEnumerable<IProduct>> GetNewProducts(int count)
         {
-            return _db.Products
-                .OrderByDescending(a => a.Created)
-                .Take(count)
-                .ToListAsync();
+            return _productRepository.LoadNewProducts(count);
         }
 
         private List<CommunityPost> GetCommunityPosts()

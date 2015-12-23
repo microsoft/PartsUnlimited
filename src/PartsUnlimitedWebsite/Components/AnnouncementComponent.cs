@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using PartsUnlimited.Cache;
 using PartsUnlimited.Models;
+using PartsUnlimited.Repository;
 
 namespace PartsUnlimited.Components
 {
@@ -15,30 +16,27 @@ namespace PartsUnlimited.Components
     {
         private readonly IPartsUnlimitedContext _db;
         private readonly ICacheCoordinator _cacheCoordinator;
+        private readonly IProductRepository _productRepository;
 
-        public AnnouncementComponent(IPartsUnlimitedContext context, ICacheCoordinator cacheCoordinator)
+        public AnnouncementComponent(IPartsUnlimitedContext context, ICacheCoordinator cacheCoordinator, IProductRepository productRepository)
         {
             _db = context;
             _cacheCoordinator = cacheCoordinator;
+            _productRepository = productRepository;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var key = CacheConstants.Key.AnnouncementProduct;
             var options = new PartsUnlimitedCacheOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
-            Product announcementProduct = await _cacheCoordinator.GetAsync(key, GetLatestProduct, new CacheCoordinatorOptions().WithCacheOptions(options));
+            dynamic announcementProduct = await _cacheCoordinator.GetAsync(key, GetLatestProduct, new CacheCoordinatorOptions().WithCacheOptions(options));
             return View(announcementProduct);
         }
 
-        private Product GetLatestProduct()
+        private async Task<dynamic> GetLatestProduct()
         {
-            var latestProduct = _db.Products.OrderByDescending(a => a.Created).FirstOrDefault();
-            if ((latestProduct != null) && ((latestProduct.Created - DateTime.UtcNow).TotalDays <= 2))
-            {
-                return latestProduct;
-            }
-
-            return null;
+            return await _productRepository.GetLatestProduct();
+            
         }
     }
 }

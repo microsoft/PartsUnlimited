@@ -3,19 +3,39 @@ As an Azure developer it's important to understand of key application code conce
  
 #Setup#
 
-Before you going you will need to pull the solution and setup the required Azure dependencies which are listed below.
+Before you get going you will need to pull the solution and setup the required dependancies.
+The source for the current solution exists [here](https://github.com/Microsoft/PartsUnlimited/tree/accelerator).
+The required Azure dependencies will also need to be created and configured, instructions are below.
 
 ##Redis##
-[Get stared with Redis](https://azure.microsoft.com/en-us/documentation/articles/cache-dotnet-how-to-use-azure-redis-cache/)
+
+To get started using the Redis Cache hosted within Azure you will need to setup a cache using the Azure portal.
+Instructions to carry this out can be found [here](https://azure.microsoft.com/en-us/documentation/articles/cache-dotnet-how-to-use-azure-redis-cache/). 
+
+Once you have a Redis cache configured you will need to edit the [`config.json`](..\..\src\PartsUnlimitedWebsite\config.json) file by filling in the `HostName` and `AccessKey` details, these can be found within Azure. If these details are not filled in PartsUnlimited will fall back to using an implementation of an in memory cache.
+	
+	"RedisCache": {
+		"HostName": "<tennantname>.redis.cache.windows.net",
+		"AccessKey": "<key>",
+		...
+	}
 
 ##Azure Storage / CDN ##
 [How to use CDN](https://azure.microsoft.com/en-us/documentation/articles/cdn-how-to-use-cdn/)
 
 ##DocDB##
-[Learning Path Doc DB](https://azure.microsoft.com/en-us/documentation/learning-paths/documentdb/)
+To get started using the Azure DocumentDB first you will need to setup a database account using the Azure portal.
+Instructions to carry this out can be found [here](https://azure.microsoft.com/en-us/documentation/articles/documentdb-create-account/). 
 
-##Web.config##
-Edit web config, add the following keys here.
+Once you have a Database account you will need to edit the [`config.json`](..\..\src\PartsUnlimitedWebsite\config.json) file by filling in the `URI` and `Key` details, these can be found within Azure. If these details are not filled in PartsUnlimited will fall back to using an implementation of a SQL Database.
+
+	"DocDb": {
+    	"URI": "https://<tennantname>.documents.azure.com:443/",
+    	"Key": "<key>"
+    }
+
+Further information and learning resources can be found on the DocumentDB  [Learning Path way](https://azure.microsoft.com/en-us/documentation/learning-paths/documentdb/)
+
 
 #Scenarios#
 

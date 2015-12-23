@@ -20,6 +20,7 @@ using PartsUnlimited.Telemetry;
 using PartsUnlimited.WebsiteConfiguration;
 using System;
 using PartsUnlimited.Cache;
+using PartsUnlimited.Repository;
 
 namespace PartsUnlimited
 {
@@ -82,7 +83,9 @@ namespace PartsUnlimited
             });
 
             SetupCache(services);
-            
+
+            SetupRepository(services);
+
             services.AddScoped<IOrdersQuery, OrdersQuery>();
             services.AddScoped<IRaincheckQuery, RaincheckQuery>();
 
@@ -158,6 +161,31 @@ namespace PartsUnlimited
             services.AddSingleton<ICacheCoordinator, CacheCoordinator>();
         }
 
+        private void SetupRepository(IServiceCollection services)
+        {
+            var docDbConfig = new DocDbConfiguration(Configuration.GetSection("Keys:DocDb"));
+            services.AddSingleton<SqlProductRepository>();
+
+            if (string.IsNullOrEmpty(docDbConfig.URI)
+                || string.IsNullOrEmpty(docDbConfig.Key))
+            {    
+                services.AddScoped<IProductBuilder, SqlProductBuilder>();
+                services.AddScoped<IProductRepository, SqlProductRepository>();
+                services.AddScoped<IProductLoader, SqlProductRepository>();
+                services.AddScoped<IDataSeeder, SQLDataSeeder>();
+            }
+            else
+            {
+                services.AddScoped<SQLDataSeeder>();
+                services.AddInstance<IDocDbConfiguration>(docDbConfig);
+                services.AddScoped<DocDbProductRepository>();
+                services.AddScoped<IProductBuilder, DocDbProductBuilder>();
+                services.AddScoped<IProductRepository, DocDbProductRepository>();
+                services.AddScoped<IProductLoader, DocDbProductRepository>();
+                services.AddScoped<IDataSeeder, DocDbSeeder>();
+            }
+        }
+
         //This method is invoked when KRE_ENV is 'Development' or is not defined
         //The allowed values are Development,Staging and Production
         public void ConfigureDevelopment(IApplicationBuilder app)
@@ -227,7 +255,9 @@ namespace PartsUnlimited
             });
 
             //Populates the PartsUnlimited sample data
-            SampleData.InitializePartsUnlimitedDatabaseAsync(app.ApplicationServices).Wait();
+            var dataSeeder = app.ApplicationServices.GetService<IDataSeeder>();
+            var data = new SampleData();
+            dataSeeder.Seed(data).Wait();
         }
     }
 }

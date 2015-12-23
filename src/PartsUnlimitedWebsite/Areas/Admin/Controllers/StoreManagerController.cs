@@ -9,94 +9,38 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
-using Microsoft.Data.Entity;
 using PartsUnlimited.Cache;
 using PartsUnlimited.Hubs;
 using PartsUnlimited.Models;
+using PartsUnlimited.Repository;
 using PartsUnlimited.ViewModels;
 
 namespace PartsUnlimited.Areas.Admin.Controllers
 {
-    public enum SortField { Name, Title, Price }
-    public enum SortDirection { Up, Down }
-
     public class StoreManagerController : AdminController
     {
         private readonly IPartsUnlimitedContext _db;
         private readonly IHubContext _annoucementHub;
         private readonly ICacheCoordinator _cacheCoordinator;
+        private readonly IProductRepository _productRepository;
 
         public StoreManagerController(IPartsUnlimitedContext context, IConnectionManager connectionManager, 
-            ICacheCoordinator cacheCoordinator)
+            ICacheCoordinator cacheCoordinator, IProductRepository productRepository)
         {
             _db = context;
             _annoucementHub = connectionManager.GetHubContext<AnnouncementHub>();
             _cacheCoordinator = cacheCoordinator;
+            _productRepository = productRepository;
         }
 
         //
         // GET: /StoreManager/
 
-        public IActionResult Index(SortField sortField = SortField.Name, SortDirection sortDirection = SortDirection.Up)
+        public async Task<IActionResult> Index(SortField sortField = SortField.Name, SortDirection sortDirection = SortDirection.Up)
         {
-            // TODO [EF] Swap to native support for loading related data when available
-            var products = from product in _db.Products
-                           join category in _db.Categories on product.CategoryId equals category.CategoryId
-                           select new Product()
-                           {
-                               ProductArtUrl = product.ProductArtUrl,
-                               ProductId = product.ProductId,
-                               CategoryId = product.CategoryId,
-                               Price = product.Price,
-                               Title = product.Title,
-                               Category = new Category()
-                               {
-                                   CategoryId = product.CategoryId,
-                                   Name = category.Name
-                               }
-                           };
-
-            var sorted = Sort(products, sortField, sortDirection);
-
-            return View(sorted);
+            IEnumerable<IProduct> products = await _productRepository.LoadAllProducts(sortField, sortDirection);
+            return View(products);
         }
-
-        private IQueryable<Product> Sort(IQueryable<Product> products, SortField sortField, SortDirection sortDirection)
-        {
-            if (sortField == SortField.Name)
-            {
-                if (sortDirection == SortDirection.Up)
-                {
-                    return products.OrderBy(o => o.Category.Name);
-                }
-
-                return products.OrderByDescending(o => o.Category.Name);
-            }
-
-            if (sortField == SortField.Price)
-            {
-                if (sortDirection == SortDirection.Up)
-                {
-                    return products.OrderBy(o => o.Price);
-                }
-
-                return products.OrderByDescending(o => o.Price);
-            }
-
-            if (sortField == SortField.Title)
-            {
-                if (sortDirection == SortDirection.Up)
-                {
-                    return products.OrderBy(o => o.Title);
-                }
-
-                return products.OrderByDescending(o => o.Title);
-            }
-
-            // Should not reach here, but return products for compiler
-            return products;
-        }
-
 
         //
         // GET: /StoreManager/Details/5
@@ -105,20 +49,21 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         {
             string cacheId = CacheConstants.Key.ProductKey(id);
             var options = new PartsUnlimitedCacheOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10));
-            Product product = await _cacheCoordinator.GetAsync(cacheId, LoadProductWithId(id), new CacheCoordinatorOptions().WithCacheOptions(options).WhichRemovesIfNull());
+            IProduct product = await _cacheCoordinator.GetAsync(cacheId, LoadProductWithId(id), new CacheCoordinatorOptions().WithCacheOptions(options).WhichRemovesIfNull());
             
             if (product != null)
             {
                 // TODO [EF] We don't query related data as yet. We have to populate this until we do automatically.
-                product.Category = _db.Categories.Single(g => g.CategoryId == product.CategoryId);
+                int categoryId = product.CategoryId;
+                product.Category = _db.Categories.Single(g => g.CategoryId == categoryId);
             }
             
             return View(product);
         }
 
-        private Func<Product> LoadProductWithId(int id)
+        private Func<Task<IProduct>> LoadProductWithId(int id)
         {
-            return delegate { return _db.Products.FirstOrDefault(a => a.ProductId == id); };
+            return async () => await _productRepository.Load(id);
         }
 
         //
@@ -134,10 +79,9 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
-            if (ModelState.IsValid)
+            if (TryValidateModel(product) && ModelState.IsValid)
             {
-                _db.Products.Add(product);
-                await _db.SaveChangesAsync(HttpContext.RequestAborted);
+                await _productRepository.Add(product, HttpContext.RequestAborted);
                 _annoucementHub.Clients.All.announcement(new ProductData { Title = product.Title, Url = Url.Action("Details", "Store", new { id = product.ProductId }) });
                 await _cacheCoordinator.Remove(CacheConstants.Key.AnnouncementProduct);
                 return RedirectToAction("Index");
@@ -149,9 +93,9 @@ namespace PartsUnlimited.Areas.Admin.Controllers
 
         //
         // GET: /StoreManager/Edit/5
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            Product product = _db.Products.FirstOrDefault(a => a.ProductId == id);
+            IProduct product = await _productRepository.Load(id);
             ViewBag.Categories = new SelectList(_db.Categories, "CategoryId", "Name", product.CategoryId).ToList();
             return View(product);
         }
@@ -160,12 +104,12 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         // POST: /StoreManager/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Product product)
+        
+        public async Task<IActionResult> Edit([ModelBinder(BinderType = typeof(ProductModelBinder))]IProduct product)
         {
-            if (ModelState.IsValid)
+            if (TryValidateModel(product) && ModelState.IsValid)
             {
-                _db.Entry(product).State = EntityState.Modified;
-                await _db.SaveChangesAsync(HttpContext.RequestAborted);
+                await _productRepository.Save(product, HttpContext.RequestAborted);
                 //Invalidate the cache entry as it is modified
                 await _cacheCoordinator.Remove(CacheConstants.Key.ProductKey(product.ProductId));
                 return RedirectToAction("Index");
@@ -177,9 +121,9 @@ namespace PartsUnlimited.Areas.Admin.Controllers
 
         //
         // GET: /StoreManager/RemoveProduct/5
-        public IActionResult RemoveProduct(int id)
+        public async Task<IActionResult> RemoveProduct(int id)
         {
-            Product product = _db.Products.FirstOrDefault(a => a.ProductId == id);
+            IProduct product = await _productRepository.Load(id);
             return View(product);
         }
 
@@ -188,7 +132,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         [HttpPost, ActionName("RemoveProduct")]
         public async Task<IActionResult> RemoveProductConfirmed(int id)
         {
-            Product product = _db.Products.FirstOrDefault(a => a.ProductId == id);
+            IProduct product = await _productRepository.Load(id);
             CartItem cartItem = _db.CartItems.FirstOrDefault(a => a.ProductId == id);
             List<OrderDetail> orderDetail = _db.OrderDetails.Where(a => a.ProductId == id).ToList();
             List<Raincheck> rainCheck = _db.RainChecks.Where(a => a.ProductId == id).ToList();
@@ -213,8 +157,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
                     await _db.SaveChangesAsync(HttpContext.RequestAborted);
                 }
 
-                _db.Products.Remove(product);
-                await _db.SaveChangesAsync(HttpContext.RequestAborted);
+                await _productRepository.Delete(product, HttpContext.RequestAborted);
                 //Remove the cache entry as it is removed
                 await _cacheCoordinator.Remove(CacheConstants.Key.ProductKey(id));
             }
