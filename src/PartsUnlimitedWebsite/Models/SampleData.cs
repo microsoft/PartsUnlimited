@@ -79,17 +79,21 @@ namespace PartsUnlimited.Models
 
         public IEnumerable<OrderDetail> BuildOrderDetail(int[] recomendations, Order order, IEnumerable<IProduct> products)
         {
+            decimal total = 0;
+
             foreach (var i in recomendations)
             {
-                decimal total = 0;
-                var product = products.Single(x => x.RecommendationId == i);
-                var orderDetail = GetOrderDetail(product, order);
-                total += orderDetail.UnitPrice;  
-                yield return  orderDetail;
-                order.Total = total;
+                var product = products.SingleOrDefault(x => x.RecommendationId == i);
+                if (product != null)
+                {
+                    var orderDetail = GetOrderDetail(product, order);
+                    total += orderDetail.UnitPrice;
+                    yield return orderDetail;
+                }
             }
+            order.Total = total;
         }
-        
+
         private OrderDetail GetOrderDetail(IProduct product, Order order)
         {
             var random = new Random();
