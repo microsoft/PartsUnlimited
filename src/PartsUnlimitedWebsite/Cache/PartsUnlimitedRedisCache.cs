@@ -45,7 +45,7 @@ namespace PartsUnlimited.Cache
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
-            string stringValue= JsonConvert.SerializeObject(cacheItem, Formatting.Indented, settings);
+            string stringValue= JsonConvert.SerializeObject(cacheItem, Formatting.None, settings);
             return Database.StringSetAsync(key, stringValue, span, When.Always, commandFlags);
         }
 
