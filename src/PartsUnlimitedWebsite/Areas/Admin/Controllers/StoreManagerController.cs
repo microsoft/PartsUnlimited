@@ -17,6 +17,9 @@ using PartsUnlimited.ViewModels;
 
 namespace PartsUnlimited.Areas.Admin.Controllers
 {
+    public enum SortField { Name, Title, Price }
+    public enum SortDirection { Up, Down }
+
     public class StoreManagerController : AdminController
     {
         private readonly IPartsUnlimitedContext _db;
@@ -77,7 +80,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         // POST: /StoreManager/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([ModelBinder(BinderType = typeof(ProductModelBinder))]IProduct product)
+        public async Task<IActionResult> Create(Product product)
         {
             if (TryValidateModel(product) && ModelState.IsValid)
             {

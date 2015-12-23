@@ -49,10 +49,10 @@
       "ConnectTimeoutMilliseconds": 3000
     },
     "DocDb": {
-        //"URI": "https://docdbaccelerator.documents.azure.com:443/", //David's URI
-        "URI": "https://sbpartsunlimited.documents.azure.com:443/", //Stian's URI
-        //"Key": "qnqp2PpP9r993Egjjyma8XybgpqNQQ1d5+mT6QoblsNxNdPBnrB3U3IJ2AWTkDEsUKpF6AIKX2fXKHDBpJ7jSw==" //David's key
-        "Key":  "aNGVe21moy5KV0ir3WikfHsFy/9KvlB2XXaP5BFjdG+7srnIessg1alHo/RvrQD0fxH/J0xzE+A4sGrTnCkc0A==" //Stian's key
+        //"URI": "https://docdbaccelerator.documents.azure.com:443/", // David's URI
+        "URI": "https://partsunlimited.documents.azure.com:443/", // Stian's URI
+        //"Key": "qnqp2PpP9r993Egjjyma8XybgpqNQQ1d5+mT6QoblsNxNdPBnrB3U3IJ2AWTkDEsUKpF6AIKX2fXKHDBpJ7jSw==" // David's key
+        "Key":  "KiS7sd8RWrF4RMeSQsdYBBBDE7LQEws0lWc2boBT2QHJ0bDf3kvRAAdt1TQz6EwcJhyIf0wbHQ/amIa7VcJvxw==" // Stian's key
     }
   }
 }

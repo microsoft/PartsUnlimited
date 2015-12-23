@@ -7,6 +7,7 @@ using Microsoft.Azure.Documents.Client;
 using PartsUnlimited.Models;
 using PartsUnlimited.Search;
 using PartsUnlimited.WebsiteConfiguration;
+using PartsUnlimited.Areas.Admin.Controllers;
 
 namespace PartsUnlimited.Repository
 {
@@ -47,9 +48,11 @@ namespace PartsUnlimited.Repository
                 .ToAsyncEnumerable().ToList();
         }
 
-        public Task Add(IProduct product, CancellationToken requestAborted)
+        public async Task Add(IProduct product, CancellationToken requestAborted)
         {
-            throw new NotImplementedException();
+            //TODO - wrap CancellationToken around request
+            var collection = _configuration.BuildProductCollectionLink();
+            await _client.CreateDocumentAsync(collection, product);
         }
 
         public async Task<IProduct> GetLatestProduct()
@@ -72,9 +75,11 @@ namespace PartsUnlimited.Repository
             return null;
         }
 
-        public Task Delete(IProduct product, CancellationToken requestAborted)
+        public async Task Delete(IProduct product, CancellationToken requestAborted)
         {
-            throw new NotImplementedException();
+            //TODO - wrap CancellationToken around request
+            var productLink = _configuration.BuildProductLink(product.ProductId);
+            await _client.DeleteDocumentAsync(productLink);            
         }
 
         public async Task<IEnumerable<IProduct>> LoadProductsForCategory(int categoryId)
@@ -83,6 +88,7 @@ namespace PartsUnlimited.Repository
             var productsInCategory = await _client.CreateDocumentQuery<Product>(collection)
                 .Where(p => p.CategoryId == categoryId)
                 .ToAsyncEnumerable().ToList();
+
             return productsInCategory;
         }
 
@@ -122,14 +128,15 @@ namespace PartsUnlimited.Repository
         {
             var collection = _configuration.BuildProductCollectionLink();
             var products = _client.CreateDocumentQuery<Product>(collection);
-            var sortedQuery = products.Sort(sortField, sortDirection);
+            var sortedQuery = Sort(products, sortField, sortDirection);
             var sortedProducts = await sortedQuery.ToAsyncEnumerable().ToList();
             return sortedProducts;
         }
 
         public Task Save(IProduct product, CancellationToken token)
         {
-            throw new NotImplementedException();
+            //Not required for DocDb implementation.
+            return null;
         }
 
         public async Task<IProduct> Load(int id)
@@ -140,6 +147,42 @@ namespace PartsUnlimited.Repository
                 .ToAsyncEnumerable().ToList();
 
             return products.Any() ? products.First() : null;
+        }
+
+        private IQueryable<IProduct> Sort(IQueryable<Product> products, SortField sortField, SortDirection sortDirection)
+        {
+            if (sortField == SortField.Name)
+            {
+                if (sortDirection == SortDirection.Up)
+                {
+                    return products.OrderBy(o => o.Category.Name);
+                }
+
+                return products.OrderByDescending(o => o.Category.Name);
+            }
+
+            if (sortField == SortField.Price)
+            {
+                if (sortDirection == SortDirection.Up)
+                {
+                    return products.OrderBy(o => o.Price);
+                }
+
+                return products.OrderByDescending(o => o.Price);
+            }
+
+            if (sortField == SortField.Title)
+            {
+                if (sortDirection == SortDirection.Up)
+                {
+                    return products.OrderBy(o => o.Title);
+                }
+
+                return products.OrderByDescending(o => o.Title);
+            }
+
+            // Should not reach here, but return products for compiler
+            return products;
         }
     }
 }
