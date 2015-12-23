@@ -7,6 +7,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents.Client;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PartsUnlimited.Models;
 using PartsUnlimited.Search;
 using PartsUnlimited.WebsiteConfiguration;
@@ -53,8 +55,21 @@ namespace PartsUnlimited.Repository
 
         public async Task Add(IProduct product, CancellationToken requestAborted)
         {
-            //TODO - wrap CancellationToken around request
+            //TODO Use built in Id's for looking up products.
             var collection = _configuration.BuildProductCollectionLink();
+            var nextIds = await _client.CreateDocumentQuery<int>(collection, 
+                "SELECT TOP 1 VALUE p.ProductId " +
+                "FROM p " +
+                "ORDER BY p.ProductId DESC")
+                .ToAsyncEnumerable().ToList(requestAborted);
+
+            var newProductId = 1;
+            if (nextIds.Any())
+            {
+                int nextId = nextIds.First() + 1;
+                newProductId = nextId;
+            }
+            product.ProductId = newProductId;
             await _client.CreateDocumentAsync(collection, product);
         }
 
@@ -138,8 +153,9 @@ namespace PartsUnlimited.Repository
 
         public Task Save(IProduct product, CancellationToken token)
         {
-            //Not required for DocDb implementation.
-            return null;
+            //TODO - wrap CancellationToken around request
+            var collection = _configuration.BuildProductCollectionLink();
+            return _client.UpsertDocumentAsync(collection, product);
         }
 
         public async Task<IProduct> Load(int id)

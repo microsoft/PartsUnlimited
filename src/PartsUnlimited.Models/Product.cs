@@ -19,8 +19,11 @@ namespace PartsUnlimited.Models
         [ScaffoldColumn(false)]
         public int ProductId { get; set; }
 
-        public int RecommendationId { get; set; }
+        [JsonProperty(PropertyName = "id")]
+        public string Id => ProductId.ToString();
 
+        public int RecommendationId { get; set; }
+        
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
 

@@ -120,13 +120,11 @@ namespace PartsUnlimited.Models
             };
         }
 
-        public IEnumerable<IProduct> GetProducts(IEnumerable<Category> categories, bool seedId = false)
+        public IEnumerable<IProduct> GetProducts(IEnumerable<Category> categories)
         {
             var categoriesMap = categories.ToDictionary(c => c.Name, c => c);
-            int i = 1;
             yield return new Product
             {
-                ProductId = seedId ? i++ : 0,
                 SkuNumber = "LIG-0001",
                 Title = "Halogen Headlights (2 Pack)",
                 Category = categoriesMap["Lighting"],
@@ -143,7 +141,6 @@ namespace PartsUnlimited.Models
 
             yield return new Product
             {
-                ProductId = seedId ?i++ : 0,
                 SkuNumber = "LIG-0002",
                 Title = "Bugeye Headlights (2 Pack)",
                 Category = categoriesMap["Lighting"],
@@ -160,7 +157,6 @@ namespace PartsUnlimited.Models
 
             yield return new Product
             {
-                ProductId = seedId ?i++ : 0,
                 SkuNumber = "LIG-0003",
                 Title = "Turn Signal Light Bulb",
                 Category = categoriesMap["Lighting"],
@@ -177,7 +173,6 @@ namespace PartsUnlimited.Models
 
             yield return new Product
             {
-                ProductId = seedId ?i++ : 0,
                 SkuNumber = "WHE-0001",
                 Title = "Matte Finish Rim",
                 Category = categoriesMap["Wheels & Tires"],
@@ -194,7 +189,6 @@ namespace PartsUnlimited.Models
 
             yield return new Product
             {
-                ProductId = seedId ?i++ : 0,
                 SkuNumber = "WHE-0002",
                 Title = "Blue Performance Alloy Rim",
                 Category = categoriesMap["Wheels & Tires"],
@@ -211,7 +205,6 @@ namespace PartsUnlimited.Models
 
             yield return new Product
             {
-                ProductId = seedId ?i++ : 0,
                 SkuNumber = "WHE-0003",
                 Title = "High Performance Rim",
                 Category = categoriesMap["Wheels & Tires"],
@@ -228,7 +221,6 @@ namespace PartsUnlimited.Models
 
             yield return new Product
             {
-                ProductId = seedId ?i++ : 0,
                 SkuNumber = "WHE-0004",
                 Title = "Wheel Tire Combo",
                 Category = categoriesMap["Wheels & Tires"],
@@ -261,7 +253,6 @@ namespace PartsUnlimited.Models
 
             yield return new Product
             {
-                ProductId = seedId ?i++ : 0,
                 SkuNumber = "WHE-0006",
                 Title = "Wheel Tire Combo (4 Pack)",
                 Category = categoriesMap["Wheels & Tires"],
@@ -278,7 +269,6 @@ namespace PartsUnlimited.Models
 
             yield return new Product
             {
-                ProductId = seedId ?i++ : 0,
                 SkuNumber = "BRA-0001",
                 Title = "Disk and Pad Combo",
                 Category = categoriesMap["Wheels & Tires"],
@@ -295,7 +285,6 @@ namespace PartsUnlimited.Models
 
             yield return new Product
             {
-                ProductId = seedId ?i++ : 0,
                 SkuNumber = "BRA-0002",
                 Title = "Brake Rotor",
                 Category = categoriesMap["Brakes"],
@@ -312,7 +301,6 @@ namespace PartsUnlimited.Models
 
             yield return new Product
             {
-                ProductId = seedId ?i++ : 0,
                 SkuNumber = "BRA-0003",
                 Title = "Brake Disk and Calipers",
                 Category = categoriesMap["Brakes"],
@@ -329,7 +317,6 @@ namespace PartsUnlimited.Models
 
             yield return new Product
             {
-                ProductId = seedId ?i++ : 0,
                 SkuNumber = "BAT-0001",
                 Title = "12-Volt Calcium Battery",
                 Category = categoriesMap["Batteries"],
@@ -346,7 +333,6 @@ namespace PartsUnlimited.Models
 
             yield return new Product
             {
-                ProductId = seedId ?i++ : 0,
                 SkuNumber = "BAT-0002",
                 Title = "Spiral Coil Battery",
                 Category = categoriesMap["Batteries"],
@@ -363,7 +349,6 @@ namespace PartsUnlimited.Models
 
             yield return new Product
             {
-                ProductId = seedId ?i++ : 0,
                 SkuNumber = "BAT-0003",
                 Title = "Jumper Leads",
                 Category = categoriesMap["Batteries"],
@@ -380,7 +365,6 @@ namespace PartsUnlimited.Models
 
             yield return new Product
             {
-                ProductId = seedId ?i++ : 0,
                 SkuNumber = "OIL-0001",
                 Title = "Filter Set",
                 Category = categoriesMap["Oil"],
@@ -397,7 +381,6 @@ namespace PartsUnlimited.Models
 
             yield return new Product
             {
-                ProductId = seedId ?i++ : 0,
                 SkuNumber = "OIL-0002",
                 Title = "Oil and Filter Combo",
                 Category = categoriesMap["Oil"],
@@ -414,7 +397,6 @@ namespace PartsUnlimited.Models
 
             yield return new Product
             {
-                ProductId = seedId ?i++ : 0,
                 SkuNumber = "OIL-0003",
                 Title = "Synthetic Engine Oil",
                 Category = categoriesMap["Oil"],

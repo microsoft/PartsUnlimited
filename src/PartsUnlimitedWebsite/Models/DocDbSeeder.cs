@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
+using PartsUnlimited.Repository;
 using PartsUnlimited.WebsiteConfiguration;
 
 namespace PartsUnlimited.Models
@@ -13,11 +15,13 @@ namespace PartsUnlimited.Models
     {
         private readonly IDocDbConfiguration _configuration;
         private readonly SQLDataSeeder _sqlDataSeeder;
+        private readonly DocDbProductRepository _productRepository;
 
-        public DocDbSeeder(IDocDbConfiguration configuration, SQLDataSeeder sqlDataSeeder)
+        public DocDbSeeder(IDocDbConfiguration configuration, SQLDataSeeder sqlDataSeeder, DocDbProductRepository productRepository)
         {
             _configuration = configuration;
             _sqlDataSeeder = sqlDataSeeder;
+            _productRepository = productRepository;
         }
 
         public async Task Seed(SampleData data)
@@ -56,11 +60,11 @@ namespace PartsUnlimited.Models
 
             if (!docDbProducts.Any())
             {
-                IEnumerable<IProduct> products = data.GetProducts(categories, true);
+                IEnumerable<IProduct> products = data.GetProducts(categories);
 
                 foreach (var prod in products)
                 {
-                    await client.CreateDocumentAsync(collectionId, prod);
+                    await _productRepository.Add(prod, new CancellationToken(false));
                 }
 
                 return products;

@@ -165,11 +165,11 @@ namespace PartsUnlimited
         {
             var docDbConfig = new DocDbConfiguration(Configuration.GetSection("Keys:DocDb"));
             services.AddSingleton<SqlProductRepository>();
+            services.AddScoped<IProductBuilder, ProductBuilder>();
 
             if (string.IsNullOrEmpty(docDbConfig.URI)
                 || string.IsNullOrEmpty(docDbConfig.Key))
             {    
-                services.AddScoped<IProductBuilder, SqlProductBuilder>();
                 services.AddScoped<IProductRepository, SqlProductRepository>();
                 services.AddScoped<IProductLoader, SqlProductRepository>();
                 services.AddScoped<IDataSeeder, SQLDataSeeder>();
@@ -179,7 +179,6 @@ namespace PartsUnlimited
                 services.AddScoped<SQLDataSeeder>();
                 services.AddInstance<IDocDbConfiguration>(docDbConfig);
                 services.AddScoped<DocDbProductRepository>();
-                services.AddScoped<IProductBuilder, DocDbProductBuilder>();
                 services.AddScoped<IProductRepository, DocDbProductRepository>();
                 services.AddScoped<IProductLoader, DocDbProductRepository>();
                 services.AddScoped<IDataSeeder, DocDbSeeder>();

@@ -4,7 +4,7 @@ using Microsoft.AspNet.Mvc.ModelBinding;
 
 namespace PartsUnlimited.Models
 {
-    public class SqlProductBuilder : IProductBuilder
+    public class ProductBuilder : IProductBuilder
     {
         public IProduct Build(ModelBindingContext context)
         {
