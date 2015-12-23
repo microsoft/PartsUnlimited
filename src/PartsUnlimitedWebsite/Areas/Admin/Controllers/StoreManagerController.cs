@@ -69,9 +69,10 @@ namespace PartsUnlimited.Areas.Admin.Controllers
 
         //
         // GET: /StoreManager/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Categories = new SelectList(_db.Categories, "CategoryId", "Name");
+            var categories = await _categoryLoader.LoadAll();
+            ViewBag.Categories = new SelectList(categories, "CategoryId", "Name");
             return View();
         }
 
@@ -88,7 +89,8 @@ namespace PartsUnlimited.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Categories = new SelectList(_db.Categories, "CategoryId", "Name", product.CategoryId);
+            var categories = await _categoryLoader.LoadAll();
+            ViewBag.Categories = new SelectList(categories, "CategoryId", "Name", product.CategoryId);
             return View(product);
         }
 
@@ -97,7 +99,8 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             IProduct product = await _productRepository.Load(id);
-            ViewBag.Categories = new SelectList(_db.Categories, "CategoryId", "Name", product.CategoryId).ToList();
+            var categories = await _categoryLoader.LoadAll();
+            ViewBag.Categories = new SelectList(categories, "CategoryId", "Name", product.CategoryId).ToList();
             return View(product);
         }
 
@@ -116,7 +119,8 @@ namespace PartsUnlimited.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Categories = new SelectList(_db.Categories, "CategoryId", "Name", product.CategoryId);
+            IEnumerable<Category> categories = await _categoryLoader.LoadAll();
+            ViewBag.Categories = new SelectList(categories, "CategoryId", "Name", product.CategoryId);
             return View(product);
         }
 
