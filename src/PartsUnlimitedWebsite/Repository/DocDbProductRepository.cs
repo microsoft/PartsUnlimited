@@ -7,12 +7,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents.Client;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using PartsUnlimited.Models;
 using PartsUnlimited.Search;
 using PartsUnlimited.WebsiteConfiguration;
-using PartsUnlimited.Areas.Admin.Controllers;
 
 namespace PartsUnlimited.Repository
 {
@@ -96,7 +93,7 @@ namespace PartsUnlimited.Repository
         public async Task Delete(IProduct product, CancellationToken requestAborted)
         {
             //TODO - wrap CancellationToken around request
-            var productLink = _configuration.BuildProductLink(product.ProductId);
+            var productLink = _configuration.BuildProductLink(product.Id);
             await _client.DeleteDocumentAsync(productLink);            
         }
 
@@ -146,7 +143,7 @@ namespace PartsUnlimited.Repository
         {
             var collection = _configuration.BuildProductCollectionLink();
             var products = _client.CreateDocumentQuery<Product>(collection);
-            var sortedQuery = Sort(products, sortField, sortDirection);
+            var sortedQuery = products.Sort(sortField, sortDirection);
             var sortedProducts = await sortedQuery.ToAsyncEnumerable().ToList();
             return sortedProducts;
         }
@@ -165,43 +162,7 @@ namespace PartsUnlimited.Repository
                 .Where(p => p.ProductId == id)
                 .ToAsyncEnumerable().ToList();
 
-            return products.Any() ? products.First() : null;
-        }
-
-        private IQueryable<IProduct> Sort(IQueryable<Product> products, SortField sortField, SortDirection sortDirection)
-        {
-            if (sortField == SortField.Name)
-            {
-                if (sortDirection == SortDirection.Up)
-                {
-                    return products.OrderBy(o => o.Category.Name);
-                }
-
-                return products.OrderByDescending(o => o.Category.Name);
-            }
-
-            if (sortField == SortField.Price)
-            {
-                if (sortDirection == SortDirection.Up)
-                {
-                    return products.OrderBy(o => o.Price);
-                }
-
-                return products.OrderByDescending(o => o.Price);
-            }
-
-            if (sortField == SortField.Title)
-            {
-                if (sortDirection == SortDirection.Up)
-                {
-                    return products.OrderBy(o => o.Title);
-                }
-
-                return products.OrderByDescending(o => o.Title);
-            }
-
-            // Should not reach here, but return products for compiler
-            return products;
+            return products.Single();
         }
     }
 }

@@ -4,7 +4,7 @@
 using Microsoft.AspNet.Mvc;
 using PartsUnlimited.Models;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using PartsUnlimited.Cache;
 using PartsUnlimited.Repository;
@@ -13,33 +13,33 @@ namespace PartsUnlimited.Controllers
 {
     public class StoreController : Controller
     {
-        private readonly IPartsUnlimitedContext _db;
+        private readonly ICategoryLoader _categoryLoader;
         private readonly ICacheCoordinator _cacheCoordinator;
         private readonly IProductRepository _productRepository;
 
-        public StoreController(IPartsUnlimitedContext context, ICacheCoordinator cacheCoordinator, IProductRepository productRepository)
+        public StoreController(ICategoryLoader categoryLoader,
+            ICacheCoordinator cacheCoordinator, IProductRepository productRepository)
         {
-            _db = context;
+            _categoryLoader = categoryLoader;
             _cacheCoordinator = cacheCoordinator;
             _productRepository = productRepository;
         }
 
         //
         // GET: /Store/
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var category = _db.Categories.ToList();
-
-            return View(category);
+            IEnumerable<Category> categories = await _categoryLoader.LoadAll();
+            return View(categories);
         }
 
         //
         // GET: /Store/Browse?category=Brakes
         public async Task<IActionResult> Browse(int categoryId)
         {
-            // Retrieve Category category and its Associated associated Products products from database
+            // Retrieve category and its Associated associated Products products from database
             // TODO [EF] Swap to native support for loading related data when available
-            var categoryModel = _db.Categories.Single(g => g.CategoryId == categoryId);
+            var categoryModel = await _categoryLoader.Load(categoryId);
             var products = await _productRepository.LoadProductsForCategory(categoryModel.CategoryId);
             var browse = new Browse { Products  = products, Category = categoryModel};
             return View(browse);
@@ -61,8 +61,7 @@ namespace PartsUnlimited.Controllers
             return async () =>
             {
                 IProduct productData = await _productRepository.Load(id);
-                int categoryId = productData.CategoryId;
-                productData.Category = _db.Categories.Single(g => g.CategoryId == categoryId);
+                productData.Category = await _categoryLoader.Load(productData.CategoryId);
                 return productData;
             };
         }

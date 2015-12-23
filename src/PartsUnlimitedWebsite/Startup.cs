@@ -165,7 +165,7 @@ namespace PartsUnlimited
         {
             var docDbConfig = new DocDbConfiguration(Configuration.GetSection("Keys:DocDb"));
             services.AddSingleton<SqlProductRepository>();
-            services.AddScoped<IProductBuilder, ProductBuilder>();
+            services.AddScoped<ICategoryLoader, CategoryLoader>();
 
             if (string.IsNullOrEmpty(docDbConfig.URI)
                 || string.IsNullOrEmpty(docDbConfig.Key))
@@ -256,6 +256,7 @@ namespace PartsUnlimited
             //Populates the PartsUnlimited sample data
             var dataSeeder = app.ApplicationServices.GetService<IDataSeeder>();
             var data = new SampleData();
+
             dataSeeder.Seed(data).Wait();
         }
     }

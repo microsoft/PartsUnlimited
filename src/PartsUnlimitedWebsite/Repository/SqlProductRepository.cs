@@ -113,21 +113,21 @@ namespace PartsUnlimited.Repository
 
             IQueryable<Product> products = from product in _context.Products
                                            join category in _context.Categories on product.CategoryId equals category.CategoryId
-                                           select new Product()
+                                           select new Product
                                            {
                                                ProductArtUrl = product.ProductArtUrl,
                                                ProductId = product.ProductId,
                                                CategoryId = product.CategoryId,
                                                Price = product.Price,
                                                Title = product.Title,
-                                               Category = new Category()
+                                               Category = new Category
                                                {
                                                    CategoryId = product.CategoryId,
                                                    Name = category.Name
                                                }
                                            };
 
-            var sortedList = Sort(products, sortField, sortDirection);
+            var sortedList = products.Sort(sortField, sortDirection);
             return await sortedList.ToListAsync();
         }
 
@@ -136,43 +136,7 @@ namespace PartsUnlimited.Repository
             _context.Entry(product).State = EntityState.Modified;
             return _context.SaveChangesAsync(token);
         }
-
-        private IQueryable<IProduct> Sort(IQueryable<Product> products, SortField sortField, SortDirection sortDirection)
-        {
-            if (sortField == SortField.Name)
-            {
-                if (sortDirection == SortDirection.Up)
-                {
-                    return products.OrderBy(o => o.Category.Name);
-                }
-
-                return products.OrderByDescending(o => o.Category.Name);
-            }
-
-            if (sortField == SortField.Price)
-            {
-                if (sortDirection == SortDirection.Up)
-                {
-                    return products.OrderBy(o => o.Price);
-                }
-
-                return products.OrderByDescending(o => o.Price);
-            }
-
-            if (sortField == SortField.Title)
-            {
-                if (sortDirection == SortDirection.Up)
-                {
-                    return products.OrderBy(o => o.Title);
-                }
-
-                return products.OrderByDescending(o => o.Title);
-            }
-
-            // Should not reach here, but return products for compiler
-            return products;
-        }
-
+      
         public Task<IProduct> Load(int id)
         {
             var product = _context.Products.Single(p => p.ProductId == id);

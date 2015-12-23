@@ -15,11 +15,13 @@ namespace PartsUnlimited.Queries
     {
         private readonly IPartsUnlimitedContext _context;
         private readonly IProductLoader _productLoader;
+        private readonly ICategoryLoader _categoryLoader;
 
-        public RaincheckQuery(IPartsUnlimitedContext context, IProductLoader productLoader)
+        public RaincheckQuery(IPartsUnlimitedContext context, IProductLoader productLoader, ICategoryLoader categoryLoader)
         {
             _context = context;
             _productLoader = productLoader;
+            _categoryLoader = categoryLoader;
         }
 
         public async Task<IEnumerable<Raincheck>> GetAllAsync()
@@ -64,7 +66,7 @@ namespace PartsUnlimited.Queries
         {
             raincheck.IssuerStore = await _context.Stores.AsAsyncEnumerable().First(s => s.StoreId == raincheck.StoreId);
             raincheck.Product = await _productLoader.Load(raincheck.ProductId);
-            raincheck.Product.Category = await _context.Categories.AsAsyncEnumerable().First(c => c.CategoryId == raincheck.Product.CategoryId);
+            raincheck.Product.Category = await _categoryLoader.Load(raincheck.Product.CategoryId);
         }
     }
 }

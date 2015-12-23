@@ -23,14 +23,16 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         private readonly IHubContext _annoucementHub;
         private readonly ICacheCoordinator _cacheCoordinator;
         private readonly IProductRepository _productRepository;
+        private readonly ICategoryLoader _categoryLoader;
 
         public StoreManagerController(IPartsUnlimitedContext context, IConnectionManager connectionManager, 
-            ICacheCoordinator cacheCoordinator, IProductRepository productRepository)
+            ICacheCoordinator cacheCoordinator, IProductRepository productRepository, ICategoryLoader categoryLoader)
         {
             _db = context;
             _annoucementHub = connectionManager.GetHubContext<AnnouncementHub>();
             _cacheCoordinator = cacheCoordinator;
             _productRepository = productRepository;
+            _categoryLoader = categoryLoader;
         }
 
         //
@@ -51,11 +53,10 @@ namespace PartsUnlimited.Areas.Admin.Controllers
             var options = new PartsUnlimitedCacheOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10));
             IProduct product = await _cacheCoordinator.GetAsync(cacheId, LoadProductWithId(id), new CacheCoordinatorOptions().WithCacheOptions(options).WhichRemovesIfNull());
             
-            if (product != null)
+            if (product != null && product.Category == null)
             {
-                // TODO [EF] We don't query related data as yet. We have to populate this until we do automatically.
                 int categoryId = product.CategoryId;
-                product.Category = _db.Categories.Single(g => g.CategoryId == categoryId);
+                product.Category  = await _categoryLoader.Load(categoryId);
             }
             
             return View(product);
@@ -105,7 +106,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         
-        public async Task<IActionResult> Edit([ModelBinder(BinderType = typeof(ProductModelBinder))]IProduct product)
+        public async Task<IActionResult> Edit(Product product)
         {
             if (TryValidateModel(product) && ModelState.IsValid)
             {
