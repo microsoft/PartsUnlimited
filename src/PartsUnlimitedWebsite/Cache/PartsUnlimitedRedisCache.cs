@@ -71,7 +71,7 @@ namespace PartsUnlimited.Cache
                 if (cacheValue.SlidingCacheTime.HasValue)
                 {
                     var timeSpan = cacheValue.SlidingCacheTime.Value;
-                    await Database.KeyExpireAsync(key, timeSpan, cacheValue.Flags);
+                    await Database.KeyExpireAsync(key, timeSpan, CommandFlags.FireAndForget);
                 }
                 return new CacheResult<T>(cacheValue.Value);
             }
