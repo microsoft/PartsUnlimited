@@ -36,7 +36,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         //
         // GET: /StoreManager/
 
-        public async Task<IActionResult > Index(SortField sortField = SortField.Name, SortDirection sortDirection = SortDirection.Up)
+        public async Task<IActionResult> Index(SortField sortField = SortField.Name, SortDirection sortDirection = SortDirection.Up)
         {
             IEnumerable<IProduct> products = await _productRepository.LoadAllProducts(sortField, sortDirection);
             return View(products);
