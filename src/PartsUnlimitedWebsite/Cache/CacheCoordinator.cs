@@ -23,7 +23,7 @@ namespace PartsUnlimited.Cache
 
             try
             {
-                var result = await _cache.GetValue<T>(key);
+                var result = await _cache.GetValueAsync<T>(key);
                 if (result.HasValue)
                 {
                     return result.Value;
@@ -31,7 +31,7 @@ namespace PartsUnlimited.Cache
 
                 //initial population.
                 var sourceValue = await sourceLoader.Value;
-                await _cache.SetValue(key, sourceValue, options.CacheOption);
+                await _cache.SetValueAsync(key, sourceValue, options.CacheOption);
 
                 if (sourceValue == null && options.RemoveIfNull)
                 {
@@ -61,7 +61,7 @@ namespace PartsUnlimited.Cache
 
         public Task Remove(string key)
         {
-            return _cache.Remove(key);
+            return _cache.RemoveAsync(key);
         }
     }
 }

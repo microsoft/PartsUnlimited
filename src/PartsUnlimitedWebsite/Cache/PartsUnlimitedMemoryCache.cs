@@ -14,14 +14,14 @@ namespace PartsUnlimited.Cache
             _memoryCache = memoryCache;
         }
 
-        public Task SetValue<T>(string key, T value, PartsUnlimitedCacheOptions options)
+        public Task SetValueAsync<T>(string key, T value, PartsUnlimitedCacheOptions options)
         {
             var memCacheOptions = BuildOptions(options);
             _memoryCache.Set(key, value, memCacheOptions);
             return Task.FromResult(0);
         }
 
-        public Task<CacheResult<T>> GetValue<T>(string key)
+        public Task<CacheResult<T>> GetValueAsync<T>(string key)
         {
             T value;
             if (_memoryCache.TryGetValue(key, out value))
@@ -53,7 +53,7 @@ namespace PartsUnlimited.Cache
             return memCacheOptions;
         }
 
-        public Task Remove(string key)
+        public Task RemoveAsync(string key)
         {
             _memoryCache.Remove(key);
             return Task.FromResult(0);

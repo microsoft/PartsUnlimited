@@ -13,18 +13,18 @@ namespace PartsUnlimited.Cache
         /// <returns>
         /// The object that was cached.
         /// </returns>
-        Task SetValue<T>(string key, T value, PartsUnlimitedCacheOptions options);
+        Task SetValueAsync<T>(string key, T value, PartsUnlimitedCacheOptions options);
 
         /// <summary>
         /// Gets the cache item associated with this key if present.
         /// </summary>
         /// <param name="key">An object identifying the requested entry.</param>
-        Task<CacheResult<T>> GetValue<T>(string key);
+        Task<CacheResult<T>> GetValueAsync<T>(string key);
 
         /// <summary>
         /// Removes the object associated with the given key.
         /// </summary>
         /// <param name="key">An object identifying the entry.</param>
-        Task Remove(string key);
+        Task RemoveAsync(string key);
     }
 }

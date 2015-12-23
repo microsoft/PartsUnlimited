@@ -22,7 +22,7 @@ namespace PartsUnlimited.Cache
 
         private static IDatabase Database => _lazyConnection.Value.GetDatabase();
 
-        public Task SetValue<T>(string key, T value, PartsUnlimitedCacheOptions options)
+        public Task SetValueAsync<T>(string key, T value, PartsUnlimitedCacheOptions options)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
             if (value == null) throw new ArgumentNullException(nameof(value));
@@ -60,7 +60,7 @@ namespace PartsUnlimited.Cache
             }
         }
 
-        public async Task<CacheResult<T>>  GetValue<T>(string key)
+        public async Task<CacheResult<T>>  GetValueAsync<T>(string key)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
 
@@ -79,7 +79,7 @@ namespace PartsUnlimited.Cache
             return CacheResult<T>.Empty();
         }
 
-        public Task Remove(string key)
+        public Task RemoveAsync(string key)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
             return Database.KeyDeleteAsync(key);

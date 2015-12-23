@@ -24,30 +24,30 @@ namespace PartsUnlimited.Cache
             _telemetryProvider = telemetryProvider;
         }
 
-        public async Task SetValue<T>(string key, T value, PartsUnlimitedCacheOptions options)
+        public async Task SetValueAsync<T>(string key, T value, PartsUnlimitedCacheOptions options)
         {
             if (options.ShouldApplyToMultiLevelCache)
             {
-                await _memoryCache.SetValue(key, value, options.SecondLevelCacheOptions);
+                await _memoryCache.SetValueAsync(key, value, options.SecondLevelCacheOptions);
             }
 
-            await _redisCache.SetValue(key, value, options);
+            await _redisCache.SetValueAsync(key, value, options);
         }
 
-        public async Task<CacheResult<T>> GetValue<T>(string key)
+        public async Task<CacheResult<T>> GetValueAsync<T>(string key)
         {
-            var memoryResult = await _memoryCache.GetValue<T>(key);
+            var memoryResult = await _memoryCache.GetValueAsync<T>(key);
             if (memoryResult.HasValue)
             {
                 return memoryResult;
             }
 
-            return await _redisCache.GetValue<T>(key);
+            return await _redisCache.GetValueAsync<T>(key);
         }
 
-        public Task Remove(string key)
+        public Task RemoveAsync(string key)
         {
-            Task[] tasks = { _memoryCache.Remove(key) , _redisCache.Remove(key) };
+            Task[] tasks = { _memoryCache.RemoveAsync(key) , _redisCache.RemoveAsync(key) };
             try
             {
                 return Task.WhenAll(tasks);
