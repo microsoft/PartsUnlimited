@@ -28,7 +28,7 @@ namespace PartsUnlimited.Cache
             if (value == null) throw new ArgumentNullException(nameof(value));
             TimeSpan span = TimeSpan.Zero;
             var commandFlags = BuildFlags(options);
-            var cacheItem = new CacheItem<T>(value, commandFlags);
+            var cacheItem = new CacheItem<T>(value);
 
             if (options.SlidingExpiration.HasValue)
             {
