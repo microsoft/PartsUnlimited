@@ -38,6 +38,11 @@ namespace PartsUnlimited.WebsiteConfiguration
             return UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId);
         }
 
+        public Uri BuildProductLink(int productId)
+        {
+            return UriFactory.CreateDocumentUri(DatabaseId, CollectionId, productId.ToString());
+        }
+
         public Uri BuildDatabaseLink()
         {
             return UriFactory.CreateDatabaseUri(DatabaseId);
