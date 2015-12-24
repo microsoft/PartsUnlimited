@@ -38,7 +38,6 @@ namespace PartsUnlimited.Models
         [Display(Name = "Sale Price")]
         public decimal SalePrice { get; set; }
 
-        [Required]
         [Display(Name = "Product Art URL")]
         [StringLength(1024)]
         public string ProductArtUrl { get; set; }

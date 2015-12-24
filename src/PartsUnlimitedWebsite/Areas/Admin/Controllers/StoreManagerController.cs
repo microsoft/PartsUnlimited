@@ -14,6 +14,7 @@ using PartsUnlimited.Hubs;
 using PartsUnlimited.Models;
 using PartsUnlimited.Repository;
 using PartsUnlimited.ViewModels;
+using PartsUnlimited.WebsiteConfiguration;
 
 namespace PartsUnlimited.Areas.Admin.Controllers
 {
@@ -23,14 +24,18 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         private readonly IHubContext _annoucementHub;
         private readonly ICacheCoordinator _cacheCoordinator;
         private readonly IProductRepository _productRepository;
+        private IAzureStorageConfiguration _azureStorage;
+        private IVisionApiConfiguration _visionApi;
 
         public StoreManagerController(IPartsUnlimitedContext context, IConnectionManager connectionManager, 
-            ICacheCoordinator cacheCoordinator, IProductRepository productRepository)
+            ICacheCoordinator cacheCoordinator, IProductRepository productRepository, IAzureStorageConfiguration azureStorage, IVisionApiConfiguration visionApi)
         {
             _db = context;
             _annoucementHub = connectionManager.GetHubContext<AnnouncementHub>();
             _cacheCoordinator = cacheCoordinator;
             _productRepository = productRepository;
+            _azureStorage = azureStorage;
+            _visionApi = visionApi;
         }
 
         //
@@ -82,6 +87,13 @@ namespace PartsUnlimited.Areas.Admin.Controllers
             if (TryValidateModel(product) && ModelState.IsValid)
             {
                 await _productRepository.Add(product, HttpContext.RequestAborted);
+
+                var imagePath = await _azureStorage.Upload("product", Request.Form.Files["productImage"]);
+                var imageAnalysis = await _visionApi.AnalyseImage(imagePath);
+
+                var thumbnailBytes = await _visionApi.GenerateThumbnail(imagePath);
+                var thumbnailImagePath = await _azureStorage.UploadAndAttachToProduct("product", thumbnailBytes);
+
                 _annoucementHub.Clients.All.announcement(new ProductData { Title = product.Title, Url = Url.Action("Details", "Store", new { id = product.ProductId }) });
                 await _cacheCoordinator.Remove(CacheConstants.Key.AnnouncementProduct);
                 return RedirectToAction("Index");
@@ -105,7 +117,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         
-        public async Task<IActionResult> Edit([ModelBinder(BinderType = typeof(ProductModelBinder))]IProduct product)
+        public async Task<IActionResult> Edit(Product product)
         {
             if (TryValidateModel(product) && ModelState.IsValid)
             {

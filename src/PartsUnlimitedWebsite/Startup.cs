@@ -84,6 +84,9 @@ namespace PartsUnlimited
 
             SetupCache(services);
 
+            SetupAzureStorage(services);
+            SetupVisionApi(services);
+
             SetupRepository(services);
 
             services.AddScoped<IOrdersQuery, OrdersQuery>();
@@ -159,6 +162,18 @@ namespace PartsUnlimited
             }
 
             services.AddSingleton<ICacheCoordinator, CacheCoordinator>();
+        }
+
+        private void SetupAzureStorage(IServiceCollection services)
+        {
+            var storageConfig = new AzureStorageConfiguration(Configuration.GetSection("Keys:AzureStorage"));
+            services.AddInstance<IAzureStorageConfiguration>(storageConfig);
+        }
+
+        private void SetupVisionApi(IServiceCollection services)
+        {
+            var visionApiConfig = new VisionApiConfiguration(Configuration.GetSection("Keys:VisionApi"));
+            services.AddInstance<IVisionApiConfiguration>(visionApiConfig);
         }
 
         private void SetupRepository(IServiceCollection services)
