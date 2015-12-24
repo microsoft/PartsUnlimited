@@ -51,11 +51,26 @@ namespace PartsUnlimited.Repository
                 .ToAsyncEnumerable().ToList();
         }
 
-        public async Task Add(IProduct product, CancellationToken requestAborted)
+        public async Task<int> Add(IProduct product, CancellationToken requestAborted)
         {
-            //TODO - wrap CancellationToken around request
+            //TODO Use built in Id's for looking up products.
             var collection = _configuration.BuildProductCollectionLink();
+            var nextIds = await _client.CreateDocumentQuery<int>(collection,
+                "SELECT TOP 1 VALUE p.ProductId " +
+                "FROM p " +
+                "ORDER BY p.ProductId DESC")
+                .ToAsyncEnumerable().ToList(requestAborted);
+
+            var newProductId = 1;
+            if (nextIds.Any())
+            {
+                int nextId = nextIds.First() + 1;
+                newProductId = nextId;
+            }
+            product.ProductId = newProductId;
             await _client.CreateDocumentAsync(collection, product);
+
+            return product.ProductId;
         }
 
         public async Task<IProduct> GetLatestProduct()

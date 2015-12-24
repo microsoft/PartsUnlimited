@@ -40,10 +40,11 @@ namespace PartsUnlimited.Repository
             return await _context.Products.ToAsyncEnumerable().ToList();
         }
 
-        public async Task Add(IProduct product, CancellationToken requestAborted)
+        public async Task<int> Add(IProduct product, CancellationToken requestAborted)
         {
             _context.Products.Add((Product)product);
             await _context.SaveChangesAsync(requestAborted);
+            return product.ProductId;
         }
 
         public Task<IProduct> GetLatestProduct()

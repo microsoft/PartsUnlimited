@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PartsUnlimited.Models
 {
@@ -41,7 +42,7 @@ namespace PartsUnlimited.Models
         [Display(Name = "Product Art URL")]
         [StringLength(1024)]
         public string ProductArtUrl { get; set; }
-
+        
         public virtual Category Category { get; set; }
 
         public virtual List<OrderDetail> OrderDetails { get; set; }

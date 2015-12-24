@@ -4,6 +4,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Http;
+using Microsoft.ProjectOxford.Vision.Contract;
 
 namespace PartsUnlimited.WebsiteConfiguration
 {
@@ -18,6 +19,6 @@ namespace PartsUnlimited.WebsiteConfiguration
         Task<bool> Exists(string fileName, string containerName);
 
         Task<string> Upload(string containerName, IFormFile file);
-        Task<string> UploadAndAttachToProduct(int productId, string containerName, byte[] fileBytes);
+        Task<string> UploadAndAttachToProduct(int productId, string containerName, byte[] fileBytes, AnalysisResult imageAnalysis);
     }
 }

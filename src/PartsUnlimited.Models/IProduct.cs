@@ -6,7 +6,7 @@ namespace PartsUnlimited.Models
     public interface IProduct
     {
         string SkuNumber { get; }
-        int ProductId { get; }
+        int ProductId { get; set; }
         int RecommendationId { get; }
         int CategoryId { get; }
         string Title { get; }

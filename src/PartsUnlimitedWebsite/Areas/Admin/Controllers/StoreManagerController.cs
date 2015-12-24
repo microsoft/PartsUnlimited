@@ -88,11 +88,16 @@ namespace PartsUnlimited.Areas.Admin.Controllers
             {
                 await _productRepository.Add(product, HttpContext.RequestAborted);
 
-                var imagePath = await _azureStorage.Upload("product", Request.Form.Files["productImage"]);
-                var imageAnalysis = await _visionApi.AnalyseImage(imagePath);
+                var productImage = Request.Form.Files["productImage"];
+                if (productImage != null)
+                {
+                    var imagePath = await _azureStorage.Upload("product", productImage);
 
-                var thumbnailBytes = await _visionApi.GenerateThumbnail(imagePath);
-                var thumbnailImagePath = await _azureStorage.UploadAndAttachToProduct("product", thumbnailBytes);
+                    var imageAnalysis = await _visionApi.AnalyseImage(imagePath);
+
+                    var thumbnailBytes = await _visionApi.GenerateThumbnail(imagePath);
+                    var thumbnailImagePath = await _azureStorage.UploadAndAttachToProduct(product.ProductId, "product", thumbnailBytes, imageAnalysis);
+                }
 
                 _annoucementHub.Clients.All.announcement(new ProductData { Title = product.Title, Url = Url.Action("Details", "Store", new { id = product.ProductId }) });
                 await _cacheCoordinator.Remove(CacheConstants.Key.AnnouncementProduct);

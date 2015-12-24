@@ -166,7 +166,8 @@ namespace PartsUnlimited
 
         private void SetupAzureStorage(IServiceCollection services)
         {
-            var storageConfig = new AzureStorageConfiguration(Configuration.GetSection("Keys:AzureStorage"));
+            var docDbConfig = new DocDbConfiguration(Configuration.GetSection("Keys:DocDb"));
+            var storageConfig = new AzureStorageConfiguration(Configuration.GetSection("Keys:AzureStorage"), docDbConfig);
             services.AddInstance<IAzureStorageConfiguration>(storageConfig);
         }
 

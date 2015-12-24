@@ -13,7 +13,7 @@ namespace PartsUnlimited.Repository
         Task<IEnumerable<IProduct>> Search(ProductSearchCriteria searchCriteria);
         Task<IEnumerable<IProduct>> LoadSaleProducts();
         Task<IEnumerable<IProduct>> LoadAllProducts();
-        Task Add(IProduct product, CancellationToken requestAborted);
+        Task<int> Add(IProduct product, CancellationToken requestAborted);
         Task<IProduct> GetLatestProduct();
         Task Delete(IProduct product, CancellationToken requestAborted);
         Task<IEnumerable<IProduct>> LoadProductsForCategory(int categoryId);

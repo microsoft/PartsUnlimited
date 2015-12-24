@@ -4,12 +4,14 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Http;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Framework.Configuration;
 using Microsoft.Net.Http.Headers;
+using Microsoft.ProjectOxford.Vision.Contract;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -107,7 +109,7 @@ namespace PartsUnlimited.WebsiteConfiguration
             }
         }
 
-        public async Task<string> UploadAndAttachToProduct(int productId, string containerName, byte[] fileBytes)
+        public async Task<string> UploadAndAttachToProduct(int productId, string containerName, byte[] fileBytes, AnalysisResult imageAnalysis)
         {
             var client = CloudStorageAccount.CreateCloudBlobClient();
             var container = client.GetContainerReference(containerName);
@@ -119,16 +121,20 @@ namespace PartsUnlimited.WebsiteConfiguration
 
             var imageUrl = newBlob.Uri.ToString();
 
-            await AttachToDocumentDb(productId, fileName, imageUrl);
+            await AttachToDocumentDb(productId, fileName, imageUrl, imageAnalysis);
 
             return imageUrl;
 
         }
 
-        private async Task AttachToDocumentDb(int productId, string imageId, string imageUrl)
+        private async Task AttachToDocumentDb(int productId, string imageId, string imageUrl, AnalysisResult imageAnalysis)
         {
             var productLink = _docDbConfiguration.BuildProductLink(productId);
-            await _documentDbClient.CreateAttachmentAsync(productLink, new Attachment { Id = imageId, ContentType = "image/jpeg", MediaLink = imageUrl });
+
+            var productArtCategories = imageAnalysis.Categories.Select(c => c.Name).ToArray();
+            var productArtColors = imageAnalysis.Color.DominantColors;
+
+            await _documentDbClient.CreateAttachmentAsync(productLink, new { id = imageId, contentType = "image/jpeg", media = imageUrl, categories = productArtCategories, colors = productArtColors });
         }
     }
 }
