@@ -19,7 +19,7 @@ namespace PartsUnlimited.Components
             _options = options;
         }
 
-        public Task<IViewComponentResult> InvokeAsync(Product product)
+        public Task<IViewComponentResult> InvokeAsync(dynamic product)
         {
             if (_options.ShowRecommendations)
             {

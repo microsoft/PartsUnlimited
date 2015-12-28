@@ -1,132 +1,25 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Identity;
-using Microsoft.Data.Entity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.PlatformAbstractions;
-using PartsUnlimited.Areas.Admin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-
 
 namespace PartsUnlimited.Models
 {
-    public static class SampleData
+    public class SampleData
     {
-        private static string AdminRoleSectionName = "AdminRole";
-        private static string DefaultAdminNameKey = "UserName";
-        private static string DefaultAdminPasswordKey = "Password";
-
-        public static async Task InitializePartsUnlimitedDatabaseAsync(IServiceProvider serviceProvider, bool createUser = true)
+        public IEnumerable<Promo> GetPromo()
         {
-            using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var db = serviceScope.ServiceProvider.GetService<PartsUnlimitedContext>();
-
-
-                bool dbNewlyCreated = await db.Database.EnsureCreatedAsync();
-
-                //Seeding a database using migrations is not yet supported. (https://github.com/aspnet/EntityFramework/issues/629)
-                //Add seed data, only if the tables are empty.
-                bool tablesEmpty = !db.Products.Any() && !db.Orders.Any() && !db.Categories.Any() && !db.Stores.Any();
-
-                if (dbNewlyCreated || tablesEmpty)
-                {
-                    await InsertTestData(serviceProvider);
-                    await CreateAdminUser(serviceProvider);
-                }
-            }
-        }
-
-        public static async Task InsertTestData(IServiceProvider serviceProvider)
-        {
-            var categories = GetCategories().ToList();
-            await AddOrUpdateAsync(serviceProvider, g => g.Name, categories);
-
-            var products = GetProducts(categories).ToList();
-            await AddOrUpdateAsync(serviceProvider, a => a.Title, products);
-
-            var stores = GetStores().ToList();
-            await AddOrUpdateAsync(serviceProvider, a => a.Name, stores);
-
-            var rainchecks = GetRainchecks(stores, products).ToList();
-            await AddOrUpdateAsync(serviceProvider, a => a.RaincheckId, rainchecks);
-
-            PopulateOrderHistory(serviceProvider, products);
-        }
-
-        private static async Task AddOrUpdateAsync<TEntity>(
-            IServiceProvider serviceProvider,
-            Func<TEntity, object> propertyToMatch, IEnumerable<TEntity> entities)
-            where TEntity : class
-        {
-            // Query in a separate context so that we can attach existing entities as modified
-            List<TEntity> existingData;
-            using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var db = serviceScope.ServiceProvider.GetService<PartsUnlimitedContext>();
-                existingData = db.Set<TEntity>().ToList();
-            }
-
-            using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var db = serviceScope.ServiceProvider.GetService<PartsUnlimitedContext>();
-                foreach (var item in entities)
-                {
-                    db.Entry(item).State = existingData.Any(g => propertyToMatch(g).Equals(propertyToMatch(item)))
-                        ? EntityState.Modified
-                        : EntityState.Added;
-                }
-                await db.SaveChangesAsync();
-            }
-        }
-
-       /// <summary>
-       /// Returns configuration section for AdminRole.
-       /// </summary>
-       /// <param name="serviceProvider"></param>
-       /// <returns></returns>
-       private static IConfigurationSection GetAdminRoleConfiguration(IServiceProvider serviceProvider)
-        {
-            var appEnv = serviceProvider.GetService<IApplicationEnvironment>();
-
-            var builder = new ConfigurationBuilder().SetBasePath(appEnv.ApplicationBasePath)
-                        .AddJsonFile("config.json")
-                        .AddEnvironmentVariables();
-            var configuration = builder.Build();
-            return configuration.GetSection(AdminRoleSectionName);
-        }
-
-        /// <summary>
-        /// Creates a store manager user who can manage the inventory.
-        /// </summary>
-        /// <param name="serviceProvider"></param>
-        /// <returns></returns>
-        private static async Task CreateAdminUser(IServiceProvider serviceProvider)
-        {
-            IConfigurationSection configuration = GetAdminRoleConfiguration(serviceProvider);
-            UserManager<ApplicationUser> userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
-
-            var user = await userManager.FindByNameAsync(configuration[DefaultAdminNameKey]);
-
-            if (user == null)
-            {
-                user = new ApplicationUser { UserName = configuration[DefaultAdminNameKey] };
-                await userManager.CreateAsync(user, configuration[DefaultAdminPasswordKey]);
-                await userManager.AddClaimAsync(user, new Claim(AdminConstants.ManageStore.Name, AdminConstants.ManageStore.Allowed));
-            }
+            yield return new Promo { Name = "FREE" };
+            yield return new Promo { Name = "Promo100" };
         }
 
         /// <summary>
         /// Generate an enumeration of rainchecks.  The random number generator uses a seed to ensure 
         /// that the sequence is consistent, but provides somewhat random looking data.
         /// </summary>
-        public static IEnumerable<Raincheck> GetRainchecks(IEnumerable<Store> stores, IList<Product> products)
+        public IEnumerable<Raincheck> GetRainchecks(IEnumerable<Store> stores, IList<IProduct> products)
         {
             var random = new Random(1234);
 
@@ -146,12 +39,12 @@ namespace PartsUnlimited.Models
             }
         }
 
-        public static IEnumerable<Store> GetStores()
+        public IEnumerable<Store> GetStores()
         {
             return Enumerable.Range(1, 20).Select(id => new Store { Name = $"Store{id}" });
         }
 
-        public static IEnumerable<Category> GetCategories()
+        public IEnumerable<Category> GetCategories()
         {
             yield return new Category { Name = "Brakes", Description = "Brakes description", ImageUrl = "product_brakes_disc.jpg" };
             yield return new Category { Name = "Lighting", Description = "Lighting description", ImageUrl = "product_lighting_headlight.jpg" };
@@ -160,70 +53,48 @@ namespace PartsUnlimited.Models
             yield return new Category { Name = "Oil", Description = "Oil description", ImageUrl = "product_oil_premium-oil.jpg" };
         }
 
-        public static void PopulateOrderHistory(IServiceProvider serviceProvider, IEnumerable<Product> products)
+        public IEnumerable<Order> BuildOrders(int count, string userName, IEnumerable<Promo> promo)
         {
             var random = new Random(1234);
-            var recomendationCombinations = new[] {
-                new{ Transactions = new []{1, 3, 8}, Multiplier = 60 },
-                new{ Transactions = new []{2, 6}, Multiplier = 10 },
-                new{ Transactions = new []{4, 11}, Multiplier = 20 },
-                new{ Transactions = new []{5, 14}, Multiplier = 10 },
-                new{ Transactions = new []{6, 16, 18}, Multiplier = 20 },
-                new{ Transactions = new []{7, 17}, Multiplier = 25 },
-                new{ Transactions = new []{8, 1}, Multiplier = 5 },
-                new{ Transactions = new []{10, 17,9}, Multiplier = 15 },
-                new{ Transactions = new []{11, 5}, Multiplier = 15 },
-                new{ Transactions = new []{12, 8}, Multiplier = 5 },
-                new{ Transactions = new []{13, 15}, Multiplier = 50 },
-                new{ Transactions = new []{14, 15}, Multiplier = 30 },
-                new{ Transactions = new []{16, 18}, Multiplier = 80 }
-            };
-
-            IConfigurationSection configuration = GetAdminRoleConfiguration(serviceProvider);
-            string userName = configuration[DefaultAdminNameKey];
-
-            using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            for (int i = count - 1; i >= 0; i--)
             {
-                var db = serviceScope.ServiceProvider.GetService<PartsUnlimitedContext>();
-
-                var orders = new List<Order>();
-                foreach (var combination in recomendationCombinations)
+                var order = new Order
                 {
-                    for (int i = 0; i < combination.Multiplier; i++)
-                    {
-                        var order = new Order
-                        {
-                            Username = userName,
-                            OrderDate = DateTime.Now,
-                            Name = $"John Smith{random.Next()}",
-                            Address = "15010 NE 36th St",
-                            City = "Redmond",
-                            State = "WA",
-                            PostalCode = "98052",
-                            Country = "United States",
-                            Phone = "425-703-6214",
-                            Email = userName
-                        };
+                    Username = userName,
+                    OrderDate = DateTime.Now,
+                    Name = $"John Smith{random.Next()}",
+                    Address = "15010 NE 36th St",
+                    City = "Redmond",
+                    State = "WA",
+                    PostalCode = "98052",
+                    Country = "United States",
+                    Phone = "425-703-6214",
+                    Email = userName,
+                    PromoId = promo.First().PromoId
+                };
 
-                        db.Orders.Add(order);
-                        decimal total = 0;
-                        foreach (var id in combination.Transactions)
-                        {
-                            var product = products.Single(x => x.RecommendationId == id);
-                            var orderDetail = GetOrderDetail(product, order);
-                            db.OrderDetails.Add(orderDetail);
-                            total += orderDetail.UnitPrice;
-                        }
-
-                        order.Total = total;
-                    }
-                }
-
-                db.SaveChanges();
+                yield return order;
             }
         }
 
-        public static OrderDetail GetOrderDetail(Product product, Order order)
+        public IEnumerable<OrderDetail> BuildOrderDetail(int[] recomendations, Order order, IEnumerable<IProduct> products)
+        {
+            decimal total = 0;
+
+            foreach (var i in recomendations)
+            {
+                var product = products.SingleOrDefault(x => x.RecommendationId == i);
+                if (product != null)
+                {
+                    var orderDetail = GetOrderDetail(product, order);
+                    total += orderDetail.UnitPrice;
+                    yield return orderDetail;
+                }
+            }
+            order.Total = total;
+        }
+
+        private OrderDetail GetOrderDetail(IProduct product, Order order)
         {
             var random = new Random();
             int quantity;
@@ -251,10 +122,9 @@ namespace PartsUnlimited.Models
             };
         }
 
-        public static IEnumerable<Product> GetProducts(IEnumerable<Category> categories)
+        public IEnumerable<IProduct> GetProducts(IEnumerable<Category> categories)
         {
             var categoriesMap = categories.ToDictionary(c => c.Name, c => c);
-
             yield return new Product
             {
                 SkuNumber = "LIG-0001",

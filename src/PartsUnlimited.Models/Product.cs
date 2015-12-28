@@ -7,10 +7,11 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PartsUnlimited.Models
 {
-    public class Product
+    public class Product : IProduct
     {
         [Required]
         [Display(Name = "Sku Number")]
@@ -19,8 +20,12 @@ namespace PartsUnlimited.Models
         [ScaffoldColumn(false)]
         public int ProductId { get; set; }
 
-        public int RecommendationId { get; set; }
+        [NotMapped]
+        [JsonProperty(PropertyName = "id")]
+        public string Id => ProductId.ToString();
 
+        public int RecommendationId { get; set; }
+        
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
 

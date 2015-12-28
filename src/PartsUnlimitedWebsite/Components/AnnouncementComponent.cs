@@ -1,12 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using PartsUnlimited.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Mvc;
+using PartsUnlimited.Cache;
+using PartsUnlimited.Models;
+using PartsUnlimited.Repository;
 
 namespace PartsUnlimited.Components
 {
@@ -14,41 +15,28 @@ namespace PartsUnlimited.Components
     public class AnnouncementComponent : ViewComponent
     {
         private readonly IPartsUnlimitedContext _db;
-        private readonly IMemoryCache _cache;
+        private readonly ICacheCoordinator _cacheCoordinator;
+        private readonly IProductRepository _productRepository;
 
-        public AnnouncementComponent(IPartsUnlimitedContext context, IMemoryCache memoryCache)
+        public AnnouncementComponent(IPartsUnlimitedContext context, ICacheCoordinator cacheCoordinator, IProductRepository productRepository)
         {
             _db = context;
-            _cache = memoryCache;
+            _cacheCoordinator = cacheCoordinator;
+            _productRepository = productRepository;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            Product announcementProduct;
-            if (!_cache.TryGetValue("announcementProduct", out announcementProduct))
-            {
-                announcementProduct = await GetLatestProduct();
-
-                if (announcementProduct != null)
-                {
-                    _cache.Set("announcementProduct", announcementProduct, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)));
-                }
-            }
-
+            var key = CacheConstants.Key.AnnouncementProduct;
+            var options = new PartsUnlimitedCacheOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
+            dynamic announcementProduct = await _cacheCoordinator.GetAsync(key, GetLatestProduct, new CacheCoordinatorOptions().WithCacheOptions(options));
             return View(announcementProduct);
         }
 
-        private Task<Product> GetLatestProduct()
+        private async Task<dynamic> GetLatestProduct()
         {
-            var latestProduct = _db.Products.OrderByDescending(a => a.Created).FirstOrDefault();
-            if ((latestProduct != null) && ((latestProduct.Created - DateTime.UtcNow).TotalDays <= 2))
-            {
-                return Task.FromResult(latestProduct);
+            return await _productRepository.GetLatestProduct();
+            
             }
-            else
-            {
-                return Task.FromResult<Product>(null);
             }
         }
-    }
-}

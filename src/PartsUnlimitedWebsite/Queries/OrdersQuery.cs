@@ -8,16 +8,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using PartsUnlimited.Cache;
 
 namespace PartsUnlimited.Queries
 {
     public class OrdersQuery : IOrdersQuery
     {
         private readonly IPartsUnlimitedContext _db;
+        private readonly ICacheCoordinator _cacheCoordinator;
+        private readonly IProductLoader _productLoader;
 
-        public OrdersQuery(IPartsUnlimitedContext context)
+        public OrdersQuery(IPartsUnlimitedContext context, ICacheCoordinator cacheCoordinator, IProductLoader productLoader)
         {
             _db = context;
+            _cacheCoordinator = cacheCoordinator;
+            _productLoader = productLoader;
         }
 
         public async Task<OrdersModel> IndexHelperAsync(string username, DateTime? start, DateTime? end, int count, string invalidOrderSearch, bool isAdminSearch)
@@ -37,7 +42,7 @@ namespace PartsUnlimited.Queries
 
         private IQueryable<Order> GetOrderQuery(string username, DateTime start, DateTime end, int count)
         {
-            if (String.IsNullOrEmpty(username))
+            if (string.IsNullOrEmpty(username))
             {
                 return _db
                     .Orders
@@ -45,14 +50,12 @@ namespace PartsUnlimited.Queries
                     .OrderBy(o => o.OrderDate)
                     .Take(count);
             }
-            else
-            {
-                return _db
-                    .Orders
-                    .Where(o => o.OrderDate < end && o.OrderDate >= start && o.Username == username)
-                    .OrderBy(o => o.OrderDate)
-                    .Take(count);
-            }
+
+            return _db
+                .Orders
+                .Where(o => o.OrderDate < end && o.OrderDate >= start && o.Username == username)
+                .OrderBy(o => o.OrderDate)
+                .Take(count);
         }
 
         public async Task<Order> FindOrderAsync(int id)
@@ -72,15 +75,33 @@ namespace PartsUnlimited.Queries
 
         private async Task FillOrderDetails(IEnumerable<Order> orders)
         {
+            var promo = await LoadPromoCodes();
             foreach (var order in orders)
             {
+                if (order.PromoId.HasValue)
+                {
+                    order.Promo = promo.First(s => s.PromoId == order.PromoId);
+                }
                 order.OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == order.OrderId).ToListAsync();
 
                 foreach (var details in order.OrderDetails)
                 {
-                    details.Product = await _db.Products.FirstOrDefaultAsync(o => o.ProductId == details.ProductId);
+                    var key = CacheConstants.Key.ProductKey(details.ProductId);
+                    var cacheOptions = new PartsUnlimitedCacheOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10));
+                    var invokerOptions = new CacheCoordinatorOptions().WithCacheOptions(cacheOptions).WhichFailsOver();
+                    var product = await _cacheCoordinator.GetAsync( key, () => _productLoader.Load(details.ProductId), invokerOptions);
+                    details.Product = product;
                 }
             }
+        }
+
+        private async Task<List<Promo>> LoadPromoCodes()
+        {
+            var key = CacheConstants.Key.Promos;
+            var cacheOptions = new PartsUnlimitedCacheOptions().SetSlidingExpiration(TimeSpan.FromMinutes(60));
+            var invokerOptions = new CacheCoordinatorOptions().WithCacheOptions(cacheOptions).WhichFailsOver();
+            List<Promo> product = await _cacheCoordinator.GetAsync(key, () => _db.Promo.ToListAsync(), invokerOptions);
+            return product;
         }
     }
 }

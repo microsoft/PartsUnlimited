@@ -8,7 +8,6 @@ using Microsoft.Data.Entity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.PlatformAbstractions;
 using PartsUnlimited.Areas.Admin;
 using PartsUnlimited.Models;
 using PartsUnlimited.Queries;
@@ -18,6 +17,8 @@ using PartsUnlimited.Security;
 using PartsUnlimited.Telemetry;
 using PartsUnlimited.WebsiteConfiguration;
 using System;
+using PartsUnlimited.Cache;
+using PartsUnlimited.Repository;
 
 namespace PartsUnlimited
 {
@@ -55,7 +56,7 @@ namespace PartsUnlimited
             }
             else
             {
-                services.AddEntityFramework()                
+                services.AddEntityFramework()
                         .AddSqlServer()
                         .AddDbContext<PartsUnlimitedContext>(options =>
                         {
@@ -77,11 +78,12 @@ namespace PartsUnlimited
                     {
                         authBuilder.RequireClaim(AdminConstants.ManageStore.Name, AdminConstants.ManageStore.Allowed);
                     });
-                 
+
             });
 
-            // Add implementations
-            services.AddSingleton<IMemoryCache, MemoryCache>();
+            // Add implementations            
+            SetupCache(services);
+            SetupRepository(services);
             services.AddScoped<IOrdersQuery, OrdersQuery>();
             services.AddScoped<IRaincheckQuery, RaincheckQuery>();
 
@@ -136,6 +138,51 @@ namespace PartsUnlimited
                 services.AddSingleton<IAzureMLAuthenticatedHttpClient, AzureMLAuthenticatedHttpClient>();
                 services.AddInstance<IAzureMLFrequentlyBoughtTogetherConfig>(azureMlConfig);
                 services.AddScoped<IRecommendationEngine, AzureMLFrequentlyBoughtTogetherRecommendationEngine>();
+            }
+        }
+
+        private void SetupCache(IServiceCollection services)
+        {
+            var redisConfig = new RedisCacheConfig(Configuration.GetSection("Keys:RedisCache"));
+            services.AddSingleton<IMemoryCache, MemoryCache>();
+
+            // If keys are not available for Redis Cache use in memory cache as primary cache.
+            if (string.IsNullOrEmpty(redisConfig.AccessKey) || string.IsNullOrEmpty(redisConfig.HostName))
+            {
+                services.AddSingleton<IPartsUnlimitedCache, PartsUnlimitedMemoryCache>();
+            }
+            else
+            {
+                services.AddSingleton<PartsUnlimitedMemoryCache>();
+                services.AddSingleton<PartsUnlimitedRedisCache>();
+                services.AddInstance<IRedisCacheConfiguration>(redisConfig);
+                services.AddSingleton<IPartsUnlimitedCache, PartUnlimitedMultilevelCache>();
+            }
+
+            services.AddSingleton<ICacheCoordinator, CacheCoordinator>();
+        }
+
+        private void SetupRepository(IServiceCollection services)
+        {
+            var docDbConfig = new DocDbConfiguration(Configuration.GetSection("Keys:DocDb"));
+            services.AddSingleton<SqlProductRepository>();
+            services.AddScoped<ICategoryLoader, CategoryLoader>();
+
+            if (string.IsNullOrEmpty(docDbConfig.URI)
+                || string.IsNullOrEmpty(docDbConfig.Key))
+            {
+                services.AddScoped<IProductRepository, SqlProductRepository>();
+                services.AddScoped<IProductLoader, SqlProductRepository>();
+                services.AddScoped<IDataSeeder, SQLDataSeeder>();
+            }
+            else
+            {
+                services.AddScoped<SQLDataSeeder>();
+                services.AddInstance<IDocDbConfiguration>(docDbConfig);
+                services.AddScoped<DocDbProductRepository>();
+                services.AddScoped<IProductRepository, DocDbProductRepository>();
+                services.AddScoped<IProductLoader, DocDbProductRepository>();
+                services.AddScoped<IDataSeeder, DocDbSeeder>();
             }
         }
 
@@ -208,7 +255,9 @@ namespace PartsUnlimited
             });
 
             //Populates the PartsUnlimited sample data
-            SampleData.InitializePartsUnlimitedDatabaseAsync(app.ApplicationServices).Wait();
+            var dataSeeder = app.ApplicationServices.GetService<IDataSeeder>();
+            var data = new SampleData();
+            dataSeeder.Seed(data).Wait();
         }
     }
 }

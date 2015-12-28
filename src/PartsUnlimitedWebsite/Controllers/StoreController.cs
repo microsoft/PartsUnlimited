@@ -2,64 +2,68 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.AspNet.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using PartsUnlimited.Models;
 using System;
-using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using PartsUnlimited.Cache;
+using PartsUnlimited.Repository;
 
 namespace PartsUnlimited.Controllers
 {
     public class StoreController : Controller
     {
-        private readonly IPartsUnlimitedContext _db;
-        private readonly IMemoryCache _cache;
+        private readonly ICategoryLoader _categoryLoader;
+        private readonly ICacheCoordinator _cacheCoordinator;
+        private readonly IProductRepository _productRepository;
 
-        public StoreController(IPartsUnlimitedContext context, IMemoryCache memoryCache)
+        public StoreController(ICategoryLoader categoryLoader,
+            ICacheCoordinator cacheCoordinator, IProductRepository productRepository)
         {
-            _db = context;
-            _cache = memoryCache;
+            _categoryLoader = categoryLoader;
+            _cacheCoordinator = cacheCoordinator;
+            _productRepository = productRepository;
         }
 
         //
         // GET: /Store/
-
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var category = _db.Categories.ToList();
-
-            return View(category);
+            IEnumerable<Category> categories = await _categoryLoader.LoadAll();
+            return View(categories);
         }
 
         //
         // GET: /Store/Browse?category=Brakes
-
-        public IActionResult Browse(int categoryId)
+        public async Task<IActionResult> Browse(int categoryId)
         {
-            // Retrieve Category category and its Associated associated Products products from database
-
+            // Retrieve category and its Associated associated Products products from database
             // TODO [EF] Swap to native support for loading related data when available
-            var categoryModel = _db.Categories.Single(g => g.CategoryId == categoryId);
-            categoryModel.Products = _db.Products.Where(a => a.CategoryId == categoryModel.CategoryId).ToList();
-
-            return View(categoryModel);
+            var categoryModel = await _categoryLoader.Load(categoryId);
+            var products = await _productRepository.LoadProductsForCategory(categoryModel.CategoryId);
+            var browse = new Browse { Products  = products, Category = categoryModel};
+            return View(browse);
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            Product productData;
-
-            if (!_cache.TryGetValue(string.Format("product_{0}", id), out productData))
-            {
-                productData = _db.Products.Single(a => a.ProductId == id);
-                productData.Category = _db.Categories.Single(g => g.CategoryId == productData.CategoryId);
-
-                if (productData != null)
-                {
-                    _cache.Set(string.Format("product_{0}", id), productData, new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10)));
-                }                
-            }
-
+            string productKey = CacheConstants.Key.ProductKey(id);
+            var options = new PartsUnlimitedCacheOptions()
+                .SetSlidingExpiration(TimeSpan.FromMinutes(10))
+                .WithSecondLevelCacheAsRatio(0.33m);
+            var productData = await _cacheCoordinator.GetAsync(productKey, LoadProductWithId(id), 
+                new CacheCoordinatorOptions().WithCacheOptions(options));
             return View(productData);
         }
-    }
+
+        private Func<Task<IProduct>> LoadProductWithId(int id)
+            {
+            return async () =>
+                {
+                IProduct productData = await _productRepository.Load(id);
+                productData.Category = await _categoryLoader.Load(productData.CategoryId);
+                return productData;
+            };
+                }                
+            }
 }
