@@ -101,8 +101,8 @@ namespace PartsUnlimited
             {
                 return src;
             }
-
-            return string.Format("{0}/{1}", Configuration.Images, src);
+            var newUri = new UriBuilder(src) { Host = Configuration.Images };
+            return newUri.Uri.ToString();
         }
     }
 }

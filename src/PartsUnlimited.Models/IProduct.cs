@@ -12,9 +12,10 @@ namespace PartsUnlimited.Models
         string Title { get; }
         decimal Price { get; }
         decimal SalePrice { get; }
-        string ProductArtUrl { get; }
+        string ProductArtUrl { get; set; }
         Category Category { get; set; }
         string Description { get; }
         string ProductDetails { get; }
+        string id { get; set; }
     }
 }

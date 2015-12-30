@@ -8,11 +8,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DataType = System.ComponentModel.DataAnnotations.DataType;
 
 namespace PartsUnlimited.Models
 {
     public class Product : IProduct
     {
+        [NotMapped]
+        public string id { get; set; }
+
         [Required]
         [Display(Name = "Sku Number")]
         public string SkuNumber { get; set; }

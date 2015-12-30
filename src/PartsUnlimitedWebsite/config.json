@@ -4,7 +4,7 @@
     "Password": "YouShouldChangeThisPassword1!"
   },
   "CDN": {
-    "images": "/images",
+    "images": "partsunlimited.azureedge.net",
     "Scripts": {
       "bootstrap": "/lib/bootstrap/js/bootstrap.js",
       "jquery": "/lib/jquery/jquery.js",

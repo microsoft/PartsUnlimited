@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
+using Microsoft.Azure.Documents.Linq;
 using PartsUnlimited.Models;
 using PartsUnlimited.Search;
 using PartsUnlimited.WebsiteConfiguration;
@@ -68,8 +70,8 @@ namespace PartsUnlimited.Repository
                 newProductId = nextId;
             }
             product.ProductId = newProductId;
+            product.id = newProductId.ToString();
             await _client.CreateDocumentAsync(collection, product);
-
             return product.ProductId;
         }
 
@@ -106,6 +108,8 @@ namespace PartsUnlimited.Repository
             var productsInCategory = await _client.CreateDocumentQuery<Product>(collection)
                 .Where(p => p.CategoryId == categoryId)
                 .ToAsyncEnumerable().ToList();
+
+            productsInCategory.ForEach(async p => await LoadProductImageUrl(p));
 
             return productsInCategory;
         }
@@ -164,7 +168,14 @@ namespace PartsUnlimited.Repository
                 .Where(p => p.ProductId == id)
                 .ToAsyncEnumerable().ToList();
 
-            return products.Any() ? products.First() : null;
+            products.ForEach(async p => await LoadProductImageUrl(p));
+
+            if (!products.Any())
+                return null;
+
+            await LoadProductImageUrl(products.First());
+
+            return products.First();
         }
 
         private IQueryable<IProduct> Sort(IQueryable<Product> products, SortField sortField, SortDirection sortDirection)
@@ -201,6 +212,21 @@ namespace PartsUnlimited.Repository
 
             // Should not reach here, but return products for compiler
             return products;
+        }
+
+        private async Task LoadProductImageUrl(IProduct product)
+        {
+            var attachmentLink = _configuration.BuildAttachmentLink(product.ProductId);
+            try
+            {
+                Attachment attachment = await _client.ReadAttachmentAsync(attachmentLink);
+                product.ProductArtUrl = attachment.MediaLink;
+            }
+            catch (DocumentClientException e)
+            {
+                if ((int)e.StatusCode != 404)
+                    throw;
+            }
         }
     }
 }

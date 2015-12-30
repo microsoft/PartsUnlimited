@@ -33,7 +33,7 @@ namespace PartsUnlimited.WebsiteConfiguration
         public async Task<byte[]> GenerateThumbnail(string imageUrl)
         {
             var vision = new VisionServiceClient(Key);
-            return await vision.GetThumbnailAsync(imageUrl, 50, 50, true);
+            return await vision.GetThumbnailAsync(imageUrl, 295, 295, true);
         }
     }
 }

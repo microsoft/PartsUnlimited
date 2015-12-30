@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "description": "",
   "authors": [ "" ],
@@ -19,6 +19,10 @@
   },
   "frameworks": {
     "dnx451": {
+        "dependencies": {
+            "Microsoft.Azure.DocumentDB": "1.5.2"
+        }
+
     },
     "dnxcore50": {
     }

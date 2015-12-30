@@ -91,12 +91,10 @@ namespace PartsUnlimited.Areas.Admin.Controllers
                 var productImage = Request.Form.Files["productImage"];
                 if (productImage != null)
                 {
-                    var imagePath = await _azureStorage.Upload("product", productImage);
-
+                    var imagePath = await _azureStorage.Upload(productImage);
                     var imageAnalysis = await _visionApi.AnalyseImage(imagePath);
-
                     var thumbnailBytes = await _visionApi.GenerateThumbnail(imagePath);
-                    var thumbnailImagePath = await _azureStorage.UploadAndAttachToProduct(product.ProductId, "product", thumbnailBytes, imageAnalysis);
+                    await _azureStorage.UploadAndAttachToProduct(product.ProductId, thumbnailBytes, imageAnalysis);
                 }
 
                 _annoucementHub.Clients.All.announcement(new ProductData { Title = product.Title, Url = Url.Action("Details", "Store", new { id = product.ProductId }) });

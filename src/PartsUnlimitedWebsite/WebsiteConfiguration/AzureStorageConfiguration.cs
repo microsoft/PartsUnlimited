@@ -25,6 +25,8 @@ namespace PartsUnlimited.WebsiteConfiguration
         private readonly IDocDbConfiguration _docDbConfiguration;
         private readonly DocumentClient _documentDbClient;
 
+        private const string ContainerName = "product";
+
         public AzureStorageConfiguration(IConfiguration config, IDocDbConfiguration configuration)
         {
             ConnectionString = config["ConnectionString"];
@@ -33,61 +35,10 @@ namespace PartsUnlimited.WebsiteConfiguration
             _documentDbClient = configuration.BuildClient();
         }
 
-        public async Task Download(string fileName, string containerName, Stream outStream)
-        {
-            await PerformOperation(fileName, containerName, blob => blob.DownloadRangeToStreamAsync(outStream, null, null));
-        }
-
-        public async Task<byte[]> Download(string fileName, string containerName)
-        {
-            byte[] bytes = null;
-            await PerformOperation(
-                fileName, containerName, async blob =>
-                {
-                    bytes = new byte[blob.Properties.Length];
-                    await blob.DownloadRangeToByteArrayAsync(bytes, 0, null, null);
-                });
-            return bytes;
-        }
-
-        public async Task Delete(string fileName, string containerName)
-        {
-            await PerformOperation(fileName, containerName, blob => blob.DeleteAsync());
-        }
-
-        private async Task PerformOperation(string fileName, string containerName, Func<CloudBlockBlob, Task> operation)
-        {
-            var account = CloudStorageAccount;
-            var client = account.CreateCloudBlobClient();
-
-            var container = client.GetContainerReference(containerName);
-            if (!(await container.ExistsAsync()))
-                throw new ArgumentException("The specified container name does not exist", containerName);
-
-            var blob = container.GetBlockBlobReference(fileName);
-            if (!(await blob.ExistsAsync()))
-                throw new FileNotFoundException("The specified file does not exist in the container");
-
-            await operation(blob);
-        }
-
-        public async Task<bool> Exists(string fileName, string containerName)
-        {
-            var account = CloudStorageAccount;
-            var client = account.CreateCloudBlobClient();
-
-            var container = client.GetContainerReference(containerName);
-            if (!(await container.ExistsAsync()))
-                return false;
-
-            var blob = container.GetBlockBlobReference(fileName);
-            return await blob.ExistsAsync();
-        }
-
-        public async Task<string> Upload(string containerName, IFormFile file)
+        public async Task<string> Upload(IFormFile file)
         {
             var client = CloudStorageAccount.CreateCloudBlobClient();
-            var container = client.GetContainerReference(containerName);
+            var container = client.GetContainerReference(ContainerName);
 
             var parsedContentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
             var fileName = WebUtility.UrlEncode(parsedContentDisposition.FileName.Replace("\"", ""));
@@ -109,32 +60,31 @@ namespace PartsUnlimited.WebsiteConfiguration
             }
         }
 
-        public async Task<string> UploadAndAttachToProduct(int productId, string containerName, byte[] fileBytes, AnalysisResult imageAnalysis)
+        public async Task<string> UploadAndAttachToProduct(int productId, byte[] fileBytes, AnalysisResult imageAnalysis)
         {
             var client = CloudStorageAccount.CreateCloudBlobClient();
-            var container = client.GetContainerReference(containerName);
+            var container = client.GetContainerReference(ContainerName);
 
-            var fileName = $"{new Guid()}.jpg";
+            var fileName = $"{Guid.NewGuid()}.jpg";
 
             var newBlob = container.GetBlockBlobReference(fileName);
             await newBlob.UploadFromByteArrayAsync(fileBytes, 0, fileBytes.Length);
 
             var imageUrl = newBlob.Uri.ToString();
 
-            await AttachToDocumentDb(productId, fileName, imageUrl, imageAnalysis);
+            await AttachToDocumentDb(productId, imageUrl, imageAnalysis);
 
             return imageUrl;
-
         }
 
-        private async Task AttachToDocumentDb(int productId, string imageId, string imageUrl, AnalysisResult imageAnalysis)
+        private async Task AttachToDocumentDb(int productId, string imageUrl, AnalysisResult imageAnalysis)
         {
             var productLink = _docDbConfiguration.BuildProductLink(productId);
 
             var productArtCategories = imageAnalysis.Categories.Select(c => c.Name).ToArray();
             var productArtColors = imageAnalysis.Color.DominantColors;
 
-            await _documentDbClient.CreateAttachmentAsync(productLink, new { id = imageId, contentType = "image/jpeg", media = imageUrl, categories = productArtCategories, colors = productArtColors });
+            await _documentDbClient.CreateAttachmentAsync(productLink, new { id = productId.ToString(), contentType = "image/jpeg", media = imageUrl, categories = productArtCategories, colors = productArtColors });
         }
     }
 }

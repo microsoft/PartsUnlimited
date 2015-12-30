@@ -10,15 +10,7 @@ namespace PartsUnlimited.WebsiteConfiguration
 {
     public interface IAzureStorageConfiguration
     {
-        Task Download(string fileName, string containerName, Stream outStream);
-
-        Task<byte[]> Download(string fileName, string containerName);
-
-        Task Delete(string fileName, string containerName);
-
-        Task<bool> Exists(string fileName, string containerName);
-
-        Task<string> Upload(string containerName, IFormFile file);
-        Task<string> UploadAndAttachToProduct(int productId, string containerName, byte[] fileBytes, AnalysisResult imageAnalysis);
+        Task<string> Upload(IFormFile file);
+        Task<string> UploadAndAttachToProduct(int productId, byte[] fileBytes, AnalysisResult imageAnalysis);
     }
 }

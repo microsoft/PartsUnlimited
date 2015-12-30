@@ -9,6 +9,7 @@ namespace PartsUnlimited.WebsiteConfiguration
         Uri BuildProductCollectionLink();
         Uri BuildDatabaseLink();
         Uri BuildProductLink(int productId);
+        Uri BuildAttachmentLink(int productId);
         string DatabaseId { get; }
         string CollectionId { get; }
     }
