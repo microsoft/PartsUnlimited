@@ -6,8 +6,9 @@ The following instruction is for Windows. For Linux or Mac OS X, please see
 ## Set up your machine ##
 1. Install [Visual Studio 2015 RC](http://go.microsoft.com/fwlink/?LinkId=517106)
 2. Install [Microsoft Web Platform Installer](http://www.microsoft.com/web/downloads/platform.aspx)
-3. When Web Platform Installer opens, click the Add button for `Microsoft Azure SDK for .NET (VS 2015) - 2.6`
-4. Click the Install button and follow the prompts to complete the installation
+3. When Web Platform Installer opens, click the Add button for `Microsoft Azure SDK for .NET (VS 2015) - 2.7.1`
+4. When Web Platform Installer opens, click the Add button for `Microsoft Azure PowerShell`
+5. Click the Install button and follow the prompts to complete the installation
 
 ## Get the source code ##
 1. Open Visual Studio 2015

@@ -37,6 +37,6 @@ namespace PartsUnlimited.Components
         {
             return await _productRepository.GetLatestProduct();
             
+            }
+            }
         }
-    }
-}

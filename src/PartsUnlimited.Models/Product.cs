@@ -24,6 +24,7 @@ namespace PartsUnlimited.Models
         [ScaffoldColumn(false)]
         public int ProductId { get; set; }
 
+        [NotMapped]
         [JsonProperty(PropertyName = "id")]
         public string Id => ProductId.ToString();
 
@@ -49,7 +50,7 @@ namespace PartsUnlimited.Models
         [Display(Name = "Product Art URL")]
         [StringLength(1024)]
         public string ProductArtUrl { get; set; }
-        
+
         public virtual Category Category { get; set; }
 
         public virtual List<OrderDetail> OrderDetails { get; set; }

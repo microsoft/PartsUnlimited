@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace Microsoft.Framework.Configuration
+namespace Microsoft.Extensions.Configuration
 {
     public static class ConfigurationExtensions
     {
@@ -39,18 +39,6 @@ namespace Microsoft.Framework.Configuration
                 .Zip(splitValues, Tuple.Create)
                 .SelectMany(o => o.Item2.Select(item2 => Tuple.Create(o.Item1, item2)))
                 .ToLookup(o => o.Item1, o => o.Item2);
-        }
-
-        public static T Get<T>(this IConfiguration configuration, string key, T defaultValue)
-        {
-            try
-            {
-                return (T)Convert.ChangeType(configuration[key], typeof(T));
-            }
-            catch (Exception)
-            {
-                return defaultValue;
-            }
         }
     }
 }

@@ -11,8 +11,8 @@ namespace PartsUnlimited.Models
     {
         public IEnumerable<Promo> GetPromo()
         {
-            yield return new Promo {Name = "FREE"};
-            yield return new Promo {Name = "Promo100"};
+            yield return new Promo { Name = "FREE" };
+            yield return new Promo { Name = "Promo100" };
         }
 
         /// <summary>

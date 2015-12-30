@@ -1,4 +1,4 @@
-﻿using Microsoft.Framework.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using PartsUnlimited.Cache;
 using StackExchange.Redis;
 

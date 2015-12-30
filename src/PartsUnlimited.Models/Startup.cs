@@ -2,10 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.AspNet.Builder;
+using Microsoft.AspNet.Hosting;
 using Microsoft.Data.Entity;
-using Microsoft.Framework.Configuration;
-using Microsoft.Framework.DependencyInjection;
-using Microsoft.Dnx.Runtime;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using System;
 
 namespace PartsUnlimited.Models
@@ -14,15 +15,24 @@ namespace PartsUnlimited.Models
     {
         public IConfiguration Configuration { get; private set; }
 
-        public Startup(IApplicationEnvironment env)
+        public Startup(IHostingEnvironment env)
         {
             //Below code demonstrates usage of multiple configuration sources. For instance a setting say 'setting1' is found in both the registered sources, 
             //then the later source will win. By this way a Local config can be overridden by a different setting while deployed remotely.
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ApplicationBasePath)
+              var builder = new ConfigurationBuilder()
                 .AddJsonFile("config.json")
-                .AddEnvironmentVariables(); //All environment variables in the process's context flow in as configuration values.
+                .AddJsonFile($"config.{env.EnvironmentName}.json", optional: true);
 
+            if (env.IsDevelopment())
+            {
+                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
+                builder.AddUserSecrets();
+
+                // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
+                builder.AddApplicationInsightsSettings(developerMode: true);
+            }
+
+            builder.AddEnvironmentVariables();
             Configuration = builder.Build();
         }
 

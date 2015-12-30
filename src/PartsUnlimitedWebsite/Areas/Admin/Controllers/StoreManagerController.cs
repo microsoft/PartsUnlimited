@@ -47,7 +47,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         {
             IEnumerable<IProduct> products = await _productRepository.LoadAllProducts(sortField, sortDirection);
             return View(products);
-        }
+                               }
 
         //
         // GET: /StoreManager/Details/5
@@ -57,15 +57,15 @@ namespace PartsUnlimited.Areas.Admin.Controllers
             string cacheId = CacheConstants.Key.ProductKey(id);
             var options = new PartsUnlimitedCacheOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10));
             IProduct product = await _cacheCoordinator.GetAsync(cacheId, LoadProductWithId(id), new CacheCoordinatorOptions().WithCacheOptions(options).WhichRemovesIfNull());
-            
+
             if (product != null && product.Category == null)
             {
                 int categoryId = product.CategoryId;
                 product.Category  = await _categoryLoader.Load(categoryId);
+                }
+
+                return View(product);
             }
-            
-            return View(product);
-        }
 
         private Func<Task<IProduct>> LoadProductWithId(int id)
         {
@@ -116,8 +116,8 @@ namespace PartsUnlimited.Areas.Admin.Controllers
             IProduct product = await _productRepository.Load(id);
             var categories = await _categoryLoader.LoadAll();
             ViewBag.Categories = new SelectList(categories, "CategoryId", "Name", product.CategoryId).ToList();
-            return View(product);
-        }
+                return View(product);
+            }
 
         //
         // POST: /StoreManager/Edit/5

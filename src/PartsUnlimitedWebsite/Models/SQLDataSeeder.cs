@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.Data.Entity;
 using Microsoft.Dnx.Runtime;
-using Microsoft.Framework.Configuration;
-using Microsoft.Framework.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.PlatformAbstractions;
 using PartsUnlimited.Areas.Admin;
 
 namespace PartsUnlimited.Models
@@ -103,10 +104,9 @@ namespace PartsUnlimited.Models
 
         private async Task<IEnumerable<IProduct>> InsertProductData(SampleData data, IEnumerable<Category> categories)
         {
-            var seededProducts = data.GetProducts(categories).ToList();
-            var typedProducts = seededProducts.OfType<Product>();
-            await AddOrUpdateAsync(a => a.Title, typedProducts);
-            return typedProducts;
+            var products = data.GetProducts(categories).ToList().OfType<Product>();
+            await AddOrUpdateAsync(a => a.Title, products);
+            return products;
         }
 
         private async Task InsertReferenceData(SampleData data)

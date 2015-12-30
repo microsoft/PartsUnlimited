@@ -36,7 +36,6 @@ namespace PartsUnlimited.Repository
                 GetCategories(), new CacheCoordinatorOptions().WithCacheOptions(options));
         }
 
-
         private Func<Task<List<Category>>> GetCategories()
         {
             return async () => await _context.Categories.ToListAsync();

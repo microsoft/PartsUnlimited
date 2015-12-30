@@ -22,6 +22,6 @@ namespace PartsUnlimited.Components
         {
             IEnumerable<Category> categories = await _categoryLoader.LoadAll();
             return View(categories);
+                }
+            }
         }
-    }
-}

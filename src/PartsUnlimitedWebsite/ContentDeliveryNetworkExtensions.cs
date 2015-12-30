@@ -3,7 +3,7 @@
 
 using Microsoft.AspNet.Html.Abstractions;
 using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.Framework.WebEncoders;
+using Microsoft.Extensions.WebEncoders;
 using PartsUnlimited.WebsiteConfiguration;
 using System;
 using System.IO;

@@ -1,6 +1,6 @@
 using System;
 using Microsoft.Azure.Documents.Client;
-using Microsoft.Framework.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace PartsUnlimited.WebsiteConfiguration
 {

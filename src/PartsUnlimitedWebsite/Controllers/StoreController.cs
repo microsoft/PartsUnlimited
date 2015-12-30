@@ -57,13 +57,13 @@ namespace PartsUnlimited.Controllers
         }
 
         private Func<Task<IProduct>> LoadProductWithId(int id)
-        {
-            return async () =>
             {
+            return async () =>
+                {
                 IProduct productData = await _productRepository.Load(id);
                 productData.Category = await _categoryLoader.Load(productData.CategoryId);
                 return productData;
             };
-        }
-    }
+                }                
+            }
 }
