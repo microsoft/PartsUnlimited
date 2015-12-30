@@ -4,7 +4,7 @@
     "Password": "YouShouldChangeThisPassword1!"
   },
   "CDN": {
-    "images": "/images",
+    "images": "partsunlimited.azureedge.net",
     "Scripts": {
       "bootstrap": "/lib/bootstrap/js/bootstrap.js",
       "jquery": "/lib/jquery/jquery.js",
@@ -39,14 +39,22 @@
       "InstrumentationKey": "efc04167-3227-40ff-aa88-46a271dba379"
     },
     "RedisCache": {
-      "HostName": "",
-      "AccessKey": "",
-      "KeepAliveTimeSeconds": 5,
-      "SSLEnabled": true,
-      "Port": 6380,
-      "SyncTimeoutMilliseconds": 2000,
-      "ConnectRetry": 1,
-      "ConnectTimeoutMilliseconds": 3000
+        "HostName": "",
+        "AccessKey": "",
+        "KeepAliveTimeSeconds": 5,
+        "SSLEnabled": true,
+        "Port": 6380,
+        "SyncTimeoutMilliseconds": 2000,
+        "ConnectRetry": 1,
+        "ConnectTimeoutMilliseconds": 3000
+    },
+    "AzureStorage": {
+        "Key": "1zcJ6XBrYbLOip3ImBWFFzqvhpfVHpvMb4W6SRgI6GMafamwHk76lypN7Va05kpTlJlwaF1Yvf9Yv5/mz1CWsw==",
+        "ConnectionString": "DefaultEndpointsProtocol=https;AccountName=sbpartsunlimited;AccountKey=1zcJ6XBrYbLOip3ImBWFFzqvhpfVHpvMb4W6SRgI6GMafamwHk76lypN7Va05kpTlJlwaF1Yvf9Yv5/mz1CWsw=="
+    },
+    "VisionApi": {
+        "Key": "8a8e1e5aab5143858fc8d3cfad8dac67",
+        "Uri": "https://api.projectoxford.ai/vision/v1/analyses"
     },
     "DocDb": {
       "URI": "",

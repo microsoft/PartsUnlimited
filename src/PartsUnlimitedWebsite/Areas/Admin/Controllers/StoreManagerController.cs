@@ -14,6 +14,7 @@ using PartsUnlimited.Hubs;
 using PartsUnlimited.Models;
 using PartsUnlimited.Repository;
 using PartsUnlimited.ViewModels;
+using PartsUnlimited.WebsiteConfiguration;
 
 namespace PartsUnlimited.Areas.Admin.Controllers
 {
@@ -24,14 +25,18 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         private readonly ICacheCoordinator _cacheCoordinator;
         private readonly IProductRepository _productRepository;
         private readonly ICategoryLoader _categoryLoader;
+        private IAzureStorageConfiguration _azureStorage;
+        private IVisionApiConfiguration _visionApi;
 
         public StoreManagerController(IPartsUnlimitedContext context, IConnectionManager connectionManager, 
-            ICacheCoordinator cacheCoordinator, IProductRepository productRepository, ICategoryLoader categoryLoader)
+            ICacheCoordinator cacheCoordinator, IProductRepository productRepository, IAzureStorageConfiguration azureStorage, IVisionApiConfiguration visionApi, ICategoryLoader categoryLoader)
         {
             _db = context;
             _annoucementHub = connectionManager.GetHubContext<AnnouncementHub>();
             _cacheCoordinator = cacheCoordinator;
             _productRepository = productRepository;
+            _azureStorage = azureStorage;
+            _visionApi = visionApi;
             _categoryLoader = categoryLoader;
         }
 
@@ -84,6 +89,16 @@ namespace PartsUnlimited.Areas.Admin.Controllers
             if (TryValidateModel(product) && ModelState.IsValid)
             {
                 await _productRepository.Add(product, HttpContext.RequestAborted);
+
+                var productImage = Request.Form.Files["productImage"];
+                if (productImage != null)
+                {
+                    var imagePath = await _azureStorage.Upload(productImage);
+                    var imageAnalysis = await _visionApi.AnalyseImage(imagePath);
+                    var thumbnailBytes = await _visionApi.GenerateThumbnail(imagePath);
+                    await _azureStorage.UploadAndAttachToProduct(product.ProductId, thumbnailBytes, imageAnalysis);
+                }
+
                 _annoucementHub.Clients.All.announcement(new ProductData { Title = product.Title, Url = Url.Action("Details", "Store", new { id = product.ProductId }) });
                 await _cacheCoordinator.Remove(CacheConstants.Key.AnnouncementProduct);
                 return RedirectToAction("Index");

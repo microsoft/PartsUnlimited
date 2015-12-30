@@ -8,7 +8,8 @@ namespace PartsUnlimited.WebsiteConfiguration
         DocumentClient BuildClient();
         Uri BuildProductCollectionLink();
         Uri BuildDatabaseLink();
-        Uri BuildProductLink(string documentId);
+        Uri BuildProductLink(int documentId);
+        Uri BuildAttachmentLink(int documentId);
         string DatabaseId { get; }
         string CollectionId { get; }
     }

@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
+using Microsoft.Azure.Documents.Linq;
 using PartsUnlimited.Models;
 using PartsUnlimited.Search;
 using PartsUnlimited.WebsiteConfiguration;
@@ -52,9 +54,9 @@ namespace PartsUnlimited.Repository
 
         public async Task Add(IProduct product, CancellationToken requestAborted)
         {
-            //TODO Use built in Id's for looking up products.
+            //TODO - wrap CancellationToken around request
             var collection = _configuration.BuildProductCollectionLink();
-            var nextIds = await _client.CreateDocumentQuery<int>(collection, 
+            var nextIds = await _client.CreateDocumentQuery<int>(collection,
                 "SELECT TOP 1 VALUE p.ProductId " +
                 "FROM p " +
                 "ORDER BY p.ProductId DESC")
@@ -67,6 +69,7 @@ namespace PartsUnlimited.Repository
                 newProductId = nextId;
             }
             product.ProductId = newProductId;
+            product.id = newProductId.ToString();
             await _client.CreateDocumentAsync(collection, product);
         }
 
@@ -93,7 +96,7 @@ namespace PartsUnlimited.Repository
         public async Task Delete(IProduct product, CancellationToken requestAborted)
         {
             //TODO - wrap CancellationToken around request
-            var productLink = _configuration.BuildProductLink(product.Id);
+            var productLink = _configuration.BuildProductLink(product.ProductId);
             await _client.DeleteDocumentAsync(productLink);            
         }
 
@@ -103,6 +106,8 @@ namespace PartsUnlimited.Repository
             var productsInCategory = await _client.CreateDocumentQuery<Product>(collection)
                 .Where(p => p.CategoryId == categoryId)
                 .ToAsyncEnumerable().ToList();
+
+            productsInCategory.ForEach(async p => await LoadProductImageUrl(p));
 
             return productsInCategory;
         }
@@ -162,7 +167,63 @@ namespace PartsUnlimited.Repository
                 .Where(p => p.ProductId == id)
                 .ToAsyncEnumerable().ToList();
 
-            return products.Single();
+            if (!products.Any())
+                return null;
+
+            await LoadProductImageUrl(products.First());
+
+            return products.First();
+        }
+
+        private IQueryable<IProduct> Sort(IQueryable<Product> products, SortField sortField, SortDirection sortDirection)
+        {
+            if (sortField == SortField.Name)
+            {
+                if (sortDirection == SortDirection.Up)
+                {
+                    return products.OrderBy(o => o.Category.Name);
+                }
+
+                return products.OrderByDescending(o => o.Category.Name);
+            }
+
+            if (sortField == SortField.Price)
+            {
+                if (sortDirection == SortDirection.Up)
+                {
+                    return products.OrderBy(o => o.Price);
+                }
+
+                return products.OrderByDescending(o => o.Price);
+            }
+
+            if (sortField == SortField.Title)
+            {
+                if (sortDirection == SortDirection.Up)
+                {
+                    return products.OrderBy(o => o.Title);
+                }
+
+                return products.OrderByDescending(o => o.Title);
+            }
+
+            // Should not reach here, but return products for compiler
+            return products;
+        }
+
+        private async Task LoadProductImageUrl(IProduct product)
+        {
+            var attachmentLink = _configuration.BuildAttachmentLink(product.ProductId);
+            try
+            {
+                Attachment attachment = await _client.ReadAttachmentAsync(attachmentLink);
+                product.ProductArtUrl = attachment.MediaLink;
+            }
+            catch (DocumentClientException e)
+            {
+                if ((int)e.StatusCode != 404)
+                    throw;
+            }
         }
     }
 }

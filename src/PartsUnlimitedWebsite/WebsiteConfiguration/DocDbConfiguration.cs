@@ -38,9 +38,14 @@ namespace PartsUnlimited.WebsiteConfiguration
             return UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId);
         }
 
-        public Uri BuildProductLink(string productId)
+        public Uri BuildProductLink(int productId)
         {
-            return UriFactory.CreateDocumentUri(DatabaseId, CollectionId, productId);
+            return UriFactory.CreateDocumentUri(DatabaseId, CollectionId, productId.ToString());
+        }
+
+        public Uri BuildAttachmentLink(int productId)
+        {
+            return UriFactory.CreateAttachmentUri(DatabaseId, CollectionId, productId.ToString(), productId.ToString());
         }
 
         public Uri BuildDatabaseLink()
