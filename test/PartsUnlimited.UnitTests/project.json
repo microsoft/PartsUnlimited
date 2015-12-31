@@ -1,22 +1,16 @@
 ﻿{
     "version": "1.0.0-*",
   "dependencies": {
-    "xunit": "2.1.0-beta1-*",
-    "xunit.runner.aspnet": "2.0.0-aspnet-beta8",
+    "xunit": "2.1.0-*",
+    "xunit.runner.dnx": "2.1.0-*",
     "NSubstitute": "1.8.1",
     "PartsUnlimitedWebsite": ""
   },
     "commands": {
-        "test": "xunit.runner.aspnet"
+        "test": "xunit.runner.dnx"
     },
   "frameworks": {
-    "dnx451": {
-      "frameworkAssemblies": {
-        "System.Xml": "4.0.0.0"
-      },
-      "dependencies": {
-      }
-    }
+    "dnx451": { }
   }
 }
 
