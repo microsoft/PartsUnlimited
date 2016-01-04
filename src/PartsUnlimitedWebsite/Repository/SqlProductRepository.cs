@@ -77,6 +77,11 @@ namespace PartsUnlimited.Repository
             return await Task.WhenAll(productTasks);
         }
 
+        public Task<IEnumerable<IProduct>> LoadRelatedProducts(int productId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<IProduct>> LoadTopSellingProducts(int count)
         {
             // TODO [EF] We don't query related data as yet, so the OrderByDescending isn't doing anything

@@ -18,6 +18,7 @@ namespace PartsUnlimited.Repository
         Task Delete(IProduct product, CancellationToken requestAborted);
         Task<IEnumerable<IProduct>> LoadProductsForCategory(int categoryId);
         Task<IEnumerable<IProduct>> LoadProductsFromRecommendation(IEnumerable<string> recommendedProductIds);
+        Task<IEnumerable<IProduct>> LoadRelatedProducts(int productId);
         Task<IEnumerable<IProduct>> LoadTopSellingProducts(int count);
         Task<IEnumerable<IProduct>> LoadNewProducts(int count);
         Task<IEnumerable<IProduct>> LoadAllProducts(SortField sortField, SortDirection sortDirection);

@@ -69,7 +69,6 @@ namespace PartsUnlimited.Repository
                 newProductId = nextId;
             }
             product.ProductId = newProductId;
-            product.id = newProductId.ToString();
             await _client.CreateDocumentAsync(collection, product);
         }
 
@@ -120,6 +119,31 @@ namespace PartsUnlimited.Repository
                 .ToAsyncEnumerable().ToList();
 
             return products;
+        }
+
+        public async Task<IEnumerable<IProduct>> LoadRelatedProducts(int productId)
+        {
+            var collection = _configuration.BuildProductCollectionLink();
+
+            var product = (Product) await Load(productId);
+
+            var query = new SqlQuerySpec("SELECT * " +
+                                         "FROM p " +
+                                         "WHERE p.ProductDetailList[@key] = @value")
+            {
+                Parameters =
+                    new SqlParameterCollection
+                    {
+                        new SqlParameter("@key", product.ProductDetailList.FirstOrDefault().Key),
+                        new SqlParameter("@value", product.ProductDetailList.FirstOrDefault().Value)
+                    }
+            };
+
+            var relatedProducts = await _client.CreateDocumentQuery<Product>(collection, query)
+                .ToAsyncEnumerable()
+                .ToList();
+
+            return relatedProducts;
         }
 
         public async Task<IEnumerable<IProduct>> LoadTopSellingProducts(int count)

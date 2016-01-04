@@ -71,6 +71,10 @@
     </section>
 
     <section class="section-alt">
+        @await Component.InvokeAsync("RelatedProducts", Model)
+    </section>
+
+    <section class="section-alt">
     @await Component.InvokeAsync("Recommendations", Model)
     </section>
 </div>

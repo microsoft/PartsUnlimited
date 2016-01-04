@@ -37,7 +37,7 @@ namespace PartsUnlimited.Controllers
         // GET: /Store/Browse?category=Brakes
         public async Task<IActionResult> Browse(int categoryId)
         {
-            // Retrieve category and its Associated associated Products products from database
+            // Retrieve category and its Associated Products products from database
             // TODO [EF] Swap to native support for loading related data when available
             var categoryModel = await _categoryLoader.Load(categoryId);
             var products = await _productRepository.LoadProductsForCategory(categoryModel.CategoryId);
@@ -57,13 +57,13 @@ namespace PartsUnlimited.Controllers
         }
 
         private Func<Task<IProduct>> LoadProductWithId(int id)
-            {
+        {
             return async () =>
                 {
                 IProduct productData = await _productRepository.Load(id);
                 productData.Category = await _categoryLoader.Load(productData.CategoryId);
                 return productData;
             };
-                }                
-            }
+        }                
+    }
 }

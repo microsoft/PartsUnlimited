@@ -14,9 +14,6 @@ namespace PartsUnlimited.Models
 {
     public class Product : IProduct
     {
-        [NotMapped]
-        public string id { get; set; }
-
         [Required]
         [Display(Name = "Sku Number")]
         public string SkuNumber { get; set; }
