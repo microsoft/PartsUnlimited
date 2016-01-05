@@ -2,6 +2,7 @@
   "authors": [
     "Microsoft"
   ],
+  "license": "MIT",
   "description": "Parts Unlimited Website",
   "version": "1.0.0-*",
   "compilationOptions": {
