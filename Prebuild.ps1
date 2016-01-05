@@ -17,9 +17,6 @@ else
 # install DNX.  Alias as 'default' for so projects are built with this version later.
 & $env:USERPROFILE\.dnx\bin\dnvm.ps1 install $dnxVersion -Persistent -Alias default
 
-# Add grunt to path.  This is needed for 'dnu restore' to succeed for some of the projects.
-Write-Debug "Add grunt to path for this session."
-$env:path += ";$env:VS140COMNTOOLS\..\IDE\Extensions\Microsoft\Web Tools\External"
 #Setting npm loglevel to 'error' to avoid build failures due to package warnings.
 $env:npm_config_loglevel="error"
 
