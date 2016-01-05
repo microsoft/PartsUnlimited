@@ -13,6 +13,10 @@ if (!$env:Path.Contains($pathToWebTools)){
 }
 Write-Debug "Current Path: $env:Path"
 
+#Setting npm loglevel to 'error' to avoid build failures due to package warnings.
+Write-Verbose "Setting npm log level to 'error'"
+$env:npm_config_loglevel="error"
+
 #Call dnu
 Write-Verbose "Executing: dnu $args"
 & dnu $arg1 $arg2 $arg3 $arg4 $arg5 $arg6 $arg7 $arg8 $arg9 $arg10 $arg11 $arg12 $arg13 $arg14 $arg15 
