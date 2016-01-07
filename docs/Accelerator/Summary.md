@@ -12,7 +12,7 @@ The required Azure dependencies will also need to be created and configured, ins
 To get started using the Redis Cache hosted within Azure you will need to setup a cache using the Azure portal.
 Instructions to carry this out can be found [here](https://azure.microsoft.com/en-us/documentation/articles/cache-dotnet-how-to-use-azure-redis-cache/). 
 
-Once you have a Redis cache configured you will need to edit the [`config.json`](..\..\src\PartsUnlimitedWebsite\config.json) file by filling in the `HostName` and `AccessKey` details, these can be found within Azure. If these details are not filled in PartsUnlimited will fall back to using an implementation of an in memory cache.
+Once you have a Redis cache configured you will need to edit the [`config.json`](../../src/PartsUnlimitedWebsite/config.json) file by filling in the `HostName` and `AccessKey` details, these can be found within Azure. If these details are not filled in PartsUnlimited will fall back to using an implementation of an in memory cache.
 	
 	"RedisCache": {
 		"HostName": "<tennantname>.redis.cache.windows.net",
@@ -24,7 +24,7 @@ Once you have a Redis cache configured you will need to edit the [`config.json`]
 To get started using the Azure DocumentDB first you will need to setup a database account using the Azure portal.
 Instructions to carry this out can be found [here](https://azure.microsoft.com/en-us/documentation/articles/documentdb-create-account/). 
 
-Once you have a Database account you will need to edit the [`config.json`](..\..\src\PartsUnlimitedWebsite\config.json) file by filling in the `URI` and `Key` details, these can be found within Azure. If these details are not filled in PartsUnlimited will fall back to using an implementation of a SQL Database.
+Once you have a Database account you will need to edit the [`config.json`](../../src/PartsUnlimitedWebsite/config.json) file by filling in the `URI` and `Key` details, these can be found within Azure. If these details are not filled in PartsUnlimited will fall back to using an implementation of a SQL Database.
 
 	"DocDb": {
     	"URI": "https://<tennantname>.documents.azure.com:443/",
@@ -44,7 +44,7 @@ In order to make use of Microsoft's Computer Vision APIs, we wil need to subscri
 
 Doing so will give us access to a free offer that currently provides all Vision API operations that include analysing an image and generating thumbnails. The free plan limits calling to the Vision APIs limits to 20 transactions per minute and 5000 transactions per month. Once this has been done, we will be provided with a unique access key required as part of every call the the API.
 
-Once you have a VisionAPI account you will need to edit the [`config.json`](..\..\src\PartsUnlimitedWebsite\config.json) file by filling in the `URI` and `Key` details.
+Once you have a VisionAPI account you will need to edit the [`config.json`](../../src/PartsUnlimitedWebsite/config.json) file by filling in the `URI` and `Key` details.
 
 	"VisionApi": {
         "Key": "<key>",
