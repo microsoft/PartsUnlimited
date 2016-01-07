@@ -2,11 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.AspNet.Mvc;
-using Microsoft.Data.Entity;
-using PartsUnlimited.Models;
-using PartsUnlimited.Recommendations;
-using PartsUnlimited.WebsiteConfiguration;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using PartsUnlimited.Repository;
@@ -17,8 +12,7 @@ namespace PartsUnlimited.Controllers
     {
         private readonly IProductRepository _productRepository;
 
-        public RelatedProductsController(IPartsUnlimitedContext context, 
-            IProductRepository productRepository)
+        public RelatedProductsController(IProductRepository productRepository)
         {
             _productRepository = productRepository;
         }

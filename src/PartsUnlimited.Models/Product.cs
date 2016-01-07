@@ -68,13 +68,13 @@ namespace PartsUnlimited.Models
 
         public int LeadTime { get; set; }
 
-        public Dictionary<string, string> ProductDetailList
+        public Dictionary<string, dynamic> ProductDetailList
         {
             get
             {
                 if (string.IsNullOrWhiteSpace(ProductDetails))
                 {
-                    return new Dictionary<string, string>();
+                    return new Dictionary<string, dynamic>();
                 }
                 try
                 {
@@ -84,7 +84,7 @@ namespace PartsUnlimited.Models
                 {
                     throw new FormatException("Product Details only accepts json format.");
                 }
-                return JsonConvert.DeserializeObject<Dictionary<string, string>>(ProductDetails);
+                return JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(ProductDetails);
             }
         }
 

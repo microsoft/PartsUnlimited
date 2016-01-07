@@ -125,6 +125,7 @@ namespace PartsUnlimited.Models
         public IEnumerable<IProduct> GetProducts(IEnumerable<Category> categories)
         {
             var categoriesMap = categories.ToDictionary(c => c.Name, c => c);
+
             yield return new Product
             {
                 SkuNumber = "LIG-0001",
@@ -134,7 +135,7 @@ namespace PartsUnlimited.Models
                 Price = 38.99M,
                 SalePrice = 38.99M,
                 ProductArtUrl = "product_lighting_headlight.jpg",
-                ProductDetails = "{ \"Light Source\" : \"Halogen\", \"Assembly Required\": \"Yes\", \"Color\" : \"Clear\", \"Interior\" : \"Chrome\", \"Beam\": \"low and high\", \"Wiring harness included\" : \"Yes\", \"Bulbs Included\" : \"No\",  \"Includes Parking Signal\" : \"Yes\"}",
+                ProductDetails = "{ \"Light Source\" : \"Halogen\", \"Assembly Required\": \"Yes\", \"Color\" : \"Clear\", \"Interior\" : \"Chrome\", \"Beam\": \"low and high\", \"Wiring harness included\" : \"Yes\", \"Bulbs Included\" : \"No\",  \"Includes Parking Signal\" : \"Yes\", \"Brightness\":{ \"Lumens\" : 1270, \"Watts\" : \"90W\"  } }",
                 Description = "Our Halogen Headlights are made to fit majority of vehicles with our  universal fitting mold. Product requires some assembly.",
                 Inventory = 10,
                 LeadTime = 0,
@@ -150,7 +151,7 @@ namespace PartsUnlimited.Models
                 Price = 48.99M,
                 SalePrice = 48.99M,
                 ProductArtUrl = "product_lighting_bugeye-headlight.jpg",
-                ProductDetails = "{ \"Light Source\" : \"Halogen\", \"Assembly Required\": \"Yes\", \"Color\" : \"Clear\", \"Interior\" : \"Chrome\", \"Beam\": \"low and high\", \"Wiring harness included\" : \"No\", \"Bulbs Included\" : \"Yes\",  \"Includes Parking Signal\" : \"Yes\"}",
+                ProductDetails = "{ \"Light Source\" : \"Halogen\", \"Assembly Required\": \"Yes\", \"Color\" : \"Clear\", \"Interior\" : \"Chrome\", \"Beam\": \"low and high\", \"Wiring harness included\" : \"No\", \"Bulbs Included\" : \"Yes\",  \"Includes Parking Signal\" : \"Yes\", \"Brightness\":{ \"Lumens\" : 1200, \"Watts\" : \"80W\"  } }",
                 Description = "Our Bugeye Headlights use Halogen light bulbs are made to fit into a standard bugeye slot. Product requires some assembly and includes light bulbs.",
                 Inventory = 7,
                 LeadTime = 0,
@@ -166,7 +167,7 @@ namespace PartsUnlimited.Models
                 Price = 6.49M,
                 SalePrice = 6.49M,
                 ProductArtUrl = "product_lighting_lightbulb.jpg",
-                ProductDetails = "{ \"Color\" : \"Clear\", \"Fit\" : \"Universal\", \"Wattage\" : \"30 Watts\", \"Includes Socket\" : \"Yes\"}",
+                ProductDetails = "{ \"Color\" : \"Clear\", \"Fit\" : \"Universal\", \"Includes Socket\" : \"Yes\", \"Brightness\":{ \"Lumens\" : 550, \"Watts\" : \"30W\"  }}",
                 Description = " Clear bulb that with a universal fitting for all headlights/taillights.  Simple Installation, low wattage and a clear light for optimal visibility and efficiency.",
                 Inventory = 18,
                 LeadTime = 0,

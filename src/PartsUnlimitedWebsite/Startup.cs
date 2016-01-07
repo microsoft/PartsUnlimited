@@ -194,6 +194,10 @@ namespace PartsUnlimited
             }
             else
             {
+                services.AddScoped<IRelatedProductsQueryStrategy, WheelsAndTiresTiresRelatedProductQueryStrategy>();
+                services.AddScoped<IRelatedProductsQueryStrategy, LightingRelatedProductQueryStrategy>();
+                services.AddScoped<IRelatedProductsQueryStrategy, DefaultRelatedProductQueryStrategy>();
+                services.AddScoped<RelatedProductsQueryBuilder>();
                 services.AddScoped<SQLDataSeeder>();
                 services.AddInstance<IDocDbConfiguration>(docDbConfig);
                 services.AddScoped<DocDbProductRepository>();

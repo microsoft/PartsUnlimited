@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
-using Microsoft.Azure.Documents.Linq;
 using PartsUnlimited.Models;
 using PartsUnlimited.Search;
 using PartsUnlimited.WebsiteConfiguration;
@@ -20,11 +19,14 @@ namespace PartsUnlimited.Repository
         private readonly IDocDbConfiguration _configuration;
         private readonly SqlProductRepository _sqlProductRepository;
         private readonly DocumentClient _client;
+        private readonly RelatedProductsQueryBuilder _queryBuilder;
 
-        public DocDbProductRepository(IDocDbConfiguration configuration, SqlProductRepository sqlProductRepository)
+        public DocDbProductRepository(IDocDbConfiguration configuration, 
+            SqlProductRepository sqlProductRepository, RelatedProductsQueryBuilder queryBuilder)
         {
             _configuration = configuration;
             _sqlProductRepository = sqlProductRepository;
+            _queryBuilder = queryBuilder;
             _client = _configuration.BuildClient();
         }
 
@@ -124,20 +126,8 @@ namespace PartsUnlimited.Repository
         public async Task<IEnumerable<IProduct>> LoadRelatedProducts(int productId)
         {
             var collection = _configuration.BuildProductCollectionLink();
-
-            var product = (Product) await Load(productId);
-
-            var query = new SqlQuerySpec("SELECT * " +
-                                         "FROM p " +
-                                         "WHERE p.ProductDetailList[@key] = @value")
-            {
-                Parameters =
-                    new SqlParameterCollection
-                    {
-                        new SqlParameter("@key", product.ProductDetailList.FirstOrDefault().Key),
-                        new SqlParameter("@value", product.ProductDetailList.FirstOrDefault().Value)
-                    }
-            };
+            var product = (Product)await Load(productId);
+            var query = _queryBuilder.BuildQuery(product);
 
             var relatedProducts = await _client.CreateDocumentQuery<Product>(collection, query)
                 .ToAsyncEnumerable()
