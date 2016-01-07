@@ -57,8 +57,14 @@
         "Uri": "https://api.projectoxford.ai/vision/v1/analyses"
     },
     "DocDb": {
+
       "URI": "",
-      "Key" :  ""
+      "Key": ""
+
+      //"URI": "https://docdbaccelerator.documents.azure.com:443/", // David's URI
+      //"Key": "qnqp2PpP9r993Egjjyma8XybgpqNQQ1d5+mT6QoblsNxNdPBnrB3U3IJ2AWTkDEsUKpF6AIKX2fXKHDBpJ7jSw==" // David's key
+      //"URI": "https://partsunlimited.documents.azure.com:443/",
+      //"Key": "KiS7sd8RWrF4RMeSQsdYBBBDE7LQEws0lWc2boBT2QHJ0bDf3kvRAAdt1TQz6EwcJhyIf0wbHQ/amIa7VcJvxw=="
     }
   }
 }

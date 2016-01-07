@@ -83,10 +83,7 @@ namespace PartsUnlimited
 
             // Add implementations            
             SetupCache(services);
-
-            SetupAzureStorage(services);
             SetupVisionApi(services);
-
             SetupRepository(services);
             services.AddScoped<IOrdersQuery, OrdersQuery>();
             services.AddScoped<IRaincheckQuery, RaincheckQuery>();
@@ -166,13 +163,6 @@ namespace PartsUnlimited
             services.AddSingleton<ICacheCoordinator, CacheCoordinator>();
         }
 
-        private void SetupAzureStorage(IServiceCollection services)
-        {
-            var docDbConfig = new DocDbConfiguration(Configuration.GetSection("Keys:DocDb"));
-            var storageConfig = new AzureStorageConfiguration(Configuration.GetSection("Keys:AzureStorage"), docDbConfig);
-            services.AddInstance<IAzureStorageConfiguration>(storageConfig);
-        }
-
         private void SetupVisionApi(IServiceCollection services)
         {
             var visionApiConfig = new VisionApiConfiguration(Configuration.GetSection("Keys:VisionApi"));
@@ -185,21 +175,36 @@ namespace PartsUnlimited
             services.AddSingleton<SqlProductRepository>();
             services.AddScoped<ICategoryLoader, CategoryLoader>();
 
+
             if (string.IsNullOrEmpty(docDbConfig.URI)
                 || string.IsNullOrEmpty(docDbConfig.Key))
-            {    
+            {
+                services.AddScoped<IAzureStorageConfiguration, EmptyStorageConfiguration>();
+                services.AddScoped<IImageRepository, EmptyImageRepository>();
                 services.AddScoped<IProductRepository, SqlProductRepository>();
                 services.AddScoped<IProductLoader, SqlProductRepository>();
                 services.AddScoped<IDataSeeder, SQLDataSeeder>();
             }
             else
             {
+                var storageConfig = new AzureStorageConfiguration(Configuration.GetSection("Keys:AzureStorage"));
+                if (!string.IsNullOrWhiteSpace(storageConfig.ConnectionString))
+                {
+                    //Currently only supports Azure storage when DocDb and Azurestorage defined.
+                    services.AddInstance<IAzureStorageConfiguration>(storageConfig);
+                }
+                else
+                {
+                    services.AddScoped<IAzureStorageConfiguration, EmptyStorageConfiguration>();
+                }
+
                 services.AddScoped<SQLDataSeeder>();
                 services.AddInstance<IDocDbConfiguration>(docDbConfig);
                 services.AddScoped<DocDbProductRepository>();
                 services.AddScoped<IProductRepository, DocDbProductRepository>();
                 services.AddScoped<IProductLoader, DocDbProductRepository>();
                 services.AddScoped<IDataSeeder, DocDbSeeder>();
+                services.AddScoped<IImageRepository, DocDbImageRepository>();
             }
         }
 
