@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
@@ -25,11 +26,13 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         private readonly ICacheCoordinator _cacheCoordinator;
         private readonly IProductRepository _productRepository;
         private readonly ICategoryLoader _categoryLoader;
-        private IAzureStorageConfiguration _azureStorage;
-        private IVisionApiConfiguration _visionApi;
+        private readonly IImageRepository _imageRepository;
+        private readonly IAzureStorageConfiguration _azureStorage;
+        private readonly IVisionApiConfiguration _visionApi;
 
         public StoreManagerController(IPartsUnlimitedContext context, IConnectionManager connectionManager, 
-            ICacheCoordinator cacheCoordinator, IProductRepository productRepository, IAzureStorageConfiguration azureStorage, IVisionApiConfiguration visionApi, ICategoryLoader categoryLoader)
+            ICacheCoordinator cacheCoordinator, IProductRepository productRepository, IAzureStorageConfiguration azureStorage, 
+            IVisionApiConfiguration visionApi, ICategoryLoader categoryLoader, IImageRepository imageRepository)
         {
             _db = context;
             _annoucementHub = connectionManager.GetHubContext<AnnouncementHub>();
@@ -38,16 +41,18 @@ namespace PartsUnlimited.Areas.Admin.Controllers
             _azureStorage = azureStorage;
             _visionApi = visionApi;
             _categoryLoader = categoryLoader;
+            _imageRepository = imageRepository;
         }
 
         //
         // GET: /StoreManager/
 
-        public async Task<IActionResult> Index(SortField sortField = SortField.Name, SortDirection sortDirection = SortDirection.Up)
+        public async Task<IActionResult> Index(SortField sortField = SortField.Name,
+            SortDirection sortDirection = SortDirection.Up)
         {
             IEnumerable<IProduct> products = await _productRepository.LoadAllProducts(sortField, sortDirection);
             return View(products);
-                               }
+        }
 
         //
         // GET: /StoreManager/Details/5
@@ -56,16 +61,17 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         {
             string cacheId = CacheConstants.Key.ProductKey(id);
             var options = new PartsUnlimitedCacheOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10));
-            IProduct product = await _cacheCoordinator.GetAsync(cacheId, LoadProductWithId(id), new CacheCoordinatorOptions().WithCacheOptions(options).WhichRemovesIfNull());
+            var cacheOptions = new CacheCoordinatorOptions().WithCacheOptions(options).WhichRemovesIfNull();
+            IProduct product = await _cacheCoordinator.GetAsync(cacheId, LoadProductWithId(id),cacheOptions);
 
             if (product != null && product.Category == null)
             {
                 int categoryId = product.CategoryId;
-                product.Category  = await _categoryLoader.Load(categoryId);
-                }
-
-                return View(product);
+                product.Category = await _categoryLoader.Load(categoryId);
             }
+
+            return View(product);
+        }
 
         private Func<Task<IProduct>> LoadProductWithId(int id)
         {
@@ -78,6 +84,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         {
             var categories = await _categoryLoader.LoadAll();
             ViewBag.Categories = new SelectList(categories, "CategoryId", "Name");
+            ViewBag.CanUploadImage = _azureStorage.SupportImageUpload;
             return View();
         }
 
@@ -93,10 +100,15 @@ namespace PartsUnlimited.Areas.Admin.Controllers
                 var productImage = Request.Form.Files["productImage"];
                 if (productImage != null)
                 {
-                    var imagePath = await _azureStorage.Upload(productImage);
-                    var imageAnalysis = await _visionApi.AnalyseImage(imagePath);
-                    var thumbnailBytes = await _visionApi.GenerateThumbnail(imagePath);
-                    await _azureStorage.UploadAndAttachToProduct(product.ProductId, thumbnailBytes, imageAnalysis);
+                    using (Stream image=productImage.OpenReadStream())
+                    {
+                        var imagePath = await _imageRepository.Upload(image, productImage.ContentDisposition, productImage.ContentType);
+                        var imageAnalysis = await _visionApi.AnalyseImage(imagePath);
+                        var thumbnailBytes = await _visionApi.GenerateThumbnail(imagePath);
+                        await _imageRepository.UploadAndAttachToProduct(product.ProductId, 
+                            imageAnalysis.Color.DominantColors, 
+                            imageAnalysis.Categories.Select(s => s.Name), thumbnailBytes);
+                    }
                 }
 
                 _annoucementHub.Clients.All.announcement(new ProductData { Title = product.Title, Url = Url.Action("Details", "Store", new { id = product.ProductId }) });
@@ -116,8 +128,9 @@ namespace PartsUnlimited.Areas.Admin.Controllers
             IProduct product = await _productRepository.Load(id);
             var categories = await _categoryLoader.LoadAll();
             ViewBag.Categories = new SelectList(categories, "CategoryId", "Name", product.CategoryId).ToList();
-                return View(product);
-            }
+            ViewBag.CanUploadImage = _azureStorage.SupportImageUpload;
+            return View(product);
+        }
 
         //
         // POST: /StoreManager/Edit/5

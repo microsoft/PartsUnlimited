@@ -189,42 +189,6 @@ namespace PartsUnlimited.Repository
             return products.First();
         }
 
-        private IQueryable<IProduct> Sort(IQueryable<Product> products, SortField sortField, SortDirection sortDirection)
-        {
-            if (sortField == SortField.Name)
-            {
-                if (sortDirection == SortDirection.Up)
-                {
-                    return products.OrderBy(o => o.Category.Name);
-                }
-
-                return products.OrderByDescending(o => o.Category.Name);
-            }
-
-            if (sortField == SortField.Price)
-            {
-                if (sortDirection == SortDirection.Up)
-                {
-                    return products.OrderBy(o => o.Price);
-                }
-
-                return products.OrderByDescending(o => o.Price);
-            }
-
-            if (sortField == SortField.Title)
-            {
-                if (sortDirection == SortDirection.Up)
-                {
-                    return products.OrderBy(o => o.Title);
-                }
-
-                return products.OrderByDescending(o => o.Title);
-            }
-
-            // Should not reach here, but return products for compiler
-            return products;
-        }
-
         private async Task LoadProductImageUrl(IProduct product)
         {
             var attachmentLink = _configuration.BuildAttachmentLink(product.ProductId);

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.Data.Entity;
 using PartsUnlimited.Models;
 using PartsUnlimited.Search;
+using Category = PartsUnlimited.Models.Category;
 
 namespace PartsUnlimited.Repository
 {
