@@ -77,9 +77,15 @@ namespace PartsUnlimited.Repository
             return await Task.WhenAll(productTasks);
         }
 
-        public Task<IEnumerable<IProduct>> LoadRelatedProducts(int productId)
+        public async Task<IEnumerable<IProduct>> LoadRelatedProducts(int productId)
         {
-            throw new NotImplementedException();
+            var product = await _context.Products
+                .SingleOrDefaultAsync(p => p.ProductId == productId);
+
+            return await _context.Products.Where(a => a.CategoryId == product.CategoryId)
+                .Take(3)
+                .ToAsyncEnumerable()
+                .ToList();
         }
 
         public async Task<IEnumerable<IProduct>> LoadTopSellingProducts(int count)
