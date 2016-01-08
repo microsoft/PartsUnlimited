@@ -8,6 +8,7 @@ namespace PartsUnlimited.WebsiteConfiguration
     public interface IContentDeliveryNetworkConfiguration
     {
         string Images { get; }
+        string ProductImages { get; }
         ILookup<string, string> Scripts { get; }
         ILookup<string, string> Styles { get; }
     }

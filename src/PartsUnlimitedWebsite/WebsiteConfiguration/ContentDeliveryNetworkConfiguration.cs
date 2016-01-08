@@ -11,11 +11,13 @@ namespace PartsUnlimited.WebsiteConfiguration
         public ContentDeliveryNetworkConfiguration(IConfiguration config)
         {
             Images = config["images"];
+            ProductImages = config["ProductImages"];
             Scripts = config.GetSection("Scripts").ToLookup();
             Styles = config.GetSection("Styles").ToLookup();
         }
 
         public string Images { get; }
+        public string ProductImages { get; }
         public ILookup<string, string> Scripts { get; }
         public ILookup<string, string> Styles { get; }
     }

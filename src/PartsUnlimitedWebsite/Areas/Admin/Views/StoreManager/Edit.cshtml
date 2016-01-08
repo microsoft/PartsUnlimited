@@ -14,7 +14,7 @@
                 <div class="col-xs-12 no-gutter-sm">
                     <h4>Product</h4>
                 </div>
-                @using (Html.BeginForm())
+                @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
                     @Html.HiddenFor(model => model.ProductId)
                     @await Html.PartialAsync("_Alter", Model)

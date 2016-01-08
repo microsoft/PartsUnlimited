@@ -142,6 +142,21 @@ namespace PartsUnlimited.Areas.Admin.Controllers
             if (TryValidateModel(product) && ModelState.IsValid)
             {
                 await _productRepository.Save(product, HttpContext.RequestAborted);
+
+                var productImage = Request.Form.Files["productImage"];
+                if (productImage != null)
+                {
+                    using (Stream image = productImage.OpenReadStream())
+                    {
+                        var imagePath = await _imageRepository.Upload(image, productImage.ContentDisposition, productImage.ContentType);
+                        var imageAnalysis = await _visionApi.AnalyseImage(imagePath);
+                        var thumbnailBytes = await _visionApi.GenerateThumbnail(imagePath);
+                        await _imageRepository.UploadAndAttachToProduct(product.ProductId,
+                            imageAnalysis.Color.DominantColors,
+                            imageAnalysis.Categories.Select(s => s.Name), thumbnailBytes);
+                    }
+                }
+
                 //Invalidate the cache entry as it is modified
                 await _cacheCoordinator.Remove(CacheConstants.Key.ProductKey(product.ProductId));
                 return RedirectToAction("Index");

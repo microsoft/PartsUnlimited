@@ -23,7 +23,7 @@ namespace PartsUnlimited.Models
 
         [NotMapped]
         [JsonProperty(PropertyName = "id")]
-        public string Id => ProductId.ToString();
+        public string id => ProductId.ToString();
 
         public int RecommendationId { get; set; }
         
@@ -44,9 +44,11 @@ namespace PartsUnlimited.Models
         [Display(Name = "Sale Price")]
         public decimal SalePrice { get; set; }
 
+        [Required]
         [Display(Name = "Product Art URL")]
         [StringLength(1024)]
         public string ProductArtUrl { get; set; }
+        public bool GetArtFromLocal { get; set; }
 
         public virtual Category Category { get; set; }
 

@@ -64,6 +64,7 @@ namespace PartsUnlimited.Models
 
                 foreach (var prod in products)
                 {
+                    prod.ProductId = await _productRepository.GetNextProductId();
                     await _productRepository.Add(prod, new CancellationToken(false));
                 }
 

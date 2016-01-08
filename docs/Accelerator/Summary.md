@@ -58,7 +58,7 @@ For an overview and guide on getting started see: [here](https://azure.microsoft
 Your unique CDN credentials and URI need to be configured in the "config.json" file found at the root level of the "PartsUnlimited" sample project, under the "CDN" section.
 
 	"CDN": {
-    	"images": "<tennantname>.azureedge.net"
+    	"ProductImages": "<tennantname>.azureedge.net"
 	}
 
 #Scenarios#

@@ -58,11 +58,18 @@ namespace PartsUnlimited.Repository
         {
             //TODO - wrap CancellationToken around request
             var collection = _configuration.BuildProductCollectionLink();
+            product.ProductId = await GetNextProductId();
+            await _client.CreateDocumentAsync(collection, product);
+        }
+
+        public async Task<int> GetNextProductId()
+        {
+            var collection = _configuration.BuildProductCollectionLink();
             var nextIds = await _client.CreateDocumentQuery<int>(collection,
                 "SELECT TOP 1 VALUE p.ProductId " +
                 "FROM p " +
                 "ORDER BY p.ProductId DESC")
-                .ToAsyncEnumerable().ToList(requestAborted);
+                .ToAsyncEnumerable().ToList();
 
             var newProductId = 1;
             if (nextIds.Any())
@@ -70,8 +77,8 @@ namespace PartsUnlimited.Repository
                 int nextId = nextIds.First() + 1;
                 newProductId = nextId;
             }
-            product.ProductId = newProductId;
-            await _client.CreateDocumentAsync(collection, product);
+
+            return newProductId;
         }
 
         public async Task<IProduct> GetLatestProduct()
@@ -201,6 +208,7 @@ namespace PartsUnlimited.Repository
             {
                 if ((int)e.StatusCode != 404)
                     throw;
+                product.GetArtFromLocal = true;
             }
         }
     }
