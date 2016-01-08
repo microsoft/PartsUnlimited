@@ -118,6 +118,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
 
             var categories = await _categoryLoader.LoadAll();
             ViewBag.Categories = new SelectList(categories, "CategoryId", "Name", product.CategoryId);
+            ViewBag.CanUploadImage = _azureStorage.SupportImageUpload;
             return View(product);
         }
 
@@ -164,6 +165,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
 
             IEnumerable<Category> categories = await _categoryLoader.LoadAll();
             ViewBag.Categories = new SelectList(categories, "CategoryId", "Name", product.CategoryId);
+            ViewBag.CanUploadImage = _azureStorage.SupportImageUpload;
             return View(product);
         }
 
