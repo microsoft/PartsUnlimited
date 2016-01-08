@@ -55,7 +55,7 @@ Once you have a VisionAPI account you will need to edit the [`config.json`](../.
 
 For an overview and guide on getting started see: [here](https://azure.microsoft.com/en-us/documentation/articles/cdn-serve-content-from-cdn-in-your-web-application/)
 
-Your unique CDN credentials and URI need to be configured in the [`config.json`](../../src/PartsUnlimitedWebsite/config.json) file by filling in the `CDN image` details.
+Your unique CDN URI needs to be configured in the [`config.json`](../../src/PartsUnlimitedWebsite/config.json) file by replacing the `tennantname` below with your newly created CDN tennant.
 
 	"CDN": {
     	"images": "<tennantname>.azureedge.net"
