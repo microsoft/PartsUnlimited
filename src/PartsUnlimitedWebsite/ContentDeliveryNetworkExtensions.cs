@@ -35,7 +35,7 @@ namespace PartsUnlimited
             return img;
         }
 
-        public static IHtmlContent ProductImage(this IHtmlHelper helper, string src, string alt = null, bool getArtFromLocal = false)
+        public static IHtmlContent ProductImage(this IHtmlHelper helper, string src, string alt = null)
         {
             if (string.IsNullOrWhiteSpace(src))
             {
@@ -44,8 +44,7 @@ namespace PartsUnlimited
 
             var img = new TagBuilder("img");
 
-            img.MergeAttribute("src", getArtFromLocal ? GetCdnSource(src) : GetProductCdnSource(src));
-
+            img.MergeAttribute("src", GetProductCdnSource(src));
 
             if (!string.IsNullOrWhiteSpace(alt))
             {
@@ -129,10 +128,18 @@ namespace PartsUnlimited
         {
             if (Configuration == null || string.IsNullOrWhiteSpace(Configuration.ProductImages))
             {
-                return src;
+                return GetCdnSource(src);
             }
-            var newUri = new UriBuilder(src) { Host = Configuration.ProductImages };
-            return newUri.Uri.ToString();
+
+            var srcUri = new UriBuilder(src);
+            if (srcUri.Uri.AbsolutePath != "/")
+            {
+                var newUri = new UriBuilder(src) { Host = Configuration.ProductImages };
+                return newUri.Uri.ToString();
+            }
+
+            return GetCdnSource(src);
+            
         }
     }
 }

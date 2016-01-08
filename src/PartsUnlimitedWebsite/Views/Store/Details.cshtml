@@ -28,9 +28,8 @@
 
                     @{
                         string imageUrl = @Model.ProductArtUrl;
-                        bool getArtFromLocal = @Model.GetArtFromLocal;
                     }
-                    @Html.ProductImage(imageUrl, null, getArtFromLocal)
+                    @Html.ProductImage(imageUrl)
                 </div>
 
                 </div>

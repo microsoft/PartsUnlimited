@@ -208,7 +208,6 @@ namespace PartsUnlimited.Repository
             {
                 if ((int)e.StatusCode != 404)
                     throw;
-                product.GetArtFromLocal = true;
             }
         }
     }

@@ -48,7 +48,6 @@ namespace PartsUnlimited.Models
         [Display(Name = "Product Art URL")]
         [StringLength(1024)]
         public string ProductArtUrl { get; set; }
-        public bool GetArtFromLocal { get; set; }
 
         public virtual Category Category { get; set; }
 
