@@ -55,7 +55,7 @@ Once you have a VisionAPI account you will need to edit the [`config.json`](../.
 
 For an overview and guide on getting started see: [here](https://azure.microsoft.com/en-us/documentation/articles/cdn-serve-content-from-cdn-in-your-web-application/)
 
-Your unique CDN credentials and URI need to be configured in the "config.json" file found at the root level of the "PartsUnlimited" sample project, under the "CDN" section.
+Your unique CDN URI needs to be configured in the [`config.json`](../../src/PartsUnlimitedWebsite/config.json) file by replacing the `tennantname` below with your newly created CDN tennant.
 
 	"CDN": {
     	"ProductImages": "<tennantname>.azureedge.net"
@@ -71,7 +71,7 @@ The ecommerce website will adopt various new technologies which address these ar
 
 2. [User Generated Content](2. Content.md)
 
-3. [Doc DB](3. DocDB.md)
+3. [DocumentDB; Storage and indexing of Arbitrary Data Structures](3. DocDB.md)
  
 
 
