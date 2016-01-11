@@ -171,7 +171,7 @@ namespace PartsUnlimited
 
         private void SetupRepository(IServiceCollection services)
         {
-            var docDbConfig = new DocDbConfiguration(Configuration.GetSection("Keys:DocDb"));
+            var docDbConfig = new DocDbConfiguration(Configuration.GetSection("Keys:DocumentDB"));
             services.AddSingleton<SqlProductRepository>();
             services.AddScoped<ICategoryLoader, CategoryLoader>();
 

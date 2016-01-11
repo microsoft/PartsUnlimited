@@ -57,7 +57,7 @@
             "Key": "",
             "Uri": "https://api.projectoxford.ai/vision/v1/analyses"
         },
-        "DocDb": {
+        "DocumentDB": {
             "URI": "",
             "Key": ""
         }

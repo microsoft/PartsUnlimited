@@ -20,13 +20,13 @@ Once you have a Redis cache configured you will need to edit the [`config.json`]
 		...
 	}
 
-##DocDB##
+##DocumentDB##
 To get started using the Azure DocumentDB first you will need to setup a database account using the Azure portal.
 Instructions to carry this out can be found [here](https://azure.microsoft.com/en-us/documentation/articles/documentdb-create-account/). 
 
 Once you have a Database account you will need to edit the [`config.json`](../../src/PartsUnlimitedWebsite/config.json) file by filling in the `URI` and `Key` details, these can be found within Azure. If these details are not filled in PartsUnlimited will fall back to using an implementation of a SQL Database.
 
-	"DocDb": {
+	"DocumentDb": {
     	"URI": "https://<tennantname>.documents.azure.com:443/",
     	"Key": "<key>"
     }
@@ -71,7 +71,7 @@ The ecommerce website will adopt various new technologies which address these ar
 
 2. [User Generated Content](2. Content.md)
 
-3. [DocumentDB; Storage and indexing of Arbitrary Data Structures](3. DocDB.md)
+3. [DocumentDB; Storage and indexing of Arbitrary Data Structures](3. DocumentDB.md)
  
 
 
