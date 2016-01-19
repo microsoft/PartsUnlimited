@@ -1,22 +1,22 @@
 ﻿{
-    "version": "1.0.0-*",
+  "authors": [
+    "Microsoft"
+  ],
+  "license": "MIT",
+  "description": "Parts Unlimited unit tests",
+  "version": "1.0.0-*",
   "dependencies": {
-    "xunit": "2.1.0-beta1-*",
-    "xunit.runner.aspnet": "2.0.0-aspnet-beta8",
+    "xunit": "2.1.0",
+    "xunit.runner.dnx": "2.1.0-rc1-build204",
+    "xunit.runner.visualstudio": "2.1.0-rc1-build1124",
     "NSubstitute": "1.8.1",
     "PartsUnlimitedWebsite": ""
   },
-    "commands": {
-        "test": "xunit.runner.aspnet"
-    },
+  "commands": {
+    "test": "xunit.runner.dnx"
+  },
   "frameworks": {
-    "dnx451": {
-      "frameworkAssemblies": {
-        "System.Xml": "4.0.0.0"
-      },
-      "dependencies": {
-      }
-    }
+    "dnx451": { }
   }
 }
 
