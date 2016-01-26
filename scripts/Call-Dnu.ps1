@@ -18,5 +18,5 @@ Write-Verbose "Setting npm log level to 'error'"
 $env:npm_config_loglevel="error"
 
 #Call dnu
-Write-Verbose "Executing: dnu $args"
+Write-Verbose "Executing: dnu $arg1 $arg2 $arg3 $arg4 $arg5 $arg6 $arg7 $arg8 $arg9 $arg10 $arg11 $arg12 $arg13 $arg14 $arg15 "
 & dnu $arg1 $arg2 $arg3 $arg4 $arg5 $arg6 $arg7 $arg8 $arg9 $arg10 $arg11 $arg12 $arg13 $arg14 $arg15 
