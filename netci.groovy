@@ -15,7 +15,7 @@ def project = GithubProject
         def newJobName = Utilities.getFullJobName(project, configuration, isPR)
         
         // Define build string
-        def buildString = "build.ps1 ${configuration}"
+        def buildString = "build.ps1 /p:$BuildConfiguration=${configuration}"
 
         // Create a new job with the specified name.  The brace opens a new closure
         // and calls made within that closure apply to the newly created job.
@@ -24,7 +24,7 @@ def project = GithubProject
             
             // This opens the set of build steps that will be run.
             steps {
-                powerShell(readFileFromWorkspace('build.ps1'))
+                powerShell(buildString)
             }
         }
         
