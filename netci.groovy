@@ -41,6 +41,10 @@ def project = GithubProject
         //      These allow PR jobs to be used for simple private testing, for instance.
         // See the documentation for this function to see additional optional parameters.
         Utilities.simpleInnerLoopJobSetup(newJob, project, isPR, "Windows ${configuration}")
+
+		//Upload test results
+		Utilities.addXUnitDotNETResults(newJob, '**/testresults.xml')
+
     }
 }
 
