@@ -13,7 +13,7 @@
     "PartsUnlimitedWebsite": ""
   },
   "commands": {
-    "test": "xunit.runner.dnx"
+    "test": "xunit.runner.dnx -xml testresults.xml"
   },
   "frameworks": {
     "dnx451": { }
