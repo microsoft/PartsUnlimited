@@ -24,7 +24,7 @@ def project = GithubProject
             
             // This opens the set of build steps that will be run.
             steps {
-                powerShell(buildString)
+                powerShell(readFileFromWorkspace('build.ps1'))
             }
 
         }
@@ -50,7 +50,7 @@ def project = GithubProject
 		Utilities.addXUnitDotNETResults(newJob, '**/testresults.xml')
 
 		//Add daily trigger
-		Utilities.addPeriodicTrigger(newJob, "@weekly")
+		Utilities.addPeriodicTrigger(newJob, "@daily")
 
     }
 }
