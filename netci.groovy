@@ -50,7 +50,7 @@ def project = GithubProject
 		Utilities.addXUnitDotNETResults(newJob, '**/testresults.xml')
 
 		//Add daily trigger
-		Utilities.addPeriodicTrigger(job, "@daily")
+		Utilities.addPeriodicTrigger(job, "@weekly")
 
     }
 }
