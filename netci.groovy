@@ -26,6 +26,7 @@ def project = GithubProject
             steps {
                 powerShell(buildString)
             }
+
         }
         
         // This call performs remaining common job setup on the newly created job.
@@ -42,8 +43,14 @@ def project = GithubProject
         // See the documentation for this function to see additional optional parameters.
         Utilities.simpleInnerLoopJobSetup(newJob, project, isPR, "Windows ${configuration}")
 
+		//Upload web files
+		Utilities.addArchival(myNewJob, '**/publish/**')
+
 		//Upload test results
 		Utilities.addXUnitDotNETResults(newJob, '**/testresults.xml')
+
+		//Add daily trigger
+		Utilities.addPeriodicTrigger(job, "@daily")
 
     }
 }
