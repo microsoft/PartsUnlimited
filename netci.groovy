@@ -24,7 +24,7 @@ def project = GithubProject
             
             // This opens the set of build steps that will be run.
             steps {
-                powerShell(buildString)
+                powerShell(readFileFromWorkspace(newJobName, 'build.bat') + '${configuration}')
             }
 
         }
