@@ -44,13 +44,13 @@ def project = GithubProject
         Utilities.simpleInnerLoopJobSetup(newJob, project, isPR, "Windows ${configuration}")
 
 		//Upload web files
-		Utilities.addArchival(myNewJob, '**/publish/**')
+		Utilities.addArchival(newJob, '**/publish/**')
 
 		//Upload test results
 		Utilities.addXUnitDotNETResults(newJob, '**/testresults.xml')
 
 		//Add daily trigger
-		Utilities.addPeriodicTrigger(job, "@weekly")
+		Utilities.addPeriodicTrigger(newJob, "@weekly")
 
     }
 }
