@@ -2,7 +2,7 @@
 import jobs.generation.Utilities;
 
 // Defines a the new of the repo, used elsewhere in the file
-def project = GithubProject
+def project = 'Microsoft/PartsUnlimited'
 
 // Generate the builds for debug and release, commit and PRJob
 [true, false].each { isPR -> // Defines a closure over true and false, value assigned to isPR
@@ -26,6 +26,7 @@ def project = GithubProject
             steps {
                 powerShell(buildString)
             }
+
         }
         
         // This call performs remaining common job setup on the newly created job.
@@ -42,8 +43,14 @@ def project = GithubProject
         // See the documentation for this function to see additional optional parameters.
         Utilities.simpleInnerLoopJobSetup(newJob, project, isPR, "Windows ${configuration}")
 
+		//Upload web files
+		Utilities.addArchival(newJob, '**/publish/**')
+
 		//Upload test results
 		Utilities.addXUnitDotNETResults(newJob, '**/testresults.xml')
+
+		//Add daily trigger
+		Utilities.addPeriodicTrigger(newJob, "@daily")
 
     }
 }
