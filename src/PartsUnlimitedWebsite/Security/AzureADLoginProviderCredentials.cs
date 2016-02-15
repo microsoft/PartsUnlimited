@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Framework.ConfigurationModel;
+using Microsoft.Framework.Configuration;
 
 namespace PartsUnlimited.Security
 {
@@ -9,10 +9,10 @@ namespace PartsUnlimited.Security
     {
         public AzureADLoginProviderCredentials(IConfiguration config)
         {
-            ClientId = config.Get("ClientId");
-            Authority = config.Get("Authority");
-            RedirectUri = config.Get("RedirectUri");
-            Caption = config.Get("Caption");
+            ClientId = config["ClientId"];
+            Authority = config["Authority"];
+            RedirectUri = config["RedirectUri"];
+            Caption = config["Caption"];
 
             Use = !string.IsNullOrWhiteSpace(ClientId)
                 && !string.IsNullOrWhiteSpace(Authority)

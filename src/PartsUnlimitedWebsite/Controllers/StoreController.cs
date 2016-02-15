@@ -46,19 +46,20 @@ namespace PartsUnlimited.Controllers
 
         public IActionResult Details(int id)
         {
-            var product = _cache.GetOrSet(string.Format("product_{0}", id), context =>
+            Product productData;
+
+            if (!_cache.TryGetValue(string.Format("product_{0}", id), out productData))
             {
-                //Remove it from cache if not retrieved in last 10 minutes
-                context.SetSlidingExpiration(TimeSpan.FromMinutes(10));
-
-                var productData = _db.Products.Single(a => a.ProductId == id);
-
-                // TODO [EF] We don't query related data as yet. We have to populate this until we do automatically.
+                productData = _db.Products.Single(a => a.ProductId == id);
                 productData.Category = _db.Categories.Single(g => g.CategoryId == productData.CategoryId);
-                return productData;
-            });
 
-            return View(product);
+                if (productData != null)
+                {
+                    _cache.Set(string.Format("product_{0}", id), productData, new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10)));
+                }                
+            }
+
+            return View(productData);
         }
     }
 }

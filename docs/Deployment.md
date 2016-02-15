@@ -1,20 +1,15 @@
-#Deployment#
+﻿#Deployment#
 For full deployments, you can deploy the PartsUnlimited app to slots as needed. The website is setup to keep the connection strings with the slots. This means that if staging and main website slots are switched, the main website will still use the production database, while the staging slot will keep pointing to the staging database.
 
 ##How to Deploy Demo/Simple Environment and Publish Website##
 
 1.	Create a storage account (or use an existing one) where deployment artifacts can be uploaded. The Storage account must be on the same subscription as the one the website will be deployed to.
+1.	If you haven’t already done so, install [Microsoft Azure PowerShell - November 2015](https://github.com/Azure/azure-powershell/releases/download/v1.0.1-November2015/azure-powershell.1.0.1.msi)
 1.	Open env\PartsUnlimited.Environment\PartsUnlimited.Environment.sln
-1.	If you haven’t already done so, install PowerShell Tools for Visual Studio by following these steps:
-    * In the Solution Explorer window, expand the Scripts folder in the project, and open Deploy-AzureResourceGroup.ps1
-    * After the editor window opens, a notification bar for PowerShell Tools for Visual Studio should appear at the top.  Click the Install Now link to download and install it from the Visual Studio Gallery.
-    * Close Visual Studio to complete the installation
-    * Re-open Visual Studio
-    * Re-open env\PartsUnlimited.Environment\PartsUnlimited.Environment.sln
 1.	Right-click on the PartsUnlimited.Environment and choose Deploy -> New Deployment…
 1.	Choose the subscription to which you want to deploy
 1.	Under Resource Group select New…
-    * Enter a Resource Group name 
+	* Enter a Resource Group name 
         * Name should not include periods
         * Choose Resource group location.
 1.	For Deployment template, choose demoenvironmentsetup.json.
@@ -43,20 +38,14 @@ For full deployments, you can deploy the PartsUnlimited app to slots as needed. 
     * The website is set up to automatically update the database shape, only if the database is empty.  No extra EF migrations commands needed for the first deployment.
 
 ##How to Deploy Demo/Full Environment And Publish Website##
-1.	Create a storage account (or use an existing one) where deployment artifacts can be uploaded.
-    * The Storage account must be on the same subscription as the one the website will be deployed to.
+1.	Create a storage account (or use an existing one) where deployment artifacts can be uploaded. The Storage account must be on the same subscription as the one the website will be deployed to.
+1.	If you haven’t already done so, install [Microsoft Azure PowerShell - November 2015](https://github.com/Azure/azure-powershell/releases/download/v1.0.1-November2015/azure-powershell.1.0.1.msi)
 1.	Open env\PartsUnlimited.Environment\PartsUnlimited.Environment.sln
-1.	If you haven’t already done so, install PowerShell Tools for Visual Studio by following these steps:
-    * In the Solution Explorer window, expand the Scripts folder in the project, and open Deploy-AzureResourceGroup.ps1
-    * After the editor window opens, a notification bar for PowerShell Tools for Visual Studio should appear at the top.  Click the Install Now link to download and install it from the Visual Studio Gallery.
-    * Close Visual Studio to complete the installation
-    * Re-open Visual Studio
-    * Re-open env\PartsUnlimited.Environment\PartsUnlimited.Environment.sln
 1.	Right-click on the PartsUnlimited.Environment and choose Deploy -> New Deployment…
 1.	Choose subscription to deploy to.
 1.	Under Resource Group choose New…
-    * Enter Resource Group name 
-       * Name should not include periods.
+	* Enter Resource Group name 
+       	* Name should not include periods.
         * Choose Resource group location.
 1.	For Deployment template, choose fullenvironmentsetup.json.
 1.	For Deployment template parameters, choose fullenvironmentsetup.param.json.

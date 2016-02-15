@@ -27,20 +27,21 @@ namespace PartsUnlimited.Controllers
         public IActionResult Index()
         {
             // Get most popular products
-            var topSellingProducts = _cache.GetOrSet("topselling", context =>
+            List<Product> topSellingProducts;
+            if (!_cache.TryGetValue("topselling", out topSellingProducts))
             {
+                topSellingProducts = GetTopSellingProducts(4);
                 //Refresh it every 10 minutes. Let this be the last item to be removed by cache if cache GC kicks in.
-                context.SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
-                context.SetPriority(CachePreservationPriority.High);
-                return GetTopSellingProducts(4);
-            });
-
-            var newProducts = _cache.GetOrSet("newarrivals", context =>
+                _cache.Set("topselling", topSellingProducts, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)).SetPriority(CacheItemPriority.High));
+            }
+            
+            List<Product> newProducts;
+            if (!_cache.TryGetValue("newarrivals", out newProducts))
             {
-                context.SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
-                context.SetPriority(CachePreservationPriority.High);
-                return GetNewProducts(4);
-            });
+                newProducts = GetNewProducts(4);
+                //Refresh it every 10 minutes. Let this be the last item to be removed by cache if cache GC kicks in.
+                _cache.Set("newarrivals", newProducts, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)).SetPriority(CacheItemPriority.High));
+            }
 
             var viewModel = new HomeViewModel
             {

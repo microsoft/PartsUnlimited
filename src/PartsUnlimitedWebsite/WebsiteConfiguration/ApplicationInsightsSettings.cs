@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Framework.ConfigurationModel;
+using Microsoft.Framework.Configuration;
 
 namespace PartsUnlimited.WebsiteConfiguration
 {
@@ -9,7 +9,7 @@ namespace PartsUnlimited.WebsiteConfiguration
     {
         public ConfigurationApplicationInsightsSettings(IConfiguration config)
         {
-            InstrumentationKey = config.Get(nameof(InstrumentationKey));
+            InstrumentationKey = config[nameof(InstrumentationKey)];
         }
 
         public string InstrumentationKey { get; }
