@@ -71,19 +71,29 @@ group in order to minimize charges to your Azure account.
 
 1. Log into your VSTS account and click on the BUILD hub.
 2. Click the HOL Build that you configured in the Continuous Integration HOL, and click "Edit".
-3. Click the "Copy and Publish Build Artifacts" task and update it to look as follows:
+3. Click the "Visual Studio Build" task and modify the **MSBuild** parameters as follows:
+    ```script
+    /p:DeployOnBuild=true   
+    /p:WebPublishMethod=Package     
+    /p:PackageAsSingleFile=true     
+    /p:SkipInvalidConfigurations=true     
+    /p:PackageLocation="$(build.stagingDirectory)"
+    ```
+    ![](media/54.png)
+    
+4. Click the "Copy and Publish Build Artifacts" task and update it to look as follows:
 
 	![](media/48.png)
 	* This constrains the `drop` folder to contain only the WebDeploy zip file, which is a package containing
 	the website.
-4. Click "+ Add build step..." and add a new "Publish Build Artifacts" task. Configure it as follows:
+5. Click "+ Add build step..." and add a new "Publish Build Artifacts" task. Configure it as follows:
 
 	![](media/49.png)
 	* For `Path to Publish`, click the "..." button and browse to the PartsUnlimitedEnv/Templates folder
 	* For `Artifact Name`, enter "ARMTemplates"
 	* For `Artifact Type`, select "Server" 
-5. Queue a new build by clicking the "Queue build" button. Accept the defaults and click OK.
-6. When the build has completed, verify that there are 2 folders: drop and ARMTemplates.
+6. Queue a new build by clicking the "Queue build" button. Accept the defaults and click OK.
+7. When the build has completed, verify that there are 2 folders: drop and ARMTemplates.
 	* The drop folder should contain a single file: PartsUnlimitedWebsite.zip (click "Explore" to view the contents)
 	* The ARMTemplates folder should contain a number of json files.
 
@@ -116,7 +126,7 @@ create a Service Principal if you wish to.
 	* Click on "New Service Endpoint" and select Azure from the list
 	
 		![](media/3.png)
-	* Click on the "Certificate Based" radio button
+	* Click on the "Credentials" radio button
 		* Enter any name for the Connection Name - this is to identify this Service Endpoint in VSTS.
 		* Copy the Subscription Id and Subscription Name for your Azure subscription. You can get this
 		by logging into the new Azure portal and clicking "Subscriptions".
@@ -129,6 +139,9 @@ create a Service Principal if you wish to.
 	* You should see a new Service Endpoint. You can close the project administration page.
 	
 	![](media/5.png)
+    
+    * Repeat the above steps to create a "New Service Endpoint" but select the "Certificate" radio button
+ 
 
 ### 4: Create a Release Definition
 Now that you have an Azure Service Endpoint to deploy to, and a package to deploy (from your CI build),
@@ -190,7 +203,7 @@ be necessary to run any infrastructure tasks during Staging or Production deploy
 		* `Override Template Parameters`: Enter the following in a single line (shown split here for convenience):
 		```powershell
 		-WebsiteName $(WebsiteName) 
-		-PartsUnlimitedServerName $(ServerName) 
+		-PartsUnlimitedServerName $(ServerName)  
 		-PartsUnlimitedHostingPlanName $(HostingPlan) 
 		-CdnStorageAccountName $(StorageAccountName) 
 		-CdnStorageContainerName $(ContainerName) 
@@ -198,8 +211,8 @@ be necessary to run any infrastructure tasks during Staging or Production deploy
 		-CdnStorageContainerNameForDev $(ContainerName)-dev
 		-CdnStorageAccountNameForStaging $(StorageAccountName)-stage 
 		-CdnStorageContainerNameForStaging $(ContainerName)-stage 
-		-PartsUnlimitedServerAdminLoginPassword (ConvertTo-SecureString $(AdminPassword) -AsPlainText -Force) 
-		-PartsUnlimitedServerAdminLoginPasswordForTest (ConvertTo-SecureString $(AdminTestPassword) -AsPlainText -Force)
+		-PartsUnlimitedServerAdminLoginPassword (ConvertTo-SecureString '$(AdminPassword)' -AsPlainText -Force) 
+		-PartsUnlimitedServerAdminLoginPasswordForTest (ConvertTo-SecureString '$(AdminTestPassword)' -AsPlainText -Force)
 		```
 		You will shortly define the values for each parameter, like `$(ServerName)`, in the Environment variables.
 		
