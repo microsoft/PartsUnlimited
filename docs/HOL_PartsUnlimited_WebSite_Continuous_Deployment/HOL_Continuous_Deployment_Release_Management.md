@@ -104,7 +104,7 @@ authentication information required to deploy to Azure.
 > **Note**: Deploying [ARM Templates](https://azure.microsoft.com/en-us/documentation/articles/resource-group-authoring-templates/)
 to Azure from Release Management requires an organizational account or a [Service Principal](http://blogs.msdn.com/b/visualstudioalm/archive/2015/10/04/automating-azure-resource-group-deployment-using-a-service-principal-in-visual-studio-online-build-release-management.aspx).
 MSA Accounts and certificate-based connections are not supported. For this HOL, you will use an organizational account, but you can 
-create a Service Principal if you wish to.
+create a Service Principal if you wish to.  If you do create an Azure Resource Manager Service Endpoint using an Azure Service Principal you will also need to create an Azure Service Endpoint as the Azure Web App Deployment task only uses Azure Service Endpoints.
 
 1. Create an organizational account in Azure
 	* Create a user in the Azure Active Directory from the old Azure portal (https://manage.windowsazure.com). If you do not have
