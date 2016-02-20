@@ -140,7 +140,7 @@ PartsUnlimited source is in.
     
     /p:SkipInvalidConfigurations=true 
     
-    /p:PackageLocation="C:\Agent\HOL"
+    /p:PackageLocation=$(build.artifactstagingdirectory) 
 
 ![](<media/48.jpg>)
 
@@ -161,7 +161,7 @@ PartsUnlimited source is in.
 **11.** Select the **Publish Build Artifacts** task, and fill in the input values
 with the following:
 
-	Copy Root: C:/Agent/HOL
+	Copy Root: $(build.artifactstagingdirectory) 
 	Contents: *.zip
 	Artifact Name: drop
 	Artifact Type: Server
