@@ -131,9 +131,15 @@ the page.
     
     /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation=$(build.artifactstagingdirectory)
     
+<<<<<<< HEAD
 > **Note:** Remember all the parameters will be one after the other.
 
 ![](<media/24.4.jpg>)
+=======
+    /p:SkipInvalidConfigurations=true 
+    
+    /p:PackageLocation="$(build.stagingDirectory)"
+>>>>>>> origin/hands-on-labs
 
 **7.** On the **Visual Studio Build** task, we want to restore the nuget packages for the PartsUnlimited solution . Check **Restore Nuget Packages**.
 
@@ -160,9 +166,18 @@ the page.
 **11.** Select the **Copy Files** task, and input the **Contents** value
 with the following:
 
+<<<<<<< HEAD
 	 *.zip
 	
 ![](<media/24.8.jpg>)
+=======
+	Copy Root: $(build.stagingDirectory)
+	Contents: *.zip
+	Artifact Name: drop
+	Artifact Type: Server
+
+![](<media/39.jpg>)
+>>>>>>> origin/hands-on-labs
 
 **12.** Click **Save** and give the build definition a name (i.e.
 *“HOL Build”*).
