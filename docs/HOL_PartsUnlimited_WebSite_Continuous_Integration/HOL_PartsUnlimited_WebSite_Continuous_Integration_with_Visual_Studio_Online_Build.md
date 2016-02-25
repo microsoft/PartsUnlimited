@@ -12,7 +12,7 @@ pushed to Visual Studio Online.
 
 -   An active Visual Studio Online account
 
--   An Visual Studio 2015 or Visual Studio 2013 Update 5 client
+-   An Visual Studio 2015 Update 2 or Visual Studio 2013 Update 5 client
 
 -   Project Admin rights to the Visual Studio Online account
 
@@ -111,62 +111,58 @@ the page.
 
 ![](<media/23.jpg>)
 
-**4.** Click the **green “plus” sign**, select **Visual Studio Build**, and then click **OK**.
+**4.** Click the **green “plus” sign**, select **Visual Studio Build**, and then click **Next**.
 
-![](<media/24.jpg>)
+![](<media/24.1.jpg>)
 
-> **Note:** As you can see, you can now do Xamarin Android/IOS and Builds as well as Xcode builds.
+>**Note:** As you can see, you can now do Universal Windows Apps & Xamarin Android/IOS and Builds as well as Xcode builds.
 
-**5.** Click on the **Repository** tab, and choose the git repository that
-PartsUnlimited source is in.
+**5.** After clicking the **Next** button, select **HOL Team Project**, select **HOL** Repository, select **HOLRepo** as the default branch and check **Continuous Integration** then click **Create**.
 
-![](<media/35.jpg>)
+![](<media/24.2.jpg>)
 
-**6.** We are going to use the **HOLRepo** branch on the Repository tab
+> **Note:** We may have multiple repos and branches, so we need to select the correct Repo and Branch before we can select which Solution to build.
 
-> **Note:** We have multiple repos and branches, so we need to select the correct Repo and Branch before we can select which Solution to build.
+**6.** After clicking the **Create** button, On the **Build** tab, and click the **ellipsis** in the Build Solution pane. Select the PartsUnlimited solution file.
 
-**7.** Click on the **Build** tab, and click the **ellipsis** in the Build Solution pane. Select the PartsUnlimited solution file.
+![](<media/24.3.jpg>)
 
-![](<media/36.jpg>)
-
-**8.** Now Enter the following information to **MSBuild** parameters:
+**8.** On the **Visual Studio Build** task, now enter the following information to **MSBuild** parameters:
     
-    /p:DeployOnBuild=true 
+    /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation=$(build.artifactstagingdirectory)
     
-    /p:WebPublishMethod=Package 
-    
-    /p:PackageAsSingleFile=true 
-    
-    /p:SkipInvalidConfigurations=true 
-    
-    /p:PackageLocation="C:\Agent\HOL"
+> **Note:** Remember all the parameters will be one after the other.
 
-![](<media/48.jpg>)
+![](<media/24.4.jpg>)
 
-**9.** Since the PartUnlimited project has passing and failing tests, Select the **Visual Studio Test** Task and click **Continue on Error** checkbox. 
+**7.** On the **Visual Studio Build** task, we want to restore the nuget packages for the PartsUnlimited solution . Check **Restore Nuget Packages**.
+
+![](<media/24.9.jpg>)
+
+**9.** Select the **Visual Studio Test** Task, click the **ellipsis** in the **Run Settings File**. Select the **Local.testsettings** file.
+
+![](<media/24.5.jpg>)
+
+**10.** Since the PartUnlimited project has passing and failing tests, click **Continue on Error** checkbox. 
 
 > **Talking Points:** Clicking the **Continue on Error** checkbox will allow the build to partially succeed which will allow us to use this build for other tasks, let's just say using the build for Continuous Delivery. 
 
-![](<media/44.jpg>)
+![](<media/24.6.jpg>)
 
 > **Talking Points:** If any of your tests fail the build will fail. If you do not want the build to fail, click” Continue On Error” and the build will partially succeed.
 
-**10.** Click on the **Trigger** tab, , click **Continuous Integration**. Make sure the filter to include **HOLRepo** and **Batch Changes** checkbox is unchecked
+**11.** Click on the **Trigger** tab, Make sure the filter to include **HOLRepo** and **Batch Changes** checkbox is unchecked
 
-![](<media/38.jpg>)
+![](<media/24.7.jpg>)
 
 > **Note:** So that the Build fires off every time there’s a check in, enable the Continuous integration trigger. You can select which branch you wish to monitor, as well.
 
-**11.** Select the **Publish Build Artifacts** task, and fill in the input values
+**11.** Select the **Copy Files** task, and input the **Contents** value
 with the following:
 
-	Copy Root: C:/Agent/HOL
-	Contents: *.zip
-	Artifact Name: drop
-	Artifact Type: Server
-
-![](<media/39.jpg>)
+	 *.zip
+	
+![](<media/24.8.jpg>)
 
 **12.** Click **Save** and give the build definition a name (i.e.
 *“HOL Build”*).
