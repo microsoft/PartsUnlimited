@@ -127,7 +127,7 @@ the page.
 
 ![](<media/24.3.jpg>)
 
-**8.** On the **Visual Studio Build** task, now enter the following information to **MSBuild** parameters:
+**7.** On the **Visual Studio Build** task, now enter the following information to **MSBuild** parameters:
     
     /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation=$(build.artifactstagingdirectory)
     
@@ -135,7 +135,7 @@ the page.
 
 ![](<media/24.4.jpg>)
 
-**7.** On the **Visual Studio Build** task, we want to restore the nuget packages for the PartsUnlimited solution . Check **Restore Nuget Packages**.
+**8.** On the **Visual Studio Build** task, we want to restore the nuget packages for the PartsUnlimited solution . Check **Restore Nuget Packages**.
 
 ![](<media/24.9.jpg>)
 
@@ -157,21 +157,21 @@ the page.
 
 > **Note:** So that the Build fires off every time there’s a check in, enable the Continuous integration trigger. You can select which branch you wish to monitor, as well.
 
-**11.** Select the **Copy Files** task, and input the **Contents** value
+**12.** Select the **Copy Files** task, and input the **Contents** value
 with the following:
 
 	 *.zip
 	
 ![](<media/24.8.jpg>)
 
-**12.** Click **Save** and give the build definition a name (i.e.
+**13.** Click **Save** and give the build definition a name (i.e.
 *“HOL Build”*).
 
 ![](<media/41.jpg>)
 
 ### 3. Test the CI Trigger in Visual Studio Online
 
-We will now test the Continuous Integration build (CI) build we created on Task 3 by changing code in the Parts Unlimited project with Visual Studio Online.
+We will now test the Continuous Integration build (CI) build we created on Task 2 by changing code in the Parts Unlimited project with Visual Studio Online.
 
 **1.** Click **Code** hub and then select your your repo, **HOLRepo**. Navigate to **Controllers/HomeController.cs** in the PartsUnlimited project, then click **Edit**.
 
