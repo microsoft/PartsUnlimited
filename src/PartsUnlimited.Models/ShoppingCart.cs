@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.AspNet.Http;
+using Microsoft.Data.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -172,7 +173,7 @@ namespace PartsUnlimited.Models
         // We're using HttpContextBase to allow access to cookies.
         public string GetCartId(HttpContext context)
         {
-            var sessionCookie = context.Request.Cookies.Get("Session");
+            var sessionCookie = context.Request.Cookies["Session"];
             string cartId = null;
 
             if (string.IsNullOrWhiteSpace(sessionCookie))

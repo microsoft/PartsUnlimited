@@ -3,6 +3,7 @@
 
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Data.Entity;
 using PartsUnlimited.Models;
 using System;
 using System.Linq;
@@ -48,29 +49,29 @@ namespace PartsUnlimited.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddressAndPayment(Order order)
         {
-            var formCollection = await Context.Request.ReadFormAsync();
+            var formCollection = await HttpContext.Request.ReadFormAsync();
 
             try
             {
-                if (string.Equals(formCollection.GetValues("PromoCode").FirstOrDefault(), PromoCode,
+                if (string.Equals(formCollection["PromoCode"].FirstOrDefault(), PromoCode,
                     StringComparison.OrdinalIgnoreCase) == false)
                 {
                     return View(order);
                 }
                 else
                 {
-                    order.Username = Context.User.GetUserName();
+                    order.Username = HttpContext.User.GetUserName();
                     order.OrderDate = DateTime.Now;
 
                     //Add the Order
                     _db.Orders.Add(order);
 
                     //Process the order
-                    var cart = ShoppingCart.GetCart(_db, Context);
+                    var cart = ShoppingCart.GetCart(_db, HttpContext);
                     cart.CreateOrder(order);
 
                     // Save all changes
-                    await _db.SaveChangesAsync(Context.RequestAborted);
+                    await _db.SaveChangesAsync(HttpContext.RequestAborted);
 
                     return RedirectToAction("Complete",
                         new { id = order.OrderId });
@@ -91,7 +92,7 @@ namespace PartsUnlimited.Controllers
             // Validate customer owns this order
             Order order = _db.Orders.FirstOrDefault(
                 o => o.OrderId == id &&
-                o.Username == Context.User.GetUserName());
+                o.Username == HttpContext.User.GetUserName());
 
             if (order != null)
             {

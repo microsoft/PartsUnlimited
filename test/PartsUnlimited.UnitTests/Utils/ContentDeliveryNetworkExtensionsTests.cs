@@ -1,13 +1,16 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.AspNet.Html.Abstractions;
 using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.Framework.ConfigurationModel;
+using Microsoft.Framework.Configuration;
+using Microsoft.Framework.WebEncoders;
 using NSubstitute;
 using PartsUnlimited.WebsiteConfiguration;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml;
 using Xunit;
@@ -115,12 +118,16 @@ namespace PartsUnlimited.Utils
         }
 
 
-        private void VerifyContentLinks(HtmlString html, string path, ContentLinkType contentType, ILookup<string, string> lookup)
+        private void VerifyContentLinks(IHtmlContent html, string path, ContentLinkType contentType, ILookup<string, string> lookup)
         {
             var xmlDoc = new XmlDocument();
             var doc = xmlDoc.CreateDocumentFragment();
 
-            doc.InnerXml = html.ToString();
+            using (var writer = new StringWriter())
+            {
+                html.WriteTo(writer, HtmlEncoder.Default);
+                doc.InnerXml = writer.ToString();
+            }
 
             var childNodes = doc.ChildNodes.Cast<XmlNode>().Where(n => !(n is XmlWhitespace)).ToList();
             var expectedList = lookup[path];
@@ -151,10 +158,15 @@ namespace PartsUnlimited.Utils
             }
         }
 
-        private void Verify(HtmlString html, string src, string alt)
+        private void Verify(IHtmlContent html, string src, string alt)
         {
             var doc = new XmlDocument();
-            doc.LoadXml(html.ToString());
+
+            using (var writer = new StringWriter())
+            {
+                html.WriteTo(writer, HtmlEncoder.Default);
+                doc.LoadXml(writer.ToString());
+            }
 
             Assert.Equal(1, doc.ChildNodes.Count);
 

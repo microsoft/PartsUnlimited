@@ -109,13 +109,19 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         public IActionResult Details(int id)
         {
             string cacheId = string.Format("product_{0}", id);
-            var product = _cache.GetOrSet(cacheId, context =>
+
+            Product product;
+            if (!_cache.TryGetValue(cacheId, out product))
             {
-                //Remove it from cache if not retrieved in last 10 minutes
-                context.SetSlidingExpiration(TimeSpan.FromMinutes(10));
-                //If this returns null how do we prevent the cache to store this. 
-                return _db.Products.Where(a => a.ProductId == id).FirstOrDefault();
-            });
+                //If this returns null, don't stick it in the cache
+                product =  _db.Products.Where(a => a.ProductId == id).FirstOrDefault();
+
+                if (product != null)
+                {
+                    //                               Remove it from cache if not retrieved in last 10 minutes
+                    _cache.Set(cacheId, product, new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10)));
+                }
+            }
 
             if (product == null)
             {
@@ -144,7 +150,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 _db.Products.Add(product);
-                await _db.SaveChangesAsync(Context.RequestAborted);
+                await _db.SaveChangesAsync(HttpContext.RequestAborted);
                 _annoucementHub.Clients.All.announcement(new ProductData() { Title = product.Title, Url = Url.Action("Details", "Store", new { id = product.ProductId }) });
                 _cache.Remove("announcementProduct");
                 return RedirectToAction("Index");
@@ -178,7 +184,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 _db.Entry(product).State = EntityState.Modified;
-                await _db.SaveChangesAsync(Context.RequestAborted);
+                await _db.SaveChangesAsync(HttpContext.RequestAborted);
                 //Invalidate the cache entry as it is modified
                 _cache.Remove(string.Format("product_{0}", product.ProductId));
                 return RedirectToAction("Index");
@@ -211,23 +217,23 @@ namespace PartsUnlimited.Areas.Admin.Controllers
                 if (cartItem != null)
                 {
                     _db.CartItems.Remove(cartItem);
-                    await _db.SaveChangesAsync(Context.RequestAborted);
+                    await _db.SaveChangesAsync(HttpContext.RequestAborted);
                 }
 
                 if (orderDetail != null)
                 {
                     _db.OrderDetails.RemoveRange(orderDetail);
-                    await _db.SaveChangesAsync(Context.RequestAborted);
+                    await _db.SaveChangesAsync(HttpContext.RequestAborted);
                 }
 
                 if (rainCheck != null)
                 {
                     _db.RainChecks.RemoveRange(rainCheck);
-                    await _db.SaveChangesAsync(Context.RequestAborted);
+                    await _db.SaveChangesAsync(HttpContext.RequestAborted);
                 }
 
                 _db.Products.Remove(product);
-                await _db.SaveChangesAsync(Context.RequestAborted);
+                await _db.SaveChangesAsync(HttpContext.RequestAborted);
                 //Remove the cache entry as it is removed
                 _cache.Remove(string.Format("product_{0}", id));
             }

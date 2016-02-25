@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Framework.ConfigurationModel;
+using Microsoft.Framework.Configuration;
 using NSubstitute;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,16 +31,17 @@ namespace PartsUnlimited.Utils
         private IConfiguration CreateConfig(IEnumerable<ConfigPathHelper> values)
         {
             var config = Substitute.For<IConfiguration>();
-            var emptyConfig = Substitute.For<IConfiguration>();
-
-            var subkeys = values.Select(v => new KeyValuePair<string, IConfiguration>(v.Name, emptyConfig));
-
-            config.GetSubKeys().Returns(subkeys);
+            var sections = new List<IConfigurationSection>();
 
             foreach (var value in values)
             {
-                config.Get(value.Name).Returns(value.Path);
+                var emptySection = Substitute.For<IConfigurationSection>();
+                emptySection.Key.Returns(value.Name);
+                emptySection.Value.Returns(value.Path);
+                sections.Add(emptySection);
             }
+
+            config.GetChildren().Returns(sections);
 
             return config;
         }

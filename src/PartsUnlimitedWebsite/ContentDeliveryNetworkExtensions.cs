@@ -1,9 +1,12 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.AspNet.Html.Abstractions;
 using Microsoft.AspNet.Mvc.Rendering;
+using Microsoft.Framework.WebEncoders;
 using PartsUnlimited.WebsiteConfiguration;
 using System;
+using System.IO;
 using System.Text;
 
 namespace PartsUnlimited
@@ -12,7 +15,7 @@ namespace PartsUnlimited
     {
         public static IContentDeliveryNetworkConfiguration Configuration { get; set; }
 
-        public static HtmlString Image(this IHtmlHelper helper, string src, string alt = null)
+        public static IHtmlContent Image(this IHtmlHelper helper, string src, string alt = null)
         {
             if (string.IsNullOrWhiteSpace(src))
             {
@@ -28,16 +31,17 @@ namespace PartsUnlimited
                 img.MergeAttribute("alt", alt);
             }
 
-            return img.ToHtmlString(TagRenderMode.SelfClosing);
+            img.TagRenderMode = TagRenderMode.SelfClosing;
+            return img;
         }
 
-        public static HtmlString ImageBackground(this IHtmlHelper helper, string src)
+        public static IHtmlContent ImageBackground(this IHtmlHelper helper, string src)
         {
             var cdnSource = GetCdnSource(src);
             return new HtmlString($"style = \"background-image: url('{cdnSource}')\"");
         }
 
-        public static HtmlString Script(this IHtmlHelper helper, string contentPath)
+        public static IHtmlContent Script(this IHtmlHelper helper, string contentPath)
         {
             if (string.IsNullOrWhiteSpace(contentPath))
             {
@@ -54,13 +58,17 @@ namespace PartsUnlimited
                 script.MergeAttribute("type", "text/javascript");
                 script.MergeAttribute("src", path);
 
-                sb.AppendLine(script.ToString());
+                using (var writer = new StringWriter())
+                {
+                    script.WriteTo(writer, HtmlEncoder.Default);
+                    sb.AppendLine(writer.ToString());
+                }
             }
 
             return new HtmlString(sb.ToString());
         }
 
-        public static HtmlString Styles(this IHtmlHelper helper, string contentPath)
+        public static IHtmlContent Styles(this IHtmlHelper helper, string contentPath)
         {
             if (string.IsNullOrWhiteSpace(contentPath))
             {
@@ -77,7 +85,11 @@ namespace PartsUnlimited
                 script.MergeAttribute("rel", "stylesheet");
                 script.MergeAttribute("href", path);
 
-                sb.AppendLine(script.ToString());
+                using (var writer = new StringWriter())
+                {
+                    script.WriteTo(writer, HtmlEncoder.Default);
+                    sb.AppendLine(writer.ToString());
+                }
             }
 
             return new HtmlString(sb.ToString());

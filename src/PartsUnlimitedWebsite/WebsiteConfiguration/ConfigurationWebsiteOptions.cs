@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Framework.ConfigurationModel;
+using Microsoft.Framework.Configuration;
 using PartsUnlimited.Telemetry;
 using System;
 
@@ -13,7 +13,7 @@ namespace PartsUnlimited.WebsiteConfiguration
         {
             try
             {
-                ShowRecommendations = config.Get<bool>("ShowRecommendations");
+                ShowRecommendations = Boolean.Parse(config["ShowRecommendations"]);
             }
             catch (InvalidCastException e)
             {

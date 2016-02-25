@@ -1,32 +1,32 @@
-HOL - Parts Unlimited WebSite Continuous Integration with Visual Studio Online
+HOL - Parts Unlimited WebSite Continuous Integration with Visual Studio Team Services
 ====================================================================================
 In this lab we have an application called PartsUnlimited. We want to set up
-Visual Studio Online to be able continuously integrate code into the master
+Visual Studio Team Services to be able continuously integrate code into the master
 branch of code. This means that whenever code is committed and pushed to the
 master branch, we want to ensure that it integrates into our code correctly to
 get fast feedback. To do so, we are going to be setting up a Continuous Integration build (CI) that
 will allow us to compile and run unit tests on our code every time a commit is
-pushed to Visual Studio Online.
+pushed to Visual Studio Team Services.
 
 ###Pre-requisites:###
 
--   An active Visual Studio Online account
+-   An active Visual Studio Team Services account
 
--   An Visual Studio 2015 or Visual Studio 2013 Update 5 client
+-   An Visual Studio 2015 Update 2 or Visual Studio 2013 Update 5 client
 
--   Project Admin rights to the Visual Studio Online account
+-   Project Admin rights to the Visual Studio Team Services account
 
 ### Tasks Overview: ###
 
-**1. Setup your Visual Studio Online Account using Visual Studio:** In this step, you will connect your own Visual Studio Online account, download the PartsUnlimited source code, and then push it to your own Visual Studio Online account. 
+**1. Setup your Visual Studio Team Services Account using Visual Studio:** In this step, you will connect your own Visual Studio Team Services account, download the PartsUnlimited source code, and then push it to your own Visual Studio Team Services account. 
 
-**2. Create Continuous Integration Build:** In this step, you will create a build definition in Visual Studio Online that will be triggered every time a commit is pushed to your repository in Visual Studio Online. 
+**2. Create Continuous Integration Build:** In this step, you will create a build definition that will be triggered every time a commit is pushed to your repository in Visual Studio Team Services. 
 
-**3. Test the CI Trigger in Visual Studio Online:** In this step, test the Continuous Integration build (CI) build we created by changing code in the Parts Unlimited project with Visual Studio Online. 
+**3. Test the CI Trigger in Visual Studio Team Services:** In this step, test the Continuous Integration build (CI) build we created by changing code in the Parts Unlimited project with Visual Studio Team Services. 
 
-### 1: Setup your Visual Studio Online Account using Visual Studio
+### 1: Setup your Visual Studio Team Services Account using Visual Studio
 
-We want to push the application code to your Visual Studio Online account in
+We want to push the application code to your Visual Studio Team Services account in
 order to use Build.
 
 **1.** First, we need to open Team Explorer. Go to your **account home
@@ -34,11 +34,11 @@ page**:
 
 	https://<account>.visualstudio.com
 
-**2.** Connect to the VSO account project using Visual Studio.
+**2.** Connect to the VSTS account project using Visual Studio.
 
 ![](<media/25.jpg>)
 
-> **Talking Point:** For this lab we are using the VSO Git project. The next couple of steps will allow you to add the PartUnlimited source to the Git master repository.
+> **Talking Point:** For this lab we are using the VSTS Git project. The next couple of steps will allow you to add the PartUnlimited source to the Git master repository.
 
 **3.** Navigate to [https://github.com/Microsoft/PartsUnlimited/tree/aspnet45](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45) and download the sample as a zip
 
@@ -99,7 +99,10 @@ A continuous integration build will give us the ability check whether the code
 we checked in can compile and will successfully pass any automated tests that we
 have created against it.
 
-**1.** Go to your **account’s homepage**: https://<account\>.visualstudio.com
+**1.** Go to your **account’s homepage**: 
+
+	https://<account>.visualstudio.com
+
 
 **2.** Click **Browse** and then select your team project and click
 **Navigate**.
@@ -111,71 +114,69 @@ the page.
 
 ![](<media/23.jpg>)
 
-**4.** Click the **green “plus” sign**, select **Visual Studio Build**, and then click **OK**.
+**4.** Click the **green “plus” sign**, select **Visual Studio** build definition, and then click **Next**.
 
-![](<media/24.jpg>)
+![](<media/24.1.jpg>)
 
-> **Note:** As you can see, you can now do Xamarin Android/IOS and Builds as well as Xcode builds.
+>**Note:** As you can see, you can now do Universal Windows Apps & Xamarin Android/IOS Builds as well as Xcode builds.
 
-**5.** Click on the **Repository** tab, and choose the git repository that
-PartsUnlimited source is in.
+**5.** After clicking the **Next** button, select **HOL Team Project**, select **HOL** Repository, select **HOLRepo** as the default branch and check **Continuous Integration** then click **Create**.
 
-![](<media/35.jpg>)
+> **Note:** For this HOL, we created another agent queue (**HOL Pool**) but using the **Default or Hosted** queue in VSTS will work as well.
 
-**6.** We are going to use the **HOLRepo** branch on the Repository tab
+![](<media/24.2.jpg>)
 
-> **Note:** We have multiple repos and branches, so we need to select the correct Repo and Branch before we can select which Solution to build.
+> **Note:** We may have multiple repos and branches, so we need to select the correct Repo and Branch before we can select which Solution to build.
 
-**7.** Click on the **Build** tab, and click the **ellipsis** in the Build Solution pane. Select the PartsUnlimited solution file.
+**6.** After clicking the **Create** button, On the **Build** tab, and click the **ellipsis** in the Build Solution pane. Select the PartsUnlimited solution file.
 
-![](<media/36.jpg>)
+![](<media/24.3.jpg>)
 
-**8.** Now Enter the following information to **MSBuild** parameters:
+**7.** On the **Visual Studio Build** task, now enter the following information to **MSBuild** Arguments:
     
-    /p:DeployOnBuild=true 
-    
-    /p:WebPublishMethod=Package 
-    
-    /p:PackageAsSingleFile=true 
-    
-    /p:SkipInvalidConfigurations=true 
-    
-    /p:PackageLocation="C:\Agent\HOL"
+    /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation=$(build.artifactstagingdirectory)
+      
+> **Note:** Add all the **MSBuild** parameters will be one after the other with spaces between them.
 
-![](<media/48.jpg>)
+![](<media/24.4.jpg>)
 
-**9.** Since the PartUnlimited project has passing and failing tests, Select the **Visual Studio Test** Task and click **Continue on Error** checkbox. 
+**8.** On the **Visual Studio Build** task, we want to restore the nuget packages for the PartsUnlimited solution . Check **Restore Nuget Packages**.
 
-> **Talking Points:** Clicking the **Continue on Error** checkbox will allow the build to partially succeed which will allow us to use this build for other tasks, let's just say using the build for Continuous Delivery. 
+![](<media/24.9.jpg>)
 
-![](<media/44.jpg>)
+**9.** Select the **Visual Studio Test** Task, click the **ellipsis** in the **Run Settings File**. Select the **Local.testsettings** file.
 
-> **Talking Points:** If any of your tests fail the build will fail. If you do not want the build to fail, click” Continue On Error” and the build will partially succeed.
+> **Note:** Since we are going to be running tests we want to make sure the right test settings are in place.
 
-**10.** Click on the **Trigger** tab, , click **Continuous Integration**. Make sure the filter to include **HOLRepo** and **Batch Changes** checkbox is unchecked
+![](<media/24.5.jpg>)
 
-![](<media/38.jpg>)
+**10.** Since the PartUnlimited project has passing and failing tests, click **Continue on Error** checkbox. 
 
-> **Note:** So that the Build fires off every time there’s a check in, enable the Continuous integration trigger. You can select which branch you wish to monitor, as well.
+> **Talking Points:** If you do not want the build to fail, clicking ”**Continue On Error**” checkbox will allow the build will partially succeed which can be used in a **Release** that is part of **Continuous Delivery**, if necessary.
 
-**11.** Select the **Publish Build Artifacts** task, and fill in the input values
+![](<media/24.6.jpg>)
+
+**11.** Click on the **Trigger** tab, to make sure the **Build** fires off every time there’s a check in, check the **Continuous integration (CI)** checkbox. Also make sure the filter to include **HOLRepo** and **Batch Changes** checkbox is unchecked
+
+![](<media/24.7.jpg>)
+
+> **Note:** To enable Continuous integration in your project, check the **Continuous integration (CI)** checkbox. You can select which branch you wish to monitor, as well.
+
+**12.** Select the **Copy Files** task, and input the **Contents** value
 with the following:
 
-	Copy Root: C:/Agent/HOL
-	Contents: *.zip
-	Artifact Name: drop
-	Artifact Type: Server
+	 *.zip
+	
+![](<media/24.8.jpg>)
 
-![](<media/39.jpg>)
-
-**12.** Click **Save** and give the build definition a name (i.e.
+**13.** Click **Save** and give the build definition a name (i.e.
 *“HOL Build”*).
 
 ![](<media/41.jpg>)
 
-### 3. Test the CI Trigger in Visual Studio Online
+### 3. Test the CI Trigger in Visual Studio Team Services
 
-We will now test the Continuous Integration build (CI) build we created on Task 3 by changing code in the Parts Unlimited project with Visual Studio Online.
+We will now test the **Continuous Integration build (CI)** build we created in *Task 2* by changing code in the Parts Unlimited project with Visual Studio Team Services.
 
 **1.** Click **Code** hub and then select your your repo, **HOLRepo**. Navigate to **Controllers/HomeController.cs** in the PartsUnlimited project, then click **Edit**.
 
@@ -196,7 +197,7 @@ We will now test the Continuous Integration build (CI) build we created on Task 
 Next steps
 ----------
 
-In this lab, you learned how to push new code to Visual Studio Online, setup a Git repo and create a Continuous
+In this lab, you learned how to push new code to Visual Studio Team Services, setup a Git repo and create a Continuous
 Integration build that runs when new commits are pushed to the master branch.
 This allows you to get feedback as to whether your changes made breaking syntax
 changes, or if they broke one or more automated tests, or if your changes are a
@@ -204,4 +205,4 @@ okay.
 
 Try these labs out for next steps:
 
--   HOL Parts Unlimited Continuous Delivery using Release Managment Online (coming soon)
+-   <a href="https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Deployment/HOL_Continuous_Deployment_Release_Management.md">Continuous Deployment with Release Management in Visual Studio Team Services</a>
