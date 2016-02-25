@@ -176,7 +176,7 @@ with the following:
 
 ### 3. Test the CI Trigger in Visual Studio Team Services
 
-We will now test the Continuous Integration build (CI) build we created on Task 2 by changing code in the Parts Unlimited project with Visual Studio Online.
+We will now test the **Continuous Integration build (CI)** build we created in *Task 2* by changing code in the Parts Unlimited project with Visual Studio Team Services.
 
 **1.** Click **Code** hub and then select your your repo, **HOLRepo**. Navigate to **Controllers/HomeController.cs** in the PartsUnlimited project, then click **Edit**.
 
