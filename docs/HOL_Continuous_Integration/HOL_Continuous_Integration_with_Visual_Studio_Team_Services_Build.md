@@ -144,32 +144,26 @@ the page.
 
 ![](<media/24.9.jpg>)
 
-**9.** Select the **Visual Studio Test** Task, click the **ellipsis** in the **Run Settings File**. Select the **Local.testsettings** file.
-
-> **Note:** Since we are going to be running tests we want to make sure the right test settings are in place.
-
-![](<media/24.5.jpg>)
-
-**10.** Since the PartUnlimited project has passing and failing tests, click **Continue on Error** checkbox. 
+**9.** Since the PartUnlimited project has passing and failing tests, click **Continue on Error** checkbox. 
 
 > **Talking Points:** If you do not want the build to fail, clicking ”**Continue On Error**” checkbox will allow the build will partially succeed which can be used in a **Release** that is part of **Continuous Delivery**, if necessary.
 
 ![](<media/24.6.jpg>)
 
-**11.** Click on the **Trigger** tab, to make sure the **Build** fires off every time there’s a check in, check the **Continuous integration (CI)** checkbox. Also make sure the filter to include **HOLRepo** and **Batch Changes** checkbox is unchecked
+**10.** Click on the **Trigger** tab, to make sure the **Build** fires off every time there’s a check in, check the **Continuous integration (CI)** checkbox. Also make sure the filter to include **HOLRepo** and **Batch Changes** checkbox is unchecked
 
 ![](<media/24.7.jpg>)
 
 > **Note:** To enable Continuous integration in your project, check the **Continuous integration (CI)** checkbox. You can select which branch you wish to monitor, as well.
 
-**12.** Select the **Copy Files** task, and input the **Contents** value
+**11.** Select the **Copy Files** task, and input the **Contents** value
 with the following:
 
 	 *.zip
 	
 ![](<media/24.8.jpg>)
 
-**13.** Click **Save** and give the build definition a name (i.e.
+**12.** Click **Save** and give the build definition a name (i.e.
 *“HOL Build”*).
 
 ![](<media/41.jpg>)
