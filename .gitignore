@@ -3,6 +3,7 @@
 *.xap
 *.user
 /TestResults
+.vs/
 *.vspscc
 *.vssscc
 *.suo
