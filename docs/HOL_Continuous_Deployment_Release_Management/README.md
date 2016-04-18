@@ -3,7 +3,7 @@ HOL - Continuous Deployment with Release Management in Visual Studio Team Servic
 In this lab you have an application called PartsUnlimited, committed to a Git repo
 in Visual Studio Team Services (VSTS) and a Continuous Integration build that builds the app and
 runs unit tests whenever code is pushed to the master branch. Please refer to the
-[HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Integration/HOL_PartsUnlimited_WebSite_Continuous_Integration_with_Visual_Studio_Online_Build.md)
+[HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_Continuous_Integration)
 in order to see how the CI build was set up.
 Now you want to set up Release Management (a feature of Visual Studio Team Services)
 to be able continuously deploy the application to an Azure Web App. Initially the
@@ -20,7 +20,7 @@ the app will be deployed to the production site.
 > **Note**: In order to use deployment slots, you'll need to configure the Web App to use Standard or Premium App Service Plan mode. You **cannot** create
 deployment slots for Basic or Free Azure Web Apps. To learn more about deployment slots, see [this article](https://azure.microsoft.com/en-us/documentation/articles/web-sites-staged-publishing/).
 
-* You have completed the [HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Integration/HOL_PartsUnlimited_WebSite_Continuous_Integration_with_Visual_Studio_Online_Build.md)
+* You have completed the [HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_Continuous_Integration)
 
 * An organizational account that is a co-administrator on your Azure account
 > **Note**: This is required because deploying [ARM Templates](https://azure.microsoft.com/en-us/documentation/articles/resource-group-authoring-templates/)
@@ -29,7 +29,7 @@ MSA Account and certificate-based connections are not supported. For this HOL, y
 
 ## Tasks Overview:
 
-**1. Complete the [HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Integration/HOL_PartsUnlimited_WebSite_Continuous_Integration_with_Visual_Studio_Online_Build.md).**
+**1. Complete the [HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_Continuous_Integration).**
 This will walk through creating a Visual Studio Team Services account, committing the PartsUnlimited source code
 and setting up the Continuous Integration (CI) build.
 
@@ -53,7 +53,7 @@ Once the Release Definition is set up, you will trigger a release and see the pi
 
 # Hands On Lab
 ### 1: Complete HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services
-Make sure you've completed [HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Integration/HOL_PartsUnlimited_WebSite_Continuous_Integration_with_Visual_Studio_Online_Build.md).
+Make sure you've completed [HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_Continuous_Integration).
 
 ### 2: Modify the CI Build to include the ARM Templates
 In order to deploy to Azure, you're going to to specify the infrastructure that the PartsUnlimited Website requires. For example,
@@ -198,7 +198,7 @@ be necessary to run any infrastructure tasks during Staging or Production deploy
 		folder.
 		
 		![](media/43.png)
-		* `Template Parameters`: click the "..." button and browse to the FullEnvironmentSetupMerged.param.json file
+		* `Template Parameters`: click the "..." button and browse to the FullEnvironmentSetupMerged.param.json fileF
 		in the ARMTemplates folder.
 		* `Override Template Parameters`: Enter the following in a single line (shown split here for convenience):
 		```powershell
@@ -440,6 +440,6 @@ managing database schema deployments.
 
 The following are more PartsUnlimited Hands on Labs:
 
-1. [User Telemetry with Application Insights](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_HDD-User-Telemetry/HOL_PartsUnlimited_HDD-User-Telemetry.md)
-2. [Testing in Production with Azure Websites - PartsUnlimited](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_HDD_Testing_in_Production/HDD%20Testing%20in%20Production%20with%20Azure%20Websites%20HOL.md)
-3. [Application Performance Monitoring - PartsUnlimited](https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_Application_Performance_Monitoring/HOL_PartsUnlimited_Application_Performance_Monitoring.md)
+1. [User Telemetry with Application Insights](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_HDD_User_Telemetry)
+2. [Testing in Production with Azure Websites - PartsUnlimited](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_HDD_Testing_in_Production)
+3. [Application Performance Monitoring - PartsUnlimited](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_Application_Performance_Monitoring)

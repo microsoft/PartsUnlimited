@@ -169,6 +169,5 @@ In this lab, you learned about adding a deployment slot to an Azure Website for 
 
 Try these labs out for next steps:
 
-- Automated Recovery hands-on lab
 - Application Performance Monitoring hands-on lab
 - Load Tests and Auto-Scaling hands-on lab

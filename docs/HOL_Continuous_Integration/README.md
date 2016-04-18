@@ -199,4 +199,4 @@ okay.
 
 Try these labs out for next steps:
 
--   <a href="https://github.com/Microsoft/PartsUnlimited/blob/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Deployment/HOL_Continuous_Deployment_Release_Management.md">Continuous Deployment with Release Management in Visual Studio Team Services</a>
+-   <a href="https://github.com/Microsoft/PartsUnlimited/blob/aspnet45/docs/HOL_Continuous_Deployment_Release_Management/">Continuous Deployment with Release Management in Visual Studio Team Services</a>

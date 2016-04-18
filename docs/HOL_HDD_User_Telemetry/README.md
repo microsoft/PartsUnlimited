@@ -140,11 +140,11 @@ In this lab, you learned about setting up Application Insights and inserting the
 
 Try these labs out for next steps:
 
-- [Testing in Production hands-on lab](https://github.com/Microsoft/PartsUnlimited/tree/hands-on-labs/docs/HOL_HDD_Testing_in_Production)
+- [Testing in Production hands-on lab](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_HDD_Testing_in_Production)
 
-- [Application Performance Monitoring hands-on lab](https://github.com/Microsoft/PartsUnlimited/tree/hands-on-labs/docs/HOL_PartsUnlimited_Application_Performance_Monitoring)
+- [Application Performance Monitoring hands-on lab](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_Application_Performance_Monitoring)
 
-- [Continuous Integration hands-on lab](https://github.com/Microsoft/PartsUnlimited/tree/hands-on-labs/docs/HOL_PartsUnlimited_WebSite_Continuous_Integration)
+- [Continuous Integration hands-on lab](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_Continuous_Integration)
 
 **Further Resources**
 
