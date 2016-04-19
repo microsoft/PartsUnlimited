@@ -190,7 +190,7 @@ namespace PartsUnlimited
                 var storageConfig = new AzureStorageConfiguration(Configuration.GetSection("Keys:AzureStorage"));
                 if (!string.IsNullOrWhiteSpace(storageConfig.ConnectionString))
                 {
-                    //Currently only supports Azure storage when DocDb and Azurestorage defined.
+                    //Currently only supports Azure storage when DocumentDB and Azurestorage defined.
                     services.AddInstance<IAzureStorageConfiguration>(storageConfig);
                 }
                 else

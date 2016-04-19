@@ -59,12 +59,12 @@ namespace PartsUnlimited.Repository
 
             var imageUrl = newBlob.Uri.ToString();
 
-            await AttachToDocumentDb(productId, imageUrl, categories.ToArray(), colors.ToArray());
+            await AttachToDocumentDB(productId, imageUrl, categories.ToArray(), colors.ToArray());
 
             return imageUrl;
         }
 
-        private async Task AttachToDocumentDb(int productId, string imageUrl, string[] productArtCategories, string[] productArtColors)
+        private async Task AttachToDocumentDB(int productId, string imageUrl, string[] productArtCategories, string[] productArtColors)
         {
             var productLink = _docDbConfiguration.BuildProductLink(productId);
             var client = _docDbConfiguration.BuildClient();

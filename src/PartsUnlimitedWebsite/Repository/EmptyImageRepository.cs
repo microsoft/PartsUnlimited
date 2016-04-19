@@ -11,13 +11,13 @@ namespace PartsUnlimited.Repository
     {
         public Task<string> Upload(Stream image, string contentDisposition, string contentType)
         {
-            //Todo fill in when we allow uploading of images without storing in doc db.
+            //Todo fill in when we allow uploading of images without storing in DocumentDB.
             throw new NotImplementedException();
         }
 
         public Task<string> UploadAndAttachToProduct(int productId, IEnumerable<string> colors, IEnumerable<string> categories, byte[] fileBytes)
         {
-            //Todo fill in when we allow uploading of images without storing in doc db.
+            //Todo fill in when we allow uploading of images without storing in DocumentDB.
             throw new NotImplementedException();
         }
     }
