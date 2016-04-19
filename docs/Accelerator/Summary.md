@@ -26,7 +26,7 @@ Instructions to carry this out can be found [here](https://azure.microsoft.com/e
 
 Once you have a Database account you will need to edit the [`config.json`](../../src/PartsUnlimitedWebsite/config.json) file by filling in the `URI` and `Key` details, these can be found within Azure. If these details are not filled in PartsUnlimited will fall back to using an implementation of a SQL Database.
 
-	"DocumentDb": {
+	"DocumentDB": {
     	"URI": "https://<tennantname>.documents.azure.com:443/",
     	"Key": "<key>"
     }
