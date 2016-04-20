@@ -95,6 +95,8 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         {
             if (TryValidateModel(product) && ModelState.IsValid)
             {
+                product.Category = await _categoryLoader.Load(product.CategoryId);
+
                 await _productRepository.Add(product, HttpContext.RequestAborted);
 
                 var productImage = Request.Form.Files["productImage"];
