@@ -26,7 +26,6 @@
         "dependencies": {
             "Microsoft.Azure.DocumentDB": "1.5.2"
         }
-
     },
     "dnxcore50": {
     }

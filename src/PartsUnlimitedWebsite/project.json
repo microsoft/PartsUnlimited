@@ -39,9 +39,7 @@
     "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final",
     "PartsUnlimited.Models": "",
     "StackExchange.Redis": "1.1.0-alpha2",
-        "Microsoft.Azure.DocumentDB": "1.5.2",
-        "WindowsAzure.Storage": "6.2.0",
-        "Microsoft.ProjectOxford.Vision": "0.5.0.1"
+    "Microsoft.ProjectOxford.Vision": "0.5.0.1"
   },
   "commands": {
     "WebListener": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls http://localhost:5001",
@@ -68,6 +66,8 @@
   "frameworks": {
     "dnx451": {
       "dependencies": {
+        "Microsoft.Azure.DocumentDB": "1.5.2",
+        "WindowsAzure.Storage": "6.2.0"
       }
     }
   }
