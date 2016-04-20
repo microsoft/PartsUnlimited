@@ -29,43 +29,88 @@ namespace PartsUnlimited.Repository
             _client = _configuration.BuildClient();
         }
 
+        /// <summary>
+        /// DocumentDB query throttling helper function. Automatically retries queries which fail
+        /// due to rate throttling.
+        /// </summary>
+        public static async Task<V> ExecuteTaskWithThrottlingSafety<V>(Func<Task<V>> func)
+        {
+            while (true)
+            {
+                try
+                {
+                    return await func();
+                }
+                catch (AggregateException ae) when (ae.InnerException is DocumentClientException)
+                {
+                    var de = (DocumentClientException)ae.InnerException;
+                    if (de.StatusCode != null && (int)de.StatusCode == 429)
+                    {
+                        await Task.Delay(de.RetryAfter);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+        }
+
+        public static Task ExecuteTaskWithThrottlingSafety(Func<Task> func)
+        {
+            return ExecuteTaskWithThrottlingSafety(() => {
+                func();
+                return Task.FromResult(0);
+            });
+        }
+
         public async Task<IEnumerable<IProduct>> Search(ProductSearchCriteria searchCriteria)
         {
             var collection = _configuration.BuildProductCollectionLink();
             var lowercaseQuery = searchCriteria.TitleSearch.ToLower();
-            return await _client.CreateDocumentQuery<Product>(collection)
-                                .Where(p => p.Title.ToLower().Contains(lowercaseQuery))
-                                .ToAsyncEnumerable().ToList();
+            return await ExecuteTaskWithThrottlingSafety(() => _client.CreateDocumentQuery<Product>(collection)
+                                                                      .Where(p => p.Title.ToLower().Contains(lowercaseQuery))
+                                                                      .ToAsyncEnumerable().ToList());
         }
 
         public async Task<IEnumerable<IProduct>> LoadSaleProducts()
         {
             var collection = _configuration.BuildProductCollectionLink();
-            return await _client.CreateDocumentQuery<Product>(collection)
-                                .Where(p => p.SalePrice != p.Price)
-                                .ToAsyncEnumerable().ToList();
+            return await ExecuteTaskWithThrottlingSafety(() => _client.CreateDocumentQuery<Product>(collection)
+                                                                      .Where(p => p.SalePrice != p.Price)
+                                                                      .ToAsyncEnumerable().ToList());
         }
 
         public async Task<IEnumerable<IProduct>> LoadAllProducts()
         {
             var collection = _configuration.BuildProductCollectionLink();
-            return await _client.CreateDocumentQuery<Product>(collection)
-                                .ToAsyncEnumerable().ToList();
+            return await ExecuteTaskWithThrottlingSafety(() => _client.CreateDocumentQuery<Product>(collection)
+                                                                      .ToAsyncEnumerable().ToList());
         }
 
         public async Task Add(IProduct product, CancellationToken cancellationToken)
         {
+            if (product.Category == null)
+            {
+                throw new InvalidOperationException("Category not set");
+            }
+
             //TODO - add CancellationToken support
             var collection = _configuration.BuildProductCollectionLink();
-            product.ProductId = await GetNextProductId();
-            await _client.CreateDocumentAsync(collection, product);
+
+            await ExecuteTaskWithThrottlingSafety(async () => {
+
+                product.ProductId = await GetNextProductId();
+                await _client.CreateDocumentAsync(collection, product);
+
+            });
         }
 
         public async Task<int> GetNextProductId()
         {
             var collection = _configuration.BuildProductCollectionLink();
-            var nextIds = await _client.CreateDocumentQuery<int>(collection, "SELECT TOP 1 VALUE p.ProductId FROM p ORDER BY p.ProductId DESC")
-                                       .ToAsyncEnumerable().ToList();
+            var nextIds = await ExecuteTaskWithThrottlingSafety(() => _client.CreateDocumentQuery<int>(collection, "SELECT TOP 1 VALUE p.ProductId FROM p ORDER BY p.ProductId DESC")
+                                                                             .ToAsyncEnumerable().ToList());
 
             var newProductId = 1;
             if (nextIds.Any())
@@ -80,10 +125,10 @@ namespace PartsUnlimited.Repository
         public async Task<IProduct> GetLatestProduct()
         {
             var collection = _configuration.BuildProductCollectionLink();
-            var latestProduct = await _client.CreateDocumentQuery<Product>(collection)
-                                             .OrderByDescending(p => p.Created)
-                                             .Take(1)
-                                             .ToAsyncEnumerable().ToList();
+            var latestProduct = await ExecuteTaskWithThrottlingSafety(() => _client.CreateDocumentQuery<Product>(collection)
+                                                                                   .OrderByDescending(p => p.Created)
+                                                                                   .Take(1)
+                                                                                   .ToAsyncEnumerable().ToList());
 
             if (latestProduct.Any())
             {
@@ -101,15 +146,16 @@ namespace PartsUnlimited.Repository
         {
             //TODO - wrap CancellationToken around request
             var productLink = _configuration.BuildProductLink(product.ProductId);
-            await _client.DeleteDocumentAsync(productLink);            
+
+            await ExecuteTaskWithThrottlingSafety(() => _client.DeleteDocumentAsync(productLink));
         }
 
         public async Task<IEnumerable<IProduct>> LoadProductsForCategory(int categoryId)
         {
             var collection = _configuration.BuildProductCollectionLink();
-            var productsInCategory = await _client.CreateDocumentQuery<Product>(collection)
-                                                  .Where(p => p.CategoryId == categoryId)
-                                                  .ToAsyncEnumerable().ToList();
+            var productsInCategory = await ExecuteTaskWithThrottlingSafety(() => _client.CreateDocumentQuery<Product>(collection)
+                                                                                        .Where(p => p.CategoryId == categoryId)
+                                                                                        .ToAsyncEnumerable().ToList());
 
             productsInCategory.ForEach(async p => await LoadProductImageUrl(p));
 
@@ -119,9 +165,9 @@ namespace PartsUnlimited.Repository
         public async Task<IEnumerable<IProduct>> LoadProductsFromRecommendation(IEnumerable<string> recommendedProductIds)
         {
             var collection = _configuration.BuildProductCollectionLink();
-            var products = await _client.CreateDocumentQuery<Product>(collection)
-                                        .Where(p => recommendedProductIds.Contains(p.RecommendationId.ToString()))
-                                        .ToAsyncEnumerable().ToList();
+            var products = await ExecuteTaskWithThrottlingSafety(() => _client.CreateDocumentQuery<Product>(collection)
+                                                                              .Where(p => recommendedProductIds.Contains(p.RecommendationId.ToString()))
+                                                                              .ToAsyncEnumerable().ToList());
 
             return products;
         }
@@ -132,31 +178,32 @@ namespace PartsUnlimited.Repository
             var product = (Product)await Load(productId);
             var query = _queryBuilder.BuildQuery(product);
 
-            var relatedProducts = await _client.CreateDocumentQuery<Product>(collection, query)
-                                               .ToAsyncEnumerable()
-                                               .ToList();
+            var relatedProducts = await ExecuteTaskWithThrottlingSafety(() => _client.CreateDocumentQuery<Product>(collection, query)
+                                                                                     .ToAsyncEnumerable()
+                                                                                     .ToList());
 
             return relatedProducts;
         }
 
         public async Task<IEnumerable<IProduct>> LoadTopSellingProducts(int count)
         {
-            IEnumerable<int> productIds = await _sqlProductRepository.LoadTopSellingProduct(count);
-            productIds = productIds.ToList();
+            var productIds = await _sqlProductRepository.LoadTopSellingProduct(count);
+
             var collection = _configuration.BuildProductCollectionLink();
-            var products = _client.CreateDocumentQuery<Product>(collection)
-                                  .Where(s => productIds.Contains(s.ProductId))
-                                  .ToAsyncEnumerable().ToList();
-            return await products;
+
+            var products = await ExecuteTaskWithThrottlingSafety(() => _client.CreateDocumentQuery<Product>(collection)
+                                                                              .Where(s => productIds.Contains(s.ProductId))
+                                                                              .ToAsyncEnumerable().ToList());
+            return products;
         }
 
         public async Task<IEnumerable<IProduct>> LoadNewProducts(int count)
         {
             var collection = _configuration.BuildProductCollectionLink();
-            var products = await _client.CreateDocumentQuery<Product>(collection)
-                                        .OrderByDescending(p => p.Created)
-                                        .Take(count)
-                                        .ToAsyncEnumerable().ToList();
+            var products = await ExecuteTaskWithThrottlingSafety(() => _client.CreateDocumentQuery<Product>(collection)
+                                                                              .OrderByDescending(p => p.Created)
+                                                                              .Take(count)
+                                                                              .ToAsyncEnumerable().ToList());
 
             return products;
         }
@@ -164,28 +211,30 @@ namespace PartsUnlimited.Repository
         public async Task<IEnumerable<IProduct>> LoadAllProducts(SortField sortField, SortDirection sortDirection)
         {
             var collection = _configuration.BuildProductCollectionLink();
-            var products = _client.CreateDocumentQuery<Product>(collection);
-            var sortedQuery = products.Sort(sortField, sortDirection);
-            var sortedProducts = await sortedQuery.ToAsyncEnumerable().ToList();
-            return sortedProducts;
+            return await ExecuteTaskWithThrottlingSafety(() => _client.CreateDocumentQuery<Product>(collection)
+                                                                      .Sort(sortField, sortDirection)
+                                                                      .ToAsyncEnumerable().ToList());
         }
 
         public Task Save(IProduct product, CancellationToken token)
         {
             //TODO - wrap CancellationToken around request
             var collection = _configuration.BuildProductCollectionLink();
-            return _client.UpsertDocumentAsync(collection, product);
+
+            return ExecuteTaskWithThrottlingSafety(() => _client.UpsertDocumentAsync(collection, product));
         }
 
         public async Task<IProduct> Load(int id)
         {
             var collection = _configuration.BuildProductCollectionLink();
-            var products = await _client.CreateDocumentQuery<Product>(collection)
-                                        .Where(p => p.ProductId == id)
-                                        .ToAsyncEnumerable().ToList();
+            var products = await ExecuteTaskWithThrottlingSafety(() => _client.CreateDocumentQuery<Product>(collection)
+                                                                              .Where(p => p.ProductId == id)
+                                                                              .ToAsyncEnumerable().ToList());
 
             if (!products.Any())
+            {
                 return null;
+            }
 
             await LoadProductImageUrl(products.First());
 
@@ -197,13 +246,15 @@ namespace PartsUnlimited.Repository
             var attachmentLink = _configuration.BuildAttachmentLink(product.ProductId);
             try
             {
-                Attachment attachment = await _client.ReadAttachmentAsync(attachmentLink);
+                Attachment attachment = await ExecuteTaskWithThrottlingSafety(() => _client.ReadAttachmentAsync(attachmentLink));
                 product.ProductArtUrl = attachment.MediaLink;
             }
             catch (DocumentClientException e)
             {
-                if (e.StatusCode != null && (int)e.StatusCode != 404)
+                if (e.StatusCode != null && (int) e.StatusCode != 404)
+                {
                     throw;
+                }
             }
         }
     }

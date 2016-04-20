@@ -98,7 +98,7 @@ namespace PartsUnlimited.Repository
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<int>> LoadTopSellingProduct(int count)
+        public async Task<IList<int>> LoadTopSellingProduct(int count)
         {
             // TODO [EF] We don't query related data as yet, so the OrderByDescending isn't doing anything
             IQueryable<int> pl = (from r in _context.OrderDetails
