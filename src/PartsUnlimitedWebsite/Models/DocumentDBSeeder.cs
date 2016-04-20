@@ -88,23 +88,23 @@ namespace PartsUnlimited.Models
         private async Task CreateCollectionIfNotExists(DocumentClient client)
         {
             var databaseLink = _configuration.BuildDatabaseLink();
-            var collection = client.CreateDocumentCollectionQuery(databaseLink).FirstOrDefault(c => c.Id == _configuration.CollectionId);
+            var collection = client.CreateDocumentCollectionQuery(databaseLink).Where(c => c.Id == _configuration.CollectionId).ToList().FirstOrDefault();
             if (collection == null)
             {
                 var productCollection = new DocumentCollection { Id = _configuration.CollectionId };
-
-                //Add indexing across all items for ordering and searching.
+                
+                // Add indexing across all String and Number properties for ordering and searching
                 productCollection.IndexingPolicy.IncludedPaths.Add(
                     new IncludedPath
                     {
                         Path = "/*",
-                        Indexes = new Collection<Index>
+                        Indexes =
                         {
-                            new RangeIndex(DataType.String) { Precision = -1 },
-                            new RangeIndex(DataType.Number) { Precision = -1 }
+                            new RangeIndex(DataType.String, precision: -1),
+                            new RangeIndex(DataType.Number, precision: -1)
                         }
                     });
-                
+
                 await client.CreateDocumentCollectionAsync(databaseLink, productCollection);
             }
         }
