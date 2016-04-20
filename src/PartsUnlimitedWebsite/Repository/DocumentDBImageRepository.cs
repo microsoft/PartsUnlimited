@@ -11,15 +11,15 @@ using PartsUnlimited.WebsiteConfiguration;
 
 namespace PartsUnlimited.Repository
 {
-    public class DocDbImageRepository : IImageRepository
+    public class DocumentDBImageRepository : IImageRepository
     {
         private readonly IAzureStorageConfiguration _storageConfiguration;
-        private readonly IDocDbConfiguration _docDbConfiguration;
+        private readonly IDocumentDBConfiguration _documentDbConfiguration;
 
-        public DocDbImageRepository(IAzureStorageConfiguration storageConfiguration, IDocDbConfiguration docDbConfiguration)
+        public DocumentDBImageRepository(IAzureStorageConfiguration storageConfiguration, IDocumentDBConfiguration documentDbConfiguration)
         {
             _storageConfiguration = storageConfiguration;
-            _docDbConfiguration = docDbConfiguration;
+            _documentDbConfiguration = documentDbConfiguration;
         }
 
         public async Task<string> Upload(Stream image, string contentDisposition, string contentType)
@@ -66,8 +66,8 @@ namespace PartsUnlimited.Repository
 
         private async Task AttachToDocumentDB(int productId, string imageUrl, string[] productArtCategories, string[] productArtColors)
         {
-            var productLink = _docDbConfiguration.BuildProductLink(productId);
-            var client = _docDbConfiguration.BuildClient();
+            var productLink = _documentDbConfiguration.BuildProductLink(productId);
+            var client = _documentDbConfiguration.BuildClient();
 
             await client.CreateAttachmentAsync(productLink, new { id = productId.ToString(), contentType = "image/jpeg", media = imageUrl, categories = productArtCategories, colors = productArtColors });
         }

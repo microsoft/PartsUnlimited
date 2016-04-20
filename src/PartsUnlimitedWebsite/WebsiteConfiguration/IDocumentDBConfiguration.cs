@@ -3,7 +3,7 @@ using Microsoft.Azure.Documents.Client;
 
 namespace PartsUnlimited.WebsiteConfiguration
 {
-    public interface IDocDbConfiguration
+    public interface IDocumentDBConfiguration
     {
         DocumentClient BuildClient();
         Uri BuildProductCollectionLink();

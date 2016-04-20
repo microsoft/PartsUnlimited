@@ -174,9 +174,9 @@ namespace PartsUnlimited
             services.AddSingleton<SqlProductRepository>();
             services.AddScoped<ICategoryLoader, CategoryLoader>();
             
-            var docDbConfig = new DocDbConfiguration(Configuration.GetSection("Keys:DocumentDB"));
+            var documentDBConfig = new DocumentDbConfiguration(Configuration.GetSection("Keys:DocumentDB"));
 
-            if (string.IsNullOrEmpty(docDbConfig.URI) || string.IsNullOrEmpty(docDbConfig.Key))
+            if (string.IsNullOrEmpty(documentDBConfig.URI) || string.IsNullOrEmpty(documentDBConfig.Key))
             {    
                 // No DocumentDB configuration, use SQL
                 services.AddScoped<IImageRepository, EmptyImageRepository>();
@@ -195,12 +195,12 @@ namespace PartsUnlimited
                 services.AddScoped<IRelatedProductsQueryStrategy, DefaultRelatedProductQueryStrategy>();
                 services.AddScoped<RelatedProductsQueryBuilder>();
                 services.AddScoped<SQLDataSeeder>();
-                services.AddInstance<IDocDbConfiguration>(docDbConfig);
-                services.AddScoped<DocDbProductRepository>();
-                services.AddScoped<IProductRepository, DocDbProductRepository>();
-                services.AddScoped<IProductLoader, DocDbProductRepository>();
-                services.AddScoped<IDataSeeder, DocDbSeeder>();
-                services.AddScoped<IImageRepository, DocDbImageRepository>();
+                services.AddInstance<IDocumentDBConfiguration>(documentDBConfig);
+                services.AddScoped<DocumentDBProductRepository>();
+                services.AddScoped<IProductRepository, DocumentDBProductRepository>();
+                services.AddScoped<IProductLoader, DocumentDBProductRepository>();
+                services.AddScoped<IDataSeeder, DocumentDBSeeder>();
+                services.AddScoped<IImageRepository, DocumentDBImageRepository>();
 
                 // Currently only support Azure Storage when also using DocumentDB
                 var storageConfig = new AzureStorageConfiguration(Configuration.GetSection("Keys:AzureStorage"));

@@ -14,14 +14,14 @@ using PartsUnlimited.WebsiteConfiguration;
 
 namespace PartsUnlimited.Repository
 {
-    public class DocDbProductRepository : IProductRepository
+    public class DocumentDBProductRepository : IProductRepository
     {
-        private readonly IDocDbConfiguration _configuration;
+        private readonly IDocumentDBConfiguration _configuration;
         private readonly SqlProductRepository _sqlProductRepository;
         private readonly DocumentClient _client;
         private readonly RelatedProductsQueryBuilder _queryBuilder;
 
-        public DocDbProductRepository(IDocDbConfiguration configuration, SqlProductRepository sqlProductRepository, RelatedProductsQueryBuilder queryBuilder)
+        public DocumentDBProductRepository(IDocumentDBConfiguration configuration, SqlProductRepository sqlProductRepository, RelatedProductsQueryBuilder queryBuilder)
         {
             _configuration = configuration;
             _sqlProductRepository = sqlProductRepository;

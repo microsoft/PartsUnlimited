@@ -4,11 +4,11 @@ using Microsoft.Extensions.Configuration;
 
 namespace PartsUnlimited.WebsiteConfiguration
 {
-    public class DocDbConfiguration : IDocDbConfiguration
+    public class DocumentDbConfiguration : IDocumentDBConfiguration
     {
         private readonly DocumentClient _client;
 
-        public DocDbConfiguration(IConfiguration config)
+        public DocumentDbConfiguration(IConfiguration config)
         {
             URI = config["URI"];
             Key = config["Key"];

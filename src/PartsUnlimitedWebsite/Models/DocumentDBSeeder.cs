@@ -11,13 +11,13 @@ using PartsUnlimited.WebsiteConfiguration;
 
 namespace PartsUnlimited.Models
 {
-    public class DocDbSeeder : IDataSeeder
+    public class DocumentDBSeeder : IDataSeeder
     {
-        private readonly IDocDbConfiguration _configuration;
+        private readonly IDocumentDBConfiguration _configuration;
         private readonly SQLDataSeeder _sqlDataSeeder;
-        private readonly DocDbProductRepository _productRepository;
+        private readonly DocumentDBProductRepository _productRepository;
 
-        public DocDbSeeder(IDocDbConfiguration configuration, SQLDataSeeder sqlDataSeeder, DocDbProductRepository productRepository)
+        public DocumentDBSeeder(IDocumentDBConfiguration configuration, SQLDataSeeder sqlDataSeeder, DocumentDBProductRepository productRepository)
         {
             _configuration = configuration;
             _sqlDataSeeder = sqlDataSeeder;
@@ -27,10 +27,10 @@ namespace PartsUnlimited.Models
         public async Task Seed(SampleData data)
         {
             //See remaining items which exist within sql.
-            await _sqlDataSeeder.Seed(data, categories => CreateDocDbProducts(data, categories));            
+            await _sqlDataSeeder.Seed(data, categories => CreateDocumentDBProducts(data, categories));            
         }
 
-        private async Task<IEnumerable<IProduct>> CreateDocDbProducts(SampleData data, IEnumerable<Category> categories)
+        private async Task<IEnumerable<IProduct>> CreateDocumentDBProducts(SampleData data, IEnumerable<Category> categories)
         {
             try
             {
@@ -57,13 +57,13 @@ namespace PartsUnlimited.Models
         {
             var collectionId = _configuration.BuildProductCollectionLink();
 
-            var docDbProducts = await client.CreateDocumentQuery<Product>(collectionId, "SELECT * FROM Products").ToAsyncEnumerable().ToList();
-
-            if (docDbProducts.Any())
+            var existingProducts = await client.ReadEntireDocumentFeedAsync<Product>(collectionId);
+            if (existingProducts.Any())
             {
-                return docDbProducts;
+                return existingProducts;
             }
 
+            // No products in DocumentDB. Bootstrap from SampleData:
             var products = data.GetProducts(categories);
 
             foreach (var prod in products)
@@ -88,10 +88,10 @@ namespace PartsUnlimited.Models
         private async Task CreateCollectionIfNotExists(DocumentClient client)
         {
             var databaseLink = _configuration.BuildDatabaseLink();
-            var collection = client.CreateDocumentCollectionQuery(databaseLink).Where(c => c.Id == _configuration.CollectionId).ToArray().FirstOrDefault();
+            var collection = client.CreateDocumentCollectionQuery(databaseLink).FirstOrDefault(c => c.Id == _configuration.CollectionId);
             if (collection == null)
             {
-                var productCollection = new DocumentCollection {Id = _configuration.CollectionId };
+                var productCollection = new DocumentCollection { Id = _configuration.CollectionId };
 
                 //Add indexing across all items for ordering and searching.
                 productCollection.IndexingPolicy.IncludedPaths.Add(
