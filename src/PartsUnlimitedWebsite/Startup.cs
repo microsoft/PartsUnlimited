@@ -171,33 +171,25 @@ namespace PartsUnlimited
 
         private void SetupRepository(IServiceCollection services)
         {
-            var docDbConfig = new DocDbConfiguration(Configuration.GetSection("Keys:DocumentDB"));
             services.AddSingleton<SqlProductRepository>();
             services.AddScoped<ICategoryLoader, CategoryLoader>();
+            
+            var docDbConfig = new DocDbConfiguration(Configuration.GetSection("Keys:DocumentDB"));
 
-
-            if (string.IsNullOrEmpty(docDbConfig.URI)
-                || string.IsNullOrEmpty(docDbConfig.Key))
+            if (string.IsNullOrEmpty(docDbConfig.URI) || string.IsNullOrEmpty(docDbConfig.Key))
             {    
-                services.AddScoped<IAzureStorageConfiguration, EmptyStorageConfiguration>();
+                // No DocumentDB configuration, use SQL
                 services.AddScoped<IImageRepository, EmptyImageRepository>();
                 services.AddScoped<IProductRepository, SqlProductRepository>();
                 services.AddScoped<IProductLoader, SqlProductRepository>();
                 services.AddScoped<IDataSeeder, SQLDataSeeder>();
+                
+                // Currently only support Azure Storage when also using DocumentDB
+                services.AddScoped<IAzureStorageConfiguration, EmptyStorageConfiguration>();
             }
             else
             {
-                var storageConfig = new AzureStorageConfiguration(Configuration.GetSection("Keys:AzureStorage"));
-                if (!string.IsNullOrWhiteSpace(storageConfig.ConnectionString))
-                {
-                    //Currently only supports Azure storage when DocumentDB and Azurestorage defined.
-                    services.AddInstance<IAzureStorageConfiguration>(storageConfig);
-                }
-                else
-                {
-                    services.AddScoped<IAzureStorageConfiguration, EmptyStorageConfiguration>();
-                }
-
+                // Use DocumentDB
                 services.AddScoped<IRelatedProductsQueryStrategy, WheelsAndTiresTiresRelatedProductQueryStrategy>();
                 services.AddScoped<IRelatedProductsQueryStrategy, LightingRelatedProductQueryStrategy>();
                 services.AddScoped<IRelatedProductsQueryStrategy, DefaultRelatedProductQueryStrategy>();
@@ -209,6 +201,17 @@ namespace PartsUnlimited
                 services.AddScoped<IProductLoader, DocDbProductRepository>();
                 services.AddScoped<IDataSeeder, DocDbSeeder>();
                 services.AddScoped<IImageRepository, DocDbImageRepository>();
+
+                // Currently only support Azure Storage when also using DocumentDB
+                var storageConfig = new AzureStorageConfiguration(Configuration.GetSection("Keys:AzureStorage"));
+                if (!string.IsNullOrWhiteSpace(storageConfig.ConnectionString))
+                {
+                    services.AddInstance<IAzureStorageConfiguration>(storageConfig);
+                }
+                else
+                {
+                    services.AddScoped<IAzureStorageConfiguration, EmptyStorageConfiguration>();
+                }
             }
         }
 
@@ -261,7 +264,7 @@ namespace PartsUnlimited
 
             // Add login providers (Microsoft/AzureAD/Google/etc).  This must be done after `app.UseIdentity()`
             app.AddLoginProviders(new ConfigurationLoginProviders(Configuration.GetSection("Authentication")));
-
+            
             // Add MVC to the request pipeline
             app.UseMvc(routes =>
             {

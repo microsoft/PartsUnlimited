@@ -56,23 +56,22 @@ namespace PartsUnlimited.Models
         private async Task<IEnumerable<IProduct>> CreateProducts(DocumentClient client, SampleData data, IEnumerable<Category> categories)
         {
             var collectionId = _configuration.BuildProductCollectionLink();
-            List<Product> docDbProducts = client.CreateDocumentQuery<Product>(collectionId, "SELECT * FROM Products").AsEnumerable().ToList();
 
-            if (!docDbProducts.Any())
+            var docDbProducts = await client.CreateDocumentQuery<Product>(collectionId, "SELECT * FROM Products").ToAsyncEnumerable().ToList();
+
+            if (docDbProducts.Any())
             {
-                IEnumerable<IProduct> products = data.GetProducts(categories);
-
-                foreach (var prod in products)
-                {
-                    prod.ProductId = await _productRepository.GetNextProductId();
-                    await _productRepository.Add(prod, new CancellationToken(false));
-                }
-
-                return products;
+                return docDbProducts;
             }
 
-            return docDbProducts;
+            var products = data.GetProducts(categories);
 
+            foreach (var prod in products)
+            {
+                await _productRepository.Add(prod, CancellationToken.None);
+            }
+
+            return products;
         }
 
         private async Task CreateDatabaseIfNotExists(DocumentClient client)

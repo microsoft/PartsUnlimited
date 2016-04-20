@@ -21,8 +21,7 @@ namespace PartsUnlimited.Repository
         private readonly DocumentClient _client;
         private readonly RelatedProductsQueryBuilder _queryBuilder;
 
-        public DocDbProductRepository(IDocDbConfiguration configuration, 
-            SqlProductRepository sqlProductRepository, RelatedProductsQueryBuilder queryBuilder)
+        public DocDbProductRepository(IDocDbConfiguration configuration, SqlProductRepository sqlProductRepository, RelatedProductsQueryBuilder queryBuilder)
         {
             _configuration = configuration;
             _sqlProductRepository = sqlProductRepository;
@@ -35,28 +34,28 @@ namespace PartsUnlimited.Repository
             var collection = _configuration.BuildProductCollectionLink();
             var lowercaseQuery = searchCriteria.TitleSearch.ToLower();
             return await _client.CreateDocumentQuery<Product>(collection)
-                .Where(p => p.Title.ToLower().Contains(lowercaseQuery))
-                .ToAsyncEnumerable().ToList();
+                                .Where(p => p.Title.ToLower().Contains(lowercaseQuery))
+                                .ToAsyncEnumerable().ToList();
         }
 
         public async Task<IEnumerable<IProduct>> LoadSaleProducts()
         {
             var collection = _configuration.BuildProductCollectionLink();
             return await _client.CreateDocumentQuery<Product>(collection)
-                .Where(p => p.SalePrice != p.Price)
-                .ToAsyncEnumerable().ToList();
+                                .Where(p => p.SalePrice != p.Price)
+                                .ToAsyncEnumerable().ToList();
         }
 
         public async Task<IEnumerable<IProduct>> LoadAllProducts()
         {
             var collection = _configuration.BuildProductCollectionLink();
             return await _client.CreateDocumentQuery<Product>(collection)
-                .ToAsyncEnumerable().ToList();
+                                .ToAsyncEnumerable().ToList();
         }
 
-        public async Task Add(IProduct product, CancellationToken requestAborted)
+        public async Task Add(IProduct product, CancellationToken cancellationToken)
         {
-            //TODO - wrap CancellationToken around request
+            //TODO - add CancellationToken support
             var collection = _configuration.BuildProductCollectionLink();
             product.ProductId = await GetNextProductId();
             await _client.CreateDocumentAsync(collection, product);
@@ -65,11 +64,8 @@ namespace PartsUnlimited.Repository
         public async Task<int> GetNextProductId()
         {
             var collection = _configuration.BuildProductCollectionLink();
-            var nextIds = await _client.CreateDocumentQuery<int>(collection,
-                "SELECT TOP 1 VALUE p.ProductId " +
-                "FROM p " +
-                "ORDER BY p.ProductId DESC")
-                .ToAsyncEnumerable().ToList();
+            var nextIds = await _client.CreateDocumentQuery<int>(collection, "SELECT TOP 1 VALUE p.ProductId FROM p ORDER BY p.ProductId DESC")
+                                       .ToAsyncEnumerable().ToList();
 
             var newProductId = 1;
             if (nextIds.Any())
@@ -85,9 +81,9 @@ namespace PartsUnlimited.Repository
         {
             var collection = _configuration.BuildProductCollectionLink();
             var latestProduct = await _client.CreateDocumentQuery<Product>(collection)
-                .OrderByDescending(p => p.Created)
-                .Take(1)
-                .ToAsyncEnumerable().ToList();
+                                             .OrderByDescending(p => p.Created)
+                                             .Take(1)
+                                             .ToAsyncEnumerable().ToList();
 
             if (latestProduct.Any())
             {
@@ -112,8 +108,8 @@ namespace PartsUnlimited.Repository
         {
             var collection = _configuration.BuildProductCollectionLink();
             var productsInCategory = await _client.CreateDocumentQuery<Product>(collection)
-                .Where(p => p.CategoryId == categoryId)
-                .ToAsyncEnumerable().ToList();
+                                                  .Where(p => p.CategoryId == categoryId)
+                                                  .ToAsyncEnumerable().ToList();
 
             productsInCategory.ForEach(async p => await LoadProductImageUrl(p));
 
@@ -124,8 +120,8 @@ namespace PartsUnlimited.Repository
         {
             var collection = _configuration.BuildProductCollectionLink();
             var products = await _client.CreateDocumentQuery<Product>(collection)
-                .Where(p => recommendedProductIds.Contains(p.RecommendationId.ToString()))
-                .ToAsyncEnumerable().ToList();
+                                        .Where(p => recommendedProductIds.Contains(p.RecommendationId.ToString()))
+                                        .ToAsyncEnumerable().ToList();
 
             return products;
         }
@@ -137,8 +133,8 @@ namespace PartsUnlimited.Repository
             var query = _queryBuilder.BuildQuery(product);
 
             var relatedProducts = await _client.CreateDocumentQuery<Product>(collection, query)
-                .ToAsyncEnumerable()
-                .ToList();
+                                               .ToAsyncEnumerable()
+                                               .ToList();
 
             return relatedProducts;
         }
@@ -148,19 +144,19 @@ namespace PartsUnlimited.Repository
             IEnumerable<int> productIds = await _sqlProductRepository.LoadTopSellingProduct(count);
             productIds = productIds.ToList();
             var collection = _configuration.BuildProductCollectionLink();
-            IEnumerable<Product> products = _client.CreateDocumentQuery<Product>(collection)
-                .Where(s => productIds.Contains(s.ProductId))
-                .AsEnumerable().ToList();
-            return await Task.FromResult(products);
+            var products = _client.CreateDocumentQuery<Product>(collection)
+                                  .Where(s => productIds.Contains(s.ProductId))
+                                  .ToAsyncEnumerable().ToList();
+            return await products;
         }
 
         public async Task<IEnumerable<IProduct>> LoadNewProducts(int count)
         {
             var collection = _configuration.BuildProductCollectionLink();
-            IEnumerable<Product> products = await _client.CreateDocumentQuery<Product>(collection)
-                .OrderByDescending(p => p.Created)
-                .Take(count)
-                .ToAsyncEnumerable().ToList();
+            var products = await _client.CreateDocumentQuery<Product>(collection)
+                                        .OrderByDescending(p => p.Created)
+                                        .Take(count)
+                                        .ToAsyncEnumerable().ToList();
 
             return products;
         }
@@ -185,8 +181,8 @@ namespace PartsUnlimited.Repository
         {
             var collection = _configuration.BuildProductCollectionLink();
             var products = await _client.CreateDocumentQuery<Product>(collection)
-                .Where(p => p.ProductId == id)
-                .ToAsyncEnumerable().ToList();
+                                        .Where(p => p.ProductId == id)
+                                        .ToAsyncEnumerable().ToList();
 
             if (!products.Any())
                 return null;
@@ -206,7 +202,7 @@ namespace PartsUnlimited.Repository
             }
             catch (DocumentClientException e)
             {
-                if ((int)e.StatusCode != 404)
+                if (e.StatusCode != null && (int)e.StatusCode != 404)
                     throw;
             }
         }
