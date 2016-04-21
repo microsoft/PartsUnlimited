@@ -91,20 +91,15 @@ namespace PartsUnlimited.Models
             var collection = client.CreateDocumentCollectionQuery(databaseLink).Where(c => c.Id == _configuration.CollectionId).ToList().FirstOrDefault();
             if (collection == null)
             {
-                var productCollection = new DocumentCollection { Id = _configuration.CollectionId };
-                
-                // Add indexing across all String and Number properties for ordering and searching
-                productCollection.IndexingPolicy.IncludedPaths.Add(
-                    new IncludedPath
-                    {
-                        Path = "/*",
-                        Indexes =
-                        {
-                            new RangeIndex(DataType.String, precision: -1),
-                            new RangeIndex(DataType.Number, precision: -1)
-                        }
-                    });
+                var productCollection = new DocumentCollection {
+                    Id = _configuration.CollectionId,
+                    IndexingPolicy = new IndexingPolicy(
+                        new RangeIndex(DataType.String, precision: -1),
+                        new RangeIndex(DataType.Number, precision: -1)
+                    )
+                };
 
+                // Add indexing across all String and Number properties for ordering and searching
                 await client.CreateDocumentCollectionAsync(databaseLink, productCollection);
             }
         }
