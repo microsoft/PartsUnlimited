@@ -16,6 +16,5 @@ namespace PartsUnlimited.Models
         Category Category { get; set; }
         string Description { get; }
         string ProductDetails { get; }
-        string id { get; }
     }
 }

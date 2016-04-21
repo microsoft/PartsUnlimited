@@ -39,7 +39,7 @@ namespace PartsUnlimited.Repository
             {
                 try
                 {
-                    return await func();
+                    return await func().ConfigureAwait(continueOnCapturedContext: true);
                 }
                 catch (AggregateException ae) when (ae.InnerException is DocumentClientException)
                 {
@@ -58,10 +58,7 @@ namespace PartsUnlimited.Repository
 
         public static Task ExecuteTaskWithThrottlingSafety(Func<Task> func)
         {
-            return ExecuteTaskWithThrottlingSafety(() => {
-                func();
-                return Task.FromResult(0);
-            });
+            return ExecuteTaskWithThrottlingSafety(() => func().ContinueWith<object>(_ => null));
         }
 
         public async Task<IEnumerable<IProduct>> Search(ProductSearchCriteria searchCriteria)
@@ -69,7 +66,7 @@ namespace PartsUnlimited.Repository
             var collection = _configuration.BuildProductCollectionLink();
             var lowercaseQuery = searchCriteria.TitleSearch.ToLower();
             return await ExecuteTaskWithThrottlingSafety(() => _client.CreateDocumentQuery<Product>(collection)
-                                                                      .Where(p => p.Title.ToLower().Contains(lowercaseQuery))
+                                                                      .Where(p => p.TitleLowerCase.Contains(lowercaseQuery))
                                                                       .ToAsyncEnumerable().ToList());
         }
 

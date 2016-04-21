@@ -14,16 +14,22 @@ namespace PartsUnlimited.Models
 {
     public class Product : IProduct
     {
+        #region [ DocumentDB-only properties for indexing purposes ]
+        
+        [NotMapped, JsonProperty(PropertyName = "id")]
+        public string Id => ProductId.ToString();
+        
+        [NotMapped, JsonProperty(PropertyName = "titleLowerCase")]
+        public string TitleLowerCase => Title?.ToLower();
+
+        #endregion
+
         [Required]
         [Display(Name = "Sku Number")]
         public string SkuNumber { get; set; }
 
         [ScaffoldColumn(false)]
         public int ProductId { get; set; }
-
-        [NotMapped]
-        [JsonProperty(PropertyName = "id")]
-        public string id => ProductId.ToString();
 
         public int RecommendationId { get; set; }
         
