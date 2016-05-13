@@ -4,7 +4,7 @@ Param(
 )
 
 #Install dnvm
-& scripts/Install-Dnvm.ps1
+#& scripts/Install-Dnvm.ps1
 
 # Restore and build projects
 & scripts/Call-Dnu.ps1 restore .\src
