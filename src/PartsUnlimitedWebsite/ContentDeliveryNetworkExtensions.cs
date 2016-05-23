@@ -35,6 +35,26 @@ namespace PartsUnlimited
             return img;
         }
 
+        public static IHtmlContent ProductImage(this IHtmlHelper helper, string src, string alt = null)
+        {
+            if (string.IsNullOrWhiteSpace(src))
+            {
+                throw new ArgumentOutOfRangeException(nameof(src), src, "Must not be null or whitespace");
+            }
+
+            var img = new TagBuilder("img");
+
+            img.MergeAttribute("src", GetProductCdnSource(src));
+
+            if (!string.IsNullOrWhiteSpace(alt))
+            {
+                img.MergeAttribute("alt", alt);
+            }
+
+            img.TagRenderMode = TagRenderMode.SelfClosing;
+            return img;
+        }
+
         public static IHtmlContent ImageBackground(this IHtmlHelper helper, string src)
         {
             var cdnSource = GetCdnSource(src);
@@ -101,8 +121,25 @@ namespace PartsUnlimited
             {
                 return src;
             }
-
             return string.Format("{0}/{1}", Configuration.Images, src);
+        }
+
+        private static string GetProductCdnSource(string src)
+        {
+            if (Configuration == null || string.IsNullOrWhiteSpace(Configuration.ProductImages))
+            {
+                return GetCdnSource(src);
+            }
+
+            var srcUri = new UriBuilder(src);
+            if (srcUri.Uri.AbsolutePath != "/")
+            {
+                var newUri = new UriBuilder(src) { Host = Configuration.ProductImages };
+                return newUri.Uri.ToString();
+            }
+
+            return GetCdnSource(src);
+            
         }
     }
 }

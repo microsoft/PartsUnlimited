@@ -7,11 +7,23 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using DataType = System.ComponentModel.DataAnnotations.DataType;
 
 namespace PartsUnlimited.Models
 {
-    public class Product
+    public class Product : IProduct
     {
+        #region [ DocumentDB-only properties for indexing purposes ]
+        
+        [NotMapped, JsonProperty(PropertyName = "id")]
+        public string Id => ProductId.ToString();
+        
+        [NotMapped, JsonProperty(PropertyName = "titleLowerCase")]
+        public string TitleLowerCase => Title?.ToLower();
+
+        #endregion
+
         [Required]
         [Display(Name = "Sku Number")]
         public string SkuNumber { get; set; }
@@ -20,7 +32,7 @@ namespace PartsUnlimited.Models
         public int ProductId { get; set; }
 
         public int RecommendationId { get; set; }
-
+        
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
 
@@ -63,13 +75,13 @@ namespace PartsUnlimited.Models
 
         public int LeadTime { get; set; }
 
-        public Dictionary<string, string> ProductDetailList
+        public Dictionary<string, dynamic> ProductDetailList
         {
             get
             {
                 if (string.IsNullOrWhiteSpace(ProductDetails))
                 {
-                    return new Dictionary<string, string>();
+                    return new Dictionary<string, dynamic>();
                 }
                 try
                 {
@@ -79,7 +91,7 @@ namespace PartsUnlimited.Models
                 {
                     throw new FormatException("Product Details only accepts json format.");
                 }
-                return JsonConvert.DeserializeObject<Dictionary<string, string>>(ProductDetails);
+                return JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(ProductDetails);
             }
         }
 

@@ -8,7 +8,6 @@ using Microsoft.Data.Entity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.PlatformAbstractions;
 using PartsUnlimited.Areas.Admin;
 using PartsUnlimited.Models;
 using PartsUnlimited.Queries;
@@ -18,6 +17,8 @@ using PartsUnlimited.Security;
 using PartsUnlimited.Telemetry;
 using PartsUnlimited.WebsiteConfiguration;
 using System;
+using PartsUnlimited.Cache;
+using PartsUnlimited.Repository;
 
 namespace PartsUnlimited
 {
@@ -55,7 +56,7 @@ namespace PartsUnlimited
             }
             else
             {
-                services.AddEntityFramework()                
+                services.AddEntityFramework()
                         .AddSqlServer()
                         .AddDbContext<PartsUnlimitedContext>(options =>
                         {
@@ -77,11 +78,13 @@ namespace PartsUnlimited
                     {
                         authBuilder.RequireClaim(AdminConstants.ManageStore.Name, AdminConstants.ManageStore.Allowed);
                     });
-                 
+
             });
 
-            // Add implementations
-            services.AddSingleton<IMemoryCache, MemoryCache>();
+            // Add implementations            
+            SetupCache(services);
+            SetupVisionApi(services);
+            SetupRepository(services);
             services.AddScoped<IOrdersQuery, OrdersQuery>();
             services.AddScoped<IRaincheckQuery, RaincheckQuery>();
 
@@ -139,6 +142,79 @@ namespace PartsUnlimited
             }
         }
 
+        private void SetupCache(IServiceCollection services)
+        {
+            var redisConfig = new RedisCacheConfig(Configuration.GetSection("Keys:RedisCache"));
+            services.AddSingleton<IMemoryCache, MemoryCache>();
+
+            // If keys are not available for Redis Cache use in memory cache as primary cache.
+            if (string.IsNullOrEmpty(redisConfig.AccessKey) || string.IsNullOrEmpty(redisConfig.HostName))
+            {
+                services.AddSingleton<IPartsUnlimitedCache, PartsUnlimitedMemoryCache>();
+            }
+            else
+            {
+                services.AddSingleton<PartsUnlimitedMemoryCache>();
+                services.AddSingleton<PartsUnlimitedRedisCache>();
+                services.AddInstance<IRedisCacheConfiguration>(redisConfig);
+                services.AddSingleton<IPartsUnlimitedCache, PartUnlimitedMultilevelCache>();
+            }
+
+            services.AddSingleton<ICacheCoordinator, CacheCoordinator>();
+        }
+
+        private void SetupVisionApi(IServiceCollection services)
+        {
+            var visionApiConfig = new VisionApiConfiguration(Configuration.GetSection("Keys:VisionApi"));
+            services.AddInstance<IVisionApiConfiguration>(visionApiConfig);
+        }
+
+        private void SetupRepository(IServiceCollection services)
+        {
+            services.AddSingleton<SqlProductRepository>();
+            services.AddScoped<ICategoryLoader, CategoryLoader>();
+            
+            var documentDBConfig = new DocumentDbConfiguration(Configuration.GetSection("Keys:DocumentDB"));
+
+            if (string.IsNullOrEmpty(documentDBConfig.URI) || string.IsNullOrEmpty(documentDBConfig.Key))
+            {    
+                // No DocumentDB configuration, use SQL
+                services.AddScoped<IImageRepository, EmptyImageRepository>();
+                services.AddScoped<IProductRepository, SqlProductRepository>();
+                services.AddScoped<IProductLoader, SqlProductRepository>();
+                services.AddScoped<IDataSeeder, SQLDataSeeder>();
+                
+                // Currently only support Azure Storage when also using DocumentDB
+                services.AddScoped<IAzureStorageConfiguration, EmptyStorageConfiguration>();
+            }
+            else
+            {
+                // Use DocumentDB
+                services.AddScoped<IRelatedProductsQueryStrategy, WheelsAndTiresTiresRelatedProductQueryStrategy>();
+                services.AddScoped<IRelatedProductsQueryStrategy, LightingRelatedProductQueryStrategy>();
+                services.AddScoped<IRelatedProductsQueryStrategy, DefaultRelatedProductQueryStrategy>();
+                services.AddScoped<RelatedProductsQueryBuilder>();
+                services.AddScoped<SQLDataSeeder>();
+                services.AddInstance<IDocumentDBConfiguration>(documentDBConfig);
+                services.AddScoped<DocumentDBProductRepository>();
+                services.AddScoped<IProductRepository, DocumentDBProductRepository>();
+                services.AddScoped<IProductLoader, DocumentDBProductRepository>();
+                services.AddScoped<IDataSeeder, DocumentDBSeeder>();
+                services.AddScoped<IImageRepository, DocumentDBImageRepository>();
+
+                // Currently only support Azure Storage when also using DocumentDB
+                var storageConfig = new AzureStorageConfiguration(Configuration.GetSection("Keys:AzureStorage"));
+                if (!string.IsNullOrWhiteSpace(storageConfig.ConnectionString))
+                {
+                    services.AddInstance<IAzureStorageConfiguration>(storageConfig);
+                }
+                else
+                {
+                    services.AddScoped<IAzureStorageConfiguration, EmptyStorageConfiguration>();
+                }
+            }
+        }
+
         //This method is invoked when KRE_ENV is 'Development' or is not defined
         //The allowed values are Development,Staging and Production
         public void ConfigureDevelopment(IApplicationBuilder app)
@@ -188,7 +264,7 @@ namespace PartsUnlimited
 
             // Add login providers (Microsoft/AzureAD/Google/etc).  This must be done after `app.UseIdentity()`
             app.AddLoginProviders(new ConfigurationLoginProviders(Configuration.GetSection("Authentication")));
-
+            
             // Add MVC to the request pipeline
             app.UseMvc(routes =>
             {
@@ -208,7 +284,9 @@ namespace PartsUnlimited
             });
 
             //Populates the PartsUnlimited sample data
-            SampleData.InitializePartsUnlimitedDatabaseAsync(app.ApplicationServices).Wait();
+            var dataSeeder = app.ApplicationServices.GetService<IDataSeeder>();
+            var data = new SampleData();
+            dataSeeder.Seed(data).Wait();
         }
     }
 }

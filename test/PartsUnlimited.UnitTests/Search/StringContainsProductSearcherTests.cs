@@ -6,6 +6,7 @@ using PartsUnlimited.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using PartsUnlimited.Repository;
 using Xunit;
 
 namespace PartsUnlimited.Search
@@ -23,11 +24,12 @@ namespace PartsUnlimited.Search
 
             context.Products.Returns(productDbSet);
 
-            var searcher = new StringContainsProductSearch(context);
+            SqlProductRepository repos = new SqlProductRepository(context);
+            var searcher = new StringContainsProductSearch(repos);
 
             var thing = await searcher.Search("thing");
 
-            Assert.Equal(new string[] { "something", "something outside" }, thing.Select(o => o.Title));
+            Assert.Equal(new[] { "something", "something outside" }, thing.Select(o => o.Title));
         }
     }
 }

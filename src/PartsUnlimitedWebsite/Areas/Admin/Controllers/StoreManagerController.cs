@@ -1,144 +1,90 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
-using Microsoft.Data.Entity;
-using Microsoft.Extensions.Caching.Memory;
+using PartsUnlimited.Cache;
 using PartsUnlimited.Hubs;
 using PartsUnlimited.Models;
+using PartsUnlimited.Repository;
 using PartsUnlimited.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using PartsUnlimited.WebsiteConfiguration;
 
 namespace PartsUnlimited.Areas.Admin.Controllers
 {
-    public enum SortField { Name, Title, Price }
-    public enum SortDirection { Up, Down }
-
     public class StoreManagerController : AdminController
     {
         private readonly IPartsUnlimitedContext _db;
         private readonly IHubContext _annoucementHub;
-        private readonly IMemoryCache _cache;
+        private readonly ICacheCoordinator _cacheCoordinator;
+        private readonly IProductRepository _productRepository;
+        private readonly ICategoryLoader _categoryLoader;
+        private readonly IImageRepository _imageRepository;
+        private readonly IAzureStorageConfiguration _azureStorage;
+        private readonly IVisionApiConfiguration _visionApi;
 
-        public StoreManagerController(IPartsUnlimitedContext context, IConnectionManager connectionManager, IMemoryCache memoryCache)
+        public StoreManagerController(IPartsUnlimitedContext context, IConnectionManager connectionManager, 
+            ICacheCoordinator cacheCoordinator, IProductRepository productRepository, IAzureStorageConfiguration azureStorage, 
+            IVisionApiConfiguration visionApi, ICategoryLoader categoryLoader, IImageRepository imageRepository)
         {
             _db = context;
             _annoucementHub = connectionManager.GetHubContext<AnnouncementHub>();
-            _cache = memoryCache;
+            _cacheCoordinator = cacheCoordinator;
+            _productRepository = productRepository;
+            _azureStorage = azureStorage;
+            _visionApi = visionApi;
+            _categoryLoader = categoryLoader;
+            _imageRepository = imageRepository;
         }
 
         //
         // GET: /StoreManager/
 
-        public IActionResult Index(SortField sortField = SortField.Name, SortDirection sortDirection = SortDirection.Up)
+        public async Task<IActionResult> Index(SortField sortField = SortField.Name,
+            SortDirection sortDirection = SortDirection.Up)
         {
-            // TODO [EF] Swap to native support for loading related data when available
-            var products = from product in _db.Products
-                           join category in _db.Categories on product.CategoryId equals category.CategoryId
-                           select new Product()
-                           {
-                               ProductArtUrl = product.ProductArtUrl,
-                               ProductId = product.ProductId,
-                               CategoryId = product.CategoryId,
-                               Price = product.Price,
-                               Title = product.Title,
-                               Category = new Category()
-                               {
-                                   CategoryId = product.CategoryId,
-                                   Name = category.Name
-                               }
-                           };
-
-            var sorted = Sort(products, sortField, sortDirection);
-
-            return View(sorted);
+            IEnumerable<IProduct> products = await _productRepository.LoadAllProducts(sortField, sortDirection);
+            return View(products);
         }
-
-        private IQueryable<Product> Sort(IQueryable<Product> products, SortField sortField, SortDirection sortDirection)
-        {
-            if (sortField == SortField.Name)
-            {
-                if (sortDirection == SortDirection.Up)
-                {
-                    return products.OrderBy(o => o.Category.Name);
-                }
-                else
-                {
-                    return products.OrderByDescending(o => o.Category.Name);
-                }
-            }
-
-            if (sortField == SortField.Price)
-            {
-                if (sortDirection == SortDirection.Up)
-                {
-                    return products.OrderBy(o => o.Price);
-                }
-                else
-                {
-                    return products.OrderByDescending(o => o.Price);
-                }
-            }
-
-            if (sortField == SortField.Title)
-            {
-                if (sortDirection == SortDirection.Up)
-                {
-                    return products.OrderBy(o => o.Title);
-                }
-                else
-                {
-                    return products.OrderByDescending(o => o.Title);
-                }
-            }
-
-            // Should not reach here, but return products for compiler
-            return products;
-        }
-
 
         //
         // GET: /StoreManager/Details/5
-
-        public IActionResult Details(int id)
+        //
+        public async Task<IActionResult> Details(int id)
         {
-            string cacheId = string.Format("product_{0}", id);
+            string cacheId = CacheConstants.Key.ProductKey(id);
+            var options = new PartsUnlimitedCacheOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10));
+            var cacheOptions = new CacheCoordinatorOptions().WithCacheOptions(options).WhichRemovesIfNull();
+            IProduct product = await _cacheCoordinator.GetAsync(cacheId, LoadProductWithId(id),cacheOptions);
 
-            Product product;
-            if (!_cache.TryGetValue(cacheId, out product))
+            if (product != null && product.Category == null)
             {
-                //If this returns null, don't stick it in the cache
-                product =  _db.Products.Where(a => a.ProductId == id).FirstOrDefault();
-
-                if (product != null)
-                {
-                    //                               Remove it from cache if not retrieved in last 10 minutes
-                    _cache.Set(cacheId, product, new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10)));
-                }
+                int categoryId = product.CategoryId;
+                product.Category = await _categoryLoader.Load(categoryId);
             }
 
-            if (product == null)
-            {
-                _cache.Remove(cacheId);
-                return View(product);
-            }
-
-            // TODO [EF] We don't query related data as yet. We have to populate this until we do automatically.
-            product.Category = _db.Categories.Single(g => g.CategoryId == product.CategoryId);
             return View(product);
+        }
+
+        private Func<Task<IProduct>> LoadProductWithId(int id)
+        {
+            return async () => await _productRepository.Load(id);
         }
 
         //
         // GET: /StoreManager/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Categories = new SelectList(_db.Categories, "CategoryId", "Name");
+            var categories = await _categoryLoader.LoadAll();
+            ViewBag.Categories = new SelectList(categories, "CategoryId", "Name");
+            ViewBag.CanUploadImage = _azureStorage.SupportImageUpload;
             return View();
         }
 
@@ -147,31 +93,45 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
-            if (ModelState.IsValid)
+            if (TryValidateModel(product) && ModelState.IsValid)
             {
-                _db.Products.Add(product);
-                await _db.SaveChangesAsync(HttpContext.RequestAborted);
-                _annoucementHub.Clients.All.announcement(new ProductData() { Title = product.Title, Url = Url.Action("Details", "Store", new { id = product.ProductId }) });
-                _cache.Remove("announcementProduct");
+                product.Category = await _categoryLoader.Load(product.CategoryId);
+
+                await _productRepository.Add(product, HttpContext.RequestAborted);
+
+                var productImage = Request.Form.Files["productImage"];
+                if (productImage != null)
+                {
+                    using (Stream image=productImage.OpenReadStream())
+                    {
+                        var imagePath = await _imageRepository.Upload(image, productImage.ContentDisposition, productImage.ContentType);
+                        var imageAnalysis = await _visionApi.AnalyseImage(imagePath);
+                        var thumbnailBytes = await _visionApi.GenerateThumbnail(imagePath);
+                        await _imageRepository.UploadAndAttachToProduct(product.ProductId, 
+                            imageAnalysis.Color.DominantColors, 
+                            imageAnalysis.Categories.Select(s => s.Name), thumbnailBytes);
+                    }
+                }
+
+                _annoucementHub.Clients.All.announcement(new ProductData { Title = product.Title, Url = Url.Action("Details", "Store", new { id = product.ProductId }) });
+                await _cacheCoordinator.Remove(CacheConstants.Key.AnnouncementProduct);
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Categories = new SelectList(_db.Categories, "CategoryId", "Name", product.CategoryId);
+            var categories = await _categoryLoader.LoadAll();
+            ViewBag.Categories = new SelectList(categories, "CategoryId", "Name", product.CategoryId);
+            ViewBag.CanUploadImage = _azureStorage.SupportImageUpload;
             return View(product);
         }
 
         //
         // GET: /StoreManager/Edit/5
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            Product product = _db.Products.Where(a => a.ProductId == id).FirstOrDefault();
-            ViewBag.Categories = new SelectList(_db.Categories, "CategoryId", "Name", product.CategoryId).ToList();
-
-            if (product == null)
-            {
-                return View(product);
-            }
-
+            IProduct product = await _productRepository.Load(id);
+            var categories = await _categoryLoader.LoadAll();
+            ViewBag.Categories = new SelectList(categories, "CategoryId", "Name", product.CategoryId).ToList();
+            ViewBag.CanUploadImage = _azureStorage.SupportImageUpload;
             return View(product);
         }
 
@@ -179,26 +139,43 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         // POST: /StoreManager/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        
         public async Task<IActionResult> Edit(Product product)
         {
-            if (ModelState.IsValid)
+            if (TryValidateModel(product) && ModelState.IsValid)
             {
-                _db.Entry(product).State = EntityState.Modified;
-                await _db.SaveChangesAsync(HttpContext.RequestAborted);
+                await _productRepository.Save(product, HttpContext.RequestAborted);
+
+                var productImage = Request.Form.Files["productImage"];
+                if (productImage != null)
+                {
+                    using (Stream image = productImage.OpenReadStream())
+                    {
+                        var imagePath = await _imageRepository.Upload(image, productImage.ContentDisposition, productImage.ContentType);
+                        var imageAnalysis = await _visionApi.AnalyseImage(imagePath);
+                        var thumbnailBytes = await _visionApi.GenerateThumbnail(imagePath);
+                        await _imageRepository.UploadAndAttachToProduct(product.ProductId,
+                            imageAnalysis.Color.DominantColors,
+                            imageAnalysis.Categories.Select(s => s.Name), thumbnailBytes);
+                    }
+                }
+
                 //Invalidate the cache entry as it is modified
-                _cache.Remove(string.Format("product_{0}", product.ProductId));
+                await _cacheCoordinator.Remove(CacheConstants.Key.ProductKey(product.ProductId));
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Categories = new SelectList(_db.Categories, "CategoryId", "Name", product.CategoryId);
+            IEnumerable<Category> categories = await _categoryLoader.LoadAll();
+            ViewBag.Categories = new SelectList(categories, "CategoryId", "Name", product.CategoryId);
+            ViewBag.CanUploadImage = _azureStorage.SupportImageUpload;
             return View(product);
         }
 
         //
         // GET: /StoreManager/RemoveProduct/5
-        public IActionResult RemoveProduct(int id)
+        public async Task<IActionResult> RemoveProduct(int id)
         {
-            Product product = _db.Products.Where(a => a.ProductId == id).FirstOrDefault();
+            IProduct product = await _productRepository.Load(id);
             return View(product);
         }
 
@@ -207,8 +184,8 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         [HttpPost, ActionName("RemoveProduct")]
         public async Task<IActionResult> RemoveProductConfirmed(int id)
         {
-            Product product = _db.Products.Where(a => a.ProductId == id).FirstOrDefault();
-            CartItem cartItem = _db.CartItems.Where(a => a.ProductId == id).FirstOrDefault();
+            IProduct product = await _productRepository.Load(id);
+            CartItem cartItem = _db.CartItems.FirstOrDefault(a => a.ProductId == id);
             List<OrderDetail> orderDetail = _db.OrderDetails.Where(a => a.ProductId == id).ToList();
             List<Raincheck> rainCheck = _db.RainChecks.Where(a => a.ProductId == id).ToList();
 
@@ -232,10 +209,9 @@ namespace PartsUnlimited.Areas.Admin.Controllers
                     await _db.SaveChangesAsync(HttpContext.RequestAborted);
                 }
 
-                _db.Products.Remove(product);
-                await _db.SaveChangesAsync(HttpContext.RequestAborted);
+                await _productRepository.Delete(product, HttpContext.RequestAborted);
                 //Remove the cache entry as it is removed
-                _cache.Remove(string.Format("product_{0}", id));
+                await _cacheCoordinator.Remove(CacheConstants.Key.ProductKey(id));
             }
 
             return RedirectToAction("Index");

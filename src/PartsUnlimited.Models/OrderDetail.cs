@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace PartsUnlimited.Models
 {
     public class OrderDetail
@@ -15,7 +17,8 @@ namespace PartsUnlimited.Models
 
         public decimal UnitPrice { get; set; }
 
-        public virtual Product Product { get; set; }
+        [NotMapped]
+        public virtual IProduct Product { get; set; }
 
         public virtual Order Order { get; set; }
     }

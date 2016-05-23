@@ -1,5 +1,5 @@
 ﻿@using PartsUnlimited
-@model PartsUnlimited.Models.Product
+@model dynamic
 
 @{
     ViewBag.Title = $"Product - {Model.Title}";
@@ -25,8 +25,12 @@
                 <div class="details-panel">
 
                 <div class="zoom" id="product-image">
-                        @Html.Image(@Model.ProductArtUrl)
-                    </div>
+
+                    @{
+                        string imageUrl = @Model.ProductArtUrl;
+                    }
+                    @Html.ProductImage(imageUrl)
+                </div>
 
                 </div>
             </div>
@@ -64,6 +68,10 @@
                 <a href="@Url.Action("AddToCart", "ShoppingCart", new { id = Model.ProductId })" class="btn">Add to Cart</a>
             </div>
         </div>
+    </section>
+
+    <section class="section-alt">
+        @await Component.InvokeAsync("RelatedProducts", Model)
     </section>
 
     <section class="section-alt">
