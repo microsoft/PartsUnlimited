@@ -40,10 +40,5 @@ namespace Microsoft.Extensions.Configuration
                 .SelectMany(o => o.Item2.Select(item2 => Tuple.Create(o.Item1, item2)))
                 .ToLookup(o => o.Item1, o => o.Item2);
         }
-
-        public static T Get<T>(this IConfiguration configuration, string key)
-        {
-            return (T)Convert.ChangeType(configuration[key], typeof(T));
-        }
     }
 }

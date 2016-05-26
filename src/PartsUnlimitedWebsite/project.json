@@ -37,7 +37,9 @@
     "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
     "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
     "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final",
-    "PartsUnlimited.Models": ""
+    "PartsUnlimited.Models": "",
+    "StackExchange.Redis": "1.1.0-alpha2",
+    "Microsoft.ProjectOxford.Vision": "0.5.0.1"
   },
   "commands": {
     "WebListener": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls http://localhost:5001",
@@ -63,8 +65,10 @@
   ],
   "frameworks": {
     "dnx451": {
-    },
-    "dnxcore50": {
+      "dependencies": {
+        "Microsoft.Azure.DocumentDB": "1.6",
+        "WindowsAzure.Storage": "6.2.0"
+      }
     }
   }
 }

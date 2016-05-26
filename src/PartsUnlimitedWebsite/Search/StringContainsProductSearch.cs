@@ -1,30 +1,31 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using PartsUnlimited.Models;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using PartsUnlimited.Models;
+using PartsUnlimited.Repository;
 
 namespace PartsUnlimited.Search
 {
     public class StringContainsProductSearch : IProductSearch
     {
-        private readonly IPartsUnlimitedContext _context;
+        private readonly IProductRepository _repository;
 
-        public StringContainsProductSearch(IPartsUnlimitedContext context)
+        public StringContainsProductSearch(IProductRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
-        public async Task<IEnumerable<Product>> Search(string query)
+        public Task<IEnumerable<IProduct>> Search(string query)
         {
-            var lowercase_query = query.ToLower();
-
-            var q = _context.Products
-                .Where(p => p.Title.ToLower().Contains(lowercase_query));
-
-            return await q.ToAsyncEnumerable().ToList();
+            var searchCriteria = new ProductSearchCriteria { TitleSearch = query.ToLower() };
+            return _repository.Search(searchCriteria);   
         }
+    }
+
+    public class ProductSearchCriteria
+    {
+        public string TitleSearch { get; set; }
     }
 }

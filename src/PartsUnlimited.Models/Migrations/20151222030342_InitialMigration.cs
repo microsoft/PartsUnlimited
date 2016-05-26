@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.Data.Entity.Migrations;
 using Microsoft.Data.Entity.Metadata;
 
@@ -283,6 +282,19 @@ namespace PartsUnlimited.Models.Migrations
                         principalColumn: "StoreId",
                         onDelete: ReferentialAction.Cascade);
                 });
+            migrationBuilder.CreateTable(
+                name: "Promo",
+                columns: table => new
+                {
+                    PromoId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Promo", x => x.PromoId);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
@@ -312,6 +324,7 @@ namespace PartsUnlimited.Models.Migrations
             migrationBuilder.DropTable("Product");
             migrationBuilder.DropTable("Store");
             migrationBuilder.DropTable("Category");
+            migrationBuilder.DropTable("Promo");
         }
     }
 }

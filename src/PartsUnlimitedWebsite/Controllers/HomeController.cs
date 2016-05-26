@@ -1,47 +1,41 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using PartsUnlimited.Models;
-using PartsUnlimited.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Mvc;
+using PartsUnlimited.Cache;
+using PartsUnlimited.Models;
+using PartsUnlimited.Repository;
+using PartsUnlimited.ViewModels;
 
 namespace PartsUnlimited.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IPartsUnlimitedContext _db;
-        private readonly IMemoryCache _cache;
+        private readonly ICacheCoordinator _cacheCoordinator;
+        private readonly IProductRepository _productRepository;
 
-        public HomeController(IPartsUnlimitedContext context, IMemoryCache memoryCache)
+        public HomeController(ICacheCoordinator cacheCoordinator, IProductRepository productRepository)
         {
-            _db = context;
-            _cache = memoryCache;
+            _cacheCoordinator = cacheCoordinator;
+            _productRepository = productRepository;
         }
 
         //
         // GET: /Home/
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             // Get most popular products
-            List<Product> topSellingProducts;
-            if (!_cache.TryGetValue("topselling", out topSellingProducts))
-            {
-                topSellingProducts = GetTopSellingProducts(4);
-                //Refresh it every 10 minutes. Let this be the last item to be removed by cache if cache GC kicks in.
-                _cache.Set("topselling", topSellingProducts, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)).SetPriority(CacheItemPriority.High));
-            }
+            var topSellingKey = CacheConstants.Key.TopSellingProducts;
+            var topSellingOptions = new PartsUnlimitedCacheOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
+            IEnumerable<IProduct> topSellingProducts = await _cacheCoordinator.GetAsync(topSellingKey, () => GetTopSellingProducts(4), new CacheCoordinatorOptions().WithCacheOptions(topSellingOptions));
             
-            List<Product> newProducts;
-            if (!_cache.TryGetValue("newarrivals", out newProducts))
-            {
-                newProducts = GetNewProducts(4);
-                //Refresh it every 10 minutes. Let this be the last item to be removed by cache if cache GC kicks in.
-                _cache.Set("newarrivals", newProducts, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)).SetPriority(CacheItemPriority.High));
-            }
+            // Get most new arrival products
+            var newArrivalKey = CacheConstants.Key.NewArrivalProducts;
+            var newArrivalOptions = new PartsUnlimitedCacheOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10)).SetPriority(PartsUnlimitedCacheItemPriority.High);
+            IEnumerable<IProduct> newProducts = await _cacheCoordinator.GetAsync(newArrivalKey, () => GetNewProducts(4), new CacheCoordinatorOptions().WithCacheOptions(newArrivalOptions));
 
             var viewModel = new HomeViewModel
             {
@@ -60,24 +54,16 @@ namespace PartsUnlimited.Controllers
             return View("~/Views/Shared/Error.cshtml");
         }
 
-        private List<Product> GetTopSellingProducts(int count)
+        private Task<IEnumerable<IProduct>> GetTopSellingProducts(int count)
         {
             // Group the order details by product and return
             // the products with the highest count
-
-            // TODO [EF] We don't query related data as yet, so the OrderByDescending isn't doing anything
-            return _db.Products
-                .OrderByDescending(a => a.OrderDetails.Count())
-                .Take(count)
-                .ToList();
+            return _productRepository.LoadTopSellingProducts(count);
         }
 
-        private List<Product> GetNewProducts(int count)
+        private Task<IEnumerable<IProduct>> GetNewProducts(int count)
         {
-            return _db.Products
-                .OrderByDescending(a => a.Created)
-                .Take(count)
-                .ToList();
+            return _productRepository.LoadNewProducts(count);
         }
 
         private List<CommunityPost> GetCommunityPosts()

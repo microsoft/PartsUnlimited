@@ -1,0 +1,8 @@
+﻿@using System.Threading.Tasks
+@model IEnumerable<PartsUnlimited.Models.IProduct>
+
+@if (Model.Any())
+{
+        <h2>Related products:</h2>
+        @await Html.PartialAsync("_ProductList", Model)
+}

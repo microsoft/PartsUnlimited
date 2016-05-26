@@ -1,4 +1,4 @@
-@model PartsUnlimited.Models.Product
+@model PartsUnlimited.Models.IProduct
 
 
 @Html.AntiForgeryToken()
@@ -41,8 +41,14 @@
 
 <div class="form-group col-sm-8 col-md-10 no-gutter-sm">
     @Html.LabelFor(model => model.ProductArtUrl, new { @class = "control-label" })
-    @Html.TextBoxFor(m => m.ProductArtUrl, new { @class = "form-control", placeholder = "Product Art Url" })
-    @Html.ValidationMessageFor(m => m.ProductArtUrl, "", new { @class = "text-danger" })
+    @Html.TextBoxFor(model => model.ProductArtUrl, new { @class = "form-control", placeholder = "Product Art" })
+
+    @if (ViewBag.CanUploadImage)
+    {
+        <span>or upload an image</span>
+        <input type="file" name="productImage" />
+        @Html.ValidationMessageFor(m => m.ProductArtUrl, "", new { @class = "text-danger" })
+    }
 </div>
 
 <div class="form-group col-sm-8 col-md-10 no-gutter-sm">

@@ -37,6 +37,8 @@ namespace PartsUnlimited.Utils
             const string src = "somepath.png";
             const string alt = "some alternate text";
 
+            ContentDeliveryNetworkExtensions.Configuration = null;
+
             var tag = _myHtmlHelper.Image(src, alt);
 
             Assert.Null(ContentDeliveryNetworkExtensions.Configuration);

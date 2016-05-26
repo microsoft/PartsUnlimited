@@ -9,6 +9,7 @@ using PartsUnlimited.WebsiteConfiguration;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using PartsUnlimited.Repository;
 
 namespace PartsUnlimited.Controllers
 {
@@ -16,12 +17,15 @@ namespace PartsUnlimited.Controllers
     {
         private readonly IPartsUnlimitedContext _db;
         private readonly IRecommendationEngine _recommendation;
+        private readonly IProductRepository _productRepository;
         private readonly IWebsiteOptions _option;
 
-        public RecommendationsController(IPartsUnlimitedContext context, IRecommendationEngine recommendationEngine, IWebsiteOptions websiteOptions)
+        public RecommendationsController(IPartsUnlimitedContext context, 
+            IRecommendationEngine recommendationEngine, IProductRepository productRepository, IWebsiteOptions websiteOptions)
         {
             _db = context;
             _recommendation = recommendationEngine;
+            _productRepository = productRepository;
             _option = websiteOptions;
         }
 
@@ -34,14 +38,9 @@ namespace PartsUnlimited.Controllers
 
             var recommendedProductIds = await _recommendation.GetRecommendationsAsync(recommendationId);
 
-            var productTasks = recommendedProductIds
-                .Select(item => _db.Products.SingleOrDefaultAsync(c => c.RecommendationId == Convert.ToInt32(item)))
-                .ToList();
+            var products = await _productRepository.LoadProductsFromRecommendation(recommendedProductIds);
 
-            await Task.WhenAll(productTasks);
-
-            var recommendedProducts = productTasks
-                .Select(p => p.Result)
+            var recommendedProducts = products
                 .Where(p => p != null && p.RecommendationId != Convert.ToInt32(recommendationId))
                 .ToList();
 
