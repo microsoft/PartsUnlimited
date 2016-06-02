@@ -33,11 +33,7 @@ order to use Build.
 
 > **Talking Point:** For this lab we are using the VSTS Git project. The next couple of steps will allow you to add the PartUnlimited source to the Git master repository.
 
-**1.** (Optional) Navigate to [hhttps://github.com/Microsoft/PartsUnlimited](https://github.com/Microsoft/PartsUnlimited) and copy the URL to the repo. (These steps all use the HTTPS protocol.)  This step will save you from having to type the full URL later.
-
-![](<media/clone.png>)
-
-**2.** Clone the repository to a local directory.
+**1.** Clone the repository to a local directory.
 
 Create a parent **Working Directory** on your local file system. For instance, on a Windows OS you can create the following directory:
 
@@ -55,19 +51,15 @@ Move into the directory that was just created.  In a Windows OS (and assuming yo
 
 	cd HOL
 
-**3.** Remove the link to GitHub. 
+**2.** Remove the link to GitHub. 
 
-The Git repo you just downloaded currently has a remote called _origin_ that points to the GitHub repo.  Since we won't be using it any longer, we can rename it or delete it altogether. You can either delete or rename the remote.  (You can theoretically leave it called _origin_ and use a different name for the VSTS remote. However, in later labs we're going to assume that your remote pointing to VSTS is called _origin_, so I recommend you either delete or rename the repo.)
+The Git repo you just downloaded currently has a remote called _origin_ that points to the GitHub repo.  Since we won't be using it any longer, we can delete the reference. 
 
 To delete the GitHub remote, use:
 
 	git remote remove origin
 
-To rename the GitHub remote, use:
-
-	git remote rename origin github
-
-**4.** Find the URL to access the VSTS Git repo
+**3.** Find the URL to access the VSTS Git repo
 
 First, we need to find the URL to empty Git repository in VSTS.  If you remember your account name, and the Team Project name you created, the URL to the default Git repo is easily assembled:
 
@@ -81,7 +73,7 @@ Additionally, at the bottom of the web page, you will see the two commands that 
 
 ![](<media/findVstsRepoUrl.png>)
 
-**5.** Add the link to VSTS and push your local Git repo
+**4.** Add the link to VSTS and push your local Git repo
 
 In the local directory from Step 3, use the following command to add VSTS as the Git remote named _origin_. You can either type the URL you found in Step 4, or simply copy the first command from the VSTS web page.
 
@@ -93,10 +85,9 @@ Congratulations, your code should now be in VSTS!
 
 ### 1b: Import Source Code into your VSTS Account with Visual Studio
 
-> Note: Use this to approach to use the Visual Studio to migrate code from GitHub to VSTS. If you use this approach, skip section 1a.
+> Note: If you already migrated using 1a (above), skip this step. 
 
-We want to push the application code to your Visual Studio Team Services account in
-order to use Build.
+Use this approach to use the Visual Studio to migrate code from GitHub to VSTS. We want to push the application code to your Visual Studio Team Services account in order to use Build.
 
 **1.** First, we need to open Team Explorer. Go to your **account home
 page**:
