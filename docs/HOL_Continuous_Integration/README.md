@@ -20,6 +20,8 @@ pushed to Visual Studio Team Services.
 
 **1. Import Source Code into your VSTS Account:** In this step, you will connect your own Visual Studio Team Services account, download the PartsUnlimited source code, and then push it to your own Visual Studio Team Services account. There are two approaches to doing this: a) Use the Git command line, or b) Use Visual Studio. The Git command line is the cleanest and easiest approach, but it does require some familiarity with the Git command line. 
 
+> Note: VSTS does support GitHub source code integration for use with VSTS builds, but is outside of the scope of this HOL
+
 **2. Create Continuous Integration Build:** In this step, you will create a build definition that will be triggered every time a commit is pushed to your repository in Visual Studio Team Services. 
 
 **3. Test the CI Trigger in Visual Studio Team Services:** In this step, test the Continuous Integration build (CI) build we created by changing code in the Parts Unlimited project with Visual Studio Team Services. 
@@ -29,7 +31,7 @@ pushed to Visual Studio Team Services.
 > Note: Use this to approach to use the Git command line to migrate code from GitHub to VSTS. If you use this approach, skip section 1b.
 
 We want to push the application code to your Visual Studio Team Services account in
-order to use Build.
+order to use VSTS Build.
 
 > **Talking Point:** For this lab we are using the VSTS Git project. The next couple of steps will allow you to add the PartUnlimited source to the Git master repository.
 
