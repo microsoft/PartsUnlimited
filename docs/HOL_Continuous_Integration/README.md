@@ -18,16 +18,78 @@ pushed to Visual Studio Team Services.
 
 ### Tasks Overview: ###
 
-**1. Setup your Visual Studio Team Services Account using Visual Studio:** In this step, you will connect your own Visual Studio Team Services account, download the PartsUnlimited source code, and then push it to your own Visual Studio Team Services account. 
+**1. Import Source Code into your VSTS Account:** In this step, you will connect your own Visual Studio Team Services account, download the PartsUnlimited source code, and then push it to your own Visual Studio Team Services account. There are two approaches to doing this: a) Use the Git command line, or b) Use Visual Studio. The Git command line is the cleanest and easiest approach, but it does require some familiarity with the Git command line. 
+
+> Note: VSTS does support GitHub source code integration for use with VSTS builds, but is outside of the scope of this HOL
 
 **2. Create Continuous Integration Build:** In this step, you will create a build definition that will be triggered every time a commit is pushed to your repository in Visual Studio Team Services. 
 
 **3. Test the CI Trigger in Visual Studio Team Services:** In this step, test the Continuous Integration build (CI) build we created by changing code in the Parts Unlimited project with Visual Studio Team Services. 
 
-### 1: Setup your Visual Studio Team Services Account using Visual Studio
+### 1a: Import Source Code into your VSTS Account with Git
+
+> Note: Use this to approach to use the Git command line to migrate code from GitHub to VSTS. If you use this approach, skip section 1b.
 
 We want to push the application code to your Visual Studio Team Services account in
-order to use Build.
+order to use VSTS Build.
+
+> **Talking Point:** For this lab we are using the VSTS Git project. The next couple of steps will allow you to add the PartUnlimited source to the Git master repository.
+
+**1.** Clone the repository to a local directory.
+
+Create a parent **Working Directory** on your local file system. For instance, on a Windows OS you can create the following directory:
+
+`C:\Source\Repos`
+
+Open a command line (one that supports Git) and change to the directory you created above.
+
+Clone the repository with the following command. You can paste in the URL if you copied it in Step 1.  In the example below, the clone will be copied into a directory named HOL. Feel free to use whatever directory name you like, or leave it blank to use the default directory name:
+
+	git clone https://github.com/Microsoft/PartsUnlimited.git HOL
+
+After a few seconds of downloading, all of the code should now be on your local machine.
+
+Move into the directory that was just created.  In a Windows OS (and assuming you used HOL as the directory name), you can use this command:
+
+	cd HOL
+
+**2.** Remove the link to GitHub. 
+
+The Git repo you just downloaded currently has a remote called _origin_ that points to the GitHub repo.  Since we won't be using it any longer, we can delete the reference. 
+
+To delete the GitHub remote, use:
+
+	git remote remove origin
+
+**3.** Find the URL to access the VSTS Git repo
+
+First, we need to find the URL to empty Git repository in VSTS.  If you remember your account name, and the Team Project name you created, the URL to the default Git repo is easily assembled:
+
+	https://<account>.visualstudio.com\<project>\_git\<project>
+
+Alternatively, you can use a web browser to browse to your account, click into your project, and click the Code tab to get to your default Git repository:
+
+	https://<account>.visualstudio.com
+
+Additionally, at the bottom of the web page, you will see the two commands that we will use to push the existing code to VSTS.
+
+![](<media/findVstsRepoUrl.png>)
+
+**4.** Add the link to VSTS and push your local Git repo
+
+In the local directory from Step 3, use the following command to add VSTS as the Git remote named _origin_. You can either type the URL you found in Step 4, or simply copy the first command from the VSTS web page.
+
+	git remote add origin https://<account>.visualstudio.com\<project>\_git\<project>
+Now you can push the code, including history, to VSTS:
+
+	git push -u origin --all	
+Congratulations, your code should now be in VSTS!
+
+### 1b: Import Source Code into your VSTS Account with Visual Studio
+
+> Note: If you already migrated using 1a (above), skip this step. 
+
+Use this approach to use the Visual Studio to migrate code from GitHub to VSTS. We want to push the application code to your Visual Studio Team Services account in order to use Build.
 
 **1.** First, we need to open Team Explorer. Go to your **account home
 page**:
