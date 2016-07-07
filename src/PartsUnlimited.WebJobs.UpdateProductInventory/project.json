@@ -14,7 +14,6 @@
     "PartsUnlimited.WebJobs.UpdateProductInventory" : "PartsUnlimited.WebJobs.UpdateProductInventory"
   },
   "frameworks" : {
-    "netcoreapp1.0": {
-    }
+    "net46": { }
   }
 }
