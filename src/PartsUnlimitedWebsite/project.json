@@ -110,8 +110,8 @@
   },
 
   "scripts": {
-    "postrestore": [ "npm install" ],
-    "prepare": [ "grunt" ],
+    "precompile": [ "npm install --loglevel=error" ],
+    "postcompile": [ "grunt" ],
     "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
   }
 }
