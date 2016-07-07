@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PartsUnlimited.Queries;
 using PartsUnlimited.Telemetry;
 using PartsUnlimited.ViewModels;
@@ -28,7 +28,7 @@ namespace PartsUnlimited.Controllers
 
         public async Task<IActionResult> Index(DateTime? start, DateTime? end, string invalidOrderSearch)
         {
-            var username = User.GetUserName();
+            var username = User.Identity.Name;
 
             return View(await _ordersQuery.IndexHelperAsync(username, start, end, 10, invalidOrderSearch, false));
         }
@@ -40,9 +40,9 @@ namespace PartsUnlimited.Controllers
                 _telemetry.TrackTrace("Order/Server/NullId");
                 return RedirectToAction("Index", new { invalidOrderSearch = Request.Query["id"] });
             }
-
+          
             var order = await _ordersQuery.FindOrderAsync(id.Value);
-            var username = User.GetUserName();
+            var username = User.Identity.Name;
 
             // If the username isn't the same as the logged in user, return as if the order does not exist
             if (order == null || !String.Equals(order.Username, username, StringComparison.Ordinal))

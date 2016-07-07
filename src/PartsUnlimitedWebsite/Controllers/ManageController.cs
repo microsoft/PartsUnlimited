@@ -1,12 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using PartsUnlimited.Models;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace PartsUnlimited.Controllers
@@ -305,7 +304,7 @@ namespace PartsUnlimited.Controllers
         {
             // Request a redirect to the external login provider to link a login for the current user
             var redirectUrl = Url.Action("LinkLoginCallback", "Manage");
-            var properties = SignInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, User.GetUserId());
+            var properties = SignInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, UserManager.GetUserId(User));
             return new ChallengeResult(provider, properties);
         }
 
@@ -319,7 +318,7 @@ namespace PartsUnlimited.Controllers
                 return View("Error");
             }
             //https://github.com/aspnet/Identity/issues/216
-            var loginInfo = await SignInManager.GetExternalLoginInfoAsync(User.GetUserId());
+            var loginInfo = await SignInManager.GetExternalLoginInfoAsync(UserManager.GetUserId(User));
             if (loginInfo == null)
             {
                 return RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
@@ -342,7 +341,7 @@ namespace PartsUnlimited.Controllers
         //TODO: No caller - do we need this?
         private async Task<bool> HasPhoneNumber()
         {
-            var user = await UserManager.FindByIdAsync(User.GetUserId());
+            var user = await UserManager.FindByIdAsync(UserManager.GetUserId(User));
             if (user != null)
             {
                 return user.PhoneNumber != null;
@@ -364,7 +363,7 @@ namespace PartsUnlimited.Controllers
 
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
-            return await UserManager.FindByIdAsync(HttpContext.User.GetUserId());
+            return await UserManager.FindByIdAsync(UserManager.GetUserId(HttpContext.User));
         }
 
         private IActionResult RedirectToLocal(string returnUrl)

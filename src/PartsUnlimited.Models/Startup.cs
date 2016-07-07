@@ -1,13 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
-using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using System;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace PartsUnlimited.Models
 {
@@ -38,16 +38,18 @@ namespace PartsUnlimited.Models
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var sqlConnectionString = Configuration["Data:DefaultConnection:ConnectionString"];
+            var sqlConnectionString = Configuration[ConfigurationPath.Combine("Data", "DefaultConnection", "ConnectionString")];
             if (!String.IsNullOrEmpty(sqlConnectionString))
             {
                 services.AddEntityFramework()
-                        .AddSqlServer()
-                        .AddDbContext<PartsUnlimitedContext>(options =>
-                        {
-                            options.UseSqlServer(sqlConnectionString);
-                        });
+                      .AddEntityFrameworkSqlServer()
+                      .AddDbContext<PartsUnlimitedContext>(options =>
+                      {
+                          options.UseSqlServer(sqlConnectionString);
+                      });
             }
+
+
         }
 
         //Configure is required by 'ef migrations add' command.

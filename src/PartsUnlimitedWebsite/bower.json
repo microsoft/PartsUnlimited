@@ -9,7 +9,6 @@
     "jquery-ui": "1.11.2",
     "jquery-ui-smoothness": "1.11.1",
     "modernizr": "2.7.2",
-    "signalr": "2.1.2",
     "respond": "1.2.0",
     "jquery-zoom": "1.7.14"
   },

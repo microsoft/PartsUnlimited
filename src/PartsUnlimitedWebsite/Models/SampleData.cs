@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Identity;
-using Microsoft.Data.Entity;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
@@ -93,9 +94,9 @@ namespace PartsUnlimited.Models
        /// <returns></returns>
        private static IConfigurationSection GetAdminRoleConfiguration(IServiceProvider serviceProvider)
         {
-            var appEnv = serviceProvider.GetService<IApplicationEnvironment>();
+            var appEnv = serviceProvider.GetService<IHostingEnvironment>();
 
-            var builder = new ConfigurationBuilder().SetBasePath(appEnv.ApplicationBasePath)
+            var builder = new ConfigurationBuilder().SetBasePath(appEnv.ContentRootPath)
                         .AddJsonFile("config.json")
                         .AddEnvironmentVariables();
             var configuration = builder.Build();

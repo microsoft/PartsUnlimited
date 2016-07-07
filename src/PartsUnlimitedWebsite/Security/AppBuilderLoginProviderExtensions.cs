@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Builder;
+using Microsoft.AspNetCore.Builder;
 
 namespace PartsUnlimited.Security
 {
@@ -11,37 +11,37 @@ namespace PartsUnlimited.Security
         {
             if (loginProviders.Azure.Use)
             {
-                app.UseOpenIdConnectAuthentication(options =>
+                app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions()
                 {
-                    options.ClientId = loginProviders.Azure.ClientId;
-                    options.Authority = loginProviders.Azure.Authority;
+                    ClientId = loginProviders.Azure.ClientId,
+                    Authority = loginProviders.Azure.Authority
                 });
             }
 
             if (loginProviders.Facebook.Use)
             {
-                app.UseFacebookAuthentication(options =>
+                app.UseFacebookAuthentication(new FacebookOptions()
                 {
-                    options.AppId = loginProviders.Facebook.Key;
-                    options.AppSecret = loginProviders.Facebook.Secret;
+                    AppId = loginProviders.Facebook.Key,
+                    AppSecret = loginProviders.Facebook.Secret
                 });
             }
 
             if (loginProviders.Google.Use)
             {
-                app.UseGoogleAuthentication(options =>
+                app.UseGoogleAuthentication(new GoogleOptions()
                 {
-                    options.ClientId = loginProviders.Google.Key;
-                    options.ClientSecret = loginProviders.Google.Secret;
-                });
+                    ClientId = loginProviders.Google.Key,
+                    ClientSecret = loginProviders.Google.Secret
+                });              
             }
 
             if (loginProviders.Twitter.Use)
             {
-                app.UseTwitterAuthentication(options =>
+                app.UseTwitterAuthentication(new TwitterOptions() 
                 {
-                    options.ConsumerKey = loginProviders.Twitter.Key;
-                    options.ConsumerSecret = loginProviders.Twitter.Secret;
+                    ConsumerKey = loginProviders.Twitter.Key,
+                    ConsumerSecret = loginProviders.Twitter.Secret
                 });
             }
 
@@ -63,10 +63,10 @@ namespace PartsUnlimited.Security
                 //The sample app can then be run via:
                 // k web
 
-                app.UseMicrosoftAccountAuthentication(options =>
+                app.UseMicrosoftAccountAuthentication(new MicrosoftAccountOptions()
                 {
-                    options.ClientId = loginProviders.Microsoft.Key;
-                    options.ClientSecret = loginProviders.Microsoft.Secret;
+                    ClientId = loginProviders.Microsoft.Key,
+                    ClientSecret = loginProviders.Microsoft.Secret
                 });
             }
         }

@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.Data.Entity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace PartsUnlimited.Models
 {
@@ -45,6 +45,9 @@ namespace PartsUnlimited.Models
             if (!string.IsNullOrWhiteSpace(_connectionString))
             {
                 optionsBuilder.UseSqlServer(_connectionString);
+            }else
+            {
+                optionsBuilder.UseInMemoryDatabase();
             }
         }
     }
