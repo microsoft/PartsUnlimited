@@ -1,19 +1,18 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Infrastructure;
-using Microsoft.Data.Entity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using PartsUnlimited.Hubs;
 using PartsUnlimited.Models;
 using PartsUnlimited.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Server.Kestrel.Http;
 
 namespace PartsUnlimited.Areas.Admin.Controllers
 {
@@ -23,13 +22,11 @@ namespace PartsUnlimited.Areas.Admin.Controllers
     public class StoreManagerController : AdminController
     {
         private readonly IPartsUnlimitedContext _db;
-        private readonly IHubContext _annoucementHub;
-        private readonly IMemoryCache _cache;
+         private readonly IMemoryCache _cache;
 
-        public StoreManagerController(IPartsUnlimitedContext context, IConnectionManager connectionManager, IMemoryCache memoryCache)
+        public StoreManagerController(IPartsUnlimitedContext context, ConnectionManager connectionManager, IMemoryCache memoryCache)
         {
             _db = context;
-            _annoucementHub = connectionManager.GetHubContext<AnnouncementHub>();
             _cache = memoryCache;
         }
 
@@ -151,7 +148,6 @@ namespace PartsUnlimited.Areas.Admin.Controllers
             {
                 _db.Products.Add(product);
                 await _db.SaveChangesAsync(HttpContext.RequestAborted);
-                _annoucementHub.Clients.All.announcement(new ProductData() { Title = product.Title, Url = Url.Action("Details", "Store", new { id = product.ProductId }) });
                 _cache.Remove("announcementProduct");
                 return RedirectToAction("Index");
             }

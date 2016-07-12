@@ -1,4 +1,4 @@
-/// <binding BeforeBuild='copy-all' />
+/// <binding BeforeBuild='default' />
 
 /*
 This file in the main entry point for defining grunt tasks and using grunt plugins.

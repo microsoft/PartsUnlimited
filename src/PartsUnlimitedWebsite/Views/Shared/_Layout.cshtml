@@ -1,5 +1,7 @@
 ﻿@using PartsUnlimited
-@inject Microsoft.Extensions.PlatformAbstractions.IRuntimeEnvironment RuntimeEnvironment
+@inject Microsoft.Extensions.PlatformAbstractions.RuntimeEnvironment RuntimeEnvironment
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,7 +76,6 @@
                     </div>
                 </div>
             </div>
-            @await Component.InvokeAsync("Announcement")
         </nav>
         <div class="visible-xs search-box">
             @using (Html.BeginForm("Index", "Search", FormMethod.Get))
@@ -152,8 +153,6 @@
     @Html.Script("jquery-ui")
     @Html.Script("bootstrap")
     @Html.Script("bootstrap-switch")
-    @Html.Script("signalr")
-    @Html.Script("signalr-hubs")
     @Html.Script("site")
     @Html.Script("respond")
     @RenderSection("scripts", required: false)

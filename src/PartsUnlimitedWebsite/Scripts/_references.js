@@ -126,7 +126,6 @@
 /// <reference path="../wwwroot/lib/modernizr/test/qunit/qunit.js" />
 /// <reference path="../wwwroot/lib/modernizr/test/qunit/run-qunit.js" />
 /// <reference path="../wwwroot/lib/respond/respond.src.js" />
-/// <reference path="../wwwroot/lib/signalr/jquery.signalR.js" />
 /// <reference path="../wwwroot/Scripts/AppInsights.js" />
 /// <reference path="../wwwroot/Scripts/NewStoreArrivals.js" />
 /// <reference path="../wwwroot/lib/bootstrap-switch/bootstrap-switch.js" />

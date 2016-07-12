@@ -1,14 +1,16 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Antiforgery;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 using PartsUnlimited.Models;
 using PartsUnlimited.Telemetry;
 using PartsUnlimited.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PartsUnlimited.Controllers
@@ -97,73 +99,52 @@ namespace PartsUnlimited.Controllers
         //
         // AJAX: /ShoppingCart/RemoveFromCart/5
         [HttpPost]
-        public async Task<IActionResult> RemoveFromCart(int id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveFromCart(
+            int id,
+            CancellationToken requestAborted)
         {
-            var cookieToken = string.Empty;
-            var formToken = string.Empty;
-            StringValues tokenHeaders;
-            string[] tokens = null;
-
-            if (HttpContext.Request.Headers.TryGetValue("RequestVerificationToken", out tokenHeaders))
-            {
-                tokens = tokenHeaders.First().Split(':');
-                if (tokens != null && tokens.Length == 2)
-                {
-                    cookieToken = tokens[0];
-                    formToken = tokens[1];
-                }
-            }
-
-
-            _antiforgery.ValidateTokens(HttpContext, new AntiforgeryTokenSet(formToken, cookieToken));
-
-            // Start timer for save process telemetry
-            var startTime = System.DateTime.Now;
-
             // Retrieve the current user's shopping cart
             var cart = ShoppingCart.GetCart(_db, HttpContext);
 
-            // Get the name of the product to display confirmation
-            // TODO [EF] Turn into one query once query of related data is enabled
-            int productId = _db.CartItems.Single(item => item.CartItemId == id).ProductId;
-            string productName = _db.Products.Single(a => a.ProductId == productId).Title;
+            // Get the name of the album to display confirmation
+            var cartItem = await _db.CartItems
+                .Where(item => item.CartItemId == id)
+                .Include(c => c.Product)
+                .SingleOrDefaultAsync();
 
-            // Remove from cart
-            int itemCount = cart.RemoveFromCart(id);
-
-            await _db.SaveChangesAsync(HttpContext.RequestAborted);
-
-            string removed = (itemCount > 0) ? " 1 copy of " : string.Empty;
-
-            // Trace remove process
-            var measurements = new Dictionary<string, double>()
+            string message;
+            int itemCount;
+            if (cartItem != null)
             {
-                {"ElapsedMilliseconds", System.DateTime.Now.Subtract(startTime).TotalMilliseconds }
-            };
-            _telemetry.TrackEvent("Cart/Server/Remove", null, measurements);
+                // Remove from cart
+                itemCount = cart.RemoveFromCart(id);
+
+                await _db.SaveChangesAsync(requestAborted);
+
+                string removed = (itemCount > 0) ? " 1 copy of " : string.Empty;
+                message = removed + cartItem.Product.Title + " has been removed from your shopping cart.";
+            }
+            else
+            {
+                itemCount = 0;
+                message = "Could not find this item, nothing has been removed from your shopping cart.";
+            }
 
             // Display the confirmation message
-            var items = cart.GetCartItems();
-            var itemsCount = items.Sum(x => x.Count);
-            var subTotal = items.Sum(x => x.Count * x.Product.Price);
-            var shipping = itemsCount * (decimal)5.00;
-            var tax = (subTotal + shipping) * (decimal)0.05;
-            var total = subTotal + shipping + tax;
 
             var results = new ShoppingCartRemoveViewModel
             {
-                Message = removed + productName +
-                    " has been removed from your shopping cart.",
-                CartSubTotal = subTotal.ToString("C"),
-                CartShipping = shipping.ToString("C"),
-                CartTax = tax.ToString("C"),
-                CartTotal = total.ToString("C"),
-                CartCount = itemsCount,
+                Message = message,
+                CartTotal = cart.GetTotal().ToString(),
+                CartCount = cart.GetCount(),
                 ItemCount = itemCount,
                 DeleteId = id
             };
 
+     
             return Json(results);
         }
+
     }
 }

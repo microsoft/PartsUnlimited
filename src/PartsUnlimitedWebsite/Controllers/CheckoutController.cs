@@ -1,9 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Mvc;
-using Microsoft.Data.Entity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PartsUnlimited.Models;
 using System;
 using System.Linq;
@@ -16,9 +17,11 @@ namespace PartsUnlimited.Controllers
     public class CheckoutController : Controller
     {
         private readonly IPartsUnlimitedContext _db;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CheckoutController(IPartsUnlimitedContext context)
+        public CheckoutController(IPartsUnlimitedContext context, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _db = context;
         }
 
@@ -29,7 +32,7 @@ namespace PartsUnlimited.Controllers
 
         public async Task<IActionResult> AddressAndPayment()
         {
-            var id = User.GetUserId();
+            var id = _userManager.GetUserId(User);
             var user = await _db.Users.FirstOrDefaultAsync(o => o.Id == id);
 
             var order = new Order
@@ -60,7 +63,7 @@ namespace PartsUnlimited.Controllers
                 }
                 else
                 {
-                    order.Username = HttpContext.User.GetUserName();
+                    order.Username = HttpContext.User.Identity.Name;
                     order.OrderDate = DateTime.Now;
 
                     //Add the Order
@@ -92,7 +95,7 @@ namespace PartsUnlimited.Controllers
             // Validate customer owns this order
             Order order = _db.Orders.FirstOrDefault(
                 o => o.OrderId == id &&
-                o.Username == HttpContext.User.GetUserName());
+                o.Username == HttpContext.User.Identity.Name);
 
             if (order != null)
             {

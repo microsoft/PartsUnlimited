@@ -1,13 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Html.Abstractions;
-using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.Extensions.WebEncoders;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using PartsUnlimited.WebsiteConfiguration;
 using System;
 using System.IO;
 using System.Text;
+using Microsoft.AspNetCore.Html;
+using System.Text.Encodings.Web;
 
 namespace PartsUnlimited
 {

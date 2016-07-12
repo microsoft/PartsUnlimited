@@ -6,7 +6,7 @@
   "projectUrl": "",
   "licenseUrl": "",
   "dependencies": {
-    "PartsUnlimited.Models": "",
+    "PartsUnlimited.Models": "1.0.0-*",
     "Microsoft.Azure.WebJobs": "1.0.0",
     "Microsoft.Azure.WebJobs.Core": "1.0.0"
   },
@@ -14,7 +14,6 @@
     "PartsUnlimited.WebJobs.UpdateProductInventory" : "PartsUnlimited.WebJobs.UpdateProductInventory"
   },
   "frameworks" : {
-    "dnx451": {
-    }
+    "net46": { }
   }
 }

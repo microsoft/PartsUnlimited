@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.Data.Entity;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +18,7 @@ using PartsUnlimited.Security;
 using PartsUnlimited.Telemetry;
 using PartsUnlimited.WebsiteConfiguration;
 using System;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace PartsUnlimited
 {
@@ -40,24 +41,20 @@ namespace PartsUnlimited
         {
             //If this type is present - we're on mono
             var runningOnMono = Type.GetType("Mono.Runtime") != null;
-            var sqlConnectionString = Configuration["Data:DefaultConnection:ConnectionString"];
+            var sqlConnectionString = Configuration[ConfigurationPath.Combine("Data","DefaultConnection", "ConnectionString")];
             var useInMemoryDatabase = string.IsNullOrWhiteSpace(sqlConnectionString);
 
             // Add EF services to the services container
             if (useInMemoryDatabase || runningOnMono)
             {
-                services.AddEntityFramework()
-                        .AddInMemoryDatabase()
-                        .AddDbContext<PartsUnlimitedContext>(options =>
+                services.AddDbContext<PartsUnlimitedContext>(options =>
                         {
                             options.UseInMemoryDatabase();
                         });
             }
             else
             {
-                services.AddEntityFramework()                
-                        .AddSqlServer()
-                        .AddDbContext<PartsUnlimitedContext>(options =>
+                services.AddDbContext<PartsUnlimitedContext>(options =>
                         {
                             options.UseSqlServer(sqlConnectionString);
                         });
@@ -99,7 +96,7 @@ namespace PartsUnlimited
 
             services.AddScoped<IApplicationInsightsSettings>(p =>
             {
-                return new ConfigurationApplicationInsightsSettings(Configuration.GetSection("Keys:ApplicationInsights"));
+                return new ConfigurationApplicationInsightsSettings(Configuration.GetSection(ConfigurationPath.Combine("Keys", "ApplicationInsights")));
             });
 
             // Associate IPartsUnlimitedContext with context
@@ -111,20 +108,17 @@ namespace PartsUnlimited
             // Add MVC services to the services container
             services.AddMvc();
 
-            //Add all SignalR related services to IoC.
-            services.AddSignalR();
-
             //Add InMemoryCache
             services.AddSingleton<IMemoryCache, MemoryCache>();
 
             // Add session related services.
-            services.AddCaching();
+            //services.AddCaching();
             services.AddSession();
         }
 
         private void SetupRecommendationService(IServiceCollection services)
         {
-            var azureMlConfig = new AzureMLFrequentlyBoughtTogetherConfig(Configuration.GetSection("Keys:AzureMLFrequentlyBoughtTogether"));
+            var azureMlConfig = new AzureMLFrequentlyBoughtTogetherConfig(Configuration.GetSection(ConfigurationPath.Combine("Keys", "AzureMLFrequentlyBoughtTogether")));
 
             // If keys are not available for Azure ML recommendation service, register an empty recommendation engine
             if (string.IsNullOrEmpty(azureMlConfig.AccountKey) || string.IsNullOrEmpty(azureMlConfig.ModelName))
@@ -134,9 +128,11 @@ namespace PartsUnlimited
             else
             {
                 services.AddSingleton<IAzureMLAuthenticatedHttpClient, AzureMLAuthenticatedHttpClient>();
-                services.AddInstance<IAzureMLFrequentlyBoughtTogetherConfig>(azureMlConfig);
+                services.AddSingleton<IAzureMLFrequentlyBoughtTogetherConfig>(azureMlConfig);
                 services.AddScoped<IRecommendationEngine, AzureMLFrequentlyBoughtTogetherRecommendationEngine>();
             }
+
+            services.AddSingleton<RuntimeEnvironment>();
         }
 
         //This method is invoked when KRE_ENV is 'Development' or is not defined
@@ -146,7 +142,7 @@ namespace PartsUnlimited
             //Display custom error page in production when error occurs
             //During development use the ErrorPage middleware to display error information in the browser
             app.UseDeveloperExceptionPage();
-            app.UseDatabaseErrorPage(DatabaseErrorPageExtensions.EnableAll);
+            app.UseDatabaseErrorPage();
 
             // Add the runtime information page that can be used by developers
             // to see what packages are used by the application
@@ -176,9 +172,6 @@ namespace PartsUnlimited
         {
             // Configure Session.
             app.UseSession();
-
-            //Configure SignalR
-            app.UseSignalR();
 
             // Add static files to the request pipeline
             app.UseStaticFiles();

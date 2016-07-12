@@ -9,7 +9,7 @@
     <ProjectGuid>69d44ef8-50eb-4db4-9371-af08c69c8586</ProjectGuid>
     <RootNamespace>PartsUnlimited.WebJobs.ProcessOrder</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">..\..\artifacts\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
-    <OutputPath Condition="'$(OutputPath)'=='' ">..\..\artifacts\bin\$(MSBuildProjectName)\</OutputPath>
+    <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AssemblyName>PartsUnlimited.WebJobs.ProcessOrder</AssemblyName>

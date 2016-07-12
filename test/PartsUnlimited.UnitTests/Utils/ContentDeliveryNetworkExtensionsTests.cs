@@ -1,19 +1,17 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNet.Html.Abstractions;
-using Microsoft.AspNet.Mvc.Rendering;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.WebEncoders;
 using NSubstitute;
 using PartsUnlimited.WebsiteConfiguration;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
 using Xunit;
+using System.Xml;
+using System.Text.Encodings.Web;
 
 namespace PartsUnlimited.Utils
 {
