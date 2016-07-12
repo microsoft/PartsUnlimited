@@ -20,7 +20,7 @@ the app will be deployed to the production site.
 > **Note**: In order to use deployment slots, you'll need to configure the Web App to use Standard or Premium App Service Plan mode. You **cannot** create
 deployment slots for Basic or Free Azure Web Apps. To learn more about deployment slots, see [this article](https://azure.microsoft.com/en-us/documentation/articles/web-sites-staged-publishing/).
 
-* You have completed the [HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_Continuous_Integration)
+* You have completed the [HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/tree/master/docs/HOL_Continuous_Integration)
 
 * An organizational account that is a co-administrator on your Azure account
 > **Note**: This is required because deploying [ARM Templates](https://azure.microsoft.com/en-us/documentation/articles/resource-group-authoring-templates/)
@@ -29,7 +29,7 @@ MSA Account and certificate-based connections are not supported. For this HOL, y
 
 ## Tasks Overview:
 
-**1. Complete the [HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_Continuous_Integration).**
+**1. Complete the [HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/tree/master/docs/HOL_Continuous_Integration).**
 This will walk through creating a Visual Studio Team Services account, committing the PartsUnlimited source code
 and setting up the Continuous Integration (CI) build.
 
@@ -53,7 +53,7 @@ Once the Release Definition is set up, you will trigger a release and see the pi
 
 # Hands On Lab
 ### 1: Complete HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services
-Make sure you've completed [HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_Continuous_Integration).
+Make sure you've completed [HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/tree/master/docs/HOL_Continuous_Integration).
 
 ### 2: Modify the CI Build to include the ARM Templates
 In order to deploy to Azure, you're going to to specify the infrastructure that the PartsUnlimited Website requires. For example,
@@ -420,7 +420,7 @@ managing database schema deployments.
 1. [Release Management for Visual Studio Team Services](https://msdn.microsoft.com/Library/vs/alm/release/overview-rmpreview)
 2. [Cloud Load Testing in Visual Studio Team Services](https://channel9.msdn.com/Events/Visual-Studio/Connect-event-2015/Cloud-Loading-Testing-in-Visual-Studio-Team-Service)
 
-The following are more PartsUnlimited Hands on Labs:
+Note: The below HOLs are for the ASP.Net 4.5 version of the application.
 
 1. [User Telemetry with Application Insights](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_HDD_User_Telemetry)
 2. [Testing in Production with Azure Websites - PartsUnlimited](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_HDD_Testing_in_Production)

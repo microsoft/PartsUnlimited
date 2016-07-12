@@ -215,5 +215,5 @@ okay.
 
 Try these labs out for next steps:
 
--**TODO** Add link for next lab!
+-[Continuous Deployment Lab](../HOL-Continuous_Deployment/Lab.md)
 
