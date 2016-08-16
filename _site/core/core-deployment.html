@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>PartsUnlimited : Deployment</title>
+        <meta name="description" content="example e-commerce website">
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/PartsUnlimited/css/syntax.css">
+        <link rel="stylesheet" href="/PartsUnlimited/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <div id="header" class="col-sm-12">
+                    <img class="logo" src="/PartsUnlimited/assets/logo-ms-dark.png" alt="Microsoft">
+<h4><a class="brand" href="/PartsUnlimited/">PartsUnlimited</a>
+    <small>example e-commerce website</small>
+</h4>
+
+                </div>
+            </div>
+
+            <div class="row">
+                
+                
+                    <div id="navigation" class="col-sm-3">
+                        <ul class="nav nav-list">
+    
+        <li><a href="/PartsUnlimited/">Welcome</a></li>
+    
+
+    
+        
+        
+
+        
+            
+                <li class="nav-header">.NET Core</li>
+            
+
+            
+                <li data-order="7"><a href="/PartsUnlimited/core/core-Authentication.html">Authentication</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a class="nav-active" href="/PartsUnlimited/core/core-deployment.html">Deployment</a></li>  
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/core/core-ci.html">Continuous Integration</a></li>
+            
+        
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/core/core-cd.html">Continuous Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="6"><a href="/PartsUnlimited/core/core-MachineLearning.html">Machine Learning</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/core/core-GettingStartedLinuxOSX.html">Getting Started on Linux and OSX</a></li>
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/core/core-GettingStarted.html">Getting Started</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/core/core-EntityFramework7.html">Entity Framework 7</a></li>
+            
+        
+    
+        
+        
+
+        
+            
+                <li class="nav-header">.NET 4.5</li>
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/45/45-telemetry.html">User Telemetry</a></li>
+            
+        
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/45/45-apm.html">Application Performance Monitoring</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/45/45-testing-production.html">Testing in Production</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/45/45-ci.html">Continuous Integration</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/45/45-cd.html">Continuous Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/45/45-GettingStarted.html">Getting Started</a></li>
+            
+        
+    
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class="divider"></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id="content" class="col-sm-9">
+                        <div class="page-header">
+    <h2>Deployment
+        
+    </h2>
+</div>
+
+<p>For full deployments, you can deploy the PartsUnlimited app to slots as needed. The website is setup to keep the connection strings with the slots. This means that if staging and main website slots are switched, the main website will still use the production database, while the staging slot will keep pointing to the staging database.</p>
+
+<h2 id="how-to-deploy-demosimple-environment-and-publish-website">How to Deploy Demo/Simple Environment and Publish Website</h2>
+
+<ol>
+  <li>Create a storage account (or use an existing one) where deployment artifacts can be uploaded. The Storage account must be on the same subscription as the one the website will be deployed to.</li>
+  <li>If you haven’t already done so, install <a href="https://github.com/Azure/azure-powershell/releases/download/v1.0.1-November2015/azure-powershell.1.0.1.msi">Microsoft Azure PowerShell - November 2015</a></li>
+  <li>Open env\PartsUnlimited.Environment\PartsUnlimited.Environment.sln</li>
+  <li>Right-click on the PartsUnlimited.Environment and choose Deploy -&gt; New Deployment…</li>
+  <li>Choose the subscription to which you want to deploy</li>
+  <li>Under Resource Group select New…
+    <ul>
+      <li>Enter a Resource Group name
+        <ul>
+          <li>Name should not include periods</li>
+          <li>Choose Resource group location.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>For Deployment template, choose demoenvironmentsetup.json.</li>
+  <li>For Deployment template parameters, choose demoenvironmentsetup.param.json.</li>
+  <li>Click Deploy.</li>
+  <li>If prompted, edit the parameter to add any required value for the deployment template.
+    <ul>
+      <li>Do not fill in values for anything that has ‘auto-generated’ for its value.</li>
+    </ul>
+  </li>
+  <li>If prompted fill in any values the scripts ask for.  This will only happen if you leave a non-auto-generated parameter blank.
+    <ul>
+      <li>The SQL Server name (specified by PartsUnlimitedServerName) should be all lowercase</li>
+      <li>The Storage Account name (specified by CdnStorageAccountName) should be all lowercase and be 3 to 24 characters in length</li>
+      <li>The Storage Container name (specified by CdnStorageContainerName) should be all lowercase and be 3 to 63 characters in length</li>
+    </ul>
+  </li>
+  <li>Now that the environment is setup, it is time to publish the website bits.</li>
+  <li>Open PartsUnlimited.sln.</li>
+  <li>Wait for package loads to complete.</li>
+  <li>Build the project</li>
+  <li>Right-click on src\PartsUnlimited project and choose Publish…</li>
+  <li>For Publish Web Wizard
+    <ul>
+      <li>On Profile Page
+        <ul>
+          <li>Choose ‘Microsoft Azure Web Apps’ under ‘Select a publish target’.  Select the website created above.  (Website name specified by WebsiteName parameter name in picture above.)</li>
+          <li>Click Next.</li>
+        </ul>
+      </li>
+      <li>On Connection Page, just click Next.  This should be automatically filled out when the website was chosen on the previous page.</li>
+      <li>On Settings Page, verify the configuration is what you want (i.e. Release – Any CPU).</li>
+      <li>On Preview Page.  Click Publish
+        <ul>
+          <li>Users can click ‘Start Preview’ to verify the deployment will work, if they wish.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Wait for publish to complete and load the website.
+    <ul>
+      <li>The website is set up to automatically update the database shape, only if the database is empty.  No extra EF migrations commands needed for the first deployment.</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="how-to-deploy-demofull-environment-and-publish-website">How to Deploy Demo/Full Environment And Publish Website</h2>
+<ol>
+  <li>Create a storage account (or use an existing one) where deployment artifacts can be uploaded. The Storage account must be on the same subscription as the one the website will be deployed to.</li>
+  <li>If you haven’t already done so, install <a href="https://github.com/Azure/azure-powershell/releases/download/v1.0.1-November2015/azure-powershell.1.0.1.msi">Microsoft Azure PowerShell - November 2015</a></li>
+  <li>Open env\PartsUnlimited.Environment\PartsUnlimited.Environment.sln</li>
+  <li>Right-click on the PartsUnlimited.Environment and choose Deploy -&gt; New Deployment…</li>
+  <li>Choose subscription to deploy to.</li>
+  <li>Under Resource Group choose New…
+    <ul>
+      <li>Enter Resource Group name 
+ 	* Name should not include periods.
+        <ul>
+          <li>Choose Resource group location.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>For Deployment template, choose fullenvironmentsetup.json.</li>
+  <li>For Deployment template parameters, choose fullenvironmentsetup.param.json.</li>
+  <li>Click Deploy.</li>
+  <li>If prompted, edit the parameter to add any required value for the deployment template.
+a.	Do not fill in values for anything that has ‘auto-generated’ for its value.
+b.	PartsUnlimitedHostingPlanSKU needs to be value that supports slots or else the deployment will fail.  (I took out the Free hosting plan from available hosting plans for the full setup template, but still worth noting for
+    <ul>
+      <li>The SQL Server name (specified by PartsUnlimitedServerName) should be all lowercase</li>
+      <li>The Storage Account names (specified by CdnStorageAccountName, CdnStorageAccountNameForDev and CdnStorageAccountNameForStaging) should be all lowercase and be 3 to 24 characters in length</li>
+      <li>The Storage Container names (specified by CdnStorageContainerName, CdnStorageContainerNameForDev and CdnStorageContainerNameForStaging) should be all lowercase and be 3 to 63 characters in length</li>
+    </ul>
+  </li>
+  <li>If prompted fill in any values the scripts ask for.  This will only happen if you leave a non-auto-generated parameter blank.</li>
+  <li>Now that the environment is setup, it is time to publish the website bits.</li>
+  <li>Open PartsUnlimited.sln.</li>
+  <li>Wait for package loads to complete.</li>
+  <li>Build the project</li>
+  <li>Right-click on src\PartsUnlimited project and choose Publish…</li>
+  <li>For Publish Web Wizard
+    <ul>
+      <li>On Profile Page
+        <ul>
+          <li>Choose ‘Microsoft Azure Web Apps’ under ‘Select a publish target’.  Select the website created above.  (Website name specified by WebsiteName parameter name in picture above.)  This time choose the ‘WebsiteName(slotname)’ website to publish to a slot for the website.</li>
+          <li>Click Next.</li>
+        </ul>
+      </li>
+      <li>On Connection Page, just click Next.  This should be automatically filled out when the website was chosen on the previous page.</li>
+      <li>On Settings Page, verify the configuration is what you want (i.e. Release – Any CPU).</li>
+      <li>On Preview Page.  Click Publish
+        <ul>
+          <li>Users can click ‘Start Preview’ to verify the deployment will work, if they wish.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Wait for publish to complete and load the website.
+    <ul>
+      <li>The website is set up to automatically update the database shape, only if the database is empty.  No extra EF migrations commands needed for the first deployment.</li>
+    </ul>
+  </li>
+  <li>Website is all setup to use slot switching.  Users can publish to individual slots as they need.  Website is setup to keep the connection strings with the slots.  This means that if staging and main website slots are switched the main website still uses the production database.</li>
+</ol>
+
+
+                    </div>
+                
+            </div>
+
+            
+
+            <div class="row">
+                <div id="footer" class="col-sm-12">
+                    Documentation for <a href="https://github.com/Microsoft/PartsUnlimited">PartsUnlimited</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+        
+    </body>
+</html>

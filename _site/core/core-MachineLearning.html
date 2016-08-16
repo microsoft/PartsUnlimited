@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>PartsUnlimited : Machine Learning</title>
+        <meta name="description" content="example e-commerce website">
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/PartsUnlimited/css/syntax.css">
+        <link rel="stylesheet" href="/PartsUnlimited/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <div id="header" class="col-sm-12">
+                    <img class="logo" src="/PartsUnlimited/assets/logo-ms-dark.png" alt="Microsoft">
+<h4><a class="brand" href="/PartsUnlimited/">PartsUnlimited</a>
+    <small>example e-commerce website</small>
+</h4>
+
+                </div>
+            </div>
+
+            <div class="row">
+                
+                
+                    <div id="navigation" class="col-sm-3">
+                        <ul class="nav nav-list">
+    
+        <li><a href="/PartsUnlimited/">Welcome</a></li>
+    
+
+    
+        
+        
+
+        
+            
+                <li class="nav-header">.NET Core</li>
+            
+
+            
+                <li data-order="7"><a href="/PartsUnlimited/core/core-Authentication.html">Authentication</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/core/core-deployment.html">Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/core/core-ci.html">Continuous Integration</a></li>
+            
+        
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/core/core-cd.html">Continuous Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="6"><a class="nav-active" href="/PartsUnlimited/core/core-MachineLearning.html">Machine Learning</a></li>  
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/core/core-GettingStartedLinuxOSX.html">Getting Started on Linux and OSX</a></li>
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/core/core-GettingStarted.html">Getting Started</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/core/core-EntityFramework7.html">Entity Framework 7</a></li>
+            
+        
+    
+        
+        
+
+        
+            
+                <li class="nav-header">.NET 4.5</li>
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/45/45-telemetry.html">User Telemetry</a></li>
+            
+        
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/45/45-apm.html">Application Performance Monitoring</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/45/45-testing-production.html">Testing in Production</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/45/45-ci.html">Continuous Integration</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/45/45-cd.html">Continuous Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/45/45-GettingStarted.html">Getting Started</a></li>
+            
+        
+    
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class="divider"></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id="content" class="col-sm-9">
+                        <div class="page-header">
+    <h2>Machine Learning
+        
+    </h2>
+</div>
+
+<p>PartsUnlimited uses a “Frequently Bought Together” API service to populate the “Recommendations” section that appears in every product page. This service is built on Azure Machine Learning and is available for free on the Azure Marketplace.</p>
+
+<p>In the config.json file of PartsUnlimited we provide a “WebsiteOptions” key named “ShowRecommendations” that you can use to turn “Recommendations” section on or off. Optionally, you can add this key to your website app settings using the Azure portal. Once you’ve added it, you’ll be able to turn this section on and off from the Portal instead of having to redeploy your application for the changes to take effect.</p>
+
+<p>The service takes a few seconds to load for the first time. In order to avoid delaying the rest of the page, we display the recommendations in a separate div and use ajax to asynchronously load the content.</p>
+
+<p>The project has sample data included (under Models/SampleData.cs). This populates the purchase history. You can then create a .csv file based on these transactions that the “Frequently Bought Together” service uses to generate the recommendations. The instructions below also have data on how to train your service separately using your own data from a .csv file.</p>
+
+<h2 id="how-to-sign-up-for-the-frequently-bought-together-service">How to sign up for the “Frequently Bought Together” Service</h2>
+<ol>
+  <li>Go to the <a href="https://datamarket.azure.com/dataset/amla/mba">“Frequently Bought Together” API service page</a></li>
+  <li>Sign up for the service (may require you to sign up for a Marketplace account if you don’t have one)</li>
+  <li>After you successfully sign up for the service, go to “Mange your models and upload data”</li>
+  <li>You need to get your credentials by clicking on the “Account Information” link. Copy and paste the string back in to the Account Key field to validate and initiate the connection</li>
+  <li>Create a new model and train it with a proper set of data. You can use <a href="/PartsUnlimited/assets/core-ml/Transactions.csv">Transactions.csv</a> to train your model. It takes two columns of data: one is transaction ID and the other one is item ID</li>
+  <li>After you have created and trained the model, you can test it by selecting the model you just created and entering an item ID to see the output. This output represents item IDs that are usually bought together with the input item ID (Tip: number of occurrences you specify to train your model must be greater than the smallest multiplier in your sample data)</li>
+</ol>
+
+<h2 id="how-to-add-the-frequently-bought-together-service-to-your-site">How to add the “Frequently Bought Together” Service to your site</h2>
+<ol>
+  <li>In the PartsUnlimited project, open the config.json file</li>
+  <li>Find the “Keys” section</li>
+  <li>Under “AzureMLFrequentlyBoughTogether”, enter the “AccountKey” and “ModelName” of your “Frequently Bought Together” service. You can find these under the “Account Information” link in the datamarket site</li>
+  <li>Under the “WebsiteOptions” section, make sure that the “ShowRecommendations” key is set to “true”</li>
+  <li>Run your app and test that this section works</li>
+</ol>
+
+
+                    </div>
+                
+            </div>
+
+            
+
+            <div class="row">
+                <div id="footer" class="col-sm-12">
+                    Documentation for <a href="https://github.com/Microsoft/PartsUnlimited">PartsUnlimited</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+        
+    </body>
+</html>

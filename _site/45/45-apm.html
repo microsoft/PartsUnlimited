@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>PartsUnlimited : Application Performance Monitoring</title>
+        <meta name="description" content="example e-commerce website">
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/PartsUnlimited/css/syntax.css">
+        <link rel="stylesheet" href="/PartsUnlimited/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <div id="header" class="col-sm-12">
+                    <img class="logo" src="/PartsUnlimited/assets/logo-ms-dark.png" alt="Microsoft">
+<h4><a class="brand" href="/PartsUnlimited/">PartsUnlimited</a>
+    <small>example e-commerce website</small>
+</h4>
+
+                </div>
+            </div>
+
+            <div class="row">
+                
+                
+                    <div id="navigation" class="col-sm-3">
+                        <ul class="nav nav-list">
+    
+        <li><a href="/PartsUnlimited/">Welcome</a></li>
+    
+
+    
+        
+        
+
+        
+            
+                <li class="nav-header">.NET Core</li>
+            
+
+            
+                <li data-order="7"><a href="/PartsUnlimited/core/core-Authentication.html">Authentication</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/core/core-deployment.html">Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/core/core-ci.html">Continuous Integration</a></li>
+            
+        
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/core/core-cd.html">Continuous Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="6"><a href="/PartsUnlimited/core/core-MachineLearning.html">Machine Learning</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/core/core-GettingStartedLinuxOSX.html">Getting Started on Linux and OSX</a></li>
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/core/core-GettingStarted.html">Getting Started</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/core/core-EntityFramework7.html">Entity Framework 7</a></li>
+            
+        
+    
+        
+        
+
+        
+            
+                <li class="nav-header">.NET 4.5</li>
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/45/45-telemetry.html">User Telemetry</a></li>
+            
+        
+            
+
+            
+                <li data-order="3"><a class="nav-active" href="/PartsUnlimited/45/45-apm.html">Application Performance Monitoring</a></li>  
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/45/45-testing-production.html">Testing in Production</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/45/45-ci.html">Continuous Integration</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/45/45-cd.html">Continuous Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/45/45-GettingStarted.html">Getting Started</a></li>
+            
+        
+    
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class="divider"></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id="content" class="col-sm-9">
+                        <div class="page-header">
+    <h2>Application Performance Monitoring
+        
+    </h2>
+</div>
+
+<p>The DevOps team has noticed that the recommendations page is slow to load and shows performance spikes in Application Insights telemetry. By viewing the details of performance monitoring through Application Insights, we will be able to drill down to the code that has affected the slow performance of the web application and fix the code.</p>
+
+<p>In this lab, you will learn how to set up Application Insights telemetry, and drill down into performance monitoring data through Application Insights in the new Azure Portal.</p>
+
+<p><em>Note: This hands-on lab is designed to use code from the aspnet45 branch.</em></p>
+
+<p><strong>Prerequisites</strong></p>
+
+<ul>
+  <li>
+    <p>Visual Studio 2013 or higher</p>
+  </li>
+  <li>
+    <p>PartsUnlimited website deployed to a Microsoft Azure Web App (see <a href="https://github.com/Microsoft/PartsUnlimited/blob/aspnet45/docs/Deployment.md">link</a>)</p>
+  </li>
+  <li>
+    <p>Application Insights created in the same Azure Resource Group as the PartsUnlimited website</p>
+  </li>
+  <li>
+    <p>Continuous Integration build with deployment to the Azure web app</p>
+  </li>
+</ul>
+
+<p><strong>Tasks Overview</strong></p>
+
+<ol>
+  <li>
+    <p>Set up Application Insights for PartsUnlimited</p>
+  </li>
+  <li>
+    <p>Using Application Performance Monitoring to resolve performance issues</p>
+  </li>
+</ol>
+
+<h3 id="task-1-set-up-application-insights-for-partsunlimited">Task 1: Set up Application Insights for PartsUnlimited</h3>
+<p><strong>Step 1.</strong> In an Internet browser, navigate to <a href="http://portal.azure.com">http://portal.azure.com</a> and
+sign in with your credentials.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//prereq-step1.png" alt="" /></p>
+
+<p><strong>Step 2.</strong> Click on the “Browse All” tile on the left column, select
+“Application Insights,” and click on the name of the telemetry that was created when you deployed the resource group using the Deployment template in the PartsUnlimited solution. The name of the telemetry should match the name of the PartsUnlimited name plus “Insights.”</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//prereq-step2.png" alt="" /></p>
+
+<p><strong>Step 3.</strong> In the PartsUnlimited Application Insights telemetry, click on the “Settings” tile and then “Properties.” You will want to keep this browser window open with the details of the telemetry name, location, instrumentation key, and subscription information when we attach it to the PartsUnlimited website.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//prereq-step3.png" alt="" /></p>
+
+<p><strong>Step 4.</strong> To receive data, we will need to attach the PartsUnlimited Application Insights telemetry to the PartsUnlimited project in Visual Studio. In Visual Studio, open the PartsUnlimited solution.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//prereq-step4.png" alt="" /></p>
+
+<p><strong>Step 5.</strong> In the PartsUnlimited solution, right-click on the PartsUnlimitedWebsite project and select “Add Application Insights telemetry.”</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//prereq-step5.png" alt="" /></p>
+
+<p><strong>Step 6.</strong> In the “Add Application Insights to Project” window, click on the “Use different account” hyperlink.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//prereq-step6.png" alt="" /></p>
+
+<p><strong>Step 7.</strong> Since we have the subscription and resource information for our PartsUnlimited Application Insights telemetry, click on the button, “Use advanced mode.”</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//prereq-step7.png" alt="" /></p>
+
+<p><strong>Step 8.</strong> Fill in the subscription ID, resource group, Application Insights resource name, and Instrumentation key found in the new portal from step 3. Then press the “Add Application Insights to Project” button to add the telemetry in the project.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//prereq-step8.png" alt="" /></p>
+
+<p><strong>Step 9.</strong> Back in the Azure Portal, in the PartsUnlimited Application Insights telemetry, in the Application Health panel, click on the “Learn how to collect server response time data” overlay. Before Application Insights receives any information, we need to add script code to monitor each web page in the PartsUnlimited project.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//prereq-step9.png" alt="" /></p>
+
+<p><strong>Step 10.</strong> In the Quickstart panel to add Application Insights to your project, click on “Get code to monitor my web pages” and copy the end-user usage analytics code.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//prereq-step10.png" alt="" /></p>
+
+<p><strong>Step 11.</strong> Back in Visual Studio, in the PartsUnlimitedWebsite project, in Views/Shared/_Layout.cshtml, paste the snippet of code you copied for the end-user usage analytics code from the Azure portal before the rest of the scripts between the head tag.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//prereq-step11.png" alt="" /></p>
+
+<p><strong>Step 12.</strong> In the “Changes” tile in Team Explorer, commit the changes of adding Application Insights (adding ApplicationInsights.config, editing the publish profile, _Layout.cshtml, packages.config and web.config) and sync to the repo which should kick off an automated build and deploy to the website.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//prereq-step12a.png" alt="" /></p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//prereq-step12b.png" alt="" /></p>
+
+<p><strong>Step 13.</strong> Lastly, in the Azure portal, navigate to the PartsUnlimited Azure web app and click the “Tools” tile. We need to add in application performance monitoring for the web app now that it is connected to Application Insights.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//prereq-step13.png" alt="" /></p>
+
+<p><strong>Step 14.</strong> In the tools panel, click on “Performance Monitoring,” then the “Click here to collect insights into the performance of your .NET applications” overlay. Select the Application Insights telemetry used in the previous steps for the Application Insights provider.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//prereq-step14.png" alt="" /></p>
+
+<p><strong>Step 15.</strong> Once you have selected the Application Insights provider, you do not need to add a New Relic provider, so you may just click on the OK button to add the Application Insights telemetry as a provider for peformance monitoring.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//prereq-step15.png" alt="" /></p>
+
+<p>Now that you have connected the PartsUnlimited Application Insights telemetry to your PartsUnlimited web app and enabled performance monitoring, you are ready to continue the lab.</p>
+
+<p>###Task 2: Using Application Performance Monitoring to resolve performance issues</p>
+
+<p><strong>Step 1.</strong> In an Internet browser, navigate to the PartsUnlimited website that you previously deployed and go to the Recommendations page, such as <a href="http://partsunlimited.azurewebsites.net/home/recommendations">http://partsunlimited.azurewebsites.net/home/recommendations</a>.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//step1.png" alt="" /></p>
+
+<p><strong>Step 2.</strong> Click on the “Browse All” tile on the left column, select
+“Application Insights,” and click on the name of your Application Insights
+telemetry for your web app.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//step2.png" alt="" /></p>
+
+<p><strong>Step 3.</strong> After selecting the Application Insights telemetry for your web app,
+scroll down and select the “Performance” tile to view performance monitoring
+information.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//step3.png" alt="" /></p>
+
+<p><strong>Step 4.</strong> In the performance tile of the Application Insights telemetry, note
+the timeline. The timeline data may not show up immediately, so you will want to wait for a few minutes for the telemetry to collect performance data.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//step4.png" alt="" /></p>
+
+<p><strong>Step 5.</strong> Once data shows in the timeline, view the operations listed under the <strong>Average
+of server response time by operation name</strong> section under the timeline. Click on the top operation in the list referring to the recommendations page to view details of that operation.</p>
+
+<p><strong>Step 6.</strong> Drill down into the method that is affecting the slow performance. We now know where the slow performance is being caused in our code.</p>
+
+<p><strong>Step 7.</strong> In Visual Studio, open the <strong>PartsUnlimited.sln</strong>.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//step7.png" alt="" /></p>
+
+<p><strong>Step 8.</strong> Find the Recomendations method in <strong>HomeController.cs</strong> that is causing slow performance. At the top of the HomeController class, notice that the public int roco_count is set to 1000. Change that value to be 1.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//step8.png" alt="" /></p>
+
+<p><strong>Step 9.</strong> Save the changes and commit the changes on the master branch.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//step9.png" alt="" />
+ </p>
+
+<p><strong>Step 10.</strong> Press the “Sync” button to push the changes up to the repo and
+kick off a build automatically.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//step10.png" alt="" /></p>
+
+<p><strong>Step 11.</strong> Now that our changes have deployed to the website, open up a new incognito browser window (to prevent caching) and return to the recommendations page (http://partsunlimited.azurewebsites.net/home/recommendations).</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//step1.png" alt="" /> </p>
+
+<p><strong>Step 12.</strong> Return to the Application Insights performance monitoring view in the Azure Preview Portal and refresh the page.</p>
+
+<p><img src="/PartsUnlimited/assets/45-apm//step12.png" alt="" /> </p>
+
+<p>In this lab, you learned how to set up Application Insights telemetry, and drill down into performance
+monitoring data through Application Insights in the new Azure Portal.</p>
+
+
+                    </div>
+                
+            </div>
+
+            
+
+            <div class="row">
+                <div id="footer" class="col-sm-12">
+                    Documentation for <a href="https://github.com/Microsoft/PartsUnlimited">PartsUnlimited</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+        
+    </body>
+</html>
