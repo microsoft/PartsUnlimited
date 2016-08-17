@@ -50,7 +50,7 @@
             
 
             
-                <li data-order="4"><a href="/PartsUnlimited/core/core-deployment.html">Deployment</a></li>
+                <li data-order="4"><a href="/PartsUnlimited/core/core-manual-deployment.html">Manual Deployment</a></li>
             
         
             
@@ -150,7 +150,7 @@
 <p>In this lab you have an application called PartsUnlimited, committed to a Git repo
 in Visual Studio Team Services (VSTS) and a Continuous Integration build that builds the app and
 runs unit tests whenever code is pushed to the master branch. Please refer to the
-<a href="https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_Continuous_Integration">HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services</a>
+<a href="https://microsoft.github.io/PartsUnlimited/45/45-ci.html">HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services</a>
 in order to see how the CI build was set up.
 Now you want to set up Release Management (a feature of Visual Studio Team Services)
 to be able continuously deploy the application to an Azure Web App. Initially the
@@ -170,7 +170,7 @@ the app will be deployed to the production site.</p>
 deployment slots for Basic or Free Azure Web Apps. To learn more about deployment slots, see <a href="https://azure.microsoft.com/en-us/documentation/articles/web-sites-staged-publishing/">this article</a>.</p>
   </li>
   <li>
-    <p>You have completed the <a href="https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_Continuous_Integration">HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services</a></p>
+    <p>You have completed the <a href="https://microsoft.github.io/PartsUnlimited/45/45-ci.html">HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services</a></p>
   </li>
   <li>An organizational account that is a co-administrator on your Azure account
 &gt; <strong>Note</strong>: This is required because deploying <a href="https://azure.microsoft.com/en-us/documentation/articles/resource-group-authoring-templates/">ARM Templates</a>
@@ -180,7 +180,7 @@ MSA Account and certificate-based connections are not supported. For this HOL, y
 
 <h2 id="tasks-overview">Tasks Overview:</h2>
 
-<p><strong>1. Complete the <a href="https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_Continuous_Integration">HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services</a>.</strong>
+<p><strong>1. Complete the <a href="https://microsoft.github.io/PartsUnlimited/45/45-ci.html">HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services</a>.</strong>
 This will walk through creating a Visual Studio Team Services account, committing the PartsUnlimited source code
 and setting up the Continuous Integration (CI) build.</p>
 
@@ -205,7 +205,7 @@ Once the Release Definition is set up, you will trigger a release and see the pi
 <h1 id="hands-on-lab">Hands On Lab</h1>
 
 <h3 id="complete-hol---parts-unlimited-website-continuous-integration-with-visual-studio-team-services">1: Complete HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services</h3>
-<p>Make sure you’ve completed <a href="https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_Continuous_Integration">HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services</a>.</p>
+<p>Make sure you’ve completed <a href="https://microsoft.github.io/PartsUnlimited/45/45-ci.html">HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services</a>.</p>
 
 <h3 id="modify-the-ci-build-to-include-the-arm-templates">2: Modify the CI Build to include the ARM Templates</h3>
 <p>In order to deploy to Azure, you’re going to to specify the infrastructure that the PartsUnlimited Website requires. For example,

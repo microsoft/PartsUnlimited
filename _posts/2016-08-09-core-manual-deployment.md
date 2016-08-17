@@ -1,6 +1,6 @@
 ---
 layout: page
-title:  Deployment
+title:  Manual Deployment
 category: core
 order: 4
 ---
