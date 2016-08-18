@@ -3,22 +3,22 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "WebsiteName": {
-            "value": ""
+            "value": "partsunldtzar"
         },
         "PartsUnlimitedServerName": {
-            "value": ""
+            "value": "partsunlsqldtzar"
         },
         "PartsUnlimitedHostingPlanName": {
             "value": "PartsBasicFree"
         },
         "CdnStorageAccountName": {
-            "value": ""
+            "value": "partsunlcdndtzar"
         },
         "CdnStorageContainerName": {
             "value": "cdn"
         },
         "PartsUnlimitedServerAdminLoginPassword": {
-            "value": ""
+            "value": "Password!"
         }
     }
 }

@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>43e031d4-0f62-4adf-97e5-597b380fd757</ProjectGuid>
+    <ProjectGuid>bd52204a-7129-4ff2-b66c-34a5e6f70cdd</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup>
     <TargetFrameworkIdentifier>Deployment</TargetFrameworkIdentifier>
@@ -25,12 +25,6 @@
   <Import Condition=" Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Deployment\1.1\DeploymentProject.targets') " Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Deployment\1.1\DeploymentProject.targets" />
   <!-- vertag<:>end -->
   <ItemGroup>
-    <None Include="Deployment.targets">
-      <Visible>False</Visible>
-    </None>
-    <Content Include="Scripts\Deploy-AzureResourceGroup.ps1" />
-    <Content Include="Scripts\Install-AzCopy.ps1" />
-    <Content Include="Scripts\New-CdnStorageContainer.psm1" />
     <Content Include="Templates\AppInsights.json" />
     <Content Include="Templates\DemoEnvironmentSetup.json" />
     <Content Include="Templates\DemoEnvironmentSetup.param.json" />
@@ -41,6 +35,12 @@
     <Content Include="Templates\Website.json" />
     <Content Include="Templates\WebsiteRules.json" />
     <Content Include="Templates\WebsiteWithTwoSlots.json" />
+    <None Include="Deployment.targets">
+      <Visible>False</Visible>
+    </None>
+    <Content Include="Deploy-AzureResourceGroup.ps1" />
+    <None Include="Templates\FullEnvironmentSetupMerged.json" />
+    <None Include="Templates\FullEnvironmentSetupMerged.param.json" />
   </ItemGroup>
   <Target Name="GetReferenceAssemblyPaths" />
 </Project>
