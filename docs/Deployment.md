@@ -1,7 +1,9 @@
 #Deployment
 For full deployments, you can deploy the PartsUnlimited app to slots as needed. The website is setup to keep the connection strings with the slots. This means that if staging and main website slots are switched, the main website will still use the production database, while the staging slot will keep pointing to the staging database.
 
-##How to Deploy Full Environment And Publish Website##
+> Note: If you follow the Continuous Deployment with [VSTS Release Management HOL](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_Continuous_Deployment_Release_Management), it will automatically deploy this solution for you using VSTS.
+
+##How to Manually Deploy Full Environment And Publish Website
 1.	Open PartsUnlimited.sln at the root of the directory
 1.	If you haven’t already done so, install PowerShell Tools for Visual Studio by following these steps:
     * Go to Tools - Extensions and Updates and search for "PowerShell"
