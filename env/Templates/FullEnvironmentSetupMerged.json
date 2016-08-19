@@ -1,0 +1,617 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "WebsiteName": {
+      "type": "string"
+    },
+    "PartsUnlimitedServerName": {
+      "type": "string"
+    },
+    "PartsUnlimitedServerAdminLogin": {
+      "type": "string",
+      "defaultValue": "AdminUser"
+    },
+    "PartsUnlimitedServerAdminLoginPassword": {
+      "type": "securestring"
+    },
+    "PartsUnlimitedServerAdminLoginPasswordForTest": {
+      "type": "securestring"
+    },
+    "PartsUnlimitedDBName": {
+      "type": "string",
+      "defaultValue": "PartsUnlimitedDB"
+    },
+    "PartsUnlimitedDBCollation": {
+      "type": "string",
+      "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
+    },
+    "PartsUnlimitedDBEdition": {
+      "type": "string",
+      "defaultValue": "Basic",
+      "allowedValues": [
+        "Basic",
+        "Business",
+        "Premium",
+        "Standard",
+        "Web"
+      ]
+    },
+    "PartsUnlimitedHostingPlanName": {
+      "type": "string"
+    },
+    "PartsUnlimitedHostingPlanSKU": {
+      "type": "string",
+      "allowedValues": [
+        "Standard"
+      ],
+      "defaultValue": "Standard"
+    },
+    "PartsUnlimitedHostingPlanWorkerSize": {
+      "type": "string",
+      "allowedValues": [
+        "0",
+        "1",
+        "2"
+      ],
+      "defaultValue": "0"
+    },
+    "EnableRules": {
+      "type": "bool",
+      "defaultValue": false
+    },
+    "CdnStorageAccountName": {
+      "type": "string"
+    },
+    "CdnStorageContainerName": {
+      "type": "string"
+    },
+    "CdnStorageAccountNameForDev": {
+      "type": "string"
+    },
+    "CdnStorageContainerNameForDev": {
+      "type": "string"
+    },
+    "CdnStorageAccountNameForStaging": {
+      "type": "string"
+    },
+    "CdnStorageContainerNameForStaging": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "PartsUnlimitedServerName": "[toLower(parameters('PartsUnlimitedServerName'))]",
+    "PartsUnlimitedServerNameDev": "[concat(variables('PartsUnlimitedServerName'), 'dev')]",
+    "PartsUnlimitedServerNameStage": "[concat(variables('PartsUnlimitedServerName'), 'stage')]"
+  },
+  "resources": [
+    {
+      "name": "[variables('PartsUnlimitedServerName')]",
+      "type": "Microsoft.Sql/servers",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2014-04-01-preview",
+      "tags": {
+        "displayName": "PartsUnlimitedServer"
+      },
+      "properties": {
+        "administratorLogin": "[parameters('PartsUnlimitedServerAdminLogin')]",
+        "administratorLoginPassword": "[parameters('PartsUnlimitedServerAdminLoginPassword')]"
+      },
+      "resources": [
+        {
+          "name": "[concat('AllowAllIps', variables('PartsUnlimitedServerName'))]",
+          "type": "firewallrules",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('PartsUnlimitedServerName'))]"
+          ],
+          "properties": {
+            "startIpAddress": "0.0.0.0",
+            "endIpAddress": "0.0.0.0"
+          }
+        },
+        {
+          "name": "[parameters('PartsUnlimitedDBName')]",
+          "type": "databases",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('PartsUnlimitedServerName'))]"
+          ],
+          "tags": {
+            "displayName": "PartsUnlimitedDB"
+          },
+          "properties": {
+            "collation": "[parameters('PartsUnlimitedDBCollation')]",
+            "edition": "[parameters('PartsUnlimitedDBEdition')]",
+            "maxSizeBytes": "1073741824"
+          }
+        }
+      ]
+    },
+    {
+      "name": "[variables('PartsUnlimitedServerNameDev')]",
+      "type": "Microsoft.Sql/servers",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2014-04-01-preview",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "PartsUnlimitedServer"
+      },
+      "properties": {
+        "administratorLogin": "[parameters('PartsUnlimitedServerAdminLogin')]",
+        "administratorLoginPassword": "[parameters('PartsUnlimitedServerAdminLoginPasswordForTest')]"
+      },
+      "resources": [
+        {
+          "name": "[concat('AllowAllIps', variables('PartsUnlimitedServerNameDev'))]",
+          "type": "firewallrules",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('PartsUnlimitedServerNameDev'))]"
+          ],
+          "properties": {
+            "startIpAddress": "0.0.0.0",
+            "endIpAddress": "0.0.0.0"
+          }
+        },
+        {
+          "name": "[parameters('PartsUnlimitedDBName')]",
+          "type": "databases",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('PartsUnlimitedServerNameDev'))]"
+          ],
+          "tags": {
+            "displayName": "PartsUnlimitedDB"
+          },
+          "properties": {
+            "collation": "[parameters('PartsUnlimitedDBCollation')]",
+            "edition": "[parameters('PartsUnlimitedDBEdition')]",
+            "maxSizeBytes": "1073741824"
+          }
+        }
+      ]
+    },
+    {
+      "name": "[variables('PartsUnlimitedServerNameStage')]",
+      "type": "Microsoft.Sql/servers",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2014-04-01-preview",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "PartsUnlimitedServer"
+      },
+      "properties": {
+        "administratorLogin": "[parameters('PartsUnlimitedServerAdminLogin')]",
+        "administratorLoginPassword": "[parameters('PartsUnlimitedServerAdminLoginPasswordForTest')]"
+      },
+      "resources": [
+        {
+          "name": "[concat('AllowAllIps', variables('PartsUnlimitedServerNameStage'))]",
+          "type": "firewallrules",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('PartsUnlimitedServerNameStage'))]"
+          ],
+          "properties": {
+            "startIpAddress": "0.0.0.0",
+            "endIpAddress": "0.0.0.0"
+          }
+        },
+        {
+          "name": "[parameters('PartsUnlimitedDBName')]",
+          "type": "databases",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('PartsUnlimitedServerNameStage'))]"
+          ],
+          "tags": {
+            "displayName": "PartsUnlimitedDB"
+          },
+          "properties": {
+            "collation": "[parameters('PartsUnlimitedDBCollation')]",
+            "edition": "[parameters('PartsUnlimitedDBEdition')]",
+            "maxSizeBytes": "1073741824"
+          }
+        }
+      ]
+    },
+    {
+      "name": "[concat(parameters('WebsiteName'), '-Insights')]",
+      "type": "Microsoft.Insights/components",
+      "location": "Central US",
+      "apiVersion": "2014-04-01",
+      "tags": {
+        "displayName": "insightsComponents"
+      },
+      "properties": {
+        "ApplicationId": "[concat(parameters('WebsiteName'), '-Insights')]"
+      }
+    },
+    {
+      "name": "[concat(parameters('WebsiteName'), '-DevInsights')]",
+      "type": "Microsoft.Insights/components",
+      "location": "Central US",
+      "apiVersion": "2014-04-01",
+      "tags": {
+        "displayName": "insightsComponents"
+      },
+      "properties": {
+        "ApplicationId": "[concat(parameters('WebsiteName'), '-DevInsights')]"
+      }
+    },
+    {
+      "name": "[concat(parameters('WebsiteName'), '-StagingInsights')]",
+      "type": "Microsoft.Insights/components",
+      "location": "Central US",
+      "apiVersion": "2014-04-01",
+      "tags": {
+        "displayName": "insightsComponents"
+      },
+      "properties": {
+        "ApplicationId": "[concat(parameters('WebsiteName'), '-StagingInsights')]"
+      }
+    },
+    {
+      "name": "[parameters('PartsUnlimitedHostingPlanName')]",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2014-06-01",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "PartsUnlimitedHostingPlan"
+      },
+      "properties": {
+        "name": "[parameters('PartsUnlimitedHostingPlanName')]",
+        "sku": "[parameters('PartsUnlimitedHostingPlanSKU')]",
+        "workerSize": "[parameters('PartsUnlimitedHostingPlanWorkerSize')]",
+        "numberOfWorkers": 1
+      }
+    },
+    {
+      "name": "[concat(parameters('PartsUnlimitedHostingPlanName'), '-', resourceGroup().name)]",
+      "type": "Microsoft.Insights/autoscalesettings",
+      "location": "East US",
+      "apiVersion": "2014-04-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('PartsUnlimitedHostingPlanName'))]"
+      ],
+      "tags": {
+        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('PartsUnlimitedHostingPlanName'))]": "Resource",
+        "displayName": "WebsiteHostingPlanAutoScale"
+      },
+      "properties": {
+        "name": "[concat(parameters('PartsUnlimitedHostingPlanName'), '-', resourceGroup().name)]",
+        "profiles": [
+          {
+            "name": "Default",
+            "capacity": {
+              "minimum": "1",
+              "maximum": "4",
+              "default": "1"
+            },
+            "rules": [
+              {
+                "metricTrigger": {
+                  "metricName": "CpuPercentage",
+                  "metricResourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('PartsUnlimitedHostingPlanName'))]",
+                  "timeGrain": "PT1M",
+                  "statistic": "Average",
+                  "timeWindow": "PT10M",
+                  "timeAggregation": "Average",
+                  "operator": "GreaterThan",
+                  "threshold": 80
+                },
+                "scaleAction": {
+                  "direction": "Increase",
+                  "type": "ChangeCount",
+                  "value": "1",
+                  "cooldown": "PT10M"
+                }
+              },
+              {
+                "metricTrigger": {
+                  "metricName": "CpuPercentage",
+                  "metricResourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('PartsUnlimitedHostingPlanName'))]",
+                  "timeGrain": "PT1M",
+                  "statistic": "Average",
+                  "timeWindow": "PT1H",
+                  "timeAggregation": "Average",
+                  "operator": "LessThan",
+                  "threshold": 60
+                },
+                "scaleAction": {
+                  "direction": "Decrease",
+                  "type": "ChangeCount",
+                  "value": "1",
+                  "cooldown": "PT1H"
+                }
+              }
+            ]
+          }
+        ],
+        "enabled": "[parameters('EnableRules')]",
+        "targetResourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('PartsUnlimitedHostingPlanName'))]"
+      }
+    },
+    {
+      "name": "[concat('CPUHigh ', parameters('PartsUnlimitedHostingPlanName'))]",
+      "type": "Microsoft.Insights/alertrules",
+      "location": "East US",
+      "apiVersion": "2014-04-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('PartsUnlimitedHostingPlanName'))]"
+      ],
+      "tags": {
+        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('PartsUnlimitedHostingPlanName'))]": "Resource",
+        "displayName": "WebsiteHostingPlanAlertRuleCPUHigh"
+      },
+      "properties": {
+        "name": "[concat('CPUHigh ', parameters('PartsUnlimitedHostingPlanName'))]",
+        "description": "[concat('The average CPU is high across all the instances of ', parameters('PartsUnlimitedHostingPlanName'))]",
+        "isEnabled": "[parameters('EnableRules')]",
+        "condition": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.ThresholdRuleCondition",
+          "dataSource": {
+            "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleMetricDataSource",
+            "resourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('PartsUnlimitedHostingPlanName'))]",
+            "metricName": "CpuPercentage"
+          },
+          "operator": "GreaterThan",
+          "threshold": 90,
+          "windowSize": "PT15M"
+        },
+        "action": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleEmailAction",
+          "sendToServiceOwners": true,
+          "customEmails": []
+        }
+      }
+    },
+    {
+      "name": "[concat('LongHttpQueue ', parameters('PartsUnlimitedHostingPlanName'))]",
+      "type": "Microsoft.Insights/alertrules",
+      "location": "East US",
+      "apiVersion": "2014-04-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('PartsUnlimitedHostingPlanName'))]"
+      ],
+      "tags": {
+        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('PartsUnlimitedHostingPlanName'))]": "Resource",
+        "displayName": "WebsiteHostingPlanAlertRuleLongHttpQueue"
+      },
+      "properties": {
+        "name": "[concat('LongHttpQueue ', parameters('PartsUnlimitedHostingPlanName'))]",
+        "description": "[concat('The HTTP queue for the instances of ', parameters('PartsUnlimitedHostingPlanName'), ' has a large number of pending requests.')]",
+        "isEnabled": "[parameters('EnableRules')]",
+        "condition": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.ThresholdRuleCondition",
+          "dataSource": {
+            "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleMetricDataSource",
+            "resourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('PartsUnlimitedHostingPlanName'))]",
+            "metricName": "HttpQueueLength"
+          },
+          "operator": "GreaterThan",
+          "threshold": 100,
+          "windowSize": "PT5M"
+        },
+        "action": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleEmailAction",
+          "sendToServiceOwners": true,
+          "customEmails": []
+        }
+      }
+    },
+    {
+      "name": "[parameters('WebSiteName')]",
+      "type": "Microsoft.Web/sites",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('PartsUnlimitedHostingPlanName'))]",
+        "[resourceId('Microsoft.Sql/servers', variables('PartsUnlimitedServerName'))]",
+        "[resourceId('Microsoft.Sql/servers', variables('PartsUnlimitedServerNameDev'))]",
+        "[resourceId('Microsoft.Sql/servers', variables('PartsUnlimitedServerNameStage'))]",
+        "[resourceId('Microsoft.Insights/components', concat(parameters('WebsiteName'), '-Insights'))]",
+        "[resourceId('Microsoft.Insights/components', concat(parameters('WebSiteName'), '-DevInsights'))]",
+        "[resourceId('Microsoft.Insights/components', concat(parameters('WebSiteName'), '-StagingInsights'))]"
+      ],
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2014-06-01",
+      "tags": {
+        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('PartsUnlimitedHostingPlanName'))]": "Resource",
+        "displayName": "PartsUnlimitedWebsite"
+      },
+      "properties": {
+        "name": "[parameters('WebsiteName')]",
+        "serverFarm": "[parameters('PartsUnlimitedHostingPlanName')]"
+      },
+      "resources": [
+        {
+          "name": "connectionstrings",
+          "type": "config",
+          "apiVersion": "2014-11-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites/', parameters('WebSiteName'))]"
+          ],
+          "properties": {
+            "DefaultConnectionString": {
+              "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('PartsUnlimitedServerName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', parameters('PartsUnlimitedDBName'), ';User Id=', parameters ('PartsUnlimitedServerAdminLogin'), '@', variables('PartsUnlimitedServerName'), ';Password=', parameters('PartsUnlimitedServerAdminLoginPassword'), ';')]",
+              "type": "SQLAzure"
+            }
+          }
+        },
+        {
+          "name": "appsettings",
+          "type": "config",
+          "apiVersion": "2014-11-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('WebSiteName'))]"
+          ],
+          "properties": {
+            "Keys:ApplicationInsights:InstrumentationKey": "[reference(concat('Microsoft.Insights/components/', parameters('WebsiteName'), '-Insights')).InstrumentationKey]"
+          }
+        },
+        {
+          "name": "slotconfignames",
+          "type": "config",
+          "apiVersion": "2014-11-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('WebSiteName'))]"
+          ],
+          "properties": {
+            "connectionStringNames": [ "DefaultConnectionString" ],
+            "appSettingNames": [ "keys:ApplicationInsights:InstrumentationKey" ]
+          }
+        },
+        {
+          "name": "Dev",
+          "type": "slots",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2014-11-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('WebSiteName'))]"
+          ],
+          "properties": {
+          },
+          "resources": [
+            {
+              "name": "connectionstrings",
+              "type": "config",
+              "apiVersion": "2014-11-01",
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('WebSiteName'), 'Dev')]"
+              ],
+              "properties": {
+                "DefaultConnectionString": {
+                  "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('PartsUnlimitedServerNameDev'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', parameters('PartsUnlimitedDBName'), ';User Id=', parameters ('PartsUnlimitedServerAdminLogin'), '@', variables('PartsUnlimitedServerNameDev'), ';Password=', parameters('PartsUnlimitedServerAdminLoginPasswordForTest'), ';')]",
+                  "type": "SQLAzure"
+                }
+              }
+            },
+            {
+              "name": "appsettings",
+              "type": "config",
+              "apiVersion": "2014-11-01",
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('WebSiteName'), 'Dev')]"
+              ],
+              "properties": {
+                "Keys:ApplicationInsights:InstrumentationKey": "[reference(concat('Microsoft.Insights/components/', parameters('WebsiteName'), '-DevInsights')).InstrumentationKey]"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Staging",
+          "type": "slots",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2014-11-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('WebSiteName'))]"
+          ],
+          "properties": {
+          },
+          "resources": [
+            {
+              "name": "connectionstrings",
+              "type": "config",
+              "apiVersion": "2014-11-01",
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('WebSiteName'), 'Staging')]"
+              ],
+              "properties": {
+                "DefaultConnectionString": {
+                  "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('PartsUnlimitedServerNameStage'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', parameters('PartsUnlimitedDBName'), ';User Id=', parameters ('PartsUnlimitedServerAdminLogin'), '@', variables('PartsUnlimitedServerNameStage'), ';Password=', parameters('PartsUnlimitedServerAdminLoginPasswordForTest'), ';')]",
+                  "type": "SQLAzure"
+                }
+              }
+            },
+            {
+              "name": "appsettings",
+              "type": "config",
+              "apiVersion": "2014-11-01",
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('WebSiteName'), 'Staging')]"
+              ],
+              "properties": {
+                "Keys:ApplicationInsights:InstrumentationKey": "[reference(concat('Microsoft.Insights/components/', parameters('WebsiteName'), '-StagingInsights')).InstrumentationKey]"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "[concat('ServerErrors ', parameters('WebsiteName'))]",
+      "type": "Microsoft.Insights/alertrules",
+      "location": "East US",
+      "apiVersion": "2014-04-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('WebSiteName'))]"
+      ],
+      "tags": {
+        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('WebsiteName'))]": "Resource",
+        "displayName": "WebsiteAlertRuleServerErrors"
+      },
+      "properties": {
+        "name": "[concat('ServerErrors ', parameters('WebsiteName'))]",
+        "description": "[concat(parameters('WebsiteName'), ' has some server errors, status code 5xx.')]",
+        "isEnabled": "[parameters('EnableRules')]",
+        "condition": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.ThresholdRuleCondition",
+          "dataSource": {
+            "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleMetricDataSource",
+            "resourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('WebsiteName'))]",
+            "metricName": "Http5xx"
+          },
+          "operator": "GreaterThan",
+          "threshold": 0,
+          "windowSize": "PT5M"
+        },
+        "action": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleEmailAction",
+          "sendToServiceOwners": true,
+          "customEmails": []
+        }
+      }
+    },
+    {
+      "name": "[concat('ForbiddenRequests ', parameters('WebsiteName'))]",
+      "type": "Microsoft.Insights/alertrules",
+      "location": "East US",
+      "apiVersion": "2014-04-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('WebsiteName'))]"
+      ],
+      "tags": {
+        "displayName": "WebsiteAlertRuleForbiddenRequests"
+      },
+      "properties": {
+        "name": "[concat('ForbiddenRequests ', parameters('WebsiteName'))]",
+        "description": "[concat(parameters('WebsiteName'), ' has some requests that are forbidden, status code 403.')]",
+        "isEnabled": "[parameters('EnableRules')]",
+        "condition": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.ThresholdRuleCondition",
+          "dataSource": {
+            "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleMetricDataSource",
+            "resourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('WebsiteName'))]",
+            "metricName": "Http403"
+          },
+          "operator": "GreaterThan",
+          "threshold": 0,
+          "windowSize": "PT5M"
+        },
+        "action": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleEmailAction",
+          "sendToServiceOwners": true,
+          "customEmails": []
+        }
+      }
+    }
+  ]
+}

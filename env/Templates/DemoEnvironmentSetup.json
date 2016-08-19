@@ -74,11 +74,11 @@
         }
     },
     "variables": {
-        "sqlServerAndDbTemplateFile": "PartsUnlimitedEnv/Templates/SqlServerAndDb.json",
-        "appInsightsTemplateFile": "PartsUnlimitedEnv/Templates/AppInsights.json",
-        "hostingPlanTemplateFile": "PartsUnlimitedEnv/Templates/HostingPlanAndRules.json",
-        "websiteTemplateFile": "PartsUnlimitedEnv/Templates/Website.json",
-        "websiteRulesTemplateFile": "PartsUnlimitedEnv/Templates/WebsiteRules.json"
+        "sqlServerAndDbTemplateFile": "Templates/SqlServerAndDb.json",
+        "appInsightsTemplateFile": "Templates/AppInsights.json",
+        "hostingPlanTemplateFile": "Templates/HostingPlanAndRules.json",
+        "websiteTemplateFile": "Templates/Website.json",
+        "websiteRulesTemplateFile": "Templates/WebsiteRules.json"
     },
     "resources": [
         {
