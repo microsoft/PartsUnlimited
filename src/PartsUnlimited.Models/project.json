@@ -1,14 +1,7 @@
-﻿{
+{
   "version": "1.0.0-*",
 
   "dependencies": {
-    "Microsoft.NETCore.App": {
-      "version": "1.0.0",
-      "type": "platform"
-    },
-    "Microsoft.EntityFrameworkCore": "1.0.0",
-    "Microsoft.EntityFrameworkCore.InMemory": "1.0.0",
-    "Microsoft.EntityFrameworkCore.SqlServer": "1.0.0",
     "Microsoft.Extensions.Configuration": "1.0.0",
     "Microsoft.Extensions.Configuration.Json": "1.0.0",
     "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",
@@ -17,11 +10,13 @@
     "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.0.0",
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0",
     "Microsoft.ApplicationInsights.AspNetCore": "1.0.0",
-    "NETStandard.Library": "1.6.0"
+    "Microsoft.EntityFrameworkCore": "1.0.1",
+    "Microsoft.EntityFrameworkCore.InMemory": "1.0.1",
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.0.1"
   },
 
   "frameworks": {
-    "netstandard1.3": {
+    "netstandard1.6": {
       "imports": [
         "dotnet5.6",
         "dnxcore50",
