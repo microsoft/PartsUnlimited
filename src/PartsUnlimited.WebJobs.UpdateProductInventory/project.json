@@ -14,6 +14,6 @@
     "PartsUnlimited.WebJobs.UpdateProductInventory" : "PartsUnlimited.WebJobs.UpdateProductInventory"
   },
   "frameworks" : {
-    "net46": { }
+    "net462": { }
   }
 }

@@ -11,9 +11,10 @@
     "Microsoft.Azure.WebJobs.Core": "1.0.0"
   },
   "commands": {
-    "PartsUnlimited.WebJobs.ProcessOrder" : "PartsUnlimited.WebJobs.ProcessOrder"
+    "PartsUnlimited.WebJobs.ProcessOrder": "PartsUnlimited.WebJobs.ProcessOrder"
   },
-  "frameworks" : {
-    "net46": { }
+  "frameworks": {
+    "net462": {
+    }
   }
 }
