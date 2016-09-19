@@ -6,16 +6,16 @@
     <h2>@ViewBag.Title</h2>
     <div class="row">
         <div class="col-md-6">
-            @using (Html.BeginForm("SendCode", "Account", new { ReturnUrl = Model.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            @using (Html.BeginForm("SendCode", "Account", new { ReturnUrl = Model.ReturnUrl }, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()
                 @Html.Hidden("rememberMe", @Model.RememberMe)
                 <h4>Send verification code</h4>
                 <div class="row">
-                
+
                     <div class="col-md-8">
                         <label>Select Two-Factor Authentication Provider:</label>
-                        @Html.DropDownListFor(model => model.SelectedProvider, Model.Providers, new { @class = "form-control"})
+                        @Html.DropDownListFor(model => model.SelectedProvider, Model.Providers, new { @class = "form-control" })
                     </div>
 
                     <div class="col-md-8">

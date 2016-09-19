@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.PlatformAbstractions;
 using PartsUnlimited.Areas.Admin;
 using PartsUnlimited.Models;
 using PartsUnlimited.Queries;
@@ -18,7 +17,6 @@ using PartsUnlimited.Security;
 using PartsUnlimited.Telemetry;
 using PartsUnlimited.WebsiteConfiguration;
 using System;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace PartsUnlimited
 {
@@ -41,7 +39,7 @@ namespace PartsUnlimited
         {
             //If this type is present - we're on mono
             var runningOnMono = Type.GetType("Mono.Runtime") != null;
-            var sqlConnectionString = Configuration[ConfigurationPath.Combine("Data","DefaultConnection", "ConnectionString")];
+            var sqlConnectionString = Configuration[ConfigurationPath.Combine("Data", "DefaultConnection", "ConnectionString")];
             var useInMemoryDatabase = string.IsNullOrWhiteSpace(sqlConnectionString);
 
             // Add EF services to the services container
@@ -74,7 +72,7 @@ namespace PartsUnlimited
                     {
                         authBuilder.RequireClaim(AdminConstants.ManageStore.Name, AdminConstants.ManageStore.Allowed);
                     });
-                 
+
             });
 
             // Add implementations
@@ -131,8 +129,6 @@ namespace PartsUnlimited
                 services.AddSingleton<IAzureMLFrequentlyBoughtTogetherConfig>(azureMlConfig);
                 services.AddScoped<IRecommendationEngine, AzureMLFrequentlyBoughtTogetherRecommendationEngine>();
             }
-
-            services.AddSingleton<RuntimeEnvironment>();
         }
 
         //This method is invoked when KRE_ENV is 'Development' or is not defined
@@ -143,11 +139,6 @@ namespace PartsUnlimited
             //During development use the ErrorPage middleware to display error information in the browser
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
-
-            // Add the runtime information page that can be used by developers
-            // to see what packages are used by the application
-            // default path is: /runtimeinfo
-            app.UseRuntimeInfoPage();
 
             Configure(app);
         }

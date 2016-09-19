@@ -4,8 +4,8 @@
 using System;
 using System.Linq;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Framework.Configuration;
-using Microsoft.Framework.Configuration.Json;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 
 namespace PartsUnlimited.WebJobs.ProcessOrder
 {
@@ -14,7 +14,7 @@ namespace PartsUnlimited.WebJobs.ProcessOrder
         public int Main(string[] args)
         {
             var builder = new ConfigurationBuilder();
-            builder.Add(new JsonConfigurationSource("config.json"));
+            builder.Add(new JsonConfigurationSource { Path = "config.json" });
             var config = builder.Build();
             var webjobsConnectionString = config["Data:AzureWebJobsStorage:ConnectionString"];
             var dbConnectionString = config["Data:DefaultConnection:ConnectionString"];
