@@ -2,9 +2,10 @@
   "version": "1.0.0-*",
   "description": "",
   "authors": [ "" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
+  "packOptions": {
+    "tags": [ "" ],
+    "licenseUrl": ""
+  },
   "dependencies": {
     "PartsUnlimited.Models": "1.0.0-*",
     "Microsoft.Azure.WebJobs": "1.0.0",
