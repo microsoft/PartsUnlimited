@@ -9,7 +9,7 @@
     "Microsoft.Extensions.Configuration.Abstractions": "1.0.0",
     "Microsoft.NETCore.App": {
       "type": "platform",
-      "version": "1.0.1"
+      "version": "1.0.0"
     },
     "NSubstitute": "2.0.0-alpha001",
     "PartsUnlimitedWebsite": "1.0.0-*",
