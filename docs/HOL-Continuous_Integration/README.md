@@ -8,7 +8,7 @@ get fast feedback. To do so, we are going to be setting up a Continuous Integrat
 will allow us to compile and run unit tests on our code every time a commit is
 pushed to Visual Studio Team Services.
 
-###Pre-requisites:###
+### Pre-requisites: ###
 
 -   An active Visual Studio Team Services account
 
@@ -24,9 +24,9 @@ pushed to Visual Studio Team Services.
 
 > Note: VSTS does support GitHub source code integration for use with VSTS builds, but is outside of the scope of this HOL
 
-**2. Create Continuous Integration Build:** In this step, you will create a build definition that will be triggered every time a commit is pushed to your repository in Visual Studio Team Services. 
+**2. Create Continuous Integration Build:** In this step, you will create a build definition that will be triggered every time a commit is pushed to your repository in Visual Studio Team Services.
 
-**3. Test the CI Trigger in Visual Studio Team Services:** In this step, test the Continuous Integration build (CI) build we created by changing code in the Parts Unlimited project with Visual Studio Team Services. 
+**3. Test the CI Trigger in Visual Studio Team Services:** In this step, test the Continuous Integration build (CI) build we created by changing code in the Parts Unlimited project with Visual Studio Team Services.
 
 ### I: Import Source Code into your VSTS Account with Git
 
@@ -53,9 +53,9 @@ Move into the directory that was just created.  In a Windows OS (and assuming yo
 
 	cd HOL
 
-**2.** Remove the link to GitHub. 
+**2.** Remove the link to GitHub.
 
-The Git repo you just downloaded currently has a remote called _origin_ that points to the GitHub repo.  Since we won't be using it any longer, we can delete the reference. 
+The Git repo you just downloaded currently has a remote called _origin_ that points to the GitHub repo.  Since we won't be using it any longer, we can delete the reference.
 
 To delete the GitHub remote, use:
 
@@ -77,12 +77,12 @@ Additionally, at the bottom of the web page, you will see the two commands that 
 
 **4.** Add the link to VSTS and push your local Git repo
 
-In the local directory from Step 3, use the following command to add VSTS as the Git remote named _origin_. You can either type the URL you found in Step 4, or simply copy the first command from the VSTS web page.
+In the local directory from Step 1, use the following command to add VSTS as the Git remote named _origin_. You can either type the URL you found in Step 3, or simply copy the first command from the VSTS web page.
 
 	git remote add origin https://<account>.visualstudio.com\<project>\_git\<project>
 Now you can push the code, including history, to VSTS:
 
-	git push -u origin --all	
+	git push -u origin --all
 Congratulations, your code should now be in VSTS!
 
 ### II. Create Continuous Integration Build
@@ -91,7 +91,7 @@ A continuous integration build will give us the ability check whether the code
 we checked in can compile and will successfully pass any automated tests that we
 have created against it.
 
-**1.** Go to your **account’s homepage**: 
+**1.** Go to your **account’s homepage**:
 
 	https://<account>.visualstudio.com
 
@@ -101,12 +101,11 @@ have created against it.
 
 ![](<media/CI1.jpg>)
 
-**3.** Once on the project’s home page, click on the **Build** hub at the top of
-the page.
+**3.** Once on the project’s home page, click on the **Build** hub at the top of the page, then on **All Definitions**, and then on **New Definition**.
 
 ![](<media/CI2.jpg>)
 
-**4.** Click the **green “plus” sign**, select the **Empty** build definition, and then click **Next**.
+**4.** Select the **Empty** build definition, and then click **Next**.
 
 ![](<media/CI3.jpg>)
 
@@ -139,7 +138,7 @@ the page.
 **11.** Select **File Path** for the **Type** property, enter **"build.ps1"** for the **Script filename** property and **$(BuildConfiguration) $(build.stagingDirectory)** for the **Arguments** property.
 
 ![](<media/CI9.jpg>)
-    
+
 > **Note:** The build.ps1 script contains commands using the **dotnet.exe** executable used by .Net Core.  The build script does the following: restore, build, test, publish, and produce an MSDeploy zip package.
 
 	[CmdletBinding()]
@@ -160,11 +159,11 @@ the page.
 	& dotnet publish .\src\PartsUnlimitedWebsite --framework netcoreapp1.0 --output $outputDirectory --configuration $BuildConfiguration --no-build
 	#### Package to MSDeploy format
 
-**12.** On the **Publish Test Results** task, change the **Test Result Format** to **XUnit** and the **Test Results File** to ****/testresults.xml**.
+**12.** On the **Publish Test Results** task, change the **Test Result Format** to **XUnit** and the **Test Results File** to **\*\*/testresults.xml**.
 
 ![](<media/CI10.jpg>)
 
-**13.** On the **Copy Publish Artifact** task, change the **Copy Root** property to **$(build.stagingDirectory)**, The **Contents** property to ******\\***.zip**, The **Artifact Name** property to **drop** and the **Artifact Type** to **Server**. 
+**13.** On the **Copy Publish Artifact** task, change the **Copy Root** property to **$(build.stagingDirectory)**, The **Contents** property to **\*\*\\\*.zip**, The **Artifact Name** property to **drop** and the **Artifact Type** to **Server**.
 
 ![](<media/CI11.jpg>)
 
@@ -200,7 +199,7 @@ We will now test the **Continuous Integration build (CI)** build we created by c
 
 ![](<media/CI17.jpg>)
 
-**4.** Double-Click on the **Build Number**, and you should get a build summary similar to this, which includes test results.
+**4.** Click on the **Build Number**, and you should get a build summary similar to this, which includes test results.
 
 ![](<media/CI18.jpg>)
 
@@ -211,9 +210,8 @@ In this lab, you learned how to push new code to Visual Studio Team Services, se
 Integration build that runs when new commits are pushed to the master branch.
 This allows you to get feedback as to whether your changes made breaking syntax
 changes, or if they broke one or more automated tests, or if your changes are a
-okay. 
+okay.
 
 Try these labs out for next steps:
 
 -[Continuous Deployment Lab](../HOL-Continuous_Deployment/Lab.md)
-
