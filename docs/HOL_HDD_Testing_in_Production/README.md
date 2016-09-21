@@ -12,7 +12,7 @@ In this lab, you will learn about adding a deployment slot to an Azure Website f
 
 - Azure PowerShell (version 0.8.8.1 or higher) installed and configured ([https://azure.microsoft.com/en-us/documentation/articles/powershell-install-configure/](https://azure.microsoft.com/en-us/documentation/articles/powershell-install-configure/))
 
-- PartsUnlimited website deployed to a Microsoft Azure Web App (see [link](https://github.com/Microsoft/PartsUnlimited/blob/aspnet45/docs/Deployment.md))
+- PartsUnlimited website deployed to a Microsoft Azure Web App (see [link](https://github.com/Microsoft/PartsUnlimited/blob/master/docs/Deployment.md))
 
 **Tasks Overview**
 
