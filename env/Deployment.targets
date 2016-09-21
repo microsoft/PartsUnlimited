@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -53,8 +53,8 @@
   </PropertyGroup>
 
   <Target Name="_CopyOutputToArtifactStagingDirectory">
-    <Copy SourceFiles="@(DeploymentProjectContentOutput)" DestinationFiles="$(ArtifactStagingDirectory)$(MSBuildProjectName)%(RelativePath)" />
-    <Copy SourceFiles="@(BuildProjectReferencesOutput)" DestinationFiles="$(ArtifactStagingDirectory)%(ProjectName)\%(RecursiveDir)%(FileName)%(Extension)" />
+    <Copy SourceFiles="@(DeploymentProjectContentOutput)" DestinationFiles="$(ArtifactStagingDirectory)\$(MSBuildProjectName)%(RelativePath)" />
+    <Copy SourceFiles="@(BuildProjectReferencesOutput)" DestinationFiles="$(ArtifactStagingDirectory)\$(MSBuildProjectName)\%(ProjectName)\%(RecursiveDir)%(FileName)%(Extension)" />
   </Target>
 
   <Target Name="_GetDeploymentProjectContent">
@@ -85,8 +85,8 @@
       <ArtifactStagingDirectory Condition=" '$(OutDir)'!='' ">$(OutDir)</ArtifactStagingDirectory>
       <ArtifactStagingDirectory Condition=" '$(ArtifactStagingDirectory)'=='' ">$(OutputPath)</ArtifactStagingDirectory>
       <ArtifactStagingDirectory Condition=" !HasTrailingSlash('$(ArtifactStagingDirectory)') ">$(ArtifactStagingDirectory)\</ArtifactStagingDirectory>
-      <ArtifactStagingDirectory>$(ArtifactStagingDirectory)Artifacts\</ArtifactStagingDirectory>
-      <ArtifactStagingDirectory Condition=" '$(TF_Build)' == 'True' ">$(Build_ArtifactStagingDirectory)</ArtifactStagingDirectory>
+      <ArtifactStagingDirectory>$(ArtifactStagingDirectory)staging\</ArtifactStagingDirectory>
+      <ArtifactStagingDirectory Condition=" '$(TF_Build)' == 'True' ">$(Build_StagingDirectory)</ArtifactStagingDirectory>
     </PropertyGroup>
   </Target>
 

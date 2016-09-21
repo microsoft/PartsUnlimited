@@ -1,4 +1,4 @@
-{
+﻿{
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
@@ -9,24 +9,15 @@
             "value": ""
         },
         "PartsUnlimitedHostingPlanName": {
-            "value": ""
+            "value": "PartsBasicFree"
         },
         "CdnStorageAccountName": {
             "value": ""
         },
         "CdnStorageContainerName": {
-            "value": ""
+            "value": "cdn"
         },
-        "CdnStorageAccountNameForDev": {
-            "value": ""
-        },
-        "CdnStorageContainerNameForDev": {
-            "value": ""
-        },
-        "CdnStorageAccountNameForStaging": {
-            "value": ""
-        },
-        "CdnStorageContainerNameForStaging": {
+        "PartsUnlimitedServerAdminLoginPassword": {
             "value": ""
         }
     }
