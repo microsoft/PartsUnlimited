@@ -3,7 +3,7 @@ HOL - Continuous Deployment with Release Management in Visual Studio Team Servic
 In this lab, you have an application called PartsUnlimited, committed to a Git repo
 in Visual Studio Team Services (VSTS) and a Continuous Integration build that builds the app and
 runs unit tests whenever code is pushed to the master branch. Please refer to the
-[HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/tree/aspnet45/docs/HOL_Continuous_Integration)
+[HOL - Parts Unlimited WebSite Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/tree/master/docs/HOL-Continuous_Integration)
 in order to see how the CI build was set up.
 Now you want to set up Release Management (a feature of Visual Studio Team Services)
 to be able continuously deploy the application to an Azure Web App. Initially the
