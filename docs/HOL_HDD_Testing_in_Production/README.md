@@ -1,6 +1,6 @@
 #Testing in Production with Azure Websites - PartsUnlimited
 
-According to the internal sales team, oil and filters are still not selling with a 20% discount. The engineering team is looking for a way to remedy this and would like to try increasing the current 5 second-interval on the homepage carousel showing the 20% discount to 10 seconds. The team would like to have 10-second intervals in a test version of the website and keep the current 5-second interval in production. 
+According to the internal sales team, oil and filters are still not selling with a 20% discount. The engineering team is looking for a way to remedy this and would like to try increasing the current 5 second-interval on the homepage carousel showing the 20% discount to 10 seconds. The team would like to have 10-second intervals in a test version of the website and keep the current 5-second interval in production.
 
 Using an additional website slot and Application Request Routing rules, the team can dynamically adjust the percentage of traffic that goes to the test slot and then ultimately draw conclusions based on the test results. If updating the carousel timer interval is beneficial, the team would like to gradually roll out the change from test into production to minimize risk (and roll back if needed).
 
@@ -86,7 +86,7 @@ PartsUnlimited already has their production website deployed and in operation. B
 
 ![](<media/step16.png>)
 
-**Step 17.** In the div section for the jumbotron-carousel, add in the data-interval option and set its value to be 10000 (instead of the default of 5). The test deployment slot will have a data-interval of 10 seconds, while production will still keep 5 seconds. 
+**Step 17.** In the div section for the jumbotron-carousel, add in the data-interval option and set its value to be 10000 (instead of the default of 5). The test deployment slot will have a data-interval of 10 seconds, while production will still keep 5 seconds.
 
 ![](<media/step17.png>)
 
