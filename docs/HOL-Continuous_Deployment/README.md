@@ -14,7 +14,7 @@ the app will be deployed to the production site.
 ## Pre-requisites:
 
 * An active Visual Studio Team Services account
-* An Visual Studio 2015 or Visual Studio 2013 Update 5 client
+* An Visual Studio 2015 Update 3 client
 * Project Admin rights to the Visual Studio Team Services account
 * An active Azure account to host the PartsUnlimited Website as a Web App
 > **Note**: In order to use deployment slots, you'll need to configure the Web App to use Standard or Premium App Service Plan mode. You **cannot** create
