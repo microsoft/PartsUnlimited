@@ -113,7 +113,7 @@ create a Service Principal if you wish to.
 	![](media/3.png)
 	* Fill out the form below to create a [Service Pincipal](https://blogs.msdn.microsoft.com/visualstudioalm/2015/10/04/automating-azure-resource-group-deployment-using-a-service-principal-in-visual-studio-online-buildrelease-management/). Click on "Verify connection" button to check that all details were filed in correctly and then click on "OK" button.
 
-  ![](media/4.png)   
+  	![](media/4.png)
 	* You should see a new Service Endpoint. You can close the project administration page.
 
 	![](media/5.png)
