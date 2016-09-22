@@ -70,53 +70,49 @@ PartsUnlimited already has their production website deployed and in operation. B
 
 ![](<media/step12.png>)
 
-**Step 13.** In the website blade for the test deployment slot, note the summary map tile showing the new slot next to the production website and other application resources.
-
-![](<media/step13.png>)
-
-**Step 14.** Click the Browse button.
+**Step 13.** Click the Browse button.
 
 ![](<media/step14.png>)
 
-**Step 15.** Note the domain name for the test slot (has a "-test" appended) and that it is ready for the test version of the application to be deployed.
+**Step 14.** Note the domain name for the test slot (has a "-test" appended) and that it is ready for the test version of the application to be deployed.
 
 ![](<media/step15.png>)
 
-**Step 16.** Switch to Visual Studio and load the PartsUnlimited solution. In the Views -\> Home folder, open **Index.cshtml**.
+**Step 15.** Switch to Visual Studio and load the PartsUnlimited solution. In the Views -\> Home folder, open **Index.cshtml**.
 
 ![](<media/step16.png>)
 
-**Step 17.** In the div section for the jumbotron-carousel, add in the data-interval option and set its value to be 10000 (instead of the default of 5). The test deployment slot will have a data-interval of 10 seconds, while production will still keep 5 seconds.
+**Step 16.** In the div section for the jumbotron-carousel, add in the data-interval option and set its value to be 10000 (instead of the default of 5). The test deployment slot will have a data-interval of 10 seconds, while production will still keep 5 seconds.
 
 ![](<media/step17.png>)
 
-**Step 18.** Save your changes.
+**Step 17.** Save your changes.
 
-**Step 19.** In Solution Explorer, Right-click on the PartsUnlimited.Web project and select Publish.
+**Step 18.** In Solution Explorer, Right-click on the PartsUnlimited.Web project and select Publish.
+
+![](<media/step18.png>)
+
+**Step 19.** Click the Profile tab. Click the Microsoft Azure Websites publish target.
 
 ![](<media/step19.png>)
 
-**Step 20.** Click the Profile tab. Click the Microsoft Azure Websites publish target.
+**Step 20.** Select the test version of the website to publish to and then click OK.
 
 ![](<media/step20.png>)
 
-**Step 21.** Select the test version of the website to publish to and then click OK.
-
-![](<media/step21.png>)
-
-**Step 22.** After publish settings are downloaded for Web Deploy, click Validate Connection.
+**Step 21.** After publish settings are downloaded for Web Deploy, click Validate Connection.
 
 ![](<media/step22.png>)
 
-**Step 23.** Click Publish.
+**Step 22.** Click Publish.
 
 ![](<media/step23.png>)
 
-**Step 24.** After publication is complete, a browser window should open and navigate to the homepage. Verify that the test site waits for ten seconds before transitioning between images in the carousel.
+**Step 23.** After publication is complete, a browser window should open and navigate to the homepage. Verify that the test site waits for ten seconds before transitioning between images in the carousel.
 
 ![](<media/step6.png>)
 
-**Step 25.** Close the browser window.
+**Step 24.** Close the browser window.
 
 
 ###Task 2: Adding Route Rules to Direct Traffic to the Test Site with PowerShell
