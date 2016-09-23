@@ -8,9 +8,9 @@ In this lab, you will learn about adding a deployment slot to an Azure Website f
 
 **Prerequisites**
 
-- Visual Studio 2013 or higher
+- Visual Studio 2015
 
-- Azure PowerShell (version 0.8.8.1 or higher) installed and configured ([https://azure.microsoft.com/en-us/documentation/articles/powershell-install-configure/](https://azure.microsoft.com/en-us/documentation/articles/powershell-install-configure/))
+- Azure PowerShell installed and configured ([https://azure.microsoft.com/en-us/documentation/articles/powershell-install-configure/](https://azure.microsoft.com/en-us/documentation/articles/powershell-install-configure/))
 
 - PartsUnlimited website deployed to a Microsoft Azure Web App (see [link](https://github.com/Microsoft/PartsUnlimited/blob/master/docs/Deployment.md))
 
@@ -32,7 +32,7 @@ PartsUnlimited already has their production website deployed and in operation. B
 
 ![](<media/step2.png>)
 
-**Step 3.** Select the resource group that you deployed to prior to the demo (e.g. PartsUnlimited).
+**Step 3.** Select the resource group that you deployed to prior to the demo (e.g. PartsUnlimited-dotnetcore).
 
 ![](<media/step3.png>)
 
@@ -88,25 +88,23 @@ PartsUnlimited already has their production website deployed and in operation. B
 
 **Step 17.** Save your changes.
 
-**Step 18.** In Solution Explorer, Right-click on the PartsUnlimited.Web project and select Publish.
-
-![](<media/step18.png>)
-
-**Step 19.** Click the Profile tab. Click the Microsoft Azure Websites publish target.
+**Step 18.** In Solution Explorer, Right-click on the PartsUnlimited.Website project and select Publish.
 
 ![](<media/step19.png>)
 
-**Step 20.** Select the test version of the website to publish to and then click OK.
+**Step 19.** Click the Microsoft Azure App Service publish target.
 
 ![](<media/step20.png>)
+
+**Step 20.** Select test slot to publish to and then click OK.
+
+![](<media/step21.png>)
 
 **Step 21.** After publish settings are downloaded for Web Deploy, click Validate Connection.
 
 ![](<media/step22.png>)
 
 **Step 22.** Click Publish.
-
-![](<media/step23.png>)
 
 **Step 23.** After publication is complete, a browser window should open and navigate to the homepage. Verify that the test site waits for ten seconds before transitioning between images in the carousel.
 
