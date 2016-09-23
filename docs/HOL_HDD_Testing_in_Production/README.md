@@ -62,7 +62,7 @@ PartsUnlimited already has their production website deployed and in operation. B
 
 ![](<media/step10.png>)
 
-**Step 11.** Name the new slot “test”. For Configuration Source, select the production website name from the drop-down. Click OK to add the new slot.
+**Step 11.** Name the new slot test. For Configuration Source, select the production website name from the drop-down. Click OK to add the new slot.
 
 ![](<media/step11.png>)
 
