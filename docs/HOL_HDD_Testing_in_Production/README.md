@@ -140,7 +140,7 @@ Now that we have published our new changes to the test deployment slot, we want 
 
 ![](<media/part2step3.png>)
 
-**Step 4.** Back in the preview Azure Portal, refresh the page (F5) and then navigate to the production website resource. Click on the Settings tile, then Traffic Routing.
+**Step 4.** Back in the preview Azure Portal, refresh the page (F5) and then navigate to the production website resource. Click on Testing in production.
 
 ![](<media/part2step4.png>)
 
