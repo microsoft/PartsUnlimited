@@ -140,19 +140,15 @@ Now that we have published our new changes to the test deployment slot, we want 
 
 ![](<media/part2step3.png>)
 
-**Step 4.** Back in the preview Azure Portal, refresh the page (F5) and then navigate to the production website resource. Click on Testing in production.
+**Step 4.** Back in the preview Azure Portal, refresh the page (F5) and then navigate to the production website resource. Click on Testing in production. Note that the routing rule that is sending traffic to the test slot is now setup.  
 
 ![](<media/part2step4.png>)
 
-**Step 5.** Note that the routing rule that is sending traffic to the test slot is now setup.
-
-![](<media/part2step5.png>)
-
-**Step 6.** Return to the demo website resource blade and click on the Browse button at the top to load the site in a browser window.
+**Step 5.** Return to the demo website resource blade and click on the Browse button at the top to load the site in a browser window.
 
 ![](<media/step5.png>)
 
-**Step 7.** Navigate to the Homepage and note that the interval between images on the carousel waits for ten seconds instead of five.
+**Step 6.** Navigate to the Homepage and note that the interval between images on the carousel waits for ten seconds instead of five.
 
 ![](<media/step6.png>)
 
