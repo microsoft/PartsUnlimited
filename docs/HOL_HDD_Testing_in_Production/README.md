@@ -8,7 +8,7 @@ In this lab, you will learn about adding a deployment slot to an Azure Website f
 
 **Prerequisites**
 
-- Visual Studio 2015
+- Visual Studio 2015 Update 3
 
 - Azure PowerShell installed and configured ([https://azure.microsoft.com/en-us/documentation/articles/powershell-install-configure/](https://azure.microsoft.com/en-us/documentation/articles/powershell-install-configure/))
 
