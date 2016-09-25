@@ -8,7 +8,7 @@
     <h2>@ViewBag.Title</h2>
     <div class="row">
         <div class="col-md-6">
-            @using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            @using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()
 
