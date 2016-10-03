@@ -15,6 +15,7 @@ namespace PartsUnlimited.Controllers
     {
         private readonly IPartsUnlimitedContext _db;
         private readonly IMemoryCache _cache;
+        public int roco_count = 1000;
 
         public HomeController(IPartsUnlimitedContext context, IMemoryCache memoryCache)
         {
@@ -108,6 +109,23 @@ namespace PartsUnlimited.Controllers
                     Source = CommunitySource.Facebook
                 }
             };
+        }
+
+
+        //stubbing in a recommendations action
+        public ActionResult Recommendations()
+        {
+            int count = 0;
+            while ( count < roco_count
+                   )
+            {
+                _db.Products
+                    .OrderByDescending(a => a.OrderDetails.Count())
+                    .Take(count++)
+                    .ToList();
+            }
+
+            return View();
         }
     }
 }

@@ -1,0 +1,270 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "WebsiteName": {
+            "type": "string"
+        },
+        "PartsUnlimitedServerName": {
+            "type": "string"
+        },
+        "PartsUnlimitedServerAdminLogin": {
+            "type": "string",
+            "defaultValue": "AdminUser"
+        },
+        "PartsUnlimitedServerAdminLoginPassword": {
+            "type": "securestring"
+        },
+        "PartsUnlimitedServerAdminLoginPasswordForTest": {
+            "type": "securestring"
+        },
+        "PartsUnlimitedDBName": {
+            "type": "string",
+            "defaultValue": "PartsUnlimitedDB"
+        },
+        "PartsUnlimitedDBCollation": {
+            "type": "string",
+            "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        "PartsUnlimitedDBEdition": {
+            "type": "string",
+            "defaultValue": "Basic",
+            "allowedValues": [
+                "Basic",
+                "Business",
+                "Premium",
+                "Standard",
+                "Web"
+            ]
+        },
+        "PartsUnlimitedHostingPlanName": {
+            "type": "string"
+        },
+        "PartsUnlimitedHostingPlanSKU": {
+            "type": "string",
+            "allowedValues": [
+                "Standard"
+            ],
+            "defaultValue": "Standard"
+        },
+        "PartsUnlimitedHostingPlanWorkerSize": {
+            "type": "string",
+            "allowedValues": [
+                "0",
+                "1",
+                "2"
+            ],
+            "defaultValue": "0"
+        },
+        "EnableRules": {
+            "type": "bool",
+            "defaultValue": false
+        },
+        "CdnStorageAccountName": {
+            "type": "string"
+        },
+        "CdnStorageContainerName": {
+            "type": "string"
+        },
+        "CdnStorageAccountNameForDev": {
+            "type": "string"
+        },
+        "CdnStorageContainerNameForDev": {
+            "type": "string"
+        },
+        "CdnStorageAccountNameForStaging": {
+            "type": "string"
+        },
+        "CdnStorageContainerNameForStaging": {
+            "type": "string"
+        },
+        "_artifactsLocation": {
+            "type": "string"
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring"
+        }
+    },
+    "variables": {
+        "sqlServerAndDbTemplateFile": "Templates/SqlServerAndDb.json",
+        "appInsightsTemplateFile": "Templates/AppInsights.json",
+        "hostingPlanTemplateFile": "Templates/HostingPlanAndRules.json",
+        "websiteTemplateFile": "Templates/WebsiteWithTwoSlots.json",
+        "websiteRulesTemplateFile": "Templates/WebsiteRules.json"
+    },
+    "resources": [
+        {
+            "name": "SqlServerAndDb",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2014-04-01-preview",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('sqlServerAndDbTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "PartsUnlimitedServerName": { "value": "[parameters('PartsUnlimitedServerName')]" },
+                    "PartsUnlimitedServerAdminLogin": { "value": "[parameters('PartsUnlimitedServerAdminLogin')]" },
+                    "PartsUnlimitedServerAdminLoginPassword": { "value": "[parameters('PartsUnlimitedServerAdminLoginPassword')]" },
+                    "PartsUnlimitedDBName": { "value": "[parameters('PartsUnlimitedDBName')]" },
+                    "PartsUnlimitedDBCollation": { "value": "[parameters('PartsUnlimitedDBCollation')]" },
+                    "PartsUnlimitedDBEdition": { "value": "[parameters('PartsUnlimitedDBEdition')]" }
+                }
+            }
+        },
+        {
+            "name": "SqlServerAndDb-Dev",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2014-04-01-preview",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('sqlServerAndDbTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "PartsUnlimitedServerName": { "value": "[concat(parameters('PartsUnlimitedServerName'), 'dev')]" },
+                    "PartsUnlimitedServerAdminLogin": { "value": "[parameters('PartsUnlimitedServerAdminLogin')]" },
+                    "PartsUnlimitedServerAdminLoginPassword": { "value": "[parameters('PartsUnlimitedServerAdminLoginPasswordForTest')]" },
+                    "PartsUnlimitedDBName": { "value": "[parameters('PartsUnlimitedDBName')]" },
+                    "PartsUnlimitedDBCollation": { "value": "[parameters('PartsUnlimitedDBCollation')]" },
+                    "PartsUnlimitedDBEdition": { "value": "[parameters('PartsUnlimitedDBEdition')]" }
+                }
+            }
+        },
+        {
+            "name": "SqlServerAndDb-Stage",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2014-04-01-preview",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('sqlServerAndDbTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "PartsUnlimitedServerName": { "value": "[concat(parameters('PartsUnlimitedServerName'), 'stage')]" },
+                    "PartsUnlimitedServerAdminLogin": { "value": "[parameters('PartsUnlimitedServerAdminLogin')]" },
+                    "PartsUnlimitedServerAdminLoginPassword": { "value": "[parameters('PartsUnlimitedServerAdminLoginPasswordForTest')]" },
+                    "PartsUnlimitedDBName": { "value": "[parameters('PartsUnlimitedDBName')]" },
+                    "PartsUnlimitedDBCollation": { "value": "[parameters('PartsUnlimitedDBCollation')]" },
+                    "PartsUnlimitedDBEdition": { "value": "[parameters('PartsUnlimitedDBEdition')]" }
+                }
+            }
+        },
+        {
+            "name": "AppInsights",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2014-04-01-preview",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('appInsightsTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "WebsiteName": { "value": "[parameters('WebsiteName')]" }
+                }
+            }
+        },
+        {
+            "name": "AppInsights-Dev",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2014-04-01-preview",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('appInsightsTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "WebsiteName": { "value": "[concat(parameters('WebsiteName'), '-Dev')]" }
+                }
+            }
+        },
+        {
+            "name": "AppInsights-Stage",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2014-04-01-preview",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('appInsightsTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "WebsiteName": { "value": "[concat(parameters('WebsiteName'), '-Staging')]" }
+                }
+            }
+        },
+        {
+            "name": "HostingPlan",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2014-04-01-preview",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('hostingPlanTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "PartsUnlimitedHostingPlanName": { "value": "[parameters('PartsUnlimitedHostingPlanName')]" },
+                    "PartsUnlimitedHostingPlanSKU": { "value": "[parameters('PartsUnlimitedHostingPlanSKU')]" },
+                    "PartsUnlimitedHostingPlanWorkerSize": { "value": "[parameters('PartsUnlimitedHostingPlanWorkerSize')]" },
+                    "EnableRules": { "value": "[parameters('EnableRules')]" }
+                }
+            }
+        },
+        {
+            "name": "Website",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2014-04-01-preview",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/HostingPlan",
+                "Microsoft.Resources/deployments/SqlServerAndDb",
+                "Microsoft.Resources/deployments/SqlServerAndDb-Dev",
+                "Microsoft.Resources/deployments/SqlServerAndDb-Stage",
+                "Microsoft.Resources/deployments/AppInsights",
+                "Microsoft.Resources/deployments/AppInsights-Dev",
+                "Microsoft.Resources/deployments/AppInsights-Stage"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('websiteTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "WebsiteName": { "value": "[parameters('WebsiteName')]" },
+                    "HostingPlanName": { "value": "[parameters('PartsUnlimitedHostingPlanName')]" },
+                    "DatabaseConnectionString": { "value": "[reference('Microsoft.Resources/deployments/SqlServerAndDb').outputs.connectionString.value]" },
+                    "DevSlotDatabaseConnectionString": { "value": "[reference('Microsoft.Resources/deployments/SqlServerAndDb-Dev').outputs.connectionString.value]" },
+                    "StageSlotDatabaseConnectionString": { "value": "[reference('Microsoft.Resources/deployments/SqlServerAndDb-Stage').outputs.connectionString.value]" },
+                    "AppInsightsKey": { "value": "[reference('Microsoft.Resources/deployments/AppInsights').outputs.instrumentationKey.value]" },
+                    "DevSlotAppInsightsKey": { "value": "[reference('Microsoft.Resources/deployments/AppInsights-Dev').outputs.instrumentationKey.value]" },
+                    "StageSlotAppInsightsKey": { "value": "[reference('Microsoft.Resources/deployments/AppInsights-Stage').outputs.instrumentationKey.value]" }
+                }
+            }
+        },
+        {
+            "name": "WebsiteRules",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2014-04-01-preview",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/Website"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('_artifactsLocation'), '/', variables('websiteRulesTemplateFile'), parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "WebsiteName": { "value": "[parameters('WebsiteName')]" },
+                    "EnableRules": { "value": "[parameters('EnableRules')]" }
+                }
+            }
+        }
+    ]
+}

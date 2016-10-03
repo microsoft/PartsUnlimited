@@ -1,6 +1,5 @@
 ﻿@using PartsUnlimited
-@inject Microsoft.Extensions.PlatformAbstractions.RuntimeEnvironment RuntimeEnvironment
-
+@using Microsoft.DotNet.InternalAbstractions
 
 <!DOCTYPE html>
 <html lang="en">
@@ -144,7 +143,7 @@
                 </div>
                 <div class="row">
                     <div class="text-center">
-                        Site powered by @RuntimeEnvironment.OperatingSystem @RuntimeEnvironment.OperatingSystemVersion and running on @RuntimeEnvironment.RuntimeType @RuntimeEnvironment.RuntimeVersion
+                        Site powered by @RuntimeEnvironment.OperatingSystem @RuntimeEnvironment.OperatingSystemVersion
                     </div>
                 </div>
             </div>

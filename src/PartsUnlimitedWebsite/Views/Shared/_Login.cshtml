@@ -1,6 +1,4 @@
-﻿@using System.Security.Principal
-
-@if (User.Identity.IsAuthenticated)
+﻿@if (User.Identity.IsAuthenticated)
 {
     var isNtlm = User.Identity.AuthenticationType == "NTLM";
     

@@ -1,0 +1,357 @@
+{
+  "build": [
+    {
+      "enabled": true,
+      "continueOnError": false,
+      "alwaysRun": false,
+      "displayName": "dotnet restore, build, test and publish",
+      "timeoutInMinutes": 0,
+      "task": {
+        "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+        "versionSpec": "*",
+        "definitionType": "task"
+      },
+      "inputs": {
+        "scriptType": "filePath",
+        "scriptName": "build.ps1",
+        "arguments": "$(BuildConfiguration) $(build.stagingDirectory)",
+        "inlineScript": "# You can write your powershell scripts inline here. \n# You can also pass predefined and custom variables to this scripts using arguments\n\n Write-Host \"Hello World\"",
+        "workingFolder": "",
+        "failOnStandardError": "true"
+      }
+    },
+    {
+      "enabled": true,
+      "continueOnError": false,
+      "alwaysRun": false,
+      "displayName": "Publish Test Results **/testresults.xml",
+      "timeoutInMinutes": 0,
+      "task": {
+        "id": "0b0f01ed-7dde-43ff-9cbb-e48954daf9b1",
+        "versionSpec": "*",
+        "definitionType": "task"
+      },
+      "inputs": {
+        "testRunner": "XUnit",
+        "testResultsFiles": "**/testresults.xml",
+        "mergeTestResults": "false",
+        "testRunTitle": "",
+        "platform": "",
+        "configuration": "",
+        "publishRunAttachments": "true"
+      }
+    },
+    {
+      "enabled": true,
+      "continueOnError": false,
+      "alwaysRun": false,
+      "displayName": "Copy Publish Artifact: drop",
+      "timeoutInMinutes": 0,
+      "task": {
+        "id": "1d341bb0-2106-458c-8422-d00bcea6512a",
+        "versionSpec": "*",
+        "definitionType": "task"
+      },
+      "inputs": {
+        "CopyRoot": "$(build.stagingDirectory)",
+        "Contents": "**\\*.zip",
+        "ArtifactName": "drop",
+        "ArtifactType": "Container",
+        "TargetPath": "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)"
+      }
+    },
+    {
+      "enabled": true,
+      "continueOnError": false,
+      "alwaysRun": false,
+      "displayName": "Publish Artifact: ARMTemplates",
+      "timeoutInMinutes": 0,
+      "task": {
+        "id": "2ff763a7-ce83-4e1f-bc89-0ae63477cebe",
+        "versionSpec": "*",
+        "definitionType": "task"
+      },
+      "inputs": {
+        "PathtoPublish": "env/Templates",
+        "ArtifactName": "ARMTemplates",
+        "ArtifactType": "Container",
+        "TargetPath": "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)"
+      }
+    }
+  ],
+  "options": [
+    {
+      "enabled": false,
+      "definition": {
+        "id": "7c555368-ca64-4199-add6-9ebaf0b0137d"
+      },
+      "inputs": {
+        "multipliers": "[]",
+        "parallel": "false",
+        "continueOnError": "true",
+        "additionalFields": "{}"
+      }
+    },
+    {
+      "enabled": false,
+      "definition": {
+        "id": "a9db38f9-9fdc-478c-b0f9-464221e58316"
+      },
+      "inputs": {
+        "workItemType": "471704",
+        "assignToRequestor": "true",
+        "additionalFields": "{}"
+      }
+    },
+    {
+      "enabled": false,
+      "definition": {
+        "id": "57578776-4c22-4526-aeb0-86b6da17ee9c"
+      },
+      "inputs": {
+        "additionalFields": "{}"
+      }
+    }
+  ],
+  "triggers": [],
+  "variables": {
+    "system.debug": {
+      "value": "false",
+      "allowOverride": true
+    },
+    "BuildConfiguration": {
+      "value": "release",
+      "allowOverride": true
+    },
+    "BuildPlatform": {
+      "value": "any cpu",
+      "allowOverride": true
+    }
+  },
+  "retentionRules": [
+    {
+      "branches": [
+        "+refs/heads/*"
+      ],
+      "artifacts": [],
+      "artifactTypesToDelete": [
+        "FilePath",
+        "SymbolStore"
+      ],
+      "daysToKeep": 10,
+      "minimumToKeep": 1,
+      "deleteBuildRecord": true,
+      "deleteTestResults": true
+    }
+  ],
+  "metrics": [
+    {
+      "name": "CurrentBuildsInQueue",
+      "scope": "refs/heads/master",
+      "intValue": 0
+    },
+    {
+      "name": "CurrentBuildsInProgress",
+      "scope": "refs/heads/master",
+      "intValue": 0
+    },
+    {
+      "name": "CanceledBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 0,
+      "date": "2016-09-23T00:00:00Z"
+    },
+    {
+      "name": "CanceledBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 0,
+      "date": "2016-09-22T00:00:00Z"
+    },
+    {
+      "name": "CanceledBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 0,
+      "date": "2016-09-21T00:00:00Z"
+    },
+    {
+      "name": "CanceledBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 1,
+      "date": "2016-09-20T00:00:00Z"
+    },
+    {
+      "name": "FailedBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 2,
+      "date": "2016-09-23T00:00:00Z"
+    },
+    {
+      "name": "FailedBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 3,
+      "date": "2016-09-22T00:00:00Z"
+    },
+    {
+      "name": "FailedBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 0,
+      "date": "2016-09-21T00:00:00Z"
+    },
+    {
+      "name": "FailedBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 3,
+      "date": "2016-09-20T00:00:00Z"
+    },
+    {
+      "name": "PartiallySuccessfulBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 0,
+      "date": "2016-09-23T00:00:00Z"
+    },
+    {
+      "name": "PartiallySuccessfulBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 0,
+      "date": "2016-09-22T00:00:00Z"
+    },
+    {
+      "name": "PartiallySuccessfulBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 0,
+      "date": "2016-09-21T00:00:00Z"
+    },
+    {
+      "name": "PartiallySuccessfulBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 0,
+      "date": "2016-09-20T00:00:00Z"
+    },
+    {
+      "name": "SuccessfulBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 0,
+      "date": "2016-09-23T00:00:00Z"
+    },
+    {
+      "name": "SuccessfulBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 1,
+      "date": "2016-09-22T00:00:00Z"
+    },
+    {
+      "name": "SuccessfulBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 3,
+      "date": "2016-09-21T00:00:00Z"
+    },
+    {
+      "name": "SuccessfulBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 2,
+      "date": "2016-09-20T00:00:00Z"
+    },
+    {
+      "name": "TotalBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 2,
+      "date": "2016-09-23T00:00:00Z"
+    },
+    {
+      "name": "TotalBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 4,
+      "date": "2016-09-22T00:00:00Z"
+    },
+    {
+      "name": "TotalBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 3,
+      "date": "2016-09-21T00:00:00Z"
+    },
+    {
+      "name": "TotalBuilds",
+      "scope": "refs/heads/master",
+      "intValue": 6,
+      "date": "2016-09-20T00:00:00Z"
+    },
+    {
+      "name": "CurrentBuildsInQueue",
+      "scope": "refs/heads/Master",
+      "intValue": 0
+    },
+    {
+      "name": "CurrentBuildsInProgress",
+      "scope": "refs/heads/Master",
+      "intValue": 0
+    },
+    {
+      "name": "CanceledBuilds",
+      "scope": "refs/heads/Master",
+      "intValue": 0,
+      "date": "2016-09-23T00:00:00Z"
+    },
+    {
+      "name": "FailedBuilds",
+      "scope": "refs/heads/Master",
+      "intValue": 0,
+      "date": "2016-09-23T00:00:00Z"
+    },
+    {
+      "name": "PartiallySuccessfulBuilds",
+      "scope": "refs/heads/Master",
+      "intValue": 0,
+      "date": "2016-09-23T00:00:00Z"
+    },
+    {
+      "name": "SuccessfulBuilds",
+      "scope": "refs/heads/Master",
+      "intValue": 1,
+      "date": "2016-09-23T00:00:00Z"
+    },
+    {
+      "name": "TotalBuilds",
+      "scope": "refs/heads/Master",
+      "intValue": 1,
+      "date": "2016-09-23T00:00:00Z"
+    }
+  ],
+  "_links": {
+    "self": {
+      "href": ""
+    },
+    "web": {
+      "href": ""
+    },
+    "editor": {
+      "href": ""
+    }
+  },
+  "jobAuthorizationScope": "projectCollection",
+  "jobTimeoutInMinutes": 60,
+  "quality": "definition",
+  "defaultBranch": "refs/heads/Master",
+  "authoredBy": {
+    "id": "",
+    "displayName": "",
+    "uniqueName": "",
+    "url": "",
+    "imageUrl": ""
+  },
+  "queue": {
+    "pool": {
+      "id": 2,
+      "name": "Hosted"
+    },
+    "id": 26,
+    "name": "Hosted"
+  },
+  "uri": "vstfs:///Build/Definition/90",
+  "path": "\\",
+  "type": 2,
+  "revision": 4,
+  "createdDate": "2016-09-23T00:21:09.620Z",
+  "id": 90,
+  "name": "dotnetcore CI HOL",
+  "url": ""
+}

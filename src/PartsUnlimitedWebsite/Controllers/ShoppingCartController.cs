@@ -100,16 +100,14 @@ namespace PartsUnlimited.Controllers
         // AJAX: /ShoppingCart/RemoveFromCart/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemoveFromCart(
-            int id,
-            CancellationToken requestAborted)
+        public async Task<IActionResult> RemoveFromCart(Request request)
         {
             // Retrieve the current user's shopping cart
             var cart = ShoppingCart.GetCart(_db, HttpContext);
 
             // Get the name of the album to display confirmation
             var cartItem = await _db.CartItems
-                .Where(item => item.CartItemId == id)
+                .Where(item => item.CartItemId == request.Id)
                 .Include(c => c.Product)
                 .SingleOrDefaultAsync();
 
@@ -118,9 +116,9 @@ namespace PartsUnlimited.Controllers
             if (cartItem != null)
             {
                 // Remove from cart
-                itemCount = cart.RemoveFromCart(id);
+                itemCount = cart.RemoveFromCart(request.Id);
 
-                await _db.SaveChangesAsync(requestAborted);
+                await _db.SaveChangesAsync(request.CancellationToken);
 
                 string removed = (itemCount > 0) ? " 1 copy of " : string.Empty;
                 message = removed + cartItem.Product.Title + " has been removed from your shopping cart.";
@@ -139,12 +137,10 @@ namespace PartsUnlimited.Controllers
                 CartTotal = cart.GetTotal().ToString(),
                 CartCount = cart.GetCount(),
                 ItemCount = itemCount,
-                DeleteId = id
+                DeleteId = request.Id
             };
 
-     
             return Json(results);
         }
-
     }
 }

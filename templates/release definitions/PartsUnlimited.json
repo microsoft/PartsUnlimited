@@ -1,0 +1,367 @@
+{
+  "id": 1,
+  "revision": 26,
+  "name": "PartsUnlimited",
+  "createdBy": {
+    "id": "",
+    "displayName": "",
+    "uniqueName": "",
+    "url": "",
+    "imageUrl": ""
+  },
+  "createdOn": "2016-09-20T23:57:35.430Z",
+  "modifiedBy": {
+    "id": "",
+    "displayName": "",
+    "uniqueName": "",
+    "url": "",
+    "imageUrl": ""
+  },
+  "modifiedOn": "2016-09-22T02:41:40.297Z",
+  "variables": {
+    "WebsiteName": {
+      "value": "pudncore"
+    },
+    "ResourceGroupName": {
+      "value": "PartsUnlimited-dotnetcore"
+    }
+  },
+  "environments": [
+    {
+      "id": 1,
+      "name": "Dev",
+      "rank": 1,
+      "owner": {},
+      "variables": {
+        "ServerName": {
+          "value": "pudncoreserver"
+        },
+        "HostingPlan": {
+          "value": "pudncore-appservice"
+        },
+        "StorageAccountName": {
+          "value": "pudncorestorage"
+        },
+        "ContainerName": {
+          "value": "pudncorecontainer"
+        },
+        "AdminPassword": {
+          "value": null,
+          "isSecret": true
+        },
+        "AdminTestPassword": {
+          "value": null,
+          "isSecret": true
+        }
+      },
+      "preDeployApprovals": {
+        "approvals": [
+          {
+            "rank": 1,
+            "isAutomated": true,
+            "isNotificationOn": false,
+            "id": 1
+          }
+        ]
+      },
+      "deployStep": {
+        "id": 2
+      },
+      "postDeployApprovals": {
+        "approvals": [
+          {
+            "rank": 1,
+            "isAutomated": true,
+            "isNotificationOn": false,
+            "id": 3
+          }
+        ]
+      },
+      "deployPhases": [
+        {
+          "deploymentInput": {
+            "skipArtifactsDownload": false,
+            "timeoutInMinutes": 0,
+            "queueId": 26,
+            "demands": [],
+            "enableAccessToken": false
+          },
+          "rank": 1,
+          "phaseType": 1,
+          "name": "Run on agent",
+          "workflowTasks": [
+            {
+              "taskId": "94a74903-f93f-4075-884f-dc11f34058b4",
+              "version": "*",
+              "name": "Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)",
+              "enabled": true,
+              "alwaysRun": false,
+              "continueOnError": false,
+              "timeoutInMinutes": 0,
+              "definitionType": "task",
+              "inputs": {
+                "ConnectedServiceNameSelector": "ConnectedServiceName",
+                "ConnectedServiceName": "0bacdd2f-a1e8-41cb-9507-c50c792b088b",
+                "ConnectedServiceNameClassic": "",
+                "action": "Create Or Update Resource Group",
+                "actionClassic": "Select Resource Group",
+                "resourceGroupName": "$(ResourceGroupName)",
+                "cloudService": "",
+                "location": "East US",
+                "csmFile": "$(System.DefaultWorkingDirectory)/dotnetcore CI HOL/ARMTemplates/FullEnvironmentSetupMerged.json",
+                "csmParametersFile": "$(System.DefaultWorkingDirectory)/dotnetcore CI HOL/ARMTemplates/FullEnvironmentSetupMerged.param.json",
+                "overrideParameters": "-WebsiteName $(WebsiteName) -PartsUnlimitedServerName $(ServerName) -PartsUnlimitedHostingPlanName $(HostingPlan) -CdnStorageAccountName $(StorageAccountName) -CdnStorageContainerName $(ContainerName) -CdnStorageAccountNameForDev $(StorageAccountName)-dev -CdnStorageContainerNameForDev $(ContainerName)-dev -CdnStorageAccountNameForStaging $(StorageAccountName)-stage -CdnStorageContainerNameForStaging $(ContainerName)-stage -PartsUnlimitedServerAdminLoginPassword (ConvertTo-SecureString -String '$(AdminPassword)' -AsPlainText -Force) -PartsUnlimitedServerAdminLoginPasswordForTest (ConvertTo-SecureString -String '$(AdminTestPassword)' -AsPlainText -Force)",
+                "enableDeploymentPrerequisitesForCreate": "false",
+                "enableDeploymentPrerequisitesForSelect": "false",
+                "outputVariable": ""
+              }
+            },
+            {
+              "taskId": "497d490f-eea7-4f2b-ab94-48d9c1acdcb1",
+              "version": "*",
+              "name": "Deploy AzureRM Web App: $(WebsiteName)",
+              "enabled": true,
+              "alwaysRun": false,
+              "continueOnError": false,
+              "timeoutInMinutes": 0,
+              "definitionType": "task",
+              "inputs": {
+                "ConnectedServiceName": "0bacdd2f-a1e8-41cb-9507-c50c792b088b",
+                "WebAppName": "$(WebsiteName)",
+                "DeployToSlotFlag": "true",
+                "ResourceGroupName": "$(ResourceGroupName)",
+                "SlotName": "dev",
+                "Package": "$(System.DefaultWorkingDirectory)/dotnetcore CI HOL/drop/partsunlimited.zip",
+                "SetParametersFile": "",
+                "RemoveAdditionalFilesFlag": "false",
+                "ExcludeFilesFromAppDataFlag": "false",
+                "TakeAppOfflineFlag": "true",
+                "VirtualApplication": "",
+                "AdditionalArguments": "",
+                "WebAppUri": ""
+              }
+            }
+          ]
+        }
+      ],
+      "environmentOptions": {
+        "emailNotificationType": "OnlyOnFailure",
+        "emailRecipients": "release.environment.owner;release.creator",
+        "skipArtifactsDownload": false,
+        "timeoutInMinutes": 0,
+        "enableAccessToken": false
+      },
+      "demands": [],
+      "conditions": [
+        {
+          "name": "ReleaseStarted",
+          "conditionType": 1,
+          "value": ""
+        }
+      ],
+      "executionPolicy": {
+        "concurrencyCount": 0,
+        "queueDepthCount": 0
+      },
+      "schedules": [],
+      "retentionPolicy": {
+        "daysToKeep": 30,
+        "releasesToKeep": 3,
+        "retainBuild": true
+      }
+    },
+    {
+      "id": 2,
+      "name": "Staging",
+      "rank": 2,
+      "owner": {},
+      "variables": {},
+      "preDeployApprovals": {
+        "approvals": [],
+        "approvalOptions": {
+          "requiredApproverCount": 0,
+          "releaseCreatorCanBeApprover": true
+        }
+      },
+      "deployStep": {
+        "id": 5
+      },
+      "postDeployApprovals": {
+        "approvals": [],
+        "approvalOptions": {
+          "requiredApproverCount": 0,
+          "releaseCreatorCanBeApprover": true
+        }
+      },
+      "deployPhases": [
+        {
+          "deploymentInput": {
+            "skipArtifactsDownload": false,
+            "timeoutInMinutes": 0,
+            "queueId": 26,
+            "demands": [],
+            "enableAccessToken": false
+          },
+          "rank": 1,
+          "phaseType": 1,
+          "name": "Run on agent",
+          "workflowTasks": [
+            {
+              "taskId": "497d490f-eea7-4f2b-ab94-48d9c1acdcb1",
+              "version": "*",
+              "name": "Deploy AzureRM Web App: $(WebsiteName)",
+              "enabled": true,
+              "alwaysRun": false,
+              "continueOnError": false,
+              "timeoutInMinutes": 0,
+              "definitionType": "task",
+              "inputs": {
+                "ConnectedServiceName": "0bacdd2f-a1e8-41cb-9507-c50c792b088b",
+                "WebAppName": "$(WebsiteName)",
+                "DeployToSlotFlag": "true",
+                "ResourceGroupName": "$(ResourceGroupName)",
+                "SlotName": "staging",
+                "Package": "$(System.DefaultWorkingDirectory)/dotnetcore CI HOL/drop/partsunlimited.zip",
+                "SetParametersFile": "",
+                "RemoveAdditionalFilesFlag": "false",
+                "ExcludeFilesFromAppDataFlag": "false",
+                "TakeAppOfflineFlag": "true",
+                "VirtualApplication": "",
+                "AdditionalArguments": "",
+                "WebAppUri": ""
+              }
+            }
+          ]
+        }
+      ],
+      "environmentOptions": {
+        "emailNotificationType": "OnlyOnFailure",
+        "emailRecipients": "release.environment.owner;release.creator",
+        "skipArtifactsDownload": false,
+        "timeoutInMinutes": 0,
+        "enableAccessToken": false
+      },
+      "demands": [],
+      "conditions": [
+        {
+          "name": "Dev",
+          "conditionType": 2,
+          "value": "4"
+        }
+      ],
+      "executionPolicy": {
+        "concurrencyCount": 0,
+        "queueDepthCount": 0
+      },
+      "schedules": [],
+      "retentionPolicy": {
+        "daysToKeep": 30,
+        "releasesToKeep": 3,
+        "retainBuild": true
+      }
+    },
+    {
+      "id": 3,
+      "name": "Production",
+      "rank": 3,
+      "owner": {},
+      "variables": {},
+      "preDeployApprovals": {
+        "approvals": [],
+        "approvalOptions": {
+          "requiredApproverCount": 0,
+          "releaseCreatorCanBeApprover": true
+        }
+      },
+      "deployStep": {
+        "id": 8
+      },
+      "postDeployApprovals": {
+        "approvals": [],
+        "approvalOptions": {
+          "requiredApproverCount": 0,
+          "releaseCreatorCanBeApprover": true
+        }
+      },
+      "deployPhases": [
+        {
+          "deploymentInput": {
+            "skipArtifactsDownload": false,
+            "timeoutInMinutes": 0,
+            "queueId": 26,
+            "demands": [],
+            "enableAccessToken": false
+          },
+          "rank": 1,
+          "phaseType": 1,
+          "name": "Run on agent",
+          "workflowTasks": [
+            {
+              "taskId": "497d490f-eea7-4f2b-ab94-48d9c1acdcb1",
+              "version": "*",
+              "name": "Deploy AzureRM Web App: $(WebsiteName)",
+              "enabled": true,
+              "alwaysRun": false,
+              "continueOnError": false,
+              "timeoutInMinutes": 0,
+              "definitionType": "task",
+              "inputs": {
+                "ConnectedServiceName": "0bacdd2f-a1e8-41cb-9507-c50c792b088b",
+                "WebAppName": "$(WebsiteName)",
+                "DeployToSlotFlag": "false",
+                "ResourceGroupName": "$(ResourceGroupName)",
+                "SlotName": "",
+                "Package": "$(System.DefaultWorkingDirectory)/dotnetcore CI HOL/drop/partsunlimited.zip",
+                "SetParametersFile": "",
+                "RemoveAdditionalFilesFlag": "false",
+                "ExcludeFilesFromAppDataFlag": "false",
+                "TakeAppOfflineFlag": "true",
+                "VirtualApplication": "",
+                "AdditionalArguments": "",
+                "WebAppUri": ""
+              }
+            }
+          ]
+        }
+      ],
+      "environmentOptions": {
+        "emailNotificationType": "OnlyOnFailure",
+        "emailRecipients": "release.environment.owner;release.creator",
+        "skipArtifactsDownload": false,
+        "timeoutInMinutes": 0,
+        "enableAccessToken": false
+      },
+      "demands": [],
+      "conditions": [
+        {
+          "name": "Staging",
+          "conditionType": 2,
+          "value": "4"
+        }
+      ],
+      "executionPolicy": {
+        "concurrencyCount": 0,
+        "queueDepthCount": 0
+      },
+      "schedules": [],
+      "retentionPolicy": {
+        "daysToKeep": 30,
+        "releasesToKeep": 3,
+        "retainBuild": true
+      }
+    }
+  ],
+  "artifacts": [],
+  "triggers": [],
+  "releaseNameFormat": "Release-$(rev:r)",
+  "retentionPolicy": null,
+  "url": "",
+  "_links": {
+    "self": {
+      "href": ""
+    },
+    "web": {
+      "href": ""
+    }
+  }
+}
