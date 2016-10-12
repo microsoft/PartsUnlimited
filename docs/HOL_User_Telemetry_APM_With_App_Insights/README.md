@@ -1,0 +1,214 @@
+#User Telemetry and Performance Monitoring with Application Insights
+
+The marketing team has expressed interest in the behavior of users across the PartsUnlimited website for how to best market the products, especially how popular the web application is and where the users live. The development team would like to know which browsers and operating systems that most users browse to the site from to target better user experiences. The development team has also noticed that the recommendations page is slow to load and shows performance spikes in Application Insights telemetry. By viewing the details of performance monitoring through Application Insights, we will be able to drill down to the code that has affected the slow performance of the web application and fix the code.
+
+Using the out-of-box telemetry for Application Insights, the teams will be able to find out how people use the application and gain insights into the goals that they will need to achieve.
+
+In this lab, you will learn about setting up Application Insights to gain further insight into how users are behaving towards your web application, and drill down into performance monitoring data through Application Insights in the new Azure Portal.
+
+**Prerequisites**
+
+- Visual Studio 2015 Update 3
+
+- Continuous Integration with Visual Studio Team Services (see [link](https://github.com/Microsoft/PartsUnlimited/blob/master/docs/HOL-Continuous_Integration/README.md))
+
+- Continuous Deployment with Release Management in Visual Studio Team Services (see [link](https://github.com/Microsoft/PartsUnlimited/blob/master/docs/HOL-Continuous_Deployment/README.md))
+
+- Application Insights created in the same Azure Resource Group as the PartsUnlimited website
+
+- Continuous Integration build with deployment to the Azure web app
+
+**Tasks Overview**
+
+1. Set up Application Insights for PartsUnlimited
+
+2. View real-time results for user telemetry in the Azure portal
+
+3. Using Application Performance Monitoring to resolve performance issues
+
+###Task 1: Set up Application Insights for PartsUnlimited
+**Step 1.** In an Internet browser, navigate to <http://ms.portal.azure.com> and
+sign in with your credentials.
+
+![](<media/prereq-step1.png>)
+
+**Step 2.** Click on the “More services” tile on the left column, and select “Application Insights”.
+
+ ![](<media/prereq-step1.1.png>)
+
+**Step 3.** Click on the name of the telemetry that was created when you deployed the resource group using the Deployment template in the PartsUnlimited solution.
+
+![](<media/prereq-step2.png>)
+
+**Step 4.** Click on "Properties" to view the details of telemetry, such as instrumentation key.
+
+![](<media/prereq-step3.png>)
+
+**Step 5.** To receive data, we will need to attach the PartsUnlimited Application Insights telemetry to the PartsUnlimited project in Visual Studio. In Visual Studio, open the PartsUnlimited solution.
+
+![](<media/prereq-step4.png>)
+
+**Step 6.** In the PartsUnlimited solution, right-click on the PartsUnlimitedWebsite project and select "Configure Application Insights...".
+
+![](<media/prereq-step5.png>)
+
+**Step 7.** In the "Application Insights" window, click on the "Change" button.
+
+![](<media/prereq-step-app-insights.png>)
+
+**Step 8.** Select your Microsoft account.
+
+![](<media/prereq-step6.png>)
+
+**Step 9.** Click on the button "Configure settings...".    
+
+![](<media/prereq-step7.png>)
+
+**Step 10.** Enter or select the name of Resource Group and Application Insights Resource created earlier. Then press the "OK" button to add the telemetry in the project.
+
+![](<media/prereq-step8.png>)
+
+**Step 11.** Back in Visual Studio, open appsettings.json in PartsUnlimitedWebsite project, note "ApplicationInsights" is added.
+
+![](<media/prereq-step11.png>)
+
+**Step 12.** Open Startup.cs in PartsUnlimitedWebsite project. Add the following code in Startup method.
+
+```
+.SetBasePath(env.ContentRootPath)
+.AddJsonFile("config.json")
+.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+```
+
+![](<media/startup-code.png>)
+
+**Step 13.** Add the following code in ConfigureServices method.
+
+```
+services.AddApplicationInsightsTelemetry(Configuration);
+```
+
+![](<media/configureservices-code.png>)
+
+**Step 14.** Add the following code in Configure method.
+
+```
+app.UseApplicationInsightsRequestTelemetry();
+app.UseApplicationInsightsExceptionTelemetry();
+```
+
+![](<media/configure-code.png>)
+
+**Step 15.** In the "Changes" tile in Team Explorer, commit the changes of adding Application Insights and sync to the repo which should kick off an automated build and deploy to the website.
+
+![](<media/prereq-step12a.png>)
+
+![](<media/prereq-step12b.png>)
+
+Now that the telemetry has been added to the web application, it may take a few minutes for Application Insights to refresh.
+
+###Task 2: View real-time results for user telemetry in the Azure portal
+
+Now that we've given Application Insights time to refresh, we can take a look at the usage data in the new Azure Portal. The Portal will show a variety of metrics out of the box, including number of sessions, users, and browser sessions.
+
+> **Note:** Before you proceed, you need to generate data for the Application Insights instance by browsing the website for a few minutes.
+
+**Step 1.** In an Internet browser, navigate to <http://ms.portal.azure.com> and
+sign in with your credentials.
+
+![](<media/prereq-step1.png>)
+
+**Step 2.** Click on the “More services” tile on the left column, and select “Application Insights”.
+
+ ![](<media/prereq-step1.1.png>)
+
+**Step 3.** Click on the name of the telemetry that was created when you deployed the resource group using the Deployment template in the PartsUnlimited solution.
+
+![](<media/prereq-step2.png>)
+
+**Step 4.** In the overview panel of the Application Insights instance, overall application health will be shown in server response time, page view load time, server requests, and failed requests. (Actual times may vary)
+
+![](<media/task2step3.png>)
+
+**Step 5.** In the Application Insights instance blade, scroll down and click on the "Usage" tile. By drilling into usage, we can gauge how popular our web application is based on the number of distinct users, active sessions, and number of calls to trackPageView() (usually called once). Click on "Users" to view more information about the users.
+
+![](<media/task2step4.png>)
+
+**Step 6.** In the Users timeline, note the number of users, new users, and page views. Additionally, the unique count of users by country is recorded. Click the X in the upper-right corner to close the Users panel.  
+
+![](<media/task2step6.png>)
+
+**Step 7.** Back in the overview panel of the Application Insights instance, click on the chart for Page View Load Time.
+
+![](<media/task2step7.png>)
+
+**Step 8.** In the Browsers timeline, note the receiving response time, client processing time, page load network time, send request time, server response time, and page views. Additionally, the average count of browser page load time is shown below the timeline. Click on the "Edit" button in the first timeline chart.
+
+![](<media/task2step8.png>)
+
+**Step 9.** In the Chart Details pane, scroll down to the Client area and uncheck all of the properties except for Receiving Response Time. Then, turn on the Grouping and select "Browser version" as the "group by" property. The Browsers timeline will change and show the average receiving response time broken down into the various browsers that were used to log into the site.
+
+![](<media/task2step9.png>)
+
+![](<media/task2step9b.png>)
+
+**Step 10.** Back in the Usage panel, and click on "Page views".
+
+![](<media/task2step10.png>)
+
+**Step 11.** The Page Views panel will break down the total page views, number of users, and pages per session for the web application.
+
+![](<media/task2step11.png>)
+
+###Task 3: Using Application Performance Monitoring to resolve performance issues
+
+**Step 1.** In an Internet browser, navigate to the PartsUnlimited website that you previously deployed and go to the Recommendations page, such as http://partsunlimited.azurewebsites.net/home/recommendations.
+
+![](<media/task3-step6.png>) 
+
+**Step 2.** In the Application Insights instance blade, scroll down and select the “Performance” tile to view performance monitoring
+information.
+
+![](<media/task3-step1.png>)
+
+**Step 3.** In the Performance panel, note the timeline. The timeline data may not show up immediately, so you will want to wait for a few minutes for the telemetry to collect performance data.
+
+![](<media/task3-step2.png>)
+
+**Step 4.** Once data shows in the timeline, view the operations listed under the **Average
+of server response time by operation name** section under the timeline. Click on the top operation in the list referring to the recommendations page to view details of that operation.
+
+**Step 5.** Drill down into the method that is affecting the slow performance. We now know where the slow performance is being caused in our code.
+
+**Step 6.** Back in In Visual Studio, and find the Recommendations method in HomeController.cs that is causing slow performance. At the top of the HomeController class, notice that the public int roco_count is set to 1000. Change that value to be 1.
+
+![](<media/task3-step3.png>)
+
+**Step 7.** Save the changes and commit the changes on the master branch.
+
+![](<media/task3-step4.png>)
+ 
+
+**Step 8.** Press the "Sync" button to push the changes up to the repo and
+kick off a build automatically.
+
+![](<media/task3-step5.png>)
+
+**Step 9.** Now that our changes have deployed to the website, open up a new incognito browser window (to prevent caching) and return to the recommendations page (http://partsunlimited.azurewebsites.net/home/recommendations).
+
+![](<media/task3-step6.png>) 
+
+**Step 10.** Return to the Application Insights performance monitoring view in the Azure Preview Portal and refresh the page.
+
+![](<media/task3-step7.png>) 
+
+In this lab, you learned how to set up Application Insights telemetry to gain further insight into how users are behaving towards your web application, and drill down into performance monitoring data through Application Insights in the new Azure Portal.
+
+
+Try these labs out for next steps:
+
+- [Testing in Production hands-on lab](https://github.com/Microsoft/PartsUnlimited/tree/master/docs/HOL_HDD_Testing_in_Production)
+
+**Further Resources**
+
+[Usage analysis for web applications with Application Insights](https://azure.microsoft.com/en-us/documentation/articles/app-insights-web-track-usage/)
