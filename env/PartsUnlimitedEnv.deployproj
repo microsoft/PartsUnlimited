@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|AnyCPU">
+      <Configuration>Debug</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|AnyCPU">
+      <Configuration>Release</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>bd52204a-7129-4ff2-b66c-34a5e6f70cdd</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworkIdentifier>Deployment</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>1.0</TargetFrameworkVersion>
+    <PrepareForBuildDependsOn>
+    </PrepareForBuildDependsOn>
+  </PropertyGroup>
+  <Import Condition=" Exists('Deployment.targets') " Project="Deployment.targets" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
+  <!-- vertag<:>start tokens<:>maj.min -->
+  <Import Condition=" Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Deployment\1.1\DeploymentProject.targets') " Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Deployment\1.1\DeploymentProject.targets" />
+  <!-- vertag<:>end -->
+  <ItemGroup>
+    <Content Include="Deploy-AzureResourceGroup.ps1" />
+    <Content Include="Templates\AppInsights.json" />
+    <Content Include="Templates\DemoEnvironmentSetup.json" />
+    <Content Include="Templates\DemoEnvironmentSetup.param.json" />
+    <Content Include="Templates\FullEnvironmentSetup.json" />
+    <Content Include="Templates\FullEnvironmentSetup.param.json" />
+    <Content Include="Templates\HostingPlanAndRules.json" />
+    <Content Include="Templates\SqlServerAndDb.json" />
+    <Content Include="Templates\Website.json" />
+    <Content Include="Templates\WebsiteRules.json" />
+    <Content Include="Templates\WebsiteWithTwoSlots.json" />
+    <None Include="Deployment.targets">
+      <Visible>False</Visible>
+    </None>
+    <None Include="Templates\FullEnvironmentSetupMerged.json" />
+    <None Include="Templates\FullEnvironmentSetupMerged.param.json" />
+  </ItemGroup>
+  <Target Name="GetReferenceAssemblyPaths" />
+</Project>

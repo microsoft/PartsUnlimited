@@ -15,49 +15,58 @@
 
 @section Scripts {
     <script type="text/javascript">
-        $(function () {
-            // Document.ready -> link up remove event handler
-            $(".remove-link").click(function () {
+        // Document.ready -> link up remove event handler
+        $(".remove-link")
+            .click(function () {
                 // Get the id from the link
                 var recordToDelete = $(this).attr("data-id");
-                var PostToUrl = $(this).attr("data-url");
-                if (recordToDelete != '') {
+                var postToUrl = $(this).attr("data-url");
+                if (recordToDelete !== '') {
 
                     // Start telemetry timer for post
-                    appInsights.startTrackEvent(recordToDelete);
+                    window.appInsights.startTrackEvent('Remove.Item.' + recordToDelete);
 
                     // Perform the ajax post
-                    $.post(PostToUrl, { "id": recordToDelete, "RequestVerificationToken": '@GetAntiXsrfToken()' },
-                        function (data) {
-                            // Successful requests get here
-                            // Update the page elements
-                            if (data.CartCount == 0) {
-                                $('#cart-summary').hide();
-                                $('#cart-count').hide();
-                                $('#empty-cart').show();
+                    var success = function (data) {
+
+                        console.log(data);
+                        // Successful requests get here
+                        // Update the page elements
+                        if (data.cartCount === 0) {
+                            $('#cart-summary').hide();
+                            $('#cart-count').hide();
+                            $('#empty-cart').show();
+                        } else {
+
+                            if (data.ItemCount === 0) {
+                                $('#row-' + data.deleteId).fadeOut('slow');
                             } else {
-
-                                if (data.ItemCount == 0) {
-                                    $('#row-' + data.DeleteId).fadeOut('slow');
-                                } else {
-                                    $('#item-count-' + data.DeleteId).text(data.ItemCount);
-                                }
+                                $('#item-count-' + data.deleteId).text(data.itemCount);
                             }
-                            $('#cart-sub-total').text(data.CartSubTotal);
-                            $('#cart-shipping').text(data.CartShipping);
-                            $('#cart-tax').text(data.CartTax);
-                            $('#cart-total').text(data.CartTotal);
-                            $('#update-message').text(data.Message);
-                            $('#cart-status').text('Cart (' + data.CartCount + ')');
-                            $('#cart-count').text(data.CartCount);
-                        });
+                        }
+                        $('#cart-sub-total').text(data.cartSubTotal);
+                        $('#cart-shipping').text(data.cartShipping);
+                        $('#cart-tax').text(data.cartTax);
+                        $('#cart-total').text(data.cartTotal);
+                        $('#update-message').text(data.message);
+                        $('#cart-status').text('Cart (' + data.cartCount + ')');
+                        $('#cart-count').text(data.cartCount);
 
-                    // Log timing event for delete process
-                    appInsights.stopTrackEvent(recordToDelete);
+                        window.appInsights.stopTrackEvent('Remove.Item.' + recordToDelete);
+                    };
+
+                    $.ajax({
+                        type: 'POST',
+                        url: postToUrl,
+                        data: { Id: recordToDelete, CancelationToken: '@GetAntiXsrfToken()' },
+                        success,
+                        headers: {
+                            'RequestVerificationToken': '@GetAntiXsrfToken()'
+                        }
+                    });
                 }
             });
 
-        });
     </script>
 }
 <div id="shopping-cart-page">
@@ -95,7 +104,9 @@
                                 </a>
                             </div>
                             <div class="col-xs-12 col-sm-5 col-sm-pull-4 col-md-6 description">
-                                <div class="hidden-xs"><strong>@Html.ActionLink(item.Product.Title, "Details", "Store", new { id = item.ProductId }, null)</strong></div>
+                                <div class="hidden-xs">
+                                    <strong>@Html.ActionLink(item.Product.Title, "Details", "Store", new { id = item.ProductId }, null)</strong>
+                                </div>
                                 <div class="visible-xs item-label">Description</div>
                                 <p class="text-content">@item.Product.Description</p>
                             </div>
@@ -119,6 +130,8 @@
                 </div>
             </div>
         }
-        <h4 id="empty-cart" @if (Model.CartCount > 0) { <text> style="display:none;" </text> }>Your cart is currently empty</h4>
+        <h4 id="empty-cart" @if (Model.CartCount > 0) { <text> style="display: none;" </text>   }>
+            Your cart is currently empty
+        </h4>
     </section>
 </div>

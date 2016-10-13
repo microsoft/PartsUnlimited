@@ -8,15 +8,9 @@ get fast feedback. To do so, we are going to be setting up a Continuous Integrat
 will allow us to compile and run unit tests on our code every time a commit is
 pushed to Visual Studio Team Services.
 
-###Pre-requisites:###
+### Pre-requisites: ###
 
 -   An active Visual Studio Team Services account
-
--   Visual Studio 2015 Update 3 client
-
--  .Net Core SDK
-
--   Project Admin rights to the Visual Studio Team Services account
 
 ### Tasks Overview: ###
 
@@ -24,9 +18,9 @@ pushed to Visual Studio Team Services.
 
 > Note: VSTS does support GitHub source code integration for use with VSTS builds, but is outside of the scope of this HOL
 
-**2. Create Continuous Integration Build:** In this step, you will create a build definition that will be triggered every time a commit is pushed to your repository in Visual Studio Team Services. 
+**2. Create Continuous Integration Build:** In this step, you will create a build definition that will be triggered every time a commit is pushed to your repository in Visual Studio Team Services.
 
-**3. Test the CI Trigger in Visual Studio Team Services:** In this step, test the Continuous Integration build (CI) build we created by changing code in the Parts Unlimited project with Visual Studio Team Services. 
+**3. Test the CI Trigger in Visual Studio Team Services:** In this step, test the Continuous Integration build (CI) build we created by changing code in the Parts Unlimited project with Visual Studio Team Services.
 
 ### I: Import Source Code into your VSTS Account with Git
 
@@ -34,6 +28,10 @@ We want to push the application code to your Visual Studio Team Services account
 order to use VSTS Build.
 
 > **Talking Point:** For this lab we are using the VSTS Git project. The next couple of steps will allow you to add the PartUnlimited source to the Git master repository.
+
+If you haven't already, create a new team project in your Visual Studio Team Services account that uses Git for source control.
+
+![](<media/empty-vsts-git.png>)
 
 **1.** Clone the repository to a local directory.
 
@@ -53,9 +51,9 @@ Move into the directory that was just created.  In a Windows OS (and assuming yo
 
 	cd HOL
 
-**2.** Remove the link to GitHub. 
+**2.** Remove the link to GitHub.
 
-The Git repo you just downloaded currently has a remote called _origin_ that points to the GitHub repo.  Since we won't be using it any longer, we can delete the reference. 
+The Git repo you just downloaded currently has a remote called _origin_ that points to the GitHub repo.  Since we won't be using it any longer, we can delete the reference.
 
 To delete the GitHub remote, use:
 
@@ -77,12 +75,12 @@ Additionally, at the bottom of the web page, you will see the two commands that 
 
 **4.** Add the link to VSTS and push your local Git repo
 
-In the local directory from Step 3, use the following command to add VSTS as the Git remote named _origin_. You can either type the URL you found in Step 4, or simply copy the first command from the VSTS web page.
+In the local directory from Step 1, use the following command to add VSTS as the Git remote named _origin_. You can either type the URL you found in Step 3, or simply copy the first command from the VSTS web page.
 
 	git remote add origin https://<account>.visualstudio.com\<project>\_git\<project>
 Now you can push the code, including history, to VSTS:
 
-	git push -u origin --all	
+	git push -u origin --all
 Congratulations, your code should now be in VSTS!
 
 ### II. Create Continuous Integration Build
@@ -91,7 +89,7 @@ A continuous integration build will give us the ability check whether the code
 we checked in can compile and will successfully pass any automated tests that we
 have created against it.
 
-**1.** Go to your **account’s homepage**: 
+**1.** Go to your **account’s homepage**:
 
 	https://<account>.visualstudio.com
 
@@ -99,47 +97,48 @@ have created against it.
 **2.** Click **Browse** and then select your team project and click
 **Navigate**.
 
-![](<media/CI1.jpg>)
+![](<media/CI1.png>)
 
-**3.** Once on the project’s home page, click on the **Build** hub at the top of
-the page.
+**3.** Once on the project’s home page, click on the **Build** hub at the top of the page, then on **All Definitions**, and then on **New Definition**.
 
-![](<media/CI2.jpg>)
+![](<media/CI2.png>)
 
-**4.** Click the **green “plus” sign**, select the **Empty** build definition, and then click **Next**.
+**4.** Select the **Empty** build definition, and then click **Next**.
 
-![](<media/CI3.jpg>)
+![](<media/CI3.png>)
 
 >**Note:** As you can see, you can now do Universal Windows Apps & Xamarin Android/IOS Builds as well as Xcode builds.
 
 **5.** After clicking the **Next** button, select **HOL Team Project**, select **HOL** Repository, select **Master** as the default branch and check **Continuous Integration** then click **Create**.
 
-![](<media/CI4.jpg>)
+![](<media/CI4.png>)
 
 > **Note:** We may have multiple repos and branches, so we need to select the correct Repo and Branch before we can select which Solution to build.
 
 **6.** After clicking the **Create** button, On the **Build** tab click the **Add build step** in the Build pane.
 
-![](<media/CI5.jpg>)
+![](<media/CI5.png>)
 
 **7.** In the **Add tasks** dialog, select the **Utility** page and then add a **PowerShell** task.
 
-![](<media/CI6.jpg>)
+![](<media/CI6.png>)
 
 **8.** Still in the **Add tasks** dialog, select the **Test** page and add a **Publish Test Results**& task.
 
- ![](<media/CI7.jpg>)
+ ![](<media/CI7.png>)
 
 **9.** Select the **Utility** page again and add a **Copy and Publish Artifacts** task and then click on **Close**.
 
-![](<media/CI8.jpg>)
+![](<media/CI8.png>)
 
 **10.** On the **PowerShell Script** task, click on the blue **rename** pencil icon and change the name of the step to **dotnet restore, build, test and publish** and click **OK**
 
 **11.** Select **File Path** for the **Type** property, enter **"build.ps1"** for the **Script filename** property and **$(BuildConfiguration) $(build.stagingDirectory)** for the **Arguments** property.
 
-![](<media/CI9.jpg>)
-    
+![](<media/CI9.1.png>)
+
+![](<media/CI9.2.png>)
+
 > **Note:** The build.ps1 script contains commands using the **dotnet.exe** executable used by .Net Core.  The build script does the following: restore, build, test, publish, and produce an MSDeploy zip package.
 
 	[CmdletBinding()]
@@ -160,27 +159,27 @@ the page.
 	& dotnet publish .\src\PartsUnlimitedWebsite --framework netcoreapp1.0 --output $outputDirectory --configuration $BuildConfiguration --no-build
 	#### Package to MSDeploy format
 
-**12.** On the **Publish Test Results** task, change the **Test Result Format** to **XUnit** and the **Test Results File** to ****/testresults.xml**.
+**12.** On the **Publish Test Results** task, change the **Test Result Format** to **XUnit** and the **Test Results File** to **\*\*/testresults.xml**.
 
-![](<media/CI10.jpg>)
+![](<media/CI10.png>)
 
-**13.** On the **Copy Publish Artifact** task, change the **Copy Root** property to **$(build.stagingDirectory)**, The **Contents** property to ******\\***.zip**, The **Artifact Name** property to **drop** and the **Artifact Type** to **Server**. 
+**13.** On the **Copy Publish Artifact** task, change the **Copy Root** property to **$(build.stagingDirectory)**, The **Contents** property to **\*\*\\\*.zip**, The **Artifact Name** property to **drop** and the **Artifact Type** to **Server**.
 
-![](<media/CI11.jpg>)
+![](<media/CI11.png>)
 
-**14** Select the **Variables** page and add two new variables that are used by the build.ps1 PowerShell script; **BuildConfiguration** with a value of **release** and **BuildPlatform** with a value of **any cpu**.
+**14** Select the **Variables** page and a new variable that will be used by the build.ps1 PowerShell script; **BuildConfiguration** with a value of **release**.
 
-![](<media/CI12.jpg>)
+![](<media/CI12.png>)
 
 **15.** Click on the **Triggers** tab and verify that the **Continuous integration (CI)** option is selected to build the solution everytime a change is checked in. Also make sure the filter includes the appropriate branch (in this case **master** and **Batch Changes** checkbox is unchecked
 
-![](<media/CI13.jpg>)
+![](<media/CI13.png>)
 
 > **Note:** To enable Continuous integration in your project, check the **Continuous integration (CI)** checkbox. You can select which branch you wish to monitor, as well.
 
 **16.** Click **Save** and give the build definition a name.
 
-![](<media/CI14.jpg>)
+![](<media/CI14.png>)
 
 ### III. Test the CI Trigger in Visual Studio Team Services
 
@@ -190,19 +189,22 @@ We will now test the **Continuous Integration build (CI)** build we created by c
 
 **2.** Navigate to **/src/PartsUnlimitedWebsite/Controllers** in the PartsUnlimited project, then click on the elipsis to the right of **HomeController.cs** and click **Edit**.
 
-![](<media/CI15.jpg>)
+![](<media/CI15.png>)
 
 **2.** After clicking **Edit**, add in text (i.e. *This is a test of CI*) after the last *Using* statement. Once complete, click **Save**.
 
-![](<media/CI16.jpg>)
+![](<media/CI16.png>)
 
-**3.** Click **Build** hub, then click the **Queued** link. This should have triggered the build we previously created.
+**3.** Click **Build** hub. This should have triggered the build we previously created.
 
-![](<media/CI17.jpg>)
+![](<media/CI17.png>)
 
-**4.** Double-Click on the **Build Number**, and you should get a build summary similar to this, which includes test results.
+**4.** Click on the **Build Number**, and you should get the build in progress. Here you can also see the commands being logged to console and the current steps that the build is on.
+![](<media/CI17.1.png>)
 
-![](<media/CI18.jpg>)
+**4.** Click on the **Build Number** on the top left and you should get a build summary similar to this, which includes test results.
+
+![](<media/CI18.png>)
 
 Next steps
 ----------
@@ -211,9 +213,8 @@ In this lab, you learned how to push new code to Visual Studio Team Services, se
 Integration build that runs when new commits are pushed to the master branch.
 This allows you to get feedback as to whether your changes made breaking syntax
 changes, or if they broke one or more automated tests, or if your changes are a
-okay. 
+okay.
 
 Try these labs out for next steps:
 
--[Continuous Deployment Lab](../HOL-Continuous_Deployment/Lab.md)
-
+-[Continuous Deployment Lab](../HOL-Continuous_Deployment/README.md)
