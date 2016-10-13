@@ -187,19 +187,24 @@ Congratulations, you have imported a build definition successfully.
 		![](<media/23.png>)
 		> **Note:** `AdminPassword` is the password for the production database. `AdminTestPassword` is the password for the test database.
 
-	* Change the values for the first fourth parameters by adding something unique like your initials at the end of the current one, for example in my case 'jstr', then click "OK". Save the release definition by clicking on "Save" and "OK".
+	* Change the values for the first fourth parameters by adding something unique like your initials at the end of the current one, for example in my case 'jstr', then click "OK".
 
-		![](<media/2321.png>)
-		> **Note:** You have to use unique values for 
+		![](<media/231.png>)
+		> **Note:** You have to use unique values on Azure, if not you may have an deployment error because someone is already using the same values.
 
+5. Like the previous step, you have to modify the global variales of this definition. Click on the 'Variables' section and add something unique like your initials at the end of the current one, for example in my case 'jstr', then click "OK". 
+Save the release definition by clicking on "Save" and "OK".
 
-5. If you had to define an empty release definition before, then it can be now deleted by clicking on the dropdown arrow next to the empty definition and selecting "Delete".
-
-	![](<media/17.png>)
+	![](<media/232.png>)
 
 Congratulations, you have imported a release definition successfully.
 
 
+6. If you had to define an empty release definition before, then it can be now deleted by clicking on the dropdown arrow next to the empty definition and selecting "Delete".
+
+	![](<media/17.png>)
+
+Congratulations, you have imported a release definition successfully.
 
 ### Task 5: Export Build and Release Definitions from VSTS
 Now that you have configured build and release definitions specifically for your repository in VSTS, it's a good idea to replace the given templates with your own.
