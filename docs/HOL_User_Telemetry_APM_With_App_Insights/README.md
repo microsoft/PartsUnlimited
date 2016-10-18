@@ -20,11 +20,11 @@ In this lab, you will learn about setting up Application Insights to gain furthe
 
 **Tasks Overview**
 
-1. Set up Application Insights for PartsUnlimited
+**1. Set up Application Insights for PartsUnlimited** This will walk you through creating an Application Insights instance in Azure and connecting it to the PartsUnlimited solution.
 
-2. View real-time results for user telemetry in the Azure portal
+**2. View real-time results for user telemetry in the Azure portal** In this step you will be shown where to find all of the information collected by Application Insights.
 
-3. Using Application Performance Monitoring to resolve performance issues
+**3. Using Application Performance Monitoring to resolve performance issues** In this step you will investigate and resolve a performance issue with the help of Application Insights.
 
 ###Task 1: Set up Application Insights for PartsUnlimited
 **Step 1.** In an Internet browser, navigate to <http://ms.portal.azure.com> and
