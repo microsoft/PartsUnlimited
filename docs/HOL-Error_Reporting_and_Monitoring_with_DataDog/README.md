@@ -1,20 +1,22 @@
 HOL - Error Reporting and Monitoring with DataDog
 ====================================================================================
-We want to know when things go wrong with our application. We want to give customers the best experience possible in terms of getting issues resolved quickly.
+A dormant bug may exist in the PartsUnlimited site but it has yet to show itself. We want to give customers the best experience possible in terms of getting issues resolved quickly. To do so, we are going to be setting up logging and custom event monitoring for the PartsUnlimited solution using DataDog. This will assist our engineers by providing rapid feedback around critical releases. Proactive monitoring adds to an all around better user experience and gives our engineering team greater confidence when deploying changes.
 
 ### Pre-requisites: ###
 - Visual Studio 2015 or higher
 
-- An active DataDog account
+- An active [DataDog account](https://www.datadoghq.com/datadog-signup/)
+
+- [A DataDog API key](https://app.datadoghq.com/account/settings#api) (after signing up)
 
 ### Tasks Overview: ###
-**Task 1. Create a custom wrapper to log metrics to DataDog**
+**Task 1. Create a custom wrapper to log metrics to DataDog** - In this task we will be writing some code to perform our logging calls to DataDog. We will go over the steps required to monitor three different areas of the application - the shopping cart, logins and global exceptions thrown by the application that aren't handled elsewhere.
 
-**Task 2. Deploy the PartsUnlimited Solution to Azure**
+**Task 2. Deploy the PartsUnlimited Solution to Azure** - In this task we will be going through the steps required to deploy the PartsUnlimited site to Azure.
 
-**Task 3. Trigger some logging to DataDog**
+**Task 3. Trigger some logging to DataDog** - In this task we will be using the deployed PartsUnlimited site to trigger some events that will be logged to DataDog.
 
-**Task 4. Set up a custom event monitor in DataDog**
+**Task 4. Set up a custom event monitor in DataDog** - In this task we will set up a custom monitor to look for particular events logged, then trigger email sendouts to critical or/and on call members of our engineering team.
 
 ###Task 1: Create a custom wrapper to log metrics to DataDog
 **Step 1.** Clone the repository to a local directory.
@@ -35,7 +37,7 @@ Move into the directory that was just created.  In a Windows OS (and assuming yo
 
 	cd HOL
 
-**Step 2.** Create a new setting for our datadog API key and base URL. This is located under the PartsUnlimitedWebsite project inside the config.json file.
+**Step 2.** Create a new setting for our datadog [API key](https://app.datadoghq.com/account/settings#api) and base URL. This is located under the PartsUnlimitedWebsite project inside the config.json file.
 
 ![](<media/config-section.png>)
 
@@ -71,7 +73,7 @@ Move into the directory that was just created.  In a Windows OS (and assuming yo
     }
 
 
-**Step 5.** Awesome. Now we want to create the contract we're using to communicate with DataDog. This can be found in the [DataDog API](http://docs.datadoghq.com/api/?lang=console#events). Create a new class called DataDogEventRequest.cs
+**Step 5.** Awesome. Now we want to create the contract we're using to communicate with DataDog. This can be found in the DataDog API -> http://docs.datadoghq.com/api/?lang=console#events. Create a new class called DataDogEventRequest.cs
 
     public class DataDogEventRequest
     {
@@ -154,7 +156,7 @@ We have the following:
 
 - The base address "https://app.datadoghq.com/api/v1/"
 
-- The Http accept header of "application/json"
+- The JSON accept header of "application/json"
 
 - The API key attachment
 
@@ -192,7 +194,7 @@ We also have the Trace and TrackException methods which, under the hood, are ver
 
             services.AddScoped(p => configurationDataDogSettings);
             services.AddScoped<IEventLogger, DataDogEventLogger>();
-
+            
             // add our custom exception handler to the application filter set
             services.AddMvc(
                 opts =>
@@ -235,6 +237,7 @@ We also have the Trace and TrackException methods which, under the hood, are ver
 
 Then in the login method we want to trace when there's a failed login attempt. Just underneath ModelState.AddModelError we want to trace the error and log it to DataDog.
 
+     //
     // POST: /Account/Login
     [HttpPost]
     [AllowAnonymous]
@@ -262,8 +265,7 @@ If you have an app service created in Azure, you can select it from here. Otherw
 
 ![](<media/publish2.png>)
 
-Create a unique web app name and assign it to a familiar resource group.
-> **Note:** Keep related items in the same resource group, i.e. The Web App, SQL Database and Storage account for a single application might live in their own resource group.
+Create a unique web app name and assign it to a familar resource group. Note: Keep similar items in the same resource group. As your Azure subscription grows this will assist greatly for knowing which things are related.
 
 ![](<media/publish3.png>)
 
