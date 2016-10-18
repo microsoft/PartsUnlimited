@@ -8,15 +8,15 @@ Users are reporting slow response times on the PartsUnlimited website. None of o
 - Application Insights created in the same Azure Resource Group as the PartsUnlimited website
 
 ### Tasks Overview: ###
-**Task 1. Set up Application Insights for PartsUnlimited**
+**Task 1. Set up Application Insights for PartsUnlimited** This will walk through creating an Application Insights instance in Azure and connecting it to the PartsUnlimited solution.
 
-**Task 2. Create a custom telemetry event on the client side**
+**Task 2. Create a custom telemetry event on the client side** In this task you will set the App Insights key and create a custom event tracker, so that client side's JavaScript can start logging events.
 
-**Task 3. Create a custom telemetry event on the server side**
+**Task 3. Create a custom telemetry event on the server side** In this task you will create an Application Insights telemetry provider which will log data on the server side of the PartsUnlimited's website.
 
-**Task 4. Trigger some events**
+**Task 4. Trigger some events** This task will walk you through generating some data for the next task based on the logging we have set up in the previous task.
 
-**Task 5. Build a custom query to view performance metrics and data**
+**Task 5. Build a custom query to view performance metrics and data** Once you have generated data to work with, this step will walk you through where this data can be found and how to query it.
 
 ###Task 1: Set up Application Insights for PartsUnlimited
 **Step 1.** In an Internet browser, navigate to <http://ms.portal.azure.com> and
