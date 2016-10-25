@@ -1,4 +1,4 @@
-#Testing in Production with Azure Websites - PartsUnlimited
+# Testing in Production with Azure Websites - PartsUnlimited
 
 According to the internal sales team, oil and filters are still not selling with a 20% discount. The engineering team is looking for a way to remedy this and would like to try increasing the current 5 second-interval on the homepage carousel showing the 20% discount to 20 seconds. The team would like to have 20-second intervals in a test version of the website and keep the current 5-second interval in production.
 
@@ -114,7 +114,7 @@ PartsUnlimited already has their production website deployed and in operation. B
 **Step 24.** Close the browser window.
 
 
-###Task 2: Adding Route Rules to Direct Traffic to the Test Site with PowerShell
+### Task 2: Adding Route Rules to Direct Traffic to the Test Site with PowerShell (Not available using Azure CLI yet)
 
 Now that we have published our new changes to the test deployment slot, we want to add routing rules so that the majority of traffic will go to the test deployment slot instead of production.
  

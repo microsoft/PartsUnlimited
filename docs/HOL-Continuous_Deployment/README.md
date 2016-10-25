@@ -54,12 +54,12 @@ Once the Release Definition is set up, you will trigger a release and see the pi
 
 
 ## HOL:
-###Task 1: Complete HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services
+### Task 1: Complete HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services
 Make sure you've completed [HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services](https://github.com/Microsoft/PartsUnlimited/tree/master/docs/HOL-Continuous_Integration).
 
 
 
-###Task 2: Modify the CI Build to include the ARM Templates
+### Task 2: Modify the CI Build to include the ARM Templates
 In order to deploy to Azure, you're going to specify the infrastructure that the PartsUnlimited Website requires. For example, the site requires an Azure SQL Database and an Azure Web App. Rather than create these by hand, you are going to use the Azure Resource Manager (ARM) templates that describe this infrastructure in a json file. This is good practice, since you're describing infrastructure as code.
 
 The task that will deploy the ARM template will create the resource group if it does not exist. If the resource group does
@@ -91,11 +91,11 @@ exist, then the template is used to update the existing resources.
 
 
 
-###Task 3: Create a Service Link from Visual Studio Team Services to an Azure Account
+### Task 3: Create a Service Link from Visual Studio Team Services to an Azure Account
 In order to interact with Azure, you'll need to create a Service Endpoint in VSTS. This Endpoint includes the
 authentication information required to deploy to Azure.
 
-> **Note**: Deploying [ARM Templates](https://azure.microsoft.com/en-us/documentation/articles/resource-group-authoring-templates/) to Azure from Release Management requires an organizational account or a [Service Principal](http://blogs.msdn.com/b/visualstudioalm/archive/2015/10/04/automating-azure-resource-group-deployment-using-a-service-principal-in-visual-studio-online-build-release-management.aspx). MSA Accounts and certificate-based connections are not supported. For this HOL, you will use an organizational account, but you can create a Service Principal if you wish to.
+> **Note**: Deploying [ARM Templates](https://azure.microsoft.com/en-us/documentation/articles/resource-group-authoring-templates/) to Azure from Release Management requires an organizational account or a [Service Principal](http://blog.jstroheker.com/2016/10/11/SPNAzure/). MSA Accounts and certificate-based connections are not supported. For this HOL, you will use an organizational account, but you can create a Service Principal if you wish to.
 
 **Step 1.**  Create an organizational account in Azure
 1. Create a user in the Azure Active Directory from the old Azure portal (https://manage.windowsazure.com). If you do not have
@@ -120,7 +120,7 @@ a custom domain, then use the `onmicrosoft.com` domain (the default domain). The
 
 	![](media/3.png)
 
-5. Fill out the form below to create a [Service Pincipal](https://blogs.msdn.microsoft.com/visualstudioalm/2015/10/04/automating-azure-resource-group-deployment-using-a-service-principal-in-visual-studio-online-buildrelease-management/). Click on "Verify connection" button to check that all details were filed in correctly and then click on "OK" button.
+5. Fill out the form below to create a [Service Pincipal](http://blog.jstroheker.com/2016/10/11/SPNAzure/). Click on "Verify connection" button to check that all details were filed in correctly and then click on "OK" button.
 
 	![](media/4.png)
 
@@ -130,7 +130,7 @@ a custom domain, then use the `onmicrosoft.com` domain (the default domain). The
 
 
 
-###Task 4: Create a Release Definition
+### Task 4: Create a Release Definition
 Now that you have an Azure Service Endpoint to deploy to, and a package to deploy (from your CI build),
 you can create a Release Definition. The Release Definition defines how your application moves through
 various Environments, including Tasks to update infrastructure, deploy your application, run scripts and
@@ -225,6 +225,7 @@ button next to "Azure Resource Group Deployment" to add the task. Close the "Tas
 	* **ResourceGroupName** - Name of the Resource Group.
 
 		![](media/50.png)
+		> **Note**: Use unique values for your variables by adding something custom at the end like your initials. Example for WebsiteName : pudncorejstr 
 
 		> **Note**: You can hide passwords and other sensitive fields by clicking the padlock icon to the right of the value text box.
 
@@ -369,6 +370,7 @@ they don't suddenly get a new build unexpectedly.
 
 
 **Step 6.** Configure Continuous Deployment for this Release Definition
+
 1. Click on the Triggers link of the Release Definition.
 2. For "Release trigger" pick "Continuous Deployment" and set trigger to the build definition created before.
 	> Selecting the build as the trigger means that any time the artifact build
