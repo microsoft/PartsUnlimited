@@ -8,8 +8,6 @@ In this lab, you will learn about setting up Application Insights to gain furthe
 
 **Prerequisites**
 
-- Visual Studio 2015 Update 3
-
 - Continuous Integration with Visual Studio Team Services (see [link](https://github.com/Microsoft/PartsUnlimited/blob/master/docs/HOL-Continuous_Integration/README.md))
 
 - Continuous Deployment with Release Management in Visual Studio Team Services (see [link](https://github.com/Microsoft/PartsUnlimited/blob/master/docs/HOL-Continuous_Deployment/README.md))
@@ -26,86 +24,24 @@ In this lab, you will learn about setting up Application Insights to gain furthe
 
 **3. Using Application Performance Monitoring to resolve performance issues** In this step you will investigate and resolve a performance issue with the help of Application Insights.
 
+
+
 ###Task 1: Set up Application Insights for PartsUnlimited
-**Step 1.** In an Internet browser, navigate to <http://ms.portal.azure.com> and
-sign in with your credentials.
+**Step 1.** To configure Application Insights with PartsUnlimited, please follow these steps: [Application Insights - Getting Started](https://github.com/Microsoft/ApplicationInsights-aspnetcore/wiki/Getting-Started)  
 
-![](<media/prereq-step1.png>)
 
-**Step 2.** Click on the “More services” tile on the left column, and select “Application Insights”.
+**Step 2.** Open command line that supports Git and navigate to the PartsUnlimited repository. Run the following commands to push your changes to the remote repository and trigger CI and CD:
+```Bash
+git add .
 
- ![](<media/prereq-step1.1.png>)
+git commit -m "added Application Insights"
 
-**Step 3.** Click on the name of the telemetry that was created when you deployed the resource group using the Deployment template in the PartsUnlimited solution.
-
-![](<media/prereq-step2.png>)
-
-**Step 4.** Click on "Properties" to view the details of telemetry, such as instrumentation key.
-
-![](<media/prereq-step3.png>)
-
-**Step 5.** To receive data, we will need to attach the PartsUnlimited Application Insights telemetry to the PartsUnlimited project in Visual Studio. In Visual Studio, open the PartsUnlimited solution.
-
-![](<media/prereq-step4.png>)
-
-**Step 6.** In the PartsUnlimited solution, right-click on the PartsUnlimitedWebsite project and select "Configure Application Insights...".
-
-![](<media/prereq-step5.png>)
-
-**Step 7.** In the "Application Insights" window, click on the "Change" button.
-
-![](<media/prereq-step-app-insights.png>)
-
-**Step 8.** Select your Microsoft account.
-
-![](<media/prereq-step6.png>)
-
-**Step 9.** Click on the button "Configure settings...".    
-
-![](<media/prereq-step7.png>)
-
-**Step 10.** Enter or select the name of Resource Group and Application Insights Resource created earlier. Then press the "OK" button to add the telemetry in the project.
-
-![](<media/prereq-step8.png>)
-
-**Step 11.** Back in Visual Studio, open appsettings.json in PartsUnlimitedWebsite project, note "ApplicationInsights" is added.
-
-![](<media/prereq-step11.png>)
-
-**Step 12.** Open Startup.cs in PartsUnlimitedWebsite project. Add the following code in Startup method.
-
+git push
 ```
-.SetBasePath(env.ContentRootPath)
-.AddJsonFile("config.json")
-.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-```
-
-![](<media/startup-code.png>)
-
-**Step 13.** Add the following code in ConfigureServices method.
-
-```
-services.AddApplicationInsightsTelemetry(Configuration);
-```
-
-![](<media/configureservices-code.png>)
-
-**Step 14.** Add the following code in Configure method.
-
-```
-app.UseApplicationInsightsRequestTelemetry();
-app.UseApplicationInsightsExceptionTelemetry();
-```
-
-![](<media/configure-code.png>)
-
-**Step 15.** In the "Changes" tile in Team Explorer, commit the changes of adding Application Insights and sync to the repo which should kick off an automated build and deploy to the website.
-
-![](<media/prereq-step12a.png>)
-
-![](<media/prereq-step12b.png>)
 
 Now that the telemetry has been added to the web application, it may take a few minutes for Application Insights to refresh.
+
+
 
 ###Task 2: View real-time results for user telemetry in the Azure portal
 
@@ -180,25 +116,25 @@ of server response time by operation name** section under the timeline. Click on
 
 **Step 5.** Drill down into the method that is affecting the slow performance. We now know where the slow performance is being caused in our code.
 
-**Step 6.** Back in In Visual Studio, and find the Recommendations method in HomeController.cs that is causing slow performance. At the top of the HomeController class, notice that the public int roco_count is set to 1000. Change that value to be 1.
+**Step 6.** Using your preferred IDE or a text editor, open `HomeController.cs` and find the Recommendations method that is causing slow performance. At the top of the HomeController class, notice that the public int roco_count is set to 1000. Change that value to be 1.
 
 ![](<media/task3-step3.png>)
 
-**Step 7.** Save the changes and commit the changes on the master branch.
+**Step 7.**  Open command line in PartsUnlimited repository and run the following commands:
+```Bash
+git add .
 
-![](<media/task3-step4.png>)
- 
+git commit -m "Changed roco_count from 1000 to 1 in HomeController.cs after being aware of slow perf in AI"
 
-**Step 8.** Press the "Sync" button to push the changes up to the repo and
-kick off a build automatically.
+git push
+```
+>**Note** This will push the changes up to the remote repo and kick off a build automatically.
 
-![](<media/task3-step5.png>)
-
-**Step 9.** Now that our changes have deployed to the website, open up a new incognito browser window (to prevent caching) and return to the recommendations page (http://partsunlimited.azurewebsites.net/home/recommendations).
+**Step 8.** Now that our changes have deployed to the website, open up a new incognito browser window (to prevent caching) and return to the recommendations page (http://partsunlimited.azurewebsites.net/home/recommendations).
 
 ![](<media/task3-step6.png>) 
 
-**Step 10.** Return to the Application Insights performance monitoring view in the Azure Preview Portal and refresh the page.
+**Step 9.** Return to the Application Insights performance monitoring view in the Azure Preview Portal and refresh the page.
 
 ![](<media/task3-step7.png>) 
 
