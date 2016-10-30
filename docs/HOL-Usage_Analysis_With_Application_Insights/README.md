@@ -35,7 +35,7 @@ Now we want to track when users click remove items from the cart. This could pro
 
 It's really easy to add tracking for this in our cart. If you open the template file for the shopping cart found at <b>Views -> ShoppingCart -> Index.cshtml </b> you will be able to find some custom event logging already in action! The startTrackEvent will start a timer and reference the record the user wants to remove from the cart. Once stopTrackEvent is called the timer log the time taken from start to finish and add a custom measurement of 'duration'.
 
-```
+```C#
 ...
 window.appInsights.startTrackEvent(recordToDelete);
 ...
@@ -53,7 +53,7 @@ Firstly we need an Application Insights telemetry provider. This will essentiall
 **Step 3.**
 Implement the already existing ITelemetryProvider and wire up the methods to use the application insights telemetry client.
 
-```
+```C#
 public class ApplicationInsightsTelemetryProvider : ITelemetryProvider
     {
         private readonly TelemetryClient _telemetry;
@@ -85,7 +85,7 @@ public class ApplicationInsightsTelemetryProvider : ITelemetryProvider
     }
 ```
 
-```
+```C#
 public class VersionedTelemetryInitializer : ITelemetryInitializer
 {
     public void Initialize(ITelemetry telemetry)
@@ -98,7 +98,7 @@ public class VersionedTelemetryInitializer : ITelemetryInitializer
 
 >**Note:** You can add context here for the TelemetryClient to use. This could be used to filter results to a specific version. If we released a new version with some features in a pilot sample of users, we could see if this has inadvertently impacted other parts of the solution.
 
-```
+```C#
 public class ApplicationInsightsTelemetryProvider : ITelemetryProvider
 {
     private readonly TelemetryClient _telemetry;
@@ -120,7 +120,7 @@ public class ApplicationInsightsTelemetryProvider : ITelemetryProvider
 In ***Startup.cs*** we need to rewire out dependency injector. Currently it's using an ***EmptyTelemetryProvider***. We want to swap this out with our newly created ***ApplicationInsightsTelemetryProvider***. Locate the line where the ***ITelemetryProvider*** is bound. It should look something like this
 
 ***(Before)***
-```
+```C#
 public void ConfigureServices(IServiceCollection services)
 {
     ...
@@ -130,7 +130,7 @@ public void ConfigureServices(IServiceCollection services)
 ```
 
 ***(After)***
-```
+```C#
 public void ConfigureServices(IServiceCollection services)
 {
     ...
@@ -147,7 +147,7 @@ Locate the <b>OrdersController</b> class at <b>Controllers -> OrdersController.c
 
 Also check out the <b>ShoppingCartController</b> class at <b>Controllers -> ShoppingCartController.cs </b>. Here you can see the measurements parameter being used to check the time taken for the order process. This could be used to display performance issues with the database.
 
-```
+```C#
 public async Task<IActionResult> AddToCart(int id)
 {
     ...
@@ -284,8 +284,7 @@ customEvents
 ```
 requests
    | where isnotnull(session_Id) and isnotempty(session_Id)
-   | summarize min(timestamp), max(timestamp)
-     by session_Id
+   | summarize min(timestamp), max(timestamp) by session_Id
    | extend sesh = max_timestamp - min_timestamp
    | where sesh > 1s
    | summarize count() by floor(sesh, 3s)
