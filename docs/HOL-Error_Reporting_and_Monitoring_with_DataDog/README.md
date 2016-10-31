@@ -40,7 +40,7 @@ Move into the directory that was just created.  In a Windows OS (and assuming yo
 **Step 2.** Create a new setting for our datadog [API key](https://app.datadoghq.com/account/settings#api) and base URL. This is located inside the website project -> `./HOL/src/PartsUnlimitedWebsite/config.json`
 
 This will sit under the "Keys" section.
-
+```json
     "Keys" {
         ...
         "DataDog":{
@@ -48,6 +48,7 @@ This will sit under the "Keys" section.
             "BaseUrl": "http://app.datadoghq.com/api/v1/"
         }
     }
+```
 
 **Step 3.** Create the configuration settings initializer. These can sit anywhere under the PartsUnlimitedWebsite project.
 ```csharp
@@ -93,9 +94,22 @@ This will sit under the "Keys" section.
         public string Alert_Type { get; set; }
     }
 ```
-**Step 6.** Add the Microsoft.AspNet.WebApi.Client nuget package. We need this to perfrom the PostAsJsonAsync method on our HttpClient. If you're not using Visual Studio you will need to run `dotnet restore` from the command line.
+**Step 6.** Add the Microsoft.AspNet.WebApi.Client nuget package. We need this to perfrom the PostAsJsonAsync method on our HttpClient. 
 
 ![](<media/add-package.png>)
+
+NOTE: If you're **not using Visual Studio** you will need to add the dependency in manually. 
+
+- In `./HOL/src/PartsUnlimitedWebsite/project.json` under the 'dependencies' section add the following (don't forget to add a comma on the line above). Check [here](https://www.nuget.org/packages/microsoft.aspnet.webapi.client/) for the latest version of Microsoft.AspNet.WebApi.Client.
+
+```json
+    "dependencies": {
+        ...                                     
+        "Microsoft.AspNet.WebApi.Client": "5.2.3"
+    }
+```
+
+- After that is done run `dotnet restore` from the command line inside the project folder `./HOL/src/PartsUnlimitedWebsite/`
 
 **Step 7.** Create another class called DataDogEventLogger.cs
 ```csharp
