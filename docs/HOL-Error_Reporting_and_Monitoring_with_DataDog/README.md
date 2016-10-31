@@ -301,6 +301,27 @@ The following form should be filled out. Take note of the server you are deployi
 
 ![](<media/publish5.png>)
 
+NOTE: if you are not using Visual Studio you can set this up using the [Azure CLI](https://azure.microsoft.com/en-us/downloads/#cmd-line-tools)
+
+For example, if we have [nodejs](https://nodejs.org) installed on a linux machine we can install the Azure CLI via NPM. 
+
+```
+    npm install -g azure-cli
+```
+
+Or you may need to use **sudo** to successfully run the npm command.
+
+```
+    sudo npm install -g azure-cli
+```
+
+Now run the following commands to create an App Service resource in Azure.
+
+```
+    azure config mode asm
+    azure login
+```
+
 ###Task 2: Trigger some logging to DataDog
 
 **Step 1.** Navigate to the deployed website.
