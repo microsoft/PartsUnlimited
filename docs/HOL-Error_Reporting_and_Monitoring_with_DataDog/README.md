@@ -37,12 +37,20 @@ Move into the directory that was just created.  In a Windows OS (and assuming yo
 
 	cd HOL
 
-**Step 2.** Create a new setting for our datadog [API key](https://app.datadoghq.com/account/settings#api) and base URL. This is located under the PartsUnlimitedWebsite project inside the config.json file.
+**Step 2.** Create a new setting for our datadog [API key](https://app.datadoghq.com/account/settings#api) and base URL. This is located inside the website project -> `./HOL/src/PartsUnlimitedWebsite/config.json`
 
-![](<media/config-section.png>)
+This will sit under the "Keys" section.
+
+    "Keys" {
+        ...
+        "DataDog":{
+            "ApiKey": "XXXXXXXXXXXXXXXX",
+            "BaseUrl": "http://app.datadoghq.com/api/v1/"
+        }
+    }
 
 **Step 3.** Create the configuration settings initializer. These can sit anywhere under the PartsUnlimitedWebsite project.
-
+```csharp
     public interface IDataDogSettings
     {
         string ApiKey { get; set; }
@@ -60,9 +68,10 @@ Move into the directory that was just created.  In a Windows OS (and assuming yo
         public string ApiKey { get; set; }
         public string BaseUrl { get; set; }
     }
+```
 
 **Step 4.** Now we need to set up our dependency injection correctly. Navigate to the Startup class. This will tell our configration where to look in order to load the DataDog specfic settings (Under Keys -> DataDog)
-
+```csharp
     public void ConfigureServices(IServiceCollection services)
     {
         ...
@@ -71,10 +80,10 @@ Move into the directory that was just created.  In a Windows OS (and assuming yo
 
         ...
     }
+```
 
-
-**Step 5.** Awesome. Now we want to create the contract we're using to communicate with DataDog. This can be found in the DataDog API -> http://docs.datadoghq.com/api/?lang=console#events. Create a new class called DataDogEventRequest.cs
-
+**Step 5.** Now we want to create the contract we're using to communicate with DataDog. This can be found in the DataDog API -> http://docs.datadoghq.com/api/?lang=console#events. Create a new class called DataDogEventRequest.cs
+```csharp
     public class DataDogEventRequest
     {
         public string Title { get; set; }
@@ -83,13 +92,13 @@ Move into the directory that was just created.  In a Windows OS (and assuming yo
         public List<string> Tags { get; set; }
         public string Alert_Type { get; set; }
     }
-
-**Step 6.** Add the Microsoft.AspNet.WebApi.Client nuget package. We need this to perfrom the PostAsJsonAsync method on our HttpClient
+```
+**Step 6.** Add the Microsoft.AspNet.WebApi.Client nuget package. We need this to perfrom the PostAsJsonAsync method on our HttpClient. If you're not using Visual Studio you will need to run `dotnet restore` from the command line.
 
 ![](<media/add-package.png>)
 
 **Step 7.** Create another class called DataDogEventLogger.cs
-
+```csharp
     public interface IEventLogger
     {
         void Trace(string message);
@@ -147,7 +156,7 @@ Move into the directory that was just created.  In a Windows OS (and assuming yo
             }
         }
     }
-
+```
 Let's provide a bit more context for each of these methods.
 
 We have a private method in this class which will be wrapping up our REST requests to datadog (**D**ont **R**epeat **Y**ourself!). This creates a new client with all the required attributes to communicate with the datadog API (API keys and the base URL).
@@ -163,7 +172,7 @@ We have the following:
 We also have the Trace and TrackException methods which, under the hood, are very similar. The only real difference being the information logged to DataDog.
 
 **Step 8.** Now, in order to catch exceptions make by our application we are going to want some sort of global exception catcher. Let's create a global exception **filter** for our application to ensure all unhandled exceptions are logged to DataDog.
-
+```csharp
     public class CustomExceptionFilterAttribute : ExceptionFilterAttribute
     {
         private readonly IEventLogger _eventLogger;
@@ -181,9 +190,9 @@ We also have the Trace and TrackException methods which, under the hood, are ver
             _eventLogger.TrackException(context.Exception);
         }
     }
-
+```
 **Step 9.** To ensure this custom exception filter is applied across our application we can add it to the default set of MVC filters. Navigate back to the Startup.cs class. Note we also want to bind our event logger just in case we want this to be used somewhere else in the application.
-
+```csharp
         public void ConfigureServices(IServiceCollection services)
         {
             ...
@@ -204,10 +213,10 @@ We also have the Trace and TrackException methods which, under the hood, are ver
 
             ...
         }
-
+```
 
 **Step 10.** Now, let's throw an exception in our ShoppingCartController.
-
+```csharp
      public class ShoppingCartController : Controller
     {
         ...
@@ -217,9 +226,9 @@ We also have the Trace and TrackException methods which, under the hood, are ver
             throw new Exception("Bad stuff happened!");
         }
     }
-
+```
 **Step 11.** Let's also log when a user has a failed login attempt. Navigate to the AccountController. Add the IEventLogger in to the constructor and assign it to a private variable (see below)
-
+```csharp
     public class AccountController : Controller
     {
         private readonly IEventLogger _eventLogger;
@@ -234,10 +243,10 @@ We also have the Trace and TrackException methods which, under the hood, are ver
         ...
 
     }
-
+```
 Then in the login method we want to trace when there's a failed login attempt. Just underneath ModelState.AddModelError we want to trace the error and log it to DataDog.
 
-     //
+```csharp
     // POST: /Account/Login
     [HttpPost]
     [AllowAnonymous]
@@ -250,6 +259,7 @@ Then in the login method we want to trace when there's a failed login attempt. J
         _eventLogger.Trace($"FAILEDLOGIN:{model.Email}");
         return View(model);
     }
+```
 
 ###Task 2: Deploy the PartsUnlimited Solution to Azure
 
