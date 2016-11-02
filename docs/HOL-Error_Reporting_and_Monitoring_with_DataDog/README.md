@@ -94,7 +94,7 @@ This will sit under the "Keys" section.
         public string Alert_Type { get; set; }
     }
 ```
-**Step 6.** Add the Microsoft.AspNet.WebApi.Client nuget package. We need this to perfrom the PostAsJsonAsync method on our HttpClient. 
+**Step 6.** Add the Microsoft.AspNet.WebApi.Client nuget package. We need this to perform the PostAsJsonAsync method on our HttpClient. 
 
 ![](<media/add-package.png>)
 
@@ -301,9 +301,9 @@ The following form should be filled out. Take note of the server you are deployi
 
 ![](<media/publish5.png>)
 
-NOTE: if you are not using Visual Studio you can set this up using the [Azure CLI](https://azure.microsoft.com/en-us/downloads/#cmd-line-tools)
+NOTE: if you are **not using Visual Studio** you can set this up using the [Azure CLI](https://azure.microsoft.com/en-us/downloads/#cmd-line-tools)
 
-For example, if we have [nodejs](https://nodejs.org) installed on a linux machine we can install the Azure CLI via NPM. 
+For example, if you have [nodejs](https://nodejs.org) installed on a linux machine we can install the Azure CLI via NPM. 
 
 ```
     npm install -g azure-cli
@@ -320,6 +320,34 @@ Now run the following commands to create an App Service resource in Azure.
 ```
     azure config mode asm
     azure login
+```
+
+This will prompt you to to login and provide command line access to your Azure subscription. Then we can create an app service in Azure.
+
+```
+    azure site create yoursitenamehere
+```
+
+Now we want to set up a user for the deployments
+
+```
+    site deployment user set [options] [username] [pass]
+```
+
+Now we want to create the git remote to deploy to
+
+```
+    git remote add azure https://theuseryoujustcreate@yoursitenamehere.scm.azurewebsites.net:443/yoursitenamehere.git
+```
+
+Now we need to add a deployment script to ensure our application unpacks correctly on the app service. From the root folder of this HOL document locate the **.deployment** and **deploy.cmd** script `.\HOL\docs\HOL-Error_Reporting_and_Monitoring_with_DataDog\` -> move these to the root folder of the application `./HOL`
+
+Now we're ready to deploy. Type the following commands to add the deployment files to source. This may take some time to complete.
+
+```
+    git add -A
+    git commit -m "Adding deployment scripts"
+    git push azure master
 ```
 
 ###Task 2: Trigger some logging to DataDog
