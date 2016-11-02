@@ -1,9 +1,11 @@
 HOL - Error Reporting and Monitoring with DataDog
 ====================================================================================
-A dormant bug may exist in the PartsUnlimited site but it has yet to show itself. We want to give customers the best experience possible in terms of getting issues resolved quickly. To do so, we are going to be setting up logging and custom event monitoring for the PartsUnlimited solution using DataDog. This will assist our engineers by providing rapid feedback around critical releases. Proactive monitoring adds to an all around better user experience and gives our engineering team greater confidence when deploying changes.
+A dormant bug may exist in the PartsUnlimited site but it has yet to show itself. We want to give customers the best experience possible in terms of getting issues resolved quickly. To do so, we are going to be setting up logging and custom event monitoring for the PartsUnlimited solution using DataDog. This will assist our engineers by providing rapid feedback around critical releases. Proactive monitoring adds to an all around better user experience and gives our engineering team greater confidence when deploying changes. 
+
+Datadog may be preferable due to a slight difference in it's target user base (admins, operators and the like) as opposed to other APM software. It also has some great infrastructure monitoring executables that are easy to install and provide great coverage around your application stack.
 
 ### Pre-requisites: ###
-- Visual Studio 2015 or higher
+- Visual Studio 2015 Update 3 (NOTE: Visual Studio 2015 preview 5 **does not** support .net core tooling, ensure the version you are running supports .net core tooling before continuing).
 
 - An active [DataDog account](https://www.datadoghq.com/datadog-signup/)
 
