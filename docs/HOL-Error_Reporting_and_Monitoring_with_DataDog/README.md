@@ -71,7 +71,7 @@ This will sit under the "Keys" section.
     }
 ```
 
-**Step 4.** Now we need to set up our dependency injection correctly. Navigate to the Startup class. This will tell our configration where to look in order to load the DataDog specfic settings (Under Keys -> DataDog)
+**Step 4.** Now we need to set up our dependency injection correctly. Navigate to the Startup class. This will tell our configuration where to look in order to load the DataDog specfic settings (Under Keys -> DataDog)
 ```csharp
     public void ConfigureServices(IServiceCollection services)
     {
@@ -83,7 +83,8 @@ This will sit under the "Keys" section.
     }
 ```
 
-**Step 5.** Now we want to create the contract we're using to communicate with DataDog. This can be found in the DataDog API -> http://docs.datadoghq.com/api/?lang=console#events. Create a new class called DataDogEventRequest.cs
+**Step 5.** Now we want to create the contract we're using to communicate with DataDog. This can be found in the DataDog API -> http://docs.datadoghq.com/api/?lang=console#events. Create a new class called DataDogEventRequest.cs under the `Telemetry` folder -> `./HOL/src/PartsUnlimitedWebsite/Telemetry/`
+
 ```csharp
     public class DataDogEventRequest
     {
