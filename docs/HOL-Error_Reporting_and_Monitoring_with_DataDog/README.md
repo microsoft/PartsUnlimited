@@ -232,19 +232,160 @@ We also have the Trace and TrackException methods which, under the hood, are ver
         }
 ```
 
-**Step 10.** Now, let's throw an exception in our ShoppingCartController.
+**Step 10.** Now, let's add some tracing in our Controllers. Firstly, let's add some tracing around when people add items to their cart. Navigate to ShoppingCartController.cs
+
 ```csharp
-     public class ShoppingCartController : Controller
+    public class ShoppingCartController : Controller
     {
         ...
+        private readonly IEventLogger _eventLogger;
 
-         public async Task<IActionResult> AddToCart(int id)
+        public ShoppingCartController(
+            ...
+            , IEventLogger eventLogger)
         {
-            throw new Exception("Bad stuff happened!");
+            ...
+            _eventLogger = eventLogger;
+        }
+
+        public async Task<IActionResult> AddToCart(int id)
+        {
+            // Retrieve the product from the database
+            var addedProduct = _db.Products
+                .Single(product => product.ProductId == id);
+
+            _eventLogger.Trace($"Cart/Server/Add/{addedProduct.Title}");
+
+            ...
         }
     }
 ```
-**Step 11.** Let's also log when a user has a failed login attempt. Navigate to the AccountController. Add the IEventLogger in to the constructor and assign it to a private variable (see below)
+
+Now we want to trace when an order has been completed. Navigate to CheckoutController.cs
+
+```csharp
+    public class CheckoutController : Controller
+    {
+        ...
+        private readonly IEventLogger _eventLogger;
+
+        public CheckoutController(
+            ...
+            , IEventLogger eventLogger)
+        {
+            ...
+            _eventLogger = eventLogger;
+        }
+
+        public IActionResult Complete(int id)
+        {
+            ...
+
+            if (order != null)
+            {
+                _eventLogger.Trace($"Checkout/Server/Complete/OrderId/{id}/Total/{order.Total}");
+                ...
+            }
+            ...
+        }
+    }
+```
+
+Let's also trace when a category is browsed to - this could provide valuable data for the marketing team by showing them popular categories and not so popular categories. Navigate to StoreController.cs
+
+
+```csharp
+    public class StoreController : Controller
+    {
+        ...
+        private readonly IEventLogger _eventLogger;
+
+        public StoreController(
+            ...
+            , IEventLogger eventLogger)
+        {
+            ...
+            _eventLogger = eventLogger;
+        }
+
+        public IActionResult Browse(int categoryId)
+        {
+            ...
+            var categoryModel = _db.Categories.Single(g => g.CategoryId == categoryId);
+            _eventLogger.Trace($"Store/Server/Browse/{categoryModel.Name}");
+            ...
+        }
+
+```
+
+We also want to see what people are searching for, this could potentially assist our UX team to ensure the customer can get to what they want faster and more intuitively. Navigate to SearchController.cs
+
+```csharp
+    public class SearchController : Controller
+    {
+        ...
+        private readonly IEventLogger _eventLogger;
+
+        public SearchController(
+            ...
+            , IEventLogger eventLogger)
+        {
+            ...
+            _eventLogger = eventLogger;
+        }
+
+        public async Task<IActionResult> Index(string q)
+        {
+            if (string.IsNullOrWhiteSpace(q))
+            {
+                return View(null);
+            }
+            _eventLogger.Trace($"Search/Server/Index/Query/{q}");
+            ...
+        }
+
+```
+
+For our user management, we want to check failures on the change password action. Navigate to ManageController.cs
+
+
+```csharp
+    public class ManageController : Controller
+    {
+        private readonly IEventLogger _eventLogger;
+
+        public ManageController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEventLogger eventLogger)
+        {
+            ...
+            _eventLogger = eventLogger;
+        }
+
+        ...
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            ...
+            var user = await GetCurrentUserAsync();
+            if (user != null)
+            {
+                ...
+                if (result.Succeeded)
+                {
+                    ...
+                }
+                _eventLogger.Trace($"Manage/Server/ChangePassword/Failure/{user.Name}");
+                ...
+            }
+            ...
+        }
+
+    }
+```
+
+Let's also log when a user has a failed login attempt. Navigate to the AccountController. Just underneath ModelState.AddModelError we want to trace the error and log it to DataDog.
+
 ```csharp
     public class AccountController : Controller
     {
@@ -252,29 +393,25 @@ We also have the Trace and TrackException methods which, under the hood, are ver
 
         public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEventLogger eventLogger)
         {
+            ...
             _eventLogger = eventLogger;
-            UserManager = userManager;
-            SignInManager = signInManager;
         }
 
         ...
 
-    }
-```
-Then in the login method we want to trace when there's a failed login attempt. Just underneath ModelState.AddModelError we want to trace the error and log it to DataDog.
+        // POST: /Account/Login
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        {
+            ...
 
-```csharp
-    // POST: /Account/Login
-    [HttpPost]
-    [AllowAnonymous]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
-    {
-        ...
+            ModelState.AddModelError("", "Invalid login attempt.");
+            _eventLogger.Trace($"Account/Server/Login/Failure/{model.Email}");
+            return View(model);
+        }
 
-        ModelState.AddModelError("", "Invalid login attempt.");
-        _eventLogger.Trace($"FAILEDLOGIN:{model.Email}");
-        return View(model);
     }
 ```
 
@@ -357,14 +494,17 @@ Now we're ready to deploy. Type the following commands to add the deployment fil
 
 **Step 1.** Navigate to the deployed website.
 
-**Step 2.** Now, lets trigger some failed login attempts. Navigate to the login page and try any username with any password a few times.
+**Step 2.** Now, lets trigger some actions. 
 
-**Step 3.** Let trigger the 'add to cart exception' as well. Try and add an item to your cart.
+- Navigate to the login page and try any username with any password a few times.
+- Try and add an item to your cart.
+- Try using the search bar located at the top of the site.
+- Try completing an order.
+- Login with the following credentials -> user: `Administrator@test.com` password: `YouShouldChangeThisPassword1!`. Then try to **unsuccessfully** change your password under the 'Profile -> Manage Account' section.
 
 **Step 4.** Navigate to the DataDog portal to check and see if everything was logged correctly -> https://app.datadoghq.com/event/stream
 
-![](<media/portal-events.png>)
-
+![](<media/datadog-events-extended.png>)
 
 ###Task 3: Set up a custom event monitor in DataDog
 
