@@ -458,7 +458,7 @@ Or you may need to use **sudo** to successfully run the npm command.
 Now run the following commands to create an App Service resource in Azure.
 
 ```
-    azure config mode asm
+    azure config mode arm
     azure login
 ```
 
