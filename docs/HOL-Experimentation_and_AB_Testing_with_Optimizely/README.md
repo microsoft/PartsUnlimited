@@ -43,36 +43,41 @@
 
 **Step 4.** Create a new experiment.
 
-* Click on "New Experiment".    
+* Click on "Create New" then "Experiment".    
 
-  ![](<media/32.png>)
+  ![](<media/34.png>)
 
-* Give experiment a name, then enter your `production` site URL as the "Experiment URL" and click on "Create Experiment".
+* Give experiment a name, then enter your `production` site URL as the Pages" and Set "Audiences" to Everyone which is default.
+click on "Create Experiment".
+  ![](<media/35.png>)
 
-  ![](<media/33.png>)
+* Then Set the Metrics. Audiences and Metrics will be changed later. Click on "Create Experiment".
+
+  ![](<media/36.png>)
 
 **Step 5.** Dismiss tutorial if it pop-ups. Let's define the first variation where we will change the styling of "Shop Now" button.
-  * Click on `<edit code>` button in the right bottom corner.
+  * Click on `Champaigns > Variation #1` button in the right bottom corner.
 
-    ![](<media/27.png>)
+    ![](<media/37.png>)
+  * Click on `Create` Then `Element Change`
+    ![](<media/38.png>)
 
-  * Enter the following code and click on "Apply" afterwards:
+  * Enter the following selector 
+  * Enter the color `rgba(28,54,124,1)` or `#1c367c` 
+    ![](<media/39.png>)
+  * Enter the `Enable Event Tracking` 
 
-        $(".carousel-link").css({"background-color":"#1c367c"});
+  ```
+  Track click on this element: check
+  Name: Shop Button
+  Category: Converted
+  ```
+  
+  * Click on "Save".
 
-    ![](<media/3.png>)
 
-**Step 6.** Let's add a goal to this experiment. A goal is an information we are trying to find out by doing an experiment. In this case, our goal is to know whether changing the background of the "Shop Now" button will make it more likely for users to click on it.
 
-  * Right click on the "Shop Now" button, select "Track Clicks..." and click on "Create New Click Goal".
-
-    ![](<media/8.png>)
-
-  * Enter "Shop Button" as a "Goal Name", make sure that this goal will be tracking clicks and click on "Save". On the next page click on "Close" button.
-
-    ![](<media/9.png>)
-
-**Step 7.** Save this variation by clicking on "Save now". Let's click on "Start Experiment" to activate this experiment. A few pop-ups might show up, we are only interested in "Diagnostic Report" one. It will indicate that a particular snippet of code has to be added to the project so that Optimizely can redirect users to the correct variation of the website. Take a note of this line of code.
+**Step 6.** Save this variation by clicking on "Save now". Let's click on "Start Experiment" to activate this experiment. A few pop-ups might show up, we are only interested in "Diagnostic Report" one. It will indicate that a particular snippet of code has to be added to the project so that Optimizely can redirect users to the correct variation of the website. Take a note of this line of code.
 ![](<media/5.png>)
 ![](<media/6.png>)
 >**Note:** If "Diagnostic Report" didn't pop-up then the same snippet of code can be found in settings for this project on Optimizely. Navigate "Home", select the project created in this lab, navigate to "Settings" tab and you should see it under "Implementation" sub-tab.
