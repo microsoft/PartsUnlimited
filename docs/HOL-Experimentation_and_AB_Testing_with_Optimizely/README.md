@@ -77,18 +77,9 @@ click on "Create Experiment".
   
   * Click on "Save".
 
-
-
-**Step 6.** Save this variation by clicking on "Save now". Let's click on "Start Experiment" to activate this experiment. A few pop-ups might show up, we are only interested in "Diagnostic Report" one. It will indicate that a particular snippet of code has to be added to the project so that Optimizely can redirect users to the correct variation of the website. Take a note of this line of code.
-![](<media/5.png>)
-![](<media/6.png>)
->**Note:** If "Diagnostic Report" didn't pop-up then the same snippet of code can be found in settings for this project on Optimizely. Navigate "Home", select the project created in this lab, navigate to "Settings" tab and you should see it under "Implementation" sub-tab.
-![](<media/7.png>)
-
-
-
 ### Task 2: Integrating Optimizely into PartsUnlimited
 **Step 1.** Add the snippet of code you took a note of from Optimizely's website to the head tag of `_Layout.cshtml` file in the PartsUnlimitedWebsite/Views/Shared/ directory.
+![](<media/41.png>)
 
 ![](<media/10.png>)
 
@@ -105,50 +96,38 @@ click on "Create Experiment".
 
 
 ### Task 3: Setup second variation in Optimizely
-Let's go back to Optimizely website. Navigate "Home", click on the experiment created in this lab then click on "Editor" button.
+Let's go back to Optimizely website. Navigate Champaigns", click on the experiment created in this lab.
 
-  ![](<media/28.png>)
+  ![](<media/47.png>)
 
 **Step 1.** Click on "+ Add Variation", ignore a warning about making changes while the experiment is running.
 
-![](<media/4.png>)
+![](<media/42.png>)
 
-**Step 2.** Let's remove "Fork me on Github" element in the top left corner from this variation. Right click on it, select "Remove, check "Remove element from page." and click on "Done" button.
+**Step 2.** Let's remove "Fork me on Github" element in the top left corner from this variation. Click on it.
 
-![](<media/11.png>)
+![](<media/43.png>)
+
+Then chagne Layout > Visibility to "Removed".
+
+![](<media/44.png>)
 
 **Step 3.** In this variation background color of all "Shop Now" buttons will be changed.
 
   * Change background color of the "Shop Button" in the carousel the same way as in variation 1.
+  * Enter the `Enable Event Tracking` the same way as in variation 1 as well.
 
   * If you scroll down you will see that all elements in "Arrivals" and "Top selling" groups also contain their own "Shop Now" buttons. Their color hasn't been changed because `.carousel-link` class is not used for these buttons.
+  * We hope the color is like this.
 
-    ![](<media/12.png>)
-
-  * To change the color of these buttons allow animation to show you "Shop Now" button, right click on it, select "Edit Element..." and click on "Edit Style".
-
-    ![](<media/13.png>)
-
-  * Navigate to "Color & Background" tab and enter `#1c367c` as your "Background Color", then click "Done".
-
-    ![](<media/14.png>)
-
-  * This will generate a long CSS Selector.
-
-        $("#home-page > section:eq(0) > div:eq(0) > div:eq(0) > div:eq(0) > a:eq(0) > div:eq(0) > div:eq(2) > div:eq(1)").css({"background-color":"#1c367c"});
-
-    You may however be able to use a more generic selector if you know that it will only select the "Shop Now" buttons on the page, such as $(".shop-now"), this is preferred as it is more resilient to changes in the structure of the DOM.
+    ![](<media/45.png>)
 
   * If you were to look at the DOM, you would see that all those "Shop Now" buttons are in div tags with class "shop-now", i.e. changing the background color of that class will change background color of all "Shop Now" buttons.
 
-      ![](<media/15.png>)
+    ![](<media/15.png>)
 
-  * Replace previously added line of code with this one:
-
-          $(".shop-now").css({"background-color":"#1c367c"});
-    and click on "Apply". Save this variation by clicking on "Save now" in the top right corner.
-
-    ![](<media/16.png>)
+  * To change the color of these buttons, select the selector `.shop-now` and change color the same way as in variation 1. 
+    ![](<media/46.png>)
 
   * Optionally: Create another tracking goal for every of these buttons.
 
