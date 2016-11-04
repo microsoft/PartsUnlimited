@@ -62,7 +62,7 @@ click on "Create Experiment".
   * Click on `Create` Then `Element Change`
     ![](<media/38.png>)
 
-  * Enter the following selector 
+  * Enter the selector as ".carousel-link". 
   * Enter the color `rgba(28,54,124,1)` or `#1c367c` 
     ![](<media/39.png>)
 
@@ -73,7 +73,7 @@ click on "Create Experiment".
   Name: Shop Button
   Category: Converted
   ```
-      ![](<media/40.png>)
+    ![](<media/40.png>)
   
   * Click on "Save".
 
