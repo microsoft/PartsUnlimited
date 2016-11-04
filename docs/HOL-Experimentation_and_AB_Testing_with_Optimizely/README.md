@@ -47,7 +47,7 @@
 
   ![](<media/34.png>)
 
-* Give experiment a name, then enter your `production` site URL as the Pages" and Set "Audiences" to Everyone which is default.
+* Give experiment a name, then enter your `production` site URL as the Pages" and Set "Audiences" to Everyone which is the default value.
 click on "Create Experiment".
   ![](<media/35.png>)
 
@@ -65,6 +65,7 @@ click on "Create Experiment".
   * Enter the following selector 
   * Enter the color `rgba(28,54,124,1)` or `#1c367c` 
     ![](<media/39.png>)
+
   * Enter the `Enable Event Tracking` 
 
   ```
@@ -72,6 +73,7 @@ click on "Create Experiment".
   Name: Shop Button
   Category: Converted
   ```
+      ![](<media/40.png>)
   
   * Click on "Save".
 
