@@ -40,17 +40,8 @@
 
 ![](<media/2.png>)
 
-**Step 4.** Switch to Optimizely Classic.
 
-* Click on "Settings", disable Optimizely X and click on "Save" at the bottom of the page.
-
-  ![](<media/30.png>)
-
-* A new option (Optimizely Classic) will appear on the left side menu, click on it.
-
-  ![](<media/31.png>)
-
-**Step 5.** Create a new experiment.
+**Step 4.** Create a new experiment.
 
 * Click on "New Experiment".    
 
@@ -60,7 +51,7 @@
 
   ![](<media/33.png>)
 
-**Step 6.** Dismiss tutorial if it pop-ups. Let's define the first variation where we will change the styling of "Shop Now" button.
+**Step 5.** Dismiss tutorial if it pop-ups. Let's define the first variation where we will change the styling of "Shop Now" button.
   * Click on `<edit code>` button in the right bottom corner.
 
     ![](<media/27.png>)
@@ -71,7 +62,7 @@
 
     ![](<media/3.png>)
 
-**Step 7.** Let's add a goal to this experiment. A goal is an information we are trying to find out by doing an experiment. In this case, our goal is to know whether changing the background of the "Shop Now" button will make it more likely for users to click on it.
+**Step 6.** Let's add a goal to this experiment. A goal is an information we are trying to find out by doing an experiment. In this case, our goal is to know whether changing the background of the "Shop Now" button will make it more likely for users to click on it.
 
   * Right click on the "Shop Now" button, select "Track Clicks..." and click on "Create New Click Goal".
 
@@ -81,7 +72,7 @@
 
     ![](<media/9.png>)
 
-**Step 8.** Save this variation by clicking on "Save now". Let's click on "Start Experiment" to activate this experiment. A few pop-ups might show up, we are only interested in "Diagnostic Report" one. It will indicate that a particular snippet of code has to be added to the project so that Optimizely can redirect users to the correct variation of the website. Take a note of this line of code.
+**Step 7.** Save this variation by clicking on "Save now". Let's click on "Start Experiment" to activate this experiment. A few pop-ups might show up, we are only interested in "Diagnostic Report" one. It will indicate that a particular snippet of code has to be added to the project so that Optimizely can redirect users to the correct variation of the website. Take a note of this line of code.
 ![](<media/5.png>)
 ![](<media/6.png>)
 >**Note:** If "Diagnostic Report" didn't pop-up then the same snippet of code can be found in settings for this project on Optimizely. Navigate "Home", select the project created in this lab, navigate to "Settings" tab and you should see it under "Implementation" sub-tab.
