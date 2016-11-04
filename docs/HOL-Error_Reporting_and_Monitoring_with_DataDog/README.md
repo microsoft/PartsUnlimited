@@ -20,7 +20,7 @@ Datadog may be preferable due to a slight difference in it's target user base (a
 
 **Task 4. Set up a custom event monitor in DataDog** - In this task we will set up a custom monitor to look for particular events logged, then trigger email sendouts to critical or/and on call members of our engineering team.
 
-###Task 1: Create a custom wrapper to log metrics to DataDog
+### Task 1: Create a custom wrapper to log metrics to DataDog
 **Step 1.** Clone the repository to a local directory.
 
 Create a parent **Working Directory** on your local file system. For instance, on a Windows OS you can create the following directory:
@@ -189,6 +189,7 @@ We have the following:
 We also have the Trace and TrackException methods which, under the hood, are very similar. The only real difference being the information logged to DataDog.
 
 **Step 8.** Now, in order to catch exceptions make by our application we are going to want some sort of global exception catcher. Let's create a global exception **filter** for our application to ensure all unhandled exceptions are logged to DataDog.
+
 ```csharp
     public class CustomExceptionFilterAttribute : ExceptionFilterAttribute
     {
@@ -209,6 +210,7 @@ We also have the Trace and TrackException methods which, under the hood, are ver
     }
 ```
 **Step 9.** To ensure this custom exception filter is applied across our application we can add it to the default set of MVC filters. Navigate back to the Startup.cs class. Note we also want to bind our event logger just in case we want this to be used somewhere else in the application.
+
 ```csharp
         public void ConfigureServices(IServiceCollection services)
         {
@@ -384,7 +386,7 @@ For our user management, we want to check failures on the change password action
     }
 ```
 
-Let's also log when a user has a failed login attempt. Navigate to the AccountController. Just underneath ModelState.AddModelError we want to trace the error and log it to DataDog.
+Lets also log when a user has a failed login attempt. Navigate to the AccountController. Just underneath ModelState.AddModelError we want to trace the error and log it to DataDog.
 
 ```csharp
     public class AccountController : Controller
@@ -415,9 +417,9 @@ Let's also log when a user has a failed login attempt. Navigate to the AccountCo
     }
 ```
 
-###Task 2: Deploy the PartsUnlimited Solution to Azure
+### Task 2: Deploy the PartsUnlimited Solution to Azure
 
-Let's get our modified app in to Azure! From the solution view, right click on the PartsUnlimitedWebsite project and then select 'Publish...'
+Lets get our modified app in to Azure! From the solution view, right click on the PartsUnlimitedWebsite project and then select 'Publish...'
 
 ![](<media/publish.png>)
 
@@ -462,19 +464,29 @@ Now run the following commands to create an App Service resource in Azure.
     azure login
 ```
 
-This will prompt you to to login and provide command line access to your Azure subscription. Then we can create an app service in Azure.
+This will prompt you to to login and provide command line access to your Azure subscription.
 
 ```
-    azure site create yoursitenamehere
+    azure group create -n "ExampleResourceGroup" -l "westus"
+
+    azure appserviceplan create --name partsunlimitedserviceplan --location "westus" --resource-group ExampleResourceGroup --sku P1
+
+    azure webapp create --name partsunlimitedsite --location "westus" --resou rce-group ExampleResourceGroup --plan partsunlimitedserviceplan
 ```
 
-Now we want to set up a user for the deployments
+Now you will need to navigate to the [azure portal](https://portal.azure.com) and turn on local git deployments.
 
-```
-    site deployment user set [options] [username] [pass]
-```
+![](<media/resource.png>)
 
-Now we want to create the git remote to deploy to
+Look for the **ExampleResourceGroup** we created earlier, then find the **partsunlimitedsite** web app we created. We then want to alter the **deployment options**. Select **Local Git Repository**, create a deployment user then select **OK**.
+
+![](<media/git.png>)
+
+Now navigate to the overview page of the web app and note down the git clone url.
+
+![](<media/site-overview.png>)
+
+Now we want to create the git remote to deploy to (use the clone url we got from the azure portal)
 
 ```
     git remote add azure https://theuseryoujustcreate@yoursitenamehere.scm.azurewebsites.net:443/yoursitenamehere.git
@@ -490,7 +502,7 @@ Now we're ready to deploy. Type the following commands to add the deployment fil
     git push azure master
 ```
 
-###Task 2: Trigger some logging to DataDog
+### Task 2: Trigger some logging to DataDog
 
 **Step 1.** Navigate to the deployed website.
 
@@ -506,7 +518,7 @@ Now we're ready to deploy. Type the following commands to add the deployment fil
 
 ![](<media/datadog-events-extended.png>)
 
-###Task 3: Set up a custom event monitor in DataDog
+### Task 3: Set up a custom event monitor in DataDog
 
 Lets say, for example, we want to add a monitor for when failed login attempts occur within a certain time peroid. Log in to the DataDog portal and create a new monitor (Monitors -> New Monitor)
 
