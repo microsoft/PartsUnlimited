@@ -33,7 +33,7 @@ In this lab we have an application called PartsUnlimited. We want to set up Cont
 **6. Confirming successful deployment to Azure:** In this step you will confirm the status of your deployment in VSTS and Azure.
 
 
-##Tasks
+## Tasks
 ### Task 1: Import Source Code into your VSTS Account with Git ###
 In order to use VSTS Build, your VSTS must contain source code for the application. For this lab we are using the VSTS Git project. The next couple of steps will allow you to add the PartUnlimited source to the Git master repository.
 
@@ -72,7 +72,8 @@ Congratulations, your code should now be in VSTS.
 
 ### Task 2: Setting up Service Endpoint in VSTS
  Deploying [ARM Templates](https://azure.microsoft.com/en-us/documentation/articles/resource-group-authoring-templates/)
-to Azure from Release Management requires an organizational account or a Service Principal. MSA Accounts and certificate-based connections are not supported. For this HOL, you will use a Service Principal. Follow these instructions to quickly set it up: [Connect your Azure subscriptions to VSTS in 3 clicks](http://blogs.msdn.com/b/visualstudioalm/archive/2015/10/04/automating-azure-resource-group-deployment-using-a-service-principal-in-visual-studio-online-build-release-management.aspx)
+to Azure from Release Management requires an organizational account or a Service Principal. MSA Accounts and certificate-based connections are not supported. 
+For this HOL, you will use a Service Principal. Follow these instructions to quickly set it up: [Create Azure Service Principal for VSTS](http://blog.jstroheker.com/2016/10/11/SPNAzure/)
 >**IMPORTANT:** For the following CD template to work, `Connection Name` must be `Azure For PartsUnlimited`.
 
 
@@ -80,13 +81,13 @@ to Azure from Release Management requires an organizational account or a Service
 ### Task 3: Continuous Integration
 **Step 1.** Navigate to `Export/Import Build Definition` extension's [link ](https://marketplace.visualstudio.com/items?itemName=onlyutkarsh.ExportImportBuildDefinition). Click on "Install", select VSTS instance you want to add this extension to and click "Confirm".
 
-**Step 2.** Navigate to the "Build" tab and click on "All Definitions". If you already have at least one build definition then skip to the next step, otherwise we are going to create one very quickly to get an import build option.
+**Step 2.** Navigate to the "Build & Release" tab and click on "Builds". If you already have at least one build definition then skip to the next step, otherwise we are going to create one very quickly to get an import build option.
 
 * Click on the "+ New" button, select "Empty" definition and click "Next". On the next page click "Create". This will create an empty build definition with default settings. Click on "Save" and then "OK".
 
 	![](<media/4.png>)
 
-* Click on "Definitions".
+* Click on "Build Definitions".
 	![](<media/27.png>)
 
 **Step 3.** Click on the ellipsis (...) button next to any build and click on "Import" option.
@@ -122,7 +123,7 @@ Congratulations, you have imported a build definition successfully.
 
 
 ### Task 4: Continuous Deployment:
-**Step 1.** Navigate to Release tab. If you already have at least one release definition then skip to the next step, otherwise we are going to create one very quickly to get an import release option.
+**Step 1.** Navigate to the "Build & Release" tab and click on "Releases". If you already have at least one release definition then skip to the next step, otherwise we are going to create one very quickly to get an import release option.
 
 * Click on the "+ New definition" button and select "Empty" definition and click "Next". On the next page click "Create". This will create an empty release definition with default settings. Click on "Save" and "OK".  
 
@@ -140,11 +141,16 @@ Congratulations, you have imported a build definition successfully.
 
 ![](<media/20.png>)
 
-**Step 5.** The release definition's trigger is the key to the Continuous Deployment. To deploy on every successful build there has to be a trigger referencing the CI step completed above. Navigate to "Triggers" tab, tick "Continuous Deployment" and select the previously imported build definition.
+**Step 5.** Right after the import, you should see your tasks highlighted in red. For each tasks you may have to select your Azure subscription for the yellow field called "Azure RM Subscription".
+> The name of your Azure subscription should be 'Azure For PartsUnlimited' like descripted at the beginning of this HOL.
+
+![](<media/211.png>)
+
+**Step 6.** The release definition's trigger is the key to the Continuous Deployment. To deploy on every successful build there has to be a trigger referencing the CI step completed above. Navigate to "Triggers" tab, tick "Continuous Deployment" and select the previously imported build definition.
 
 ![](<media/21.png>)
 
-**Step 6.** Now we need to specify a deployment queue.
+**Step 7.** Now we need to specify a deployment queue.
 
 1. To do that click on the ellipsis (...) next to the "Dev" environment definition and select "Agent queue...".
 
@@ -156,7 +162,7 @@ Congratulations, you have imported a build definition successfully.
 
 3. Repeat these steps for the other two environments.
 
-**Step 7.** Our template cannot define approvers for your environments but it's a very good idea to have them for staging and production deployments.
+**Step 8.** Our template cannot define approvers for your environments but it's a very good idea to have them for staging and production deployments.
 
 1. Click on the ellipsis (...) next to the "Staging" environment definition and select "Assign approvers...".
 
@@ -176,18 +182,29 @@ Congratulations, you have imported a build definition successfully.
 
 		![](<media/22.png>)
 
-	* Enter passwords for AdminPassword and AdminTestPassword variables and click "OK". Save the release definition by clicking on "Save" then "OK".
+	* Enter passwords for AdminPassword and AdminTestPassword variables.
 
 		![](<media/23.png>)
 		> **Note:** `AdminPassword` is the password for the production database. `AdminTestPassword` is the password for the test database.
 
-5. If you had to define an empty release definition before, then it can be now deleted by clicking on the dropdown arrow next to the empty definition and selecting "Delete".
+	* Change the values for the first fourth parameters by adding something unique like your initials at the end of the current one, for example in my case 'jstr', then click "OK".
 
-	![](<media/17.png>)
+		![](<media/231.png>)
+		> **Note:** You have to use unique values on Azure, if not you may have an deployment error because someone is already using the same values.
+
+5. Like the previous step, you have to modify the global variales of this definition. Click on the 'Variables' section and add something unique like your initials at the end of the current one, for example in my case 'jstr', then click "OK". 
+Save the release definition by clicking on "Save" and "OK".
+
+	![](<media/232.png>)
 
 Congratulations, you have imported a release definition successfully.
 
 
+6. If you had to define an empty release definition before, then it can be now deleted by clicking on the dropdown arrow next to the empty definition and selecting "Delete".
+
+	![](<media/17.png>)
+
+Congratulations, you have imported a release definition successfully.
 
 ### Task 5: Export Build and Release Definitions from VSTS
 Now that you have configured build and release definitions specifically for your repository in VSTS, it's a good idea to replace the given templates with your own.
