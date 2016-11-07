@@ -471,7 +471,7 @@ This will prompt you to to login and provide command line access to your Azure s
 
     azure appserviceplan create --name partsunlimitedserviceplan --location "westus" --resource-group ExampleResourceGroup --sku P1
 
-    azure webapp create --name partsunlimitedsite --location "westus" --resou rce-group ExampleResourceGroup --plan partsunlimitedserviceplan
+    azure webapp create --name partsunlimitedsite --location "westus" --resource-group ExampleResourceGroup --plan partsunlimitedserviceplan
 ```
 
 Now you will need to navigate to the [azure portal](https://portal.azure.com) and turn on local git deployments.
