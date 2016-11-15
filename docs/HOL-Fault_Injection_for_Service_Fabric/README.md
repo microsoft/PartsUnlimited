@@ -23,7 +23,7 @@ Customers of the PartsUnlimited website have complained of the site becoming unr
 
 Service Fabric requires an executable. Our first step involves ensuring the PartsUnlimited can publish the exe we require.
 
-**Step 1.** Open up the PartsUnlimited solution in Visual Studio.
+**Step 1.** Open up PartsUnlimited.sln in Visual Studio.
 
 **Step 2.** Locate the project.json file under the PartsUnlimitedWebsite project.
 
