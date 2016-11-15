@@ -29,18 +29,20 @@ Service Fabric requires an executable. Our first step involves ensuring the Part
 
 **Step 3.**  We need to remove the 'platform' property of Microsoft.NETCore.App. Check out the sample below.
 
-Note: The platform property is used when you want to build **portable apps** that can be executed by the .NET Core shared runtime (via 'dotnet run myapp'). Service Fabric requires a **standalone app**. Standalone apps have an executable file with the runtimes embedded in the application itself.
+Note: The platform property is used when you want to build **portable apps** that can be executed by the .NET Core shared runtime (via 'dotnet run myapp'). Service Fabric requires a **standalone app**. Standalone apps have an executable file with the runtimes embedded in the application itself. This should be added at the begining of the .json file.
 
-    {
-        "dependencies": {
-            "Microsoft.NETCore.App": {
-                "version": "1.0.0"
-            }
-            ...
+```json
+{
+    "dependencies": {
+        "Microsoft.NETCore.App": {
+            "version": "1.0.0"
         }
+        ...
     }
+}
+```
 
-**Step 4.** Now we want add the desired runtime so it will build an executable. In the same project.json file add the following to the root of the json file.
+**Step 4.** Now we want add the desired runtime so it will build an executable. In the same project.json file add the following to the root of the json file. This should be located at the **end** of the file, after the **scripts** section.
 
 Note: The runtime you use here is important. If you want to solution to work locally and you're not using Windows 10 - use one of the following:
 
@@ -52,15 +54,17 @@ Note: The runtime you use here is important. If you want to solution to work loc
 
 *Windows 10*: win10-x64
 
-    {
-        ...
+```json
+{
+    ...
 
-        "runtimes": {
-            "win10-x64": {}
-        }
-
-        ...
+    "runtimes": {
+        "win10-x64": {}
     }
+
+    ...
+}
+```
 
 **Step 5.** Right click on the PartsUnlimitedWebsite and select 'Publish'
 
@@ -98,51 +102,54 @@ The other two important files are ServiceManifest.xml and ApplicationManifest.xm
 
 **ServiceManifest.xml** should look something like this:
 
-    <?xml version="1.0" encoding="utf-8"?>
-    <ServiceManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="WebApp" Version="1.0.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
-    <ServiceTypes>
-      <StatelessServiceType ServiceTypeName="WebApp" UseImplicitHost="true">
-    <Extensions>
-            <Extension Name="__GeneratedServiceType__">
-               <GeneratedNames xmlns="http://schemas.microsoft.com/2015/03/fabact-no-schema">
-                  <DefaultService Name="WebAppService" />
-                  <ServiceEndpoint Name="WebAppTypeEndpoint" />
-               </GeneratedNames>
-            </Extension>
-         </Extensions>
-    </StatelessServiceType>	 
-    </ServiceTypes>
-    <CodePackage Name="code" Version="1.0.0.0">
-      <EntryPoint>
-         <ExeHost>
-            <Program>PartsUnlimitedWebsite.exe</Program>
-            <WorkingFolder>CodePackage</WorkingFolder>
-      <ConsoleRedirection FileRetentionCount="5" FileMaxSizeInKb="2048"/>
-         </ExeHost>
-      </EntryPoint>
-    </CodePackage>
-    <Resources>
-      <Endpoints>
-         <Endpoint Name="WebAppTypeEndpoint" Protocol="http" Port="5000" UriScheme="http" Type="Input" />
-      </Endpoints>
-    </Resources>
-    </ServiceManifest>
-
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="WebApp" Version="1.0.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+<ServiceTypes>
+    <StatelessServiceType ServiceTypeName="WebApp" UseImplicitHost="true">
+<Extensions>
+        <Extension Name="__GeneratedServiceType__">
+            <GeneratedNames xmlns="http://schemas.microsoft.com/2015/03/fabact-no-schema">
+                <DefaultService Name="WebAppService" />
+                <ServiceEndpoint Name="WebAppTypeEndpoint" />
+            </GeneratedNames>
+        </Extension>
+        </Extensions>
+</StatelessServiceType>	 
+</ServiceTypes>
+<CodePackage Name="code" Version="1.0.0.0">
+    <EntryPoint>
+        <ExeHost>
+        <Program>PartsUnlimitedWebsite.exe</Program>
+        <WorkingFolder>CodePackage</WorkingFolder>
+    <ConsoleRedirection FileRetentionCount="5" FileMaxSizeInKb="2048"/>
+        </ExeHost>
+    </EntryPoint>
+</CodePackage>
+<Resources>
+    <Endpoints>
+        <Endpoint Name="WebAppTypeEndpoint" Protocol="http" Port="5000" UriScheme="http" Type="Input" />
+    </Endpoints>
+</Resources>
+</ServiceManifest>
+```
 **ApplicationManifest.xml** should look something like this:
 
-    <?xml version="1.0" encoding="utf-8"?>
-    <ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="WebAppType" ApplicationTypeVersion="1.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
-       <ServiceManifestImport>
-          <ServiceManifestRef ServiceManifestName="WebApp" ServiceManifestVersion="1.0.0.0" />
-       </ServiceManifestImport>
-        <DefaultServices>
-          <Service Name="WebAppService">
-             <StatelessService ServiceTypeName="WebApp" InstanceCount="1">
-                <SingletonPartition />
-             </StatelessService>
-          </Service>
-       </DefaultServices>
-    </ApplicationManifest>
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="WebAppType" ApplicationTypeVersion="1.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+    <ServiceManifestImport>
+        <ServiceManifestRef ServiceManifestName="WebApp" ServiceManifestVersion="1.0.0.0" />
+    </ServiceManifestImport>
+    <DefaultServices>
+        <Service Name="WebAppService">
+            <StatelessService ServiceTypeName="WebApp" InstanceCount="1">
+            <SingletonPartition />
+            </StatelessService>
+        </Service>
+    </DefaultServices>
+</ApplicationManifest>
+```
 
 Something to note - if you run this locally you want to make sure that the instance count is 1. This is because it's not possible to host multiple web applications on the same port. When we deploy this to a cluster we will not have this problem.
 
@@ -150,19 +157,27 @@ Now we're ready to deploy locally. Fire up PowerShell as an administrator and ty
 
 We want to connect to the service fabric cluster.
 
-    Connect-ServiceFabricCluster localhost:19000
+```bash
+Connect-ServiceFabricCluster localhost:19000
+```
 
 Now we're going to point to the folder structure we created (with the app inside the code section).
 
-    Copy-ServiceFabricApplicationPackage -ApplicationPackagePath 'C:\Users\user\Desktop\WebSite' -ImageStoreConnectionString 'file:C:\SfDevCluster\Data\ImageStoreShare' -ApplicationPackagePathInImageStore 'Apps\WebApp'
+```bash
+Copy-ServiceFabricApplicationPackage -ApplicationPackagePath 'C:\Users\user\Desktop\WebSite' -ImageStoreConnectionString 'file:C:\SfDevCluster\Data\ImageStoreShare' -ApplicationPackagePathInImageStore 'Apps\WebApp'
+```
 
 Now we want to register the application type.
 
-    Register-ServiceFabricApplicationType -ApplicationPathInImageStore 'Apps\WebApp'
+```bash
+Register-ServiceFabricApplicationType -ApplicationPathInImageStore 'Apps\WebApp'
+```
 
 Now we're going to create the new application.
 
-    New-ServiceFabricApplication -ApplicationName 'fabric:/WebApp' -ApplicationTypeName 'WebAppType' -ApplicationTypeVersion 1.0
+```bash
+New-ServiceFabricApplication -ApplicationName 'fabric:/WebApp' -ApplicationTypeName 'WebAppType' -ApplicationTypeVersion 1.0
+```
 
 Open a web browser and navigate to http://localhost:19080/
 
