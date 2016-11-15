@@ -95,6 +95,10 @@ public interface IFeatureStrategy
 **Step 8.** Now we want to create a feature manager class and interface. This will be used later on to toggle our features on and off. 
 
 ```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 public interface IFeatureManager
 {
     bool GetStatusByKey(string key, string comparison);
