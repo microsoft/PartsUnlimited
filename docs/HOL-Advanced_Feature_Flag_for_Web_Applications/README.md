@@ -81,7 +81,7 @@ public class Feature
 - **Description** is going to be a brief description of what the feature flag is for.
 - **Key** is going to be the unique identifier for that particular feature flag.
 
-**Step 7.** We need an interface we will use to template all our different feature toggle types. This interface will have two method signatures: 'Can' and 'Do'. 'Can' will be used to decide which strategy should be run. 'Do' will perform the actual work required for the feature flag.
+**Step 7.** We need an interface we will use to template all our different feature toggle types. This interface will have two method signatures: 'Can' and 'Do'. 'Can' will be used to decide which strategy should be run. 'Do' will perform the actual work required for the feature flag. Create this in the same 'FeatureFlag' folder we created before.
 
 ```csharp
 public interface IFeatureStrategy
@@ -468,18 +468,18 @@ Or aternatively you can use the administrator account. This can be found in conf
 
 **Step 5.** Now select 'New Zealand' and then save it.
 
-![](<media/location,png>)
+![](<media/location.png>)
 
 **Step 6.** Now navigate to the 'Breaks' section from the main navigation.
 
-![](<media/breaks,png>)
+![](<media/breaks.png>)
 
 Notice the bulk buy is not avaiable yet. This should change in a couple of minutes.
 
-![](<media/break-no-bulk,png>)
+![](<media/break-no-bulk.png>)
 
 **Step 7.** Once the current time is past the time set in the config.json for New Zealand. Refresh the page and you should see the bulk buy option. The same thing will happen 5 minutes later for any Australian users.
 
-![](<media/break-bulk,png>)
+![](<media/break-bulk.png>)
 
 In this lab you have learned how to implement time and region based feature flags for a web application. This gives you the ability stagger releases to assist with distributing load or potentially A/B testing in regions that are more accustomed to change.
