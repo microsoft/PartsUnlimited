@@ -293,7 +293,6 @@ The Azure Function created in this task is acting as a switching proxy to send c
 ![](media/20.png)
 
 **Step 7.** Enter the following code and click on "Save":
->**Note:** <br> 1) Replace `YourAppServiceUrl` in `url` variable with URL for the App Service with your API. <br> 2) Users with IDs < 10 will be redirected to the new v2 version of the specials controller, while the rest of users will be redirected to v1 controller.
 
 ```csharp
 public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceWriter log)
@@ -306,9 +305,11 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
         return await httpClient.GetAsync(url);
     }
 }
-
 ```
-> **Note:** Function's URL is used to trigger the execution of this piece of code (Azure Function) and can be found above the section where you have entered the function's code.
+>**Note:**<br>
+> 1) Replace `YourAppServiceUrl` in `url` variable with URL for the App Service with your API. <br>
+> 2) Users with IDs < 10 will be redirected to the new v2 version of the specials controller, while the rest of users will be redirected to v1 controller.<br>
+> 3) Function's URL is used to trigger the execution of this piece of code (Azure Function) and can be found above the section where you have entered the function's code.<br>
 ![](media/21.png) 
 
 
@@ -372,17 +373,15 @@ public async Task<IActionResult> Browse(int categoryId)
 }
 ```
 
->**Note:**
-> 1) You have to replace `url` variable's value with your full Azure Function's URL including its code parameter at the end.
-> 2) Only `Administrator@test.com` will be able to see version 2 of the API output. Credentials for this account can be found bellow or in `config.json` file which is located in the root of `PartsUnlimitedWebsite` project:
->  
->       ```json
->       "AdminRole": {
->           "UserName": "Administrator@test.com",
->           "Password": "YouShouldChangeThisPassword1!"
->       }
->       ```
- 
+>**Note:** <br>
+> 1) You have to replace `url` variable's value with your full Azure Function's URL including its code parameter at the end.<br>
+> 2) Only `Administrator@test.com` will be able to see version 2 of the API output. Credentials for this account can be found bellow or in `config.json` file which is located in the root of `PartsUnlimitedWebsite` project:<br>
+```json
+"AdminRole": {
+    "UserName": "Administrator@test.com",
+    "Password": "YouShouldChangeThisPassword1!"
+}
+```
 
 **Step 4.** Previously all images were local, so now we need to update the view to deal with two sources of images. Open <b>\_ProductList.cshtml</b> located at <b> PartsUnlimitedWebsite > Views > Shared > \_ProductList.cshtml </b>.
 
