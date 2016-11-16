@@ -15,7 +15,7 @@ Customers of the PartsUnlimited website have complained of the site becoming unr
 
 1. Prepare the PartsUnlimited solution to work with Service Fabric
 
-2. Deploy the Service Fabric package to a windows cluster.
+2. Deploy the Service Fabric package to an Azure Service Fabric Cluster.
 
 3. Run some tests against the cluster.
 
@@ -78,17 +78,19 @@ Note: The runtime you use here is important. If you want to solution to work loc
 
 ![](<media/publish-location.png>)
 
-**Step 9.** Set the target runtime to the one you added to the project.json file earlier. Also, select the option to delete all existing files prior to push. This will ensure that future publish actions will provide a clean code set when we come to deploy the application.
+**Step 9.** Set the target runtime to the one you added to the project.json file earlier. Also, select the option to delete all existing files prior to push. This will ensure that future publish actions will provide a clean code set when we come to deploy the application. Then click on publish.
 
 ![](<media/settings.png>)
 
 
-Now we want to set up the structure required by service fabric
+Service fabric expects a specific folder structure to work correctly. This is **not** generated automatically from the output of the Visual Studio publish profile. We will therefore have to create this manually.
 
     |-- WebSite
         |-- WebApp
             |-- Code
+                ...
                 |-- PartsUnlimitedWebsite.exe
+                ...
             |-- Config
                 |-- Settings.xml
             |-- Data
@@ -96,7 +98,7 @@ Now we want to set up the structure required by service fabric
         |-- ApplicationManifest.xml
 
 
-Now lets grab the published file we created before and put them in the Code folder as seen in the directory structure above.
+Now lets grab all the published files we created before and put them in the **Code** folder as seen in the directory structure above.
 
 The other two important files are ServiceManifest.xml and ApplicationManifest.xml.
 
@@ -151,31 +153,33 @@ The other two important files are ServiceManifest.xml and ApplicationManifest.xm
 </ApplicationManifest>
 ```
 
+**Settings.xml needs to exist** but for now it can just be an **empty file** as we don't require any configuration values at the moment.
+
 Something to note - if you run this locally you want to make sure that the instance count is 1. This is because it's not possible to host multiple web applications on the same port. When we deploy this to a cluster we will not have this problem.
 
 Now we're ready to deploy locally. Fire up PowerShell as an administrator and type the following:
 
 We want to connect to the service fabric cluster.
 
-```bash
+```powershell
 Connect-ServiceFabricCluster localhost:19000
 ```
 
 Now we're going to point to the folder structure we created (with the app inside the code section).
 
-```bash
+```powershell
 Copy-ServiceFabricApplicationPackage -ApplicationPackagePath 'C:\Users\user\Desktop\WebSite' -ImageStoreConnectionString 'file:C:\SfDevCluster\Data\ImageStoreShare' -ApplicationPackagePathInImageStore 'Apps\WebApp'
 ```
 
 Now we want to register the application type.
 
-```bash
+```powershell
 Register-ServiceFabricApplicationType -ApplicationPathInImageStore 'Apps\WebApp'
 ```
 
 Now we're going to create the new application.
 
-```bash
+```powershell
 New-ServiceFabricApplication -ApplicationName 'fabric:/WebApp' -ApplicationTypeName 'WebAppType' -ApplicationTypeVersion 1.0
 ```
 
@@ -191,12 +195,12 @@ Now navigate to http://localhost:5000 to check to see if the PartsUnlimited webs
 
 ![](<media/localhost-parts-unlimited.png>)
 
-###Task 2: Deploy the Service Fabric package to a windows cluster.
-Now that we have the application working locally, let's deploy to a Windows cluster in Azure.
+###Task 2: Deploy the Service Fabric package to an Azure Service Fabric Cluster.
+Now that we have the application working locally, let's deploy to an Azure Service Fabric Cluster.
 
 **Step 1.** First things first, let's create a Service Fabric container for our PartsUnlimited site. 
 
-Navigate to the Azure portal and select 'New' -> https://ms.portal.azure.com
+Navigate to the Azure portal and select 'New' -> https://portal.azure.com
 
 ![](<media/azure1.png>)
 
@@ -257,24 +261,33 @@ After it has sucessfully deployed you should see the following on the dashboard.
 
 Firstly we want to connect to the cluster.
 
-    Connect-ServiceFabricCluster [your-server-cluster-address].[location].cloudapp.azure.com:19000
+```powershell
+Connect-ServiceFabricCluster [your-server-cluster-address].[location].cloudapp.azure.com:19000
+```
 
 **Step 12.** Now we want to upload the application package to the cluster.
 
-    Copy-ServiceFabricApplicationPackage -ApplicationPackagePath 'C:\local\location\of\package' -ImageStoreConnectionString 'fabric:imagestore' -ApplicationPackagePathInImageStore 'Apps\WebApp'
+```powershell
+Copy-ServiceFabricApplicationPackage -ApplicationPackagePath 'C:\local\location\of\package' -ImageStoreConnectionString 'fabric:imagestore' -ApplicationPackagePathInImageStore 'Apps\WebApp'
+```
 
 **Step 13.** Then we want to register the application type in our cluster.
 
-    Register-ServiceFabricApplicationType -ApplicationPathInImageStore 'Apps\WebApp'
+```powershell
+Register-ServiceFabricApplicationType -ApplicationPathInImageStore 'Apps\WebApp'
+```
 
 **Step 14.** Now we want to create a new Service Fabric application.
 
-    New-ServiceFabricApplication -ApplicationName 'fabric:/WebApp' -ApplicationTypeName 'WebAppType' -ApplicationTypeVersion 1.0
+```powershell
+New-ServiceFabricApplication -ApplicationName 'fabric:/WebApp' -ApplicationTypeName 'WebAppType' -ApplicationTypeVersion 1.0
+```
 
 **Step 15.** Go back to the Service Fabric dashboard and check to see if the application has deployed successfully.
 
 ![](<media/azure11.png>)
 
+You can also view the application via the following url structure -> `<yourClusterName>.<yourRegion>.cloudapp.azure.com:5000`
 
 ###Task 1: Run some tests against the cluster.
 
@@ -285,17 +298,21 @@ Now let's cause some mayhem. Service Fabric provides a 'chaos' scenario that wil
 **Step 1.** Run the following commands in PowerShell.
 
 Firstly we want to connect to the cluster (note you may already be connected)
-    Connect-ServiceFabricCluster [your-server-cluster-address].[location].cloudapp.azure.com:19000
+
+```powershell
+Connect-ServiceFabricCluster [your-server-cluster-address].[location].cloudapp.azure.com:19000
+```
 
 Now for the core of the script. Specify a desired time to run (the below example will run for 10 minutes)
 
-    $timeToRun = 10
-    $maxStabilizationTimeSecs = 180
-    $concurrentFaults = 3
-    $waitTimeBetweenIterationsSec = 60
+```powershell
+$timeToRun = 10
+$maxStabilizationTimeSecs = 180
+$concurrentFaults = 3
+$waitTimeBetweenIterationsSec = 60
 
-    Invoke-ServiceFabricChaosTestScenario -TimeToRunMinute $timeToRun -MaxClusterStabilizationTimeoutSec $maxStabilizationTimeSecs -MaxConcurrentFaults $concurrentFaults -EnableMoveReplicaFaults -WaitTimeBetweenIterationsSec $waitTimeBetweenIterationsSec
-
+Invoke-ServiceFabricChaosTestScenario -TimeToRunMinute $timeToRun -MaxClusterStabilizationTimeoutSec $maxStabilizationTimeSecs -MaxConcurrentFaults $concurrentFaults -EnableMoveReplicaFaults -WaitTimeBetweenIterationsSec $waitTimeBetweenIterationsSec
+```
 
 ![](<media/powershell.png>)
 
@@ -313,28 +330,34 @@ Now that we have the node name of "_website_1" we can run our test.
 
 **Step 4.** Run this sample in PowerShell 
 
-    Connect-ServiceFabricCluster [your-server-cluster-address].[location].cloudapp.azure.com:19000
+```powershell
+Connect-ServiceFabricCluster [your-server-cluster-address].[location].cloudapp.azure.com:19000
     
-    Stop-ServiceFabricNode -NodeName "_website_1"
+Stop-ServiceFabricNode -NodeName "_website_1"
+```
 
 ![](<media/node-stop.png>)
 
 **Step 5.** If you want to turn the node back on use the following command.
 
-    Start-ServiceFabricNode -NodeName "_website_1"
+```powershell
+Start-ServiceFabricNode -NodeName "_website_1"
+```
 
 **Step 6.** We can try another test scenario included in the Service Fabric SDK. This is the 'failover test scenario'.
 
 *"The failover test scenario targets a specific service partition instead of the entire cluster, and it leaves other services unaffected. The scenario iterates through a sequence of simulated faults in service validation while your business logic runs. A failure in service validation indicates an issue that needs further investigation. The failover test induces only one fault at a time, as opposed to the chaos test scenario, which can induce multiple faults."*
 
-    Connect-ServiceFabricCluster [your-server-cluster-address].[location].cloudapp.azure.com:19000
+```powershell
+Connect-ServiceFabricCluster [your-server-cluster-address].[location].cloudapp.azure.com:19000
 
-    $timeToRun = 10
-    $maxStabilizationTimeSecs = 180
-    $waitTimeBetweenFaultsSec = 10
-    $serviceName = "fabric:/WebApp/WebAppService"
+$timeToRun = 10
+$maxStabilizationTimeSecs = 180
+$waitTimeBetweenFaultsSec = 10
+$serviceName = "fabric:/WebApp/WebAppService"
 
-    Invoke-ServiceFabricFailoverTestScenario -TimeToRunMinute $timeToRun -MaxServiceStabilizationTimeoutSec $maxStabilizationTimeSecs -WaitTimeBetweenFaultsSec $waitTimeBetweenFaultsSec -ServiceName $serviceName -PartitionKindSingleton
+Invoke-ServiceFabricFailoverTestScenario -TimeToRunMinute $timeToRun -MaxServiceStabilizationTimeoutSec $maxStabilizationTimeSecs -WaitTimeBetweenFaultsSec $waitTimeBetweenFaultsSec -ServiceName $serviceName -PartitionKindSingleton
+```
 
 ![](<media/powershell1.png>)
 
