@@ -1,6 +1,8 @@
 HOL - Feature Flag for Web Applications
 ====================================================================================
-Feature flags provide the ability to turn features of your application on and off at a moments notice, no code deployments required. One great reson for feature toggles is to assist with Continuous Delivery. We can push non-complete items to production and keep them disabled until they're ready! We can also have our development environment with all the flags enabled for testing or we could even enable features for specific users. 
+Feature flags provide the ability to turn features of your application on and off at a moments notice, no code deployments required. With feature flags you can test your features in production, getting early feedback from a subset of production users, and incrementally enable it to different sets of users. Once the feature is enabled for everyone and becomes part of the product, the flag code can be removed.
+In this lab you will add the foundation for feature flags to the PartsUnlimited project, and implement a simple feature flag for phone number validation. 
+The users will be able to self-subscribe to this feature. For your own projects you can decide how the flags are enabled and to which customers. 
 
 ### Pre-requisites: ###
 - Visual Studio 2015 Update 3 or higher
@@ -39,7 +41,7 @@ Or navigate to where you cloned the repository to e.g. `C:\Source\Repos\PartsUnl
 
 ![](<media/new-folder.png>)
 
-**Step 4.** Now we will create the first feature flag class. Right click on the newly created **FeatureFlag** folder -> select **'Add'** -> select **'Class...'**.
+**Step 4.** Now we will create the first feature flag class, this will represent a feature flag in our application. Right click on the newly created **FeatureFlag** folder -> select **'Add'** -> select **'Class...'**.
 
 ![](<media/new-class.png>)
 
@@ -62,9 +64,28 @@ public class Feature
 - **Description** is going to be a brief description of what the feature flag is for.
 - **Active** is going to be the current state for the feature flag. 
 
-**Step 7.** Now we want to create a simple feature manager class. This will be used later on to toggle our features on and off. Under the same FeatureFlag folder create a new class called **FeatureManager.cs**
+**Step 7.** We also want to add a property in ApplicationUser.cs called **ActiveFeatures**
 
 ```csharp
+public class ApplicationUser : IdentityUser
+{
+    public string Name { get; set; }
+
+    public string ActiveFeatures { get; set; }
+}
+```
+
+**Step 8.** Now we want to create a simple feature manager class. This will be used later on to toggle our features on and off. Under the same FeatureFlag folder create a new class called **FeatureManager.cs**
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using PartsUnlimited.Models;
+
 public interface IFeatureManager
 {
     Task<bool> GetStatusByKey(string key, ClaimsPrincipal userClaim);
@@ -109,7 +130,7 @@ public class FeatureManager : IFeatureManager
 
         ApplicationUser applicationUser = await _userManager.GetUserAsync(userClaim);
 
-        return applicationUser.ActiveFeatures.Split(',').Any(f => f == key);
+        return !string.IsNullOrEmpty(applicationUser.ActiveFeatures) && applicationUser.ActiveFeatures.Split(',').Any(f => f == key);
     }
 
     public async Task ChangeFeatureToggles(string[] selectedItems, ClaimsPrincipal userClaim)
@@ -141,6 +162,9 @@ Now let's explain the sections of the above code.
 We also want to set up our dependency injection for the FeatureManager. Navigate to Startup.cs and add the service binding shown below.
 
 ```csharp
+...
+using PartsUnlimited.FeatureFlag;
+
 public class Startup
 {
     ...
@@ -154,12 +178,7 @@ public class Startup
 }
 ```
 
-**Step 8.**
-Now that we have the basics set up let's create our first actual feature. We want to display a different placeholder and utilize HTML5 validation for updating phone numbers.
-
-Navigate to **AddPhoneNumber.cshtml**
-
-**Step 9.** In ManageViewModels.cs we want to add an additional properties on the AddPhoneNumberViewModel class. This will be used on the view to check if the new phone number feature is active.
+**Step 9.** Now that we have the basics set up let's create our first actual feature. We want to display a different placeholder and utilize HTML5 validation for updating phone numbers. In ManageViewModels.cs we want to add an additional properties on the AddPhoneNumberViewModel class. This will be used on the view to check if the new phone number feature is active.
 
 ```csharp
     ...
@@ -171,9 +190,14 @@ Navigate to **AddPhoneNumber.cshtml**
     ...
 ```
 
-In the ManageController we want to alter two of the existing methods.
+In ManageController.cs we want to alter two of the existing methods. This is located here -> `.\PartsUnlimited\src\PartsUnlimitedWebsite\Controllers\ManageController.cs`
+
+Note the `AddPhoneNumber()` method already exists but we need to change a few things. This needs to become an async method that returns `Task<IActionResult>`. Replace the whole method with the one below.
+
+Also for the `AddPhoneNumber(AddPhoneNumberViewModel model)` we will be replacing the existing return statement with the one displayed below.
 
 ```csharp
+using System;
 ...
 using PartsUnlimited.FeatureFlag;
 
@@ -214,7 +238,7 @@ public class ManageController : Controller
 
 **Step 10.** Now we want to conditionally display a block of code relating to the new feature. Navigate to AddPhoneNumber.cshtml
 
-Find the following line of code in the same file (**AddPhoneNumber.cshtml**), located at line 21.
+Find the following line of code in the same file (**AddPhoneNumber.cshtml**), located at line 20.
 
 ```csharp
 @Html.TextBoxFor(m => m.Number, new { @class = "form-control", placeholder = "Phone Number" })
@@ -340,7 +364,7 @@ namespace PartsUnlimited.Controllers
 
 **Step 3.** Now to tie everything together we need a view. Navigate to PartsUnlimitedWebsite -> Views and create a new folder called **'Features'**
 
-**Step 4.** Inside the folder you just created, right click and select 'Add'. Now add a cshtml file called **Index.cshtml**. Insert the contents shown below in to this new file.
+**Step 4.** Inside the folder you just created, right click and select 'Add'. Now add a View called **Index.cshtml**. Insert the contents shown below in to this new file.
 
 ![](<media/add-view.png>)
 
