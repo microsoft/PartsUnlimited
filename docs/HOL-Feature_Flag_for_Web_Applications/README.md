@@ -4,6 +4,8 @@ Feature flags provide the ability to turn features of your application on and of
 In this lab you will add the foundation for feature flags to the PartsUnlimited project, and implement a simple feature flag for phone number validation. 
 The users will be able to self-subscribe to this feature. For your own projects you can decide how the flags are enabled and to which customers. 
 
+Note: [Launch Darkly](https://launchdarkly.com/) is a great option for more advanced feature flag management. Version 3.0.0 of the Launch Darkly SDK supports .NET core.
+
 ### Pre-requisites: ###
 - Visual Studio 2015 Update 3 or higher
 
@@ -502,3 +504,5 @@ Next steps
 In this lab you have learned how to implement feature flags in a web application. This gives you the ability to seamlessly manage features in your application. You can give users access to beta functionality to give you better test coverage and deliver continuous improvement.
 
 - [Deployment to Azure](https://github.com/Microsoft/PartsUnlimited/tree/master/docs/Deployment.md)
+
+- [Controlling exposure through feature flags in VS Team Services](https://blogs.msdn.microsoft.com/buckh/2016/09/30/controlling-exposure-through-feature-flags-in-vs-team-services/)
