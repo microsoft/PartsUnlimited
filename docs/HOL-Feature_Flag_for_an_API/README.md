@@ -1,7 +1,7 @@
 ﻿HOL - Feature Flag for an API
 =============================
 
-The project manager decided to roll out a new feature but it has to be done a group of users at the time for a couple reasons. First of all, marketing team needs more time to localize their tactics for different countries and second, data analytics team want to make sure that the new feature will not have a negative impact on the number of users. Your task is to implement an API which returns different information based on the user id specified as a parameter in a URL.
+The project manager decided to roll out a new feature but it has to be done one group of users at the time for a couple reasons. First of all, the marketing team needs more time to localize their tactics for different countries; and second, the data analytics team want to make sure that the new feature will not have a negative impact on the number of users. Your task is to implement an API which returns different information based on the user id specified as a parameter in a URL.
 
 ## Pre-requisites: ##
 
@@ -9,7 +9,7 @@ The project manager decided to roll out a new feature but it has to be done a gr
 
 - Visual Studio 2015 Update 3
 
-- [.Net Core SDK](https://www.microsoft.com/net/core#windows) installed
+- Latest [.Net Core SDK](https://www.microsoft.com/net/core#windows) installed
 
 - [Windows SDK and emulator](https://developer.microsoft.com/en-us/windows/downloads/sdk-archive) installed  
 
@@ -71,11 +71,11 @@ Let's get the PartsUnlimited's source code. If you already have the source code 
 
      ![](media/4.png)
 
-2. Select "Web" under "Visual C#" category, select `ASP.NET Core Web Application (.NET Core)` as the type of this project, specify name and location, then click on "OK".
+2. Select "Web" under "Visual C#" category, select `ASP.NET Core Web Application (.NET Core)` as the type of this project, enter `PartsUnlimited.API` into the name field and append `\scr` at the end of the location, then click on "OK".
 
      ![](media/5.png)
 
-3. Select `Web API` template and click on "OK".
+3. Select `Web API` template, uncheck the "Host in the cloud" box and click on "OK".
 
      ![](media/6.png)
 
@@ -167,7 +167,7 @@ Let's get the PartsUnlimited's source code. If you already have the source code 
 
 **Step 6.** Define an API with a new feature.
 
-1. Similarly create a new controller, name it "V2SpecialsController.cs" and copy the following code into it:
+1. Similarly create a new controller, name it `V2SpecialsController.cs` and copy the following code into it:
 
     ```csharp
     using System.Collections.Generic;
@@ -309,10 +309,10 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
 
 ```
 > **Note:** Function's URL is used to trigger the execution of this piece of code (Azure Function) and can be found above the section where you have entered the function's code.
-![](media/21.png)
+![](media/21.png) 
 
 
-**Step 8.** Test Azure Function by navigating to the Function's URl with `&userid=15` at the end. This should return version V1 of the data back. If you change `userid` to 5, then it should return V2 of the data back.
+**Step 8.** Test Azure Function by navigating to the Function's URL with `&userid=15` at the end. This should return version V1 of the data back. If you change `userid` to 5, then it should return V2 of the data back. This Azure Function is acting as a switching proxy to send certain users to the API v1 and others to the API v2, allowing us to turn on the feature for specific groups of users. Although we use a simple condition here, this could also use more complex rules which could potentially be hidden behind another web api call.
 
 
 
@@ -347,7 +347,7 @@ public async Task<IActionResult> Browse(int categoryId)
 
     if (categoryModel.Name.ToLower().Equals("oil"))
     {
-        var url = "https://featureflagforanapi.azurewebsites.net/api/SpecialsProxy?code=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        var url = "https://<YourAzureFunctionUrl>.azurewebsites.net/api/SpecialsProxy?code=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
         if (HttpContext.User.Identity.IsAuthenticated)
         {
             url += HttpContext.User.Identity.Name.Equals("Administrator@test.com") ? "&UserID=1" : "&UserID=50";
@@ -373,9 +373,16 @@ public async Task<IActionResult> Browse(int categoryId)
 ```
 
 >**Note:**
-<br> 1) You have to replace `url` variable with your Azure Function's URL.
-<br> 2) Only `Administrator@test.com` will be able to see version 2 of the API output. Credentials for this account can be found in `config.json` file which is located in the root of `PartsUnlimitedWebsite` project.
-
+> 1) You have to replace `url` variable's value with your full Azure Function's URL including its code parameter at the end.
+> 2) Only `Administrator@test.com` will be able to see version 2 of the API output. Credentials for this account can be found bellow or in `config.json` file which is located in the root of `PartsUnlimitedWebsite` project:
+>  
+>       ```json
+>       "AdminRole": {
+>           "UserName": "Administrator@test.com",
+>           "Password": "YouShouldChangeThisPassword1!"
+>       }
+>       ```
+ 
 
 **Step 4.** Previously all images were local, so now we need to update the view to deal with two sources of images. Open <b>\_ProductList.cshtml</b> located at <b> PartsUnlimitedWebsite > Views > Shared > \_ProductList.cshtml </b>.
 
@@ -567,7 +574,7 @@ public void GetDataFromApi()
     Task.Run(async () =>
     {
         List<ProductDto> apiProducts;
-        var url = "https://featureflagforanapi.azurewebsites.net/api/SpecialsProxy?code=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        var url = "https://<YourAzureFunctionUrl>.azurewebsites.net/api/SpecialsProxy?code=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
         using (var client = new HttpClient())
         {
             var jsonProducts = await client.GetStringAsync(url + "&UserID=1");
@@ -587,7 +594,7 @@ public void GetDataFromApi()
 }
 
 ```
-> **Note:** Replace the URL in this code with your Azure Function's URL
+> **Note:** You have to replace `url` variable's value with your full Azure Function's URL including its code parameter at the end.
 
 
 **Step 8.** Add the following using statements at the top of the class:
