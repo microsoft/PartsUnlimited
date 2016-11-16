@@ -5,11 +5,11 @@ In this lab you will work with a simple Xamarin Forms mobile application. Your t
 
 ## Pre-requisites: ##
 
-- Visual Studio 2015
+- Visual Studio 2015 Update 3
 
 - [Windows SDK and emulator](https://developer.microsoft.com/en-us/windows/downloads/sdk-archive) installed  
 
-- [Android SDK](https://developer.android.com/studio/index.html) and [Java JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html) installed
+- [Android SDK](https://developer.android.com/studio/index.html) and [Java 1.8 JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html) installed
 
 - [Visual Studio Emulator for Android](https://www.visualstudio.com/vs/msft-android-emulator/ ) installed.
 
@@ -47,7 +47,7 @@ Let's get the PartsUnlimited's source code. If you already have the source code 
 
 
 
-### Task 2: Open and Run the mobile app ###
+### Task 2: Open and run the mobile app ###
 
 **Step 1.** Open Visual Studio as administrator. Open Start menu, locate Visual Studio 2015, right click on it, select "More" and then click on "Run as administrator".
 
@@ -66,17 +66,30 @@ Let's get the PartsUnlimited's source code. If you already have the source code 
 3. If you haven't done so already, you will be prompted to connect to a Mac machine.
 	> **Note:** Connection to a Mac machine is only required if you want to compile and run iOS applications. To connect Mac to your Visual Studio instance follow these instructions: [Xamarin: Connecting to the Mac](https://developer.xamarin.com/guides/ios/getting_started/installation/windows/connecting-to-mac/)
 
-**Step 3.** You should be able to build and run the solution on iOS, Android and UWP(windows phone 10 or windows 10). Let's run it on Android emulator.
+**Step 3.** You should be able to build and run the solution on iOS, Android and UWP (Windows Phone 10 or Windows 10). Let's run it on Android emulator.
 
 1. Right click on "PartsUnlimited.Droid" project, then on "Set as StartUp Project".
 
 	![](media/4.png)
 
-2. Select the emulator you want to run this app on and click on green triangle to run the application.
+2. Clean the solution. Right click on the solution and select "Clean Solution".
+
+	![](media/13.png)
+
+3. Rebuild the solution. Right click on the solution and select "Rebuild Solution".
+
+	![](media/14.png)
+
+>**Note:**
+<br>1) If packages haven't been restored properly then run the following command in Visual Studio's Package Manager Console: `Update-Package –reinstall`
+<br>2) If you had multiple Java JDK versions installed at the time of setting up Xamarin, then you have to make sure that Visual studio is using Java SDK version 8 in Tools > Options > Xamarin
+![](media/15.png)
+
+4. Select the emulator you want to run this app on and click on green triangle to run the application.
 
 	![](media/5.png)
 
-3. You should see the following main screen in your emulator:
+5. You should see the following main screen in your emulator:
 
 	![](media/6.png)
 
@@ -90,16 +103,18 @@ In this task you will add a feature flag that increases discount for all product
 
 **Step 1.** Let's add a bool variable which will be accessible everywhere within the application and represent whether feature flag is enabled.
 
-1. Open "GlobalResources" class located at <b>`PartsUnlimited` > `Resources` > `GlobalResources.cs` </b>.
+1. If you are still running the application then stop it by clicking on the red square in Visual Studio's tool bar or by pressing `Shift+F5`.
+
+	![](media/16.png)
+
+2. Open "GlobalResources" class located at <b>`PartsUnlimited` > `Resources` > `GlobalResources.cs` </b>.
 
 	![](media/7.png)
 
-2. Add the following code:
+3. Add the following code:
 
 	```csharp
 	...
-	public string Website { get; } = "http://partsunlimitedweb.azurewebsites.net";
-
 	private bool _enableDiscountFeatureFlag;
 	public bool EnableDiscountFeatureFlag
 	{
@@ -113,7 +128,7 @@ In this task you will add a feature flag that increases discount for all product
 	...
 	```
 	
-	> **Note:** Change the value of `Website` to match the URL of your existing deployment of the PartsUnlimited website in Azure, e.g. http://pudncore.azurewebsites.net
+4. Change the value of `Website` variable to match the URL of your existing deployment of the PartsUnlimited website in Azure, e.g. http://pudncore.azurewebsites.net
 
 
 **Step 2.** The bool property you defined in the previous step, should be able to be set by a user, so let's add a switch to the settings page.
@@ -122,7 +137,7 @@ In this task you will add a feature flag that increases discount for all product
 
 	![](media/8.png)
 
-2. Add a "SwitchCell" tag into the "TableSection" tag in the following way:
+2. Replace the whole "TableView" section with the following code:
 
 	```csharp
 	...
@@ -138,7 +153,7 @@ In this task you will add a feature flag that increases discount for all product
 
 **Step 3.** The last thing left to do is to define what this feature toggle should control/change. In this case, it will add extra 5% of discount to each product.
 
-1. Open "SettingsPage.xaml" file located at <b>`PartsUnlimited` > `ViewModels`</b>.
+1. Open "ShoppingItemViewModel.cs" file located at <b>`PartsUnlimited` > `ViewModels`</b>.
 
  	![](media/9.png)
 
