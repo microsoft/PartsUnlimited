@@ -9,7 +9,7 @@ The project manager decided to roll out a new feature but it has to be done one 
 
 - Visual Studio 2015 Update 3
 
-- Latest [.Net Core SDK](https://www.microsoft.com/net/core#windows) installed
+- [.Net Core 1.0.1 SDK](https://www.microsoft.com/net/core#windows) installed
 
 - [Windows SDK and emulator](https://developer.microsoft.com/en-us/windows/downloads/sdk-archive) installed  
 
