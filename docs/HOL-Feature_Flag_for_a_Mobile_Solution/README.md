@@ -17,6 +17,8 @@ In this lab you will work with a simple Xamarin Forms mobile application. Your t
 
 	> **Note:** This includes [Mac setup](https://developer.xamarin.com/guides/ios/getting_started/installation/windows/connecting-to-mac/), if you have intentions to run iOS app.
 
+- PartsUnlimited website deployed to a Microsoft Azure (see [link](https://github.com/Microsoft/PartsUnlimited/blob/master/docs/Deployment.md))
+
 
 
 ## Tasks Overview: ##
