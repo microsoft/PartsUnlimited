@@ -7,9 +7,9 @@ Your manager has expressed interest in the stability and fault-tolerance of the 
 
 ## Pre-requisites:
 
-* Visual Studio 2015 Update 3
+* [Visual Studio 2015 Update 3](https://www.visualstudio.com/downloads/)
 
-* Latest Azure SDK 2.9.5 installed
+* Latest [Azure SDK 2.9.5](https://www.microsoft.com/en-us/download/details.aspx?id=53600) installed
 
 * Completed [HOL - Manual Deployment](https://github.com/Microsoft/PartsUnlimited/blob/master/docs/Deployment.md)
 
@@ -28,7 +28,7 @@ Your manager has expressed interest in the stability and fault-tolerance of the 
 
 
 ## HOL:
-###Task 1: Set up a scalable and highly available environment
+### Task 1: Set up a scalable and highly available environment
 In this task you can use any two regions for your clusters as long as [Geo-Replication](https://azure.microsoft.com/en-us/documentation/articles/storage-redundancy/) is supported.
 
 
@@ -197,7 +197,7 @@ Congratulations, the scalable and highly available environment is now set up.
 > **Note:** In a real life situation you might also have a domain name for your website which will need to be set up as a CNAME to the traffic manager's DNS name.
 
 
-###Task 2: Set up Application Insights
+### Task 2: Set up Application Insights
 
 **Step 1.** Navigate to App Service in your main cluster and click on "Application Insights", then select your production Application Insights instance in the main cluster and click "OK". Azure will connect this App Service to the Application Insights instance and will start collecting data.
 
@@ -205,7 +205,7 @@ Congratulations, the scalable and highly available environment is now set up.
 
 
 
-###Task 3: Fault injection into the main cluster
+### Task 3: Fault injection into the main cluster
 
 In this task you will simulate a fault in the main cluster by decreasing the number of instances available in your App Service.
 
@@ -233,7 +233,7 @@ In this step, we will run a load test to simulate traffic for the App Service.
 
 
 
-###Task 4: Analyze results of the load test
+### Task 4: Analyze results of the load test
 In this task we will analyze the information received from the load test and attempt to determine the optimal number of instances for the App Service.
 
 **Step 1.** Navigate to the App Service in the main cluster, click on "Performance test" and then on the load test itself.
@@ -264,7 +264,7 @@ Based on the graphs above you can see that with 4 instances in the App Service (
 
 
 
-###Task 5: Test the traffic manager's functionality
+### Task 5: Test the traffic manager's functionality
 
 Here we're looking at how traffic manager can be used to handle fail over events where a datacenter is lost for some reason, perhaps a natural disaster. Main cluster will be simulated to go offline by turning its App Service off.
 
