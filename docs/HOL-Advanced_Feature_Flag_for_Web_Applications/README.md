@@ -1,18 +1,22 @@
 HOL - Advanced Feature Flag for Web Applications
 ====================================================================================
 
-There's a big sales initiative coming up next month to assist with a much anticipated product release. In the past infrastructure stability has been a massive concern and we have lost many customers with downtime and slow server response times. This time around we have a plan to stagger the release to different regions at different times to try distribute the load. You have been tasked with implementing the solution.
+There's a big sales initiative coming up next month to assist with a much anticipated product release. In the past infrastructure stability has been a massive concern and we have lost many customers with downtime and slow server response times. This time around we have a plan to stagger the release to different regions at different times to try distribute the load. You have been tasked with implementing the solution and will take advantage of feature flags to accomplish it.
+
+Note: [Launch Darkly](https://launchdarkly.com/) is a great option for more advanced feature flag management. Version 3.0.0 of the Launch Darkly SDK supports .NET core.
 
 ### Pre-requisites: ###
 - Visual Studio 2015 Update 3 or higher
 
+- [.Net Core 1.0.1 SDK](https://www.microsoft.com/net/core#windows) installed
+
 ### Tasks Overview: ###
 
-1. Add the backend code required for feature flags - In this task we will go through the steps required to create advanced feature flags which are region and time based.
+1. Add the back-end code required for feature flags - In this task we will go through the steps required to create advanced feature flags which are region and time based.
 
 2. Try it out! - In this task we will see our feature flag in action, simulating a staggered release to countries.
 
-### Task 1: Add the backend code required for feature flags
+### Task 1: Add the back-end code required for feature flags
 
 **Step 1.** Clone the PartsUnlimited repository to a local directory.
 
@@ -46,49 +50,60 @@ Or navigate to where you cloned the repository to e.g. `C:\Source\Repos` with ex
 **Step 5.** Create a new class in this folder called `FeatureType.cs`. This will be used to define different types of features we have. 
 
 ```csharp
-public enum FeatureType
+namespace PartsUnlimited.FeatureFlag
 {
-    Default,
-    Region
+    public enum FeatureType
+    {
+        Default,
+        Region
+    }
 }
 ```
 
 **Step 6.** Add another class in the same folder called `Feature.cs`. This will define the structure of our features.
 
 ```csharp
-public class Feature
+namespace PartsUnlimited.FeatureFlag
 {
-    public Feature(string key, string description, bool active, FeatureType type)
+    public class Feature
     {
-        Key = key;
-        Description = description;
-        Active = active;
-        Type = type;
+        public Feature(string key, string description, bool active, FeatureType type)
+        {
+            Key = key;
+            Description = description;
+            Active = active;
+            Type = type;
+        }
+
+        public FeatureType Type { get; }
+
+        public bool Active { get; set; }
+
+        public string Description { get; }
+
+        public string Key { get; }
+
     }
-
-    public FeatureType Type { get; }
-
-    public bool Active { get; set; }
-
-    public string Description { get; }
-
-    public string Key { get; }
-
 }
 ```
+
 - **Feature Type** is an enum which represents the feature type.
 - **Active** is going to be the current state for the feature flag. 
 - **Description** is going to be a brief description of what the feature flag is for.
 - **Key** is going to be the unique identifier for that particular feature flag.
 
-**Step 7.** We need an interface we will use to template all our different feature toggle types. This interface will have two method signatures: 'Can' and 'Do'. 'Can' will be used to decide which strategy should be run. 'Do' will perform the actual work required for the feature flag. Create this in the same 'FeatureFlag' folder we created before.
+**Step 7.** We need an interface we will use to template all our different feature toggle types. Let's call this `IFeatureFlagStrategy.cs` and store it in the same folder we've been using -> `.\PartsUnlimited\src\PartsUnlimitedWebsite\FeatureFlag`. This interface will have two method signatures: 'Can' and 'Do'. 'Can' will be used to decide which strategy should be run. 'Do' will perform the actual work required for the feature flag. Create this in the same 'FeatureFlag' folder we created before.
 
 ```csharp
-public interface IFeatureStrategy
-{
-    bool Can(Feature feature);
 
-    bool Do(Feature feature, string comparison);
+namespace PartsUnlimited.FeatureFlag
+{
+    public interface IFeatureStrategy
+    {
+        bool Can(Feature feature);
+
+        bool Do(Feature feature, string comparison);
+    }
 }
 ```
 
@@ -99,66 +114,69 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public interface IFeatureManager
+namespace PartsUnlimited.FeatureFlag
 {
-    bool GetStatusByKey(string key, string comparison);
-    void ChangeFeatureToggles(string[] selectedItems);
-    IEnumerable<Feature> RetrieveFeatures();
-}
-
-public class FeatureManager: IFeatureManager
-{
-    private readonly IEnumerable<Feature> _features;
-    private readonly IEnumerable<IFeatureStrategy> _strategies;
-
-    public FeatureManager(IEnumerable<Feature> features, IEnumerable<IFeatureStrategy> strategies)
+    public interface IFeatureManager
     {
-        if (features == null)
-            throw new ArgumentNullException(nameof(features));
-        if (strategies == null)
-            throw new ArgumentNullException(nameof(strategies));
-
-        _features = features;
-        _strategies = strategies;
+        bool GetStatusByKey(string key, string comparison);
+        void ChangeFeatureToggles(string[] selectedItems);
+        IEnumerable<Feature> RetrieveFeatures();
     }
 
-    public IEnumerable<Feature> RetrieveFeatures()
+    public class FeatureManager: IFeatureManager
     {
-        return _features;
-    }
+        private readonly IEnumerable<Feature> _features;
+        private readonly IEnumerable<IFeatureStrategy> _strategies;
 
-    public bool GetStatusByKey(string key, string comparison)
-    {
-        if (comparison == null)
-            throw new ArgumentNullException(nameof(comparison));
-        if (string.IsNullOrEmpty(key))
-            throw new ArgumentNullException(nameof(key));
-
-        Feature feature = _features.SingleOrDefault(f => f.Key == key);
-
-        foreach (IFeatureStrategy strategy in _strategies)
+        public FeatureManager(IEnumerable<Feature> features, IEnumerable<IFeatureStrategy> strategies)
         {
-            if (strategy.Can(feature))
-            {
-                return strategy.Do(feature, comparison);
-            }
+            if (features == null)
+                throw new ArgumentNullException(nameof(features));
+            if (strategies == null)
+                throw new ArgumentNullException(nameof(strategies));
+
+            _features = features;
+            _strategies = strategies;
         }
-        throw new Exception(string.Format("Unable to find a feature strategy for the key {0} with the comparison of {1}", key, comparison));
-    }
 
-    public void ChangeFeatureToggles(string[] selectedItems)
-    {
-        if (selectedItems == null)
-            throw new ArgumentNullException(nameof(selectedItems));
+        public IEnumerable<Feature> RetrieveFeatures()
+        {
+            return _features;
+        }
 
-        _features.AsParallel().ForAll(
-            f =>
+        public bool GetStatusByKey(string key, string comparison)
+        {
+            if (comparison == null)
+                throw new ArgumentNullException(nameof(comparison));
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentNullException(nameof(key));
+
+            Feature feature = _features.SingleOrDefault(f => f.Key == key);
+
+            foreach (IFeatureStrategy strategy in _strategies)
             {
-                f.Active = selectedItems.Contains(f.Key);
-            });
-    }
+                if (strategy.Can(feature))
+                {
+                    return strategy.Do(feature, comparison);
+                }
+            }
+            throw new Exception(string.Format("Unable to find a feature strategy for the key {0} with the comparison of {1}", key, comparison));
+        }
 
+        public void ChangeFeatureToggles(string[] selectedItems)
+        {
+            if (selectedItems == null)
+                throw new ArgumentNullException(nameof(selectedItems));
+
+            _features.AsParallel().ForAll(
+                f =>
+                {
+                    f.Active = selectedItems.Contains(f.Key);
+                });
+        }
+    }
 }
+
 ```
 
 Now let's explain the sections of the above code.
@@ -169,32 +187,45 @@ Now let's explain the sections of the above code.
 
 *Note: It's a much better idea to store these flags in a database. For simplicity's sake we have stored them in memory.*
 
-**Step 9.** Now lets create a region specific feature. 
+**Step 9.** Now lets create a region specific feature. The first file will be called `FeatureFlags.cs` and it will be responsible for storing the parameters required for specific features. This should be stored in the same FeatureFlag folder we created earlier `.\PartsUnlimited\src\PartsUnlimitedWebsite\FeatureFlag`.
 
 ```csharp
 
-public interface IFeatureFlags
-{
-    Dictionary<string, DateTime> Regions { get; }
-}
+using System;
+using System.Collections.Generic;
 
-public class FeatureFlags : IFeatureFlags
+namespace PartsUnlimited.FeatureFlag
 {
-    public Dictionary<string, DateTime> Regions { get; }
-
-    public FeatureFlags(Dictionary<string, DateTime> regions)
+    public interface IFeatureFlags
     {
-        if (regions == null)
-            throw new ArgumentNullException(nameof(regions));
-        Regions = regions;
+        Dictionary<string, DateTime> Regions { get; }
+    }
+
+    public class FeatureFlags : IFeatureFlags
+    {
+        public Dictionary<string, DateTime> Regions { get; }
+
+        public FeatureFlags(Dictionary<string, DateTime> regions)
+        {
+            if (regions == null)
+                throw new ArgumentNullException(nameof(regions));
+            Regions = regions;
+        }
     }
 }
 
 ```
 
+The second file will be called `FeatureRegionStrategy.cs` and will contain the core logic of our region specific feature flag. It should be created in the location as the previous file -> `.\PartsUnlimited\src\PartsUnlimitedWebsite\FeatureFlag`.
 
 ```csharp
-public class FeatureRegionStrategy : IFeatureStrategy
+
+using System;
+using System.Linq;
+
+namespace PartsUnlimited.FeatureFlag
+{
+    public class FeatureRegionStrategy : IFeatureStrategy
     {
         private readonly IFeatureFlags _featureFlags;
 
@@ -209,7 +240,7 @@ public class FeatureRegionStrategy : IFeatureStrategy
             if (feature == null)
                 throw new ArgumentNullException(nameof(feature));
 
-            return feature.Type == FeatureType.Collection;
+            return feature.Type == FeatureType.Region;
         }
 
         public bool Do(Feature feature, string comparison)
@@ -234,23 +265,29 @@ public class FeatureRegionStrategy : IFeatureStrategy
             return false;
         }
     }
-```
-
-**Step 10.** Now we want to create a static constants class to store the key and description of our feature flags.
-
-```csharp
-public static class FeatureConstants
-{
-    public static string BulkBuyKey => "BulkBuyKey";
-    public static string BulkBuyDescription => "Ability to quickly add 10 of one item to the cart";
 }
 ```
 
-**Step1 11.** Add the following section to your config.json, set any date time string for now as we will change this later.
+**Step 10.** Now we want to create a static constants class to store the key and description of our feature flags. Let's call this `FeatureConstants.cs` and store it here -> `.\PartsUnlimited\src\PartsUnlimitedWebsite`
+
+```csharp
+
+namespace PartsUnlimited
+{
+    public static class FeatureConstants
+    {
+        public static string BulkBuyKey => "BulkBuyKey";
+        public static string BulkBuyDescription => "Ability to quickly add 10 of one item to the cart";
+    }
+}
+```
+
+**Step 11.** Add the following section to your `config.json`, set any date time string for now as we will change this later. This file can be found here -> `.\PartsUnlimited\src\PartsUnlimitedWebsite\config.json`
 
 ```json
 {
     ...
+
     "FeatureFlags": {
         "Region": {
             "New Zealand": "2016-11-04T12:20:29",
@@ -261,10 +298,16 @@ public static class FeatureConstants
 ```
 
 
-**Step 12.** Now we need to manage our dependencies. Navigate to Startup.cs
+**Step 12.** Now we need to manage our dependencies. Navigate to `Startup.cs` located here -> `.\PartsUnlimited\src\PartsUnlimitedWebsite\Startup.cs`. Add the following code below to the ConfigureServices method.
 
 ```csharp
+...
+using System.Collections.Generic;
+using System.Linq;
+using PartsUnlimited.FeatureFlag;
 
+namespace PartsUnlimited
+{
     public void ConfigureServices(IServiceCollection services)
     {
         ...
@@ -282,18 +325,19 @@ public static class FeatureConstants
         
         // Here is where we will define our feature flag strategies and bind them to the feature manager
         var strategies = new List<IFeatureStrategy> { 
-            new FeatureRegionStrategy()
+            new FeatureRegionStrategy(featureFlags)
         };
         var features = new List<Feature>
         {
-            new Feature(FeatureConstants.BulkBuyKey, FeatureConstants.BulkBuyDescription, true, FeatureType.Collection)
+            new Feature(FeatureConstants.BulkBuyKey, FeatureConstants.BulkBuyDescription, true, FeatureType.Region)
         };
         services.AddScoped<IFeatureManager>(m => new FeatureManager(features, strategies));
         ...
     }
+}
 ```
 
-**Step 13.** We need to store a users location in order to apply our region flag correctly. Navigate to ApplicationUser.cs and add the 'Location' property as seen below.
+**Step 13.** We need to store a users location in order to apply our region flag correctly. Navigate to `.\PartsUnlimited\src\PartsUnlimited.Models\ApplicationUser.cs` and add the 'Location' property as seen below.
 
 ```csharp
 public class ApplicationUser : IdentityUser
@@ -303,9 +347,12 @@ public class ApplicationUser : IdentityUser
 }
 ```
 
-**Step 14.** Navigate to ManageViewModels.cs and look inside the IndexViewModel class. We need to add the location property here as well.
+**Step 14.** Navigate to `.\PartsUnlimited\src\PartsUnlimitedWebsite\Models\ManageViewModels.cs` and look inside the IndexViewModel class. We need to add the location and feature flags properties here.
 
 ```csharp
+...
+using PartsUnlimited.FeatureFlag;
+
 public class IndexViewModel
 {
     ...
@@ -314,13 +361,18 @@ public class IndexViewModel
 }
 ```
 
-**Step 15.** Navigate to the ManageController class and add the **IFeatureManager** to the constructor.
+**Step 15.** Navigate to the `.\PartsUnlimited\src\PartsUnlimitedWebsite\Controllers\ManageController.cs` class and add the **IFeatureManager** to the constructor.
 
 ```csharp
+...
+using PartsUnlimited.FeatureFlag;
+
+...
 [Authorize]
 public class ManageController : Controller
 {
     private readonly IFeatureManager _featureManager;
+    private readonly IFeatureFlags _featureFlags;
 
     public ManageController(UserManager<ApplicationUser> userManager, 
     SignInManager<ApplicationUser> signInManager, 
@@ -336,7 +388,7 @@ public class ManageController : Controller
 }
 ```
 
-**Step 16.** Now in the Index call we need to populate our location value with the correct value from the user.
+**Step 16.** Now in the Index method inside `.\PartsUnlimited\src\PartsUnlimitedWebsite\Controllers\ManageController.cs` we need to populate our location value with the correct value from the user.
 
 ```csharp
 //
@@ -357,17 +409,23 @@ public async Task<ActionResult> Index(ManageMessageId? message = null)
 }
 ```
 
-**Step 17.** At the bottom of Index.cshtml inside the Views -> Manage folder we need add the following at the bottom of the page **just inside the last closing </dl> tag**.
+**Step 17.** At the bottom of `Index.cshtml` inside the Views -> Manage folder we need add the following at the top of the file.
+
+```csharp
+@using System.Threading.Tasks
+```
+
+Then at the bottom of the page **just inside the last closing </dl> tag** we want to add the following code.
 
 ```csharp
 ...
+
 <dt>Location:</dt>
 <dd>
     @using (Html.BeginForm("AddLocale", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()
 
-        Feature selectList = Model.Features.First(f => f.Type == FeatureType.Collection);
         @Html.DropDownListFor(x => x.Location, Model.FeatureFlags.Regions.Keys.ToArray().Select(i => new SelectListItem { Text = i, Value = i, Selected = (i == Model.Location) }))
         <span>[ <input type="submit" value="Save location" class="btn btn-link" /> ]</span>
     }
@@ -375,14 +433,19 @@ public async Task<ActionResult> Index(ManageMessageId? message = null)
 ...
 ```
 
-**Step 18.** Now we need to ensure that when a user clicks the 'save location' button it actually saves! Navigate to the ManageController again and create a new POST method.
+**Step 18.** Now we need to ensure that when a user clicks the 'save location' button it actually saves! Navigate to `.\PartsUnlimited\src\PartsUnlimitedWebsite\Controllers\ManageController.cs` again and create a new POST method.
 
 ```csharp
+using System;
+...
+
 [Authorize]
 public class ManageController : Controller
 {
     ...
 
+    //
+    // POST: /Manage/AddLocation
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddLocation(IndexViewModel indexViewModel)
@@ -398,7 +461,7 @@ public class ManageController : Controller
 }
 ```
 
-**Step 19.** We need a way to bulk add items to a users cart. Navigate to ShoppingCart.cs
+**Step 19.** We need a way to bulk add items to a users cart. Navigate to `.\PartsUnlimited\src\PartsUnlimited.Models\ShoppingCart.cs` and add the following method.
 
 ```csharp
 public void BulkAddToCart(Product product)
@@ -430,13 +493,13 @@ public void BulkAddToCart(Product product)
 }
 ```
 
-**Step 20.** Now lets add the actual feature toggle on the Details.cshtml file located under Views->Store
+**Step 20.** Now lets add the actual feature toggle on the `Details.cshtml` file located under Views->Store. Take note of the comments below - we want to find where the first section (under the first comment) of code is and replace it with the second section (under the second comment).
 
 ```csharp
-// this a tag should already exist!
+// This a tag should already exist!
 <a href="@Url.Action("AddToCart", "ShoppingCart", new { id = Model.ProductId })" class="btn">Add to Cart</a>
 
-// new code to add
+// Replace the code above with the code below
 @{
     if (ViewBag.IsFeatureActive)
     {
@@ -447,7 +510,7 @@ public void BulkAddToCart(Product product)
 
 ### Task 2: Try it out!
 
-**Step 1.** Before launching the site, locate the config.json file and alter the region active times. Make the New Zealand region five minutes from now and the Australian region 10 minutes from now.
+**Step 1.** Before launching the site, locate the  `.\PartsUnlimited\src\PartsUnlimitedWebsite\config.json` file and alter the region active times. Make the New Zealand region five minutes from now and the Australian region 10 minutes from now.
 
 **Step 2.** Now launch the site. You can do this but pressing f5 or hitting the button shown below in Visual Studio. 
 
@@ -457,7 +520,7 @@ public void BulkAddToCart(Product product)
 
 **Step 3.** Now log in with any account. 
 
-Or aternatively you can use the administrator account. This can be found in config.json.
+Or alternatively you can use the administrator account. This can be found in `.\PartsUnlimited\src\PartsUnlimitedWebsite\config.json`.
 
 ```json
 "AdminRole": {
@@ -478,11 +541,11 @@ Or aternatively you can use the administrator account. This can be found in conf
 
 ![](<media/breaks.png>)
 
-Notice the bulk buy is not avaiable yet. This should change in a couple of minutes.
+Notice the bulk buy is not available yet. This should change in a couple of minutes.
 
 ![](<media/break-no-bulk.png>)
 
-**Step 7.** Once the current time is past the time set in the config.json for New Zealand. Refresh the page and you should see the bulk buy option. The same thing will happen 5 minutes later for any Australian users.
+**Step 7.** Once the current time is past the time set in the `.\PartsUnlimited\src\PartsUnlimitedWebsite\config.json` for New Zealand. Refresh the page and you should see the bulk buy option. The same thing will happen 5 minutes later for any Australian users.
 
 ![](<media/break-bulk.png>)
 
