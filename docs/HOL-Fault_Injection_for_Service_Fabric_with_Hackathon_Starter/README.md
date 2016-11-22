@@ -5,31 +5,31 @@ Service uptime is one of the most important metrics for any application. Users a
 
 **Prerequisites**
 
-- An active Azure subscription
+- [An active Azure subscription](https://portal.azure.com)
 
-- Service Fabric SDK
+- [Service Fabric SDK](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-get-started)
 
-- NodeJS 6.0+
+- [Node.js 6.0+](http://nodejs.org)
 
-- Mongo DB
+- [Git](https://git-scm.com/downloads)
 
-- Git
+- [MongoDB](https://www.mongodb.com/)
 
 **Tasks Overview**
 
-1. Get the source code for the Hackathon starter - in this task we will go through pulling down the hackathon source code and testing it locally.
+1. **Get the source code for the Hackathon starter** - in this task we will go through pulling down the hackathon source code and testing it locally.
 
-2. Prepare the Hackathon Service Fabric package - in this task we will go through the steps required to create a deployment package for the hackathon starter app.
+2. **Prepare the Hackathon Service Fabric package** - in this task we will go through the steps required to create a deployment package for the hackathon starter app.
 
-3. Set up MongoDB - in this step we'll set up a MongoDB instance in Azure.
+3. **Set up MongoDB** - in this step we'll set up a MongoDB instance in Azure.
 
-4. Deploy the Service Fabric package to a windows cluster - in this step we will deploy the actual service fabric package to Azure.
+4. **Deploy the Service Fabric package to a windows cluster** - in this step we will deploy the actual service fabric package to Azure.
 
-5. Run some tests against the cluster - In this step we'll go through some basic tests you can run against an Azure Service Fabric cluster.
+5. **Run some tests against the cluster** - In this step we'll go through some basic tests you can run against an Azure Service Fabric cluster.
 
 ### Task 1: Get the source code for the Hackathon starter.
 
-**Step 1.** Open up any of the following: PowerShell, git bash or cmd
+**Step 1.** Open and command prompt of your choice which has support for git
 
 **Step 2.** Navigate to your chosen working directory
 
@@ -50,7 +50,7 @@ cd hackathon-starter
 npm install
 ```
 
-**Step 4.** We need to make sure MongoDB is running before we try and start the application. Run the following command in another CMD window.
+**Step 4.** We need to make sure MongoDB is running before we try and start the application. Open a second command prompt and run the following command
 
 `mongod`
 
@@ -82,7 +82,7 @@ node app.js
 
 Firstly in the package root folder we want to create a new folder called `NodeService` eg `C:\release\NodeService`
 
-**Step 3.** Now add another file to the package root directory (`C:\release\NodeService`) called ApplicationManifest.xml and add the following to the file.
+**Step 3.** Now add another file to the package root directory (`C:\release`) called ApplicationManifest.xml and add the following to the file.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -153,21 +153,31 @@ Firstly in the package root folder we want to create a new folder called `NodeSe
     </ServiceManifest>
 ```
 
-**Step 6.** We need to bundle node with our self contained Service Fabric package. To find the executable open CMD and use the 'where' command.
-
-![](<media/where.png>)
+**Step 6.** We need to bundle node with our self contained Service Fabric package. 
 
 Grab the node.exe from whatever location shows up and copy it to a new deployment folder. For the example below we're using `xcopy "from/here" "to/here"`
 
-```bash
+```powershell
+
 where node.exe
 
 xcopy "C:\Program Files\nodejs\node.exe" "C:\my\package\NodeService\C"
 
-cp 
+xcopy "C:\dev\repos\hackathon-starter\*" "C:\my\package\NodeService\C" /s /i
+
 ```
 
 Alternatively you can use the linux commands `which nodejs` then `cp from to`
+
+```bash
+
+which nodejs
+
+cp node/location/node.exe /my/package/NodeService/C/
+
+cp -a /repos/hackathon-starter/. /my/package/NodeService/C/
+
+```
 
 ### Task 3: Set up our Azure MongoDB instance.
 
@@ -183,7 +193,7 @@ Alternatively you can use the linux commands `which nodejs` then `cp from to`
 
 ![](<media/mongo-create.png>)
 
-**Step 4.** On the next screen specify all the required configuration values as seen below. Note you will need to find an available ID as some names may already be taken. Also create a resource group which ties to this lab (e.g. hackathon-sf).
+**Step 4.** On the next screen specify all the required configuration values as seen below. You may need to accept that you are using a preview service if you haven't used this particular service before. Note you will need to find an available ID as some names may already be taken. Also create a resource group which ties to this lab (e.g. hackathon-sf).
 
 ![](<media/mongo-config.png>) 
 
@@ -258,6 +268,8 @@ After it has successfully deployed you should see the following on the Azure das
 
 **Step 9.** Select the Hackathon cluster, then select 'Custom fabric settings'. Add a new value for the **EseStore** with the parameter **MaxCursors** and the value **65536**. This is to ensure our node modules folder will be able to be registered correctly. Service fabric currently has a hard limit on the amount of files and will timeout if this value is not increased. *Ideally you should have a build task that minifies and concatenates all your vendor dependencies*. This may take some time to complete as it needs to propagate across the scale set.
 
+![](<media/sf-settings.png>)
+
 ![](<media/max-cursors.png>)
 
 Navigate back to the 'Overview' section inside the service fabric cluster. Then copy the 'Service Fabric Explorer' link and paste it in your browser of choice.
@@ -281,7 +293,7 @@ Note: ensure the address does not have https:// - eg. `hackathon.westcentralus.c
 **Step 12.** Now we want to upload the application package to the cluster.
 
 ```powershell
-Copy-ServiceFabricApplicationPackage -ApplicationPackagePath 'C:\dev\release' -ImageStoreConnectionString 'fabric:imagestore' -ApplicationPackagePathInImageStore 'Apps\Hackathon' -TimeoutSec 600
+Copy-ServiceFabricApplicationPackage -ApplicationPackagePath 'C:\release' -ImageStoreConnectionString 'fabric:imagestore' -ApplicationPackagePathInImageStore 'Apps\Hackathon' -TimeoutSec 600
 ```
 
 **Step 13.** Then we want to register the application type in our cluster.
@@ -298,8 +310,13 @@ New-ServiceFabricApplication -ApplicationName 'fabric:/Hackathon' -ApplicationTy
 
 **Step 15.** Go back to the Service Fabric dashboard and check to see if the application has deployed successfully.
 
-![](<media/azure11.png>)
+http://[your-server-cluster-address].[location].cloudapp.azure.com:19080/Explorer/index.html#/
 
+![](<media/azure12.png>)
+
+**Step 16.** Now let's see if the application is also running. Navigate to http://[your-server-cluster-address].[location].cloudapp.azure.com:3000 and you should see the following screen.
+
+![](<media/hackathon-landing.png>)
 
 ### Task 5: Run some tests against the cluster.
 
