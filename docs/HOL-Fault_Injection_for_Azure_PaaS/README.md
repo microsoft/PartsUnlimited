@@ -11,8 +11,6 @@ Your manager has expressed interest in the stability and fault-tolerance of the 
 
 * Latest [Azure SDK 2.9.5](https://www.microsoft.com/en-us/download/details.aspx?id=53600) installed
 
-* Completed [HOL - Manual Deployment](https://github.com/Microsoft/PartsUnlimited/blob/master/docs/Deployment.md)
-
 
 ## Tasks Overview:
 **1. Set up a scalable and highly available environment** This will walk you through deploying main cluster and failover cluster to Azure using ARM template. You will also configure traffic manager and Geo-Replication of the production database from the main cluster to the failover cluster database.
@@ -29,55 +27,95 @@ Your manager has expressed interest in the stability and fault-tolerance of the 
 
 ## HOL:
 ### Task 1: Set up a scalable and highly available environment
+
 In this task you can use any two regions for your clusters as long as [Geo-Replication](https://azure.microsoft.com/en-us/documentation/articles/storage-redundancy/) is supported.
 
+**Step 1.** Clone the PartsUnlimited repository to a local directory.
 
-**Step 1.** Deploying an ARM template for the main cluster.
+1. Open a command line (one that supports Git) and navigate to the directory where you want to store your local repositories. For example in a Windows OS, you can create and navigate to `C:\Source\Repos`.
 
-1. Create a new ARM template deployment with a new "Resource Group" in the "East US" region.
+2. Clone the repository with the following command:
+
+    ```
+    git clone https://github.com/Microsoft/PartsUnlimited.git
+    ```
+    > After a few seconds of downloading, all of the code should now be on your local machine.
+
+3. Move into the repository directory that was just created. In a Windows OS, you can use this command:
+
+    ```
+    cd PartsUnlimited
+    ```
+
+
+**Step 2.** Open the PartsUnlimited solution with Visual Studio
+
+In the command line, type the following:
+
+```
+start PartsUnlimited.sln
+```
+Alternatively, navigate to where you cloned the repository to e.g. `C:\Source\Repos\PartsUnlimited` with explorer and double click on PartsUnlimited.sln
+
+
+**Step 3.** Deploying an ARM template for the main cluster.
+
+1. Right click on `PartsUnlimitedEnv` project, select `Deploy` and click on `New...`
+
+    ![](media/44.png)
+
+2. In the "Resource group" dropdown click on `<Create new...>`. Select your subscription, enter a name, select `East US` in the "Resource group location" dropdown and click on "Create".
 
     ![](media/1.png)
 
-2. Select the "FullEnvironmentSetupMerged.json" template and the corresponding param file to deploy. Both files are located at `env` >`Templates` folder of your local repository.
+3. Select the "FullEnvironmentSetupMerged.json" template and the corresponding param file to deploy. Both files are located at `env` >`Templates` folder of your local repository.
 
     ![](media/2.png)
 
-3. Click on "Edit Parameters..." and enter the details for the main cluster. Click on "Save" and then "Deploy".
+4. Click on "Edit Parameters..." and enter the details for the main cluster. Click on "Save" and then "Deploy".
 
     ![](media/3.png)
     > **Note:** Make sure that:<br> 1) All of the names will be specific to the main cluster and unique across Azure.<br> 2) "PartsUnlimitedDBEdition" must be set to "Standard" for Geo-Replication to work.
 
 
-**Step 2.** Deploying an ARM template for the standby cluster.
+**Step 4.** Deploying an ARM template for the standby cluster.
 
-1. Create a new ARM template deployment with a new "Resource Group" in the "West US" region.
+1. Right click on `PartsUnlimitedEnv` project, select `Deploy` and click on `New...`
+
+    ![](media/44.png)
+
+2. In the "Resource group" dropdown click on `<Create new...>`. Select your subscription, enter a name, select `West US` in the "Resource group location" dropdown and click on "Create".
 
     ![](media/4.png)
 
-2. Select the "FullEnvironmentSetupMerged.json" template and the corresponding param file to deploy.
+3. Select the "FullEnvironmentSetupMerged.json" template and the corresponding param file to deploy.
 
     ![](media/5.png)
 
-3. Click on "Edit Parameters..." and enter the details for the standby cluster. Click on "Save" and then "Deploy".
+4. Click on "Edit Parameters..." and enter the details for the standby cluster. Click on "Save" and then "Deploy".
 
     ![](media/6.png)
     > **Note:** Make sure that:<br> 1) All of the names will be specific to the main cluster and unique across Azure.<br> 2) "PartsUnlimitedDBEdition" must be set to "Standard" for Geo-Replication to work.
 
 
-**Step 3.** Publish PartsUnlimited to the main and standby clusters.
+**Step 5.** Publish PartsUnlimited to the main and standby clusters.
 
-1. Right click on the PartsUnlimitedWebsite project and select "Publish...". Click on "Microsoft Azure App Service".
+1. Right click on `PartsUnlimitedWebsite` project and select `Publish...`
+
+    ![](media/45.png)
+
+2. Click on "Microsoft Azure App Service".
 
     ![](media/7.png)
 
-2. Select the main cluster, click "OK", then "Publish".
+3. Select the main cluster, click "OK", then "Publish".
 
     ![](media/8.png)
 
-3. Similarly, repeat the previous steps for the standby cluster.
+4. Similarly, repeat the previous steps for the standby cluster.
 
 
-**Step 4.** Set up the scalability of the App Service.
+**Step 6.** Set up the scalability of the App Service.
 
 1. Open the resource group of your main cluster and click on the "App Service" instance.
 
@@ -90,7 +128,7 @@ In this task you can use any two regions for your clusters as long as [Geo-Repli
 3. In this lab we will leave the number of instances in the failover cluster at 1.
   > **Note:** In this lab we want to control the number of instances running in the App Service, then we can simulate an instance fault by decrementing the total available number of instances. Usually we would prefer to define rules such that the number of instances will scale automatically based on their metrics.
 
-**Step 5.** Set up the Geo-Replication of the production database.
+**Step 7.** Set up the Geo-Replication of the production database.
 
 1. Navigate to the "Overview" page of the main cluster's resource group and click on the production database server.
 
@@ -131,7 +169,7 @@ In this task you can use any two regions for your clusters as long as [Geo-Repli
         Data Source=tcp:partsunlimitedstandbyserver.database.windows.net,1433;Initial Catalog=PartsUnlimitedMainDB;User Id=AdminUser@partsunlimitedstandbyserver;Password=************;
 
 
-**Step 6.** Creating and configuring the traffic manager in Azure.
+**Step 8.** Creating and configuring the traffic manager in Azure.
 
 1. Create a new resource group for the traffic manager.
 
