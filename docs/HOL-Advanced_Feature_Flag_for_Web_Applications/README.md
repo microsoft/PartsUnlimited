@@ -107,7 +107,7 @@ namespace PartsUnlimited.FeatureFlag
 }
 ```
 
-**Step 8.** Now we want to create a feature manager class and interface. This will be used later on to toggle our features on and off. 
+**Step 8.** Now we want to create a feature manager class and interface. This will be used later on to toggle our features on and off. Let's call it `FeatureManager.cs` and store it here -> `.\PartsUnlimited\src\PartsUnlimitedWebsite\FeatureFlag\FeatureManager.cs`
 
 ```csharp
 using System;
@@ -409,7 +409,7 @@ public async Task<ActionResult> Index(ManageMessageId? message = null)
 }
 ```
 
-**Step 17.** At the bottom of `Index.cshtml` inside the Views -> Manage folder we need add the following at the top of the file.
+**Step 17.** Navigate to `Index.cshtml` inside the Views -> Manage folder, we then need add the following at the top of the file.
 
 ```csharp
 @using System.Threading.Tasks
@@ -422,7 +422,7 @@ Then at the bottom of the page **just inside the last closing </dl> tag** we wan
 
 <dt>Location:</dt>
 <dd>
-    @using (Html.BeginForm("AddLocale", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm("AddLocation", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()
 
@@ -493,7 +493,7 @@ public void BulkAddToCart(Product product)
 }
 ```
 
-**Step 20.** Now lets add the actual feature toggle on the `Details.cshtml` file located under Views->Store. Take note of the comments below - we want to find where the first section (under the first comment) of code is and replace it with the second section (under the second comment).
+**Step 20.** Now lets add the actual feature toggle on the `Details.cshtml` file located here -> `.\PartsUnlimited\src\PartsUnlimitedWebsite\Views\Store\Details.cshtml`. Take note of the comments below - we want to find where the first section (under the first comment) of code is and replace it with the second section (under the second comment).
 
 ```csharp
 // This a tag should already exist!
@@ -533,7 +533,7 @@ Or alternatively you can use the administrator account. This can be found in `.\
 
 ![](<media/manage.png>)
 
-**Step 5.** Now select 'New Zealand' and then save it.
+**Step 5.** Now select 'Australia' and then save it.
 
 ![](<media/location.png>)
 
