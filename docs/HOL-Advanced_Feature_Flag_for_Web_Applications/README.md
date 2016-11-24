@@ -493,7 +493,57 @@ public void BulkAddToCart(Product product)
 }
 ```
 
-**Step 20.** Now lets add the actual feature toggle on the `Details.cshtml` file located here -> `.\PartsUnlimited\src\PartsUnlimitedWebsite\Views\Store\Details.cshtml`. Take note of the comments below - we want to find where the first section (under the first comment) of code is and replace it with the second section (under the second comment).
+**Step 20.** Let's wire up the required feature information to `StoreController.cs` located here -> `.\PartsUnlimited\src\PartsUnlimitedWebsite\Controllers\StoreController.cs`. We want to add the following code to the controller.
+
+```csharp
+...
+using PartsUnlimited.FeatureFlag;
+
+namespace PartsUnlimited.Controllers
+{
+    public class StoreController : Controller
+    {
+        ...
+        private readonly IFeatureManager _featureManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public StoreController(IPartsUnlimitedContext context, IMemoryCache memoryCache, IFeatureManager featureManager, UserManager<ApplicationUser> userManager)
+        {
+            ...
+            if (featureManager == null) throw new ArgumentNullException(nameof(featureManager));
+            if (userManager == null) throw new ArgumentNullException(nameof(userManager));
+
+            ...
+            _featureManager = featureManager;
+            _userManager = userManager;
+        }
+
+        ...
+
+        public async Task<IActionResult> Details(int id)
+        {
+            Product productData;
+
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                ApplicationUser user = await _userManager.FindByIdAsync(_userManager.GetUserId(HttpContext.User));
+                ViewBag.IsFeatureActive = _featureManager.GetStatusByKey(FeatureConstants.BulkBuyKey, user.Location ?? string.Empty);
+            }
+            else
+            {
+                ViewBag.IsFeatureActive = false;
+            }
+
+            ...
+
+            return View(productData);
+        }
+    }
+}
+
+```
+
+**Step 21.** Now lets add the actual feature toggle on the `Details.cshtml` file located here -> `.\PartsUnlimited\src\PartsUnlimitedWebsite\Views\Store\Details.cshtml`. Take note of the comments below - we want to find where the first section (under the first comment) of code is and replace it with the second section (under the second comment).
 
 ```csharp
 // This a tag should already exist!
