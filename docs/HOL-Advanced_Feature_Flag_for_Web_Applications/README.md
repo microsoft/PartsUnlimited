@@ -427,7 +427,28 @@ Then at the bottom of the page **just inside the last closing </dl> tag** we wan
         @Html.AntiForgeryToken()
 
         @Html.DropDownListFor(x => x.Location, Model.FeatureFlags.Regions.Keys.ToArray().Select(i => new SelectListItem { Text = i, Value = i, Selected = (i == Model.Location) }))
-        <span>[ <input type="submit" value="Save location" class="btn btn-link" /> ]</span>
+        
+        <span>[ <input type="button" value="Save location" class="btn btn-link" data-toggle="modal" data-target="#confirmation-modal"/> ]</span>
+
+        <div class="modal fade" id="confirmation-modal"  tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">Confirmation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you wish to change your location?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" style="float: left;" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" style="float: left;">Save changes</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
     }
 </dd>
 ...
