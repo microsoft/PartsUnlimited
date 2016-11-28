@@ -337,7 +337,7 @@ namespace PartsUnlimited
 }
 ```
 
-**Step 13.** We need to store a users location in order to apply our region flag correctly. Navigate to `.\PartsUnlimited\src\PartsUnlimited.Models\ApplicationUser.cs` and add the 'Location' property as seen below.
+**Step 13.** We need to store a user's location in order to apply our region flag correctly. Navigate to `.\PartsUnlimited\src\PartsUnlimited.Models\ApplicationUser.cs` and add the 'Location' property as seen below.
 
 ```csharp
 public class ApplicationUser : IdentityUser
