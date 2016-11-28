@@ -518,7 +518,9 @@ public void BulkAddToCart(Product product)
 
 ```csharp
 ...
+using Microsoft.AspNetCore.Identity;
 using PartsUnlimited.FeatureFlag;
+using System.Threading.Tasks;
 
 namespace PartsUnlimited.Controllers
 {
@@ -564,13 +566,58 @@ namespace PartsUnlimited.Controllers
 
 ```
 
-**Step 21.** Now lets add the actual feature toggle on the `Details.cshtml` file located here -> `.\PartsUnlimited\src\PartsUnlimitedWebsite\Views\Store\Details.cshtml`. Take note of the comments below - we want to find where the first section (under the first comment) of code is and replace it with the second section (under the second comment).
+We also want to include the bulk add method to `ShoppingCartController.cs` located here -> `.\PartsUnlimited\src\PartsUnlimitedWebsite\Controllers\ShoppingCartController.cs`.
 
 ```csharp
-// This a tag should already exist!
+
+        //
+        // GET: /ShoppingCart/BulkAddToCart/5
+        public async Task<IActionResult> BulkAddToCart(int id)
+        {
+            // Retrieve the product from the database
+            var addedProduct = _db.Products
+                .Single(product => product.ProductId == id);
+
+            // Start timer for save process telemetry
+            var startTime = System.DateTime.Now;
+
+            // Add it to the shopping cart
+            var cart = ShoppingCart.GetCart(_db, HttpContext);
+
+            cart.BulkAddToCart(addedProduct);
+
+            await _db.SaveChangesAsync(HttpContext.RequestAborted);
+
+            // Trace add process
+            var measurements = new Dictionary<string, double>()
+            {
+                {"ElapsedMilliseconds", System.DateTime.Now.Subtract(startTime).TotalMilliseconds }
+            };
+            _telemetry.TrackEvent("Cart/Server/Add", null, measurements);
+
+            // Go back to the main store page for more shopping
+            return RedirectToAction("Index");
+        }
+
+```
+
+
+**Step 21.** Now lets add the actual feature toggle on the `Details.cshtml` file located here -> `.\PartsUnlimited\src\PartsUnlimitedWebsite\Views\Store\Details.cshtml`. Take note of the comments below - we want to find where the first section (under the first comment) of code is and replace it with the second section (under the second comment).
+
+Look for the following tag below.
+
+```csharp
+
 <a href="@Url.Action("AddToCart", "ShoppingCart", new { id = Model.ProductId })" class="btn">Add to Cart</a>
 
-// Replace the code above with the code below
+```
+
+Replace the code above with the code below.
+
+```csharp
+
+<a href="@Url.Action("AddToCart", "ShoppingCart", new { id = Model.ProductId })" class="btn">Add to Cart</a>
+
 @{
     if (ViewBag.IsFeatureActive)
     {
