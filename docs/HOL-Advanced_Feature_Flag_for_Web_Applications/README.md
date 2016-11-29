@@ -47,7 +47,7 @@ Or navigate to where you cloned the repository to e.g. `C:\Source\Repos` with ex
 
 ![](<media/new-class.png>)
 
-**Step 5.** Create a new class in this folder called `FeatureType.cs`. This will be used to define different types of features we have. 
+**Step 5.** Create a new class in this folder called `FeatureType.cs`. This will be used to define different types of features we have.
 
 ```csharp
 namespace PartsUnlimited.FeatureFlag
@@ -88,7 +88,7 @@ namespace PartsUnlimited.FeatureFlag
 ```
 
 - **Feature Type** is an enum which represents the feature type.
-- **Active** is going to be the current state for the feature flag. 
+- **Active** is going to be the current state for the feature flag.
 - **Description** is going to be a brief description of what the feature flag is for.
 - **Key** is going to be the unique identifier for that particular feature flag.
 
@@ -322,9 +322,9 @@ namespace PartsUnlimited
         // This will make our feature flags available across the application
         services.AddScoped<IFeatureFlags>(
             p => featureFlags);
-        
+
         // Here is where we will define our feature flag strategies and bind them to the feature manager
-        var strategies = new List<IFeatureStrategy> { 
+        var strategies = new List<IFeatureStrategy> {
             new FeatureRegionStrategy(featureFlags)
         };
         var features = new List<Feature>
@@ -374,8 +374,8 @@ public class ManageController : Controller
     private readonly IFeatureManager _featureManager;
     private readonly IFeatureFlags _featureFlags;
 
-    public ManageController(UserManager<ApplicationUser> userManager, 
-    SignInManager<ApplicationUser> signInManager, 
+    public ManageController(UserManager<ApplicationUser> userManager,
+    SignInManager<ApplicationUser> signInManager,
     IFeatureManager featureManager, IFeatureFlags featureFlags)
     {
         _featureManager = featureManager;
@@ -383,7 +383,7 @@ public class ManageController : Controller
         UserManager = userManager;
         SignInManager = signInManager;
     }
-    
+
     ...
 }
 ```
@@ -415,7 +415,7 @@ public async Task<ActionResult> Index(ManageMessageId? message = null)
 @using System.Threading.Tasks
 ```
 
-Then at the bottom of the page **just inside the last closing </dl> tag** we want to add the following code.
+Then at the bottom of the page **just inside the last closing `</dl>` tag** we want to add the following code.
 
 ```csharp
 ...
@@ -427,7 +427,7 @@ Then at the bottom of the page **just inside the last closing </dl> tag** we wan
         @Html.AntiForgeryToken()
 
         @Html.DropDownListFor(x => x.Location, Model.FeatureFlags.Regions.Keys.ToArray().Select(i => new SelectListItem { Text = i, Value = i, Selected = (i == Model.Location) }))
-        
+
         <span>[ <input type="button" value="Save location" class="btn btn-link" data-toggle="modal" data-target="#confirmation-modal"/> ]</span>
 
         <div class="modal fade" id="confirmation-modal"  tabindex="-1" role="dialog" aria-hidden="true">
@@ -630,13 +630,13 @@ Replace the code above with the code below.
 
 **Step 1.** Before launching the site, locate the  `.\PartsUnlimited\src\PartsUnlimitedWebsite\config.json` file and alter the region active times. Make the New Zealand region five minutes from now and the Australian region 10 minutes from now.
 
-**Step 2.** Now launch the site. You can do this but pressing f5 or hitting the button shown below in Visual Studio. 
+**Step 2.** Now launch the site. You can do this but pressing f5 or hitting the button shown below in Visual Studio.
 
 ![](<media/iis-express.png>)
 
 ![](<media/splash.png>)
 
-**Step 3.** Now log in with any account. 
+**Step 3.** Now log in with any account.
 
 Or alternatively you can use the administrator account. This can be found in `.\PartsUnlimited\src\PartsUnlimitedWebsite\config.json`.
 
