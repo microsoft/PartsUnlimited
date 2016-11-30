@@ -63,7 +63,7 @@ To delete the GitHub remote, use:
 
 First, we need to find the URL to empty Git repository in VSTS.  If you remember your account name, and the Team Project name you created, the URL to the default Git repo is easily assembled:
 
-	https://<account>.visualstudio.com\<project>\_git\<project>
+	https://<account>.visualstudio.com\_git\<project>
 
 Alternatively, you can use a web browser to browse to your account, click into your project, and click the Code tab to get to your default Git repository:
 
