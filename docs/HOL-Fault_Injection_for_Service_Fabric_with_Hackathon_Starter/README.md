@@ -1,7 +1,7 @@
 
 #Fault Injection for Service Fabric Hackathon Starter
 
-Service uptime is one of the most important metrics for any application. Users are quick to switch if they cannot have access 24/7. Azure Service Fabric is a platform designed to make it easy to package, deploy and scale reliable applications. You have been tasked with improving availability for the hackathon starter app. 
+Service uptime is one of the most important metrics for any application. Users are quick to switch if they cannot have access 24/7. Azure Service Fabric is a platform designed to make it easy to package, deploy and scale reliable applications. You have been tasked with improving availability for the hackathon starter app.
 
 **Prerequisites**
 
@@ -54,15 +54,17 @@ npm install
 
 `mongod`
 
-NOTE: you may receive the following error:
+> If MongoDB is not on the path on Windows it will fail to start.
+>
+> You can lauch it directly, the default installation directory is `C:\Program Files\MongoDB\Server\3.2\bin`
 
-    `Data directory C:\data\db\ not found., terminating`
-
-This means you need to create a 'data' folder on whatever drive you're running the CMD instance on, with a sub folder of 'db'. MongoDB uses this location to store the database.
+> You may receive the following error: `Data directory C:\data\db\ not found., terminating`
+>
+>This means you need to create a 'data' folder on whatever drive you're running the CMD instance on, with a sub folder of 'db'. MongoDB uses this location to store the database.
 
 ![](<media/mongod.png>)
 
-**Step 5.** Lets try run the application locally. 
+**Step 5.** Lets try run the application locally.
 
 ```bash
 node app.js
@@ -78,7 +80,7 @@ node app.js
 
 **Step 1.** Create a new folder that we will use to package the Hackathon application in. For example -> `C:\release`
 
-**Step 2.** Let's set up the package structure required by Service Fabric. 
+**Step 2.** Let's set up the package structure required by Service Fabric.
 
 Firstly in the package root folder we want to create a new folder called `NodeService` eg `C:\release\NodeService`
 
@@ -103,23 +105,8 @@ Firstly in the package root folder we want to create a new folder called `NodeSe
 </ApplicationManifest>
 ```
 
-**Step 4.** Inside the NodeService folder, create a folder called C (`C:\release\NodeService\C`). This will stored the code for our node application. 
-
-    |-- ApplicationPackageRoot
-
-        |-- NodeService
-            |-- C
-                |-- Hackathon application files (the ones you got from Github)
-                |-- node.exe
-            |-- config
-                |-- Settings.xml
-            |-- ServiceManifest.xml
-
-        ...
-
-        |-- ApplicationManifest.xml
-
-**Step 5.** The ServiceManifest.xml (`C:\release\NodeService\ServiceManifest.xml`) file should have the following contents inside.
+**Step 4.**
+In the NodeService folder create the following ServiceManifest.xml file (`C:\release\NodeService\ServiceManifest.xml`), this file should have the following contents inside.
 
 ```xml
     <?xml version="1.0" encoding="utf-8"?>
@@ -153,17 +140,34 @@ Firstly in the package root folder we want to create a new folder called `NodeSe
     </ServiceManifest>
 ```
 
-**Step 6.** We need to bundle node with our self contained Service Fabric package. 
+**Step 5.** Inside the NodeService folder, create a folder called C (`C:\release\NodeService\C`). This will store the code for our node application.
+
+
+**Step 6.** Inside the NodeService folder, create a folder called config (`C:\release\NodeService\config`) You should now have the following folder and file structure:
+
+    |-- ApplicationPackageRoot
+
+        |-- NodeService
+            |-- C
+            |-- config
+            |-- ServiceManifest.xml
+        |-- ApplicationManifest.xml
+
+
+
+**Step 7.** We need to bundle node and the Hackathon Starter code within our self contained Service Fabric package.
 
 Grab the node.exe from whatever location shows up and copy it to a new deployment folder. For the example below we're using `xcopy "from/here" "to/here"`
+
+> Note that the `where` command is only available in the Windows CMD prompt and not when using PowerShell
 
 ```powershell
 
 where node.exe
 
-xcopy "C:\Program Files\nodejs\node.exe" "C:\my\package\NodeService\C"
+xcopy "C:\Program Files\nodejs\node.exe" "C:\release\NodeService\C"
 
-xcopy "C:\dev\repos\hackathon-starter\*" "C:\my\package\NodeService\C" /s /i
+xcopy "C:\dev\repos\hackathon-starter\*" "C:\release\NodeService\C" /s /i
 
 ```
 
@@ -173,11 +177,21 @@ Alternatively you can use the linux commands `which nodejs` then `cp from to`
 
 which nodejs
 
-cp node/location/node.exe /my/package/NodeService/C/
+cp node/location/node.exe /release/NodeService/C/
 
-cp -a /repos/hackathon-starter/. /my/package/NodeService/C/
+cp -a /repos/hackathon-starter/. /release/NodeService/C/
 
 ```
+You should now have the following folder and file structure:
+    |-- ApplicationPackageRoot
+
+        |-- ApplicationManifest.xml
+        |-- NodeService
+            |-- C
+                |-- Hackathon application files (the ones you got from Github)
+                |-- node.exe
+            |-- config
+            |-- ServiceManifest.xml
 
 ### Task 3: Set up our Azure MongoDB instance.
 
@@ -195,19 +209,19 @@ cp -a /repos/hackathon-starter/. /my/package/NodeService/C/
 
 **Step 4.** On the next screen specify all the required configuration values as seen below. You may need to accept that you are using a preview service if you haven't used this particular service before. Note you will need to find an available ID as some names may already be taken. Also create a resource group which ties to this lab (e.g. hackathon-sf).
 
-![](<media/mongo-config.png>) 
+![](<media/mongo-config.png>)
 
 **Step 5.** Navigate to the main resource group list and locate the group you just created. In the example above we used the name 'hackathon-sf'.
 
-![](<media/locate-mongo.png>) 
+![](<media/locate-mongo.png>)
 
 **Step 6.** Now we want to grab the connection string. Select 'Connection String' and copy down the value supplied somewhere for the next step.
 
-![](<media/mongo-connection.png>) 
+![](<media/mongo-connection.png>)
 
-**Step 7.** Navigate back to the hackathon solution and open the `C:/dev/repos/hackathon-starter/.env.example` file 
+**Step 7.** Navigate back to the hackathon solution Service Fabric package and open the `C:\release\NodeService\C\.env.example` file
 
-At the top of the file you will see two environment variables set 'MONGODB_URI' and 'MONGOLAB_URI'. We want to change the values set to be the connection string we pulled from azure in the previous step.
+At the top of the file you will see two environment variables set 'MONGODB_URI' and 'MONGOLAB_URI'. We want to change the values set to be the connection string we pulled from Azure in the previous step.
 
 For example:
 
@@ -220,7 +234,7 @@ MONGOLAB_URI=mongodb://hack-db:qC9Hhe...==@hack-db.documents.azure.com:10250/?ss
 ### Task 4: Deploy the Service Fabric package to a windows cluster.
 Let's deploy to a Windows cluster in Azure.
 
-**Step 1.** First things first, let's create a Service Fabric container for our Hackathon starter site. 
+**Step 1.** First things first, let's create a Service Fabric container for our Hackathon starter site.
 
 Navigate to the Azure portal and select 'New' -> https://ms.portal.azure.com
 
@@ -248,7 +262,7 @@ Add the custom endpoint of 3000 as this is the default port that the app is host
 
 ![](<media/azure5.png>)
 
-**Step 6.** For demo purposes we will use the insecure setting as there are quite a few steps involved in setting this up in Azure. If you want more information visit https://azure.microsoft.com/en-us/documentation/articles/key-vault-get-started/. 
+**Step 6.** For demo purposes we will use the insecure setting as there are quite a few steps involved in setting this up in Azure. If you want more information visit https://azure.microsoft.com/en-us/documentation/articles/key-vault-get-started/.
 
 It is strongly advised to use the secure mode in production.
 
@@ -262,9 +276,15 @@ It is strongly advised to use the secure mode in production.
 
 ![](<media/azure9.png>)
 
-After it has successfully deployed you should see the following on the Azure dashboard.
+After it has successfully deployed you may see the following on the Azure dashboard.
 
 ![](<media/azure10.png>)
+
+In some instances as the Service Fabric Cluster provisions the portal may automatically open the blade for you
+
+![](<media/azure10a.png>)
+
+> Note: You must wait until the status listed for your cluster is **Ready** otherwise the next step will fail.
 
 **Step 9.** Select the Hackathon cluster, then select 'Custom fabric settings'. Add a new value for the **EseStore** with the parameter **MaxCursors** and the value **65536**. This is to ensure our node modules folder will be able to be registered correctly. Service fabric currently has a hard limit on the amount of files and will timeout if this value is not increased. *Ideally you should have a build task that minifies and concatenates all your vendor dependencies*. This may take some time to complete as it needs to propagate across the scale set.
 
@@ -272,11 +292,13 @@ After it has successfully deployed you should see the following on the Azure das
 
 ![](<media/max-cursors.png>)
 
+> Note: You must again wait until the status listed for your cluster is **Ready** otherwise the next step will fail. This can take a very long time.
+
 Navigate back to the 'Overview' section inside the service fabric cluster. Then copy the 'Service Fabric Explorer' link and paste it in your browser of choice.
 
 ![](<media/azure11.png>)
 
-**Step 10.** This is the Azure Service Fabric Explorer. 
+**Step 10.** This is the Azure Service Fabric Explorer.
 
 ![](<media/sfe.png>)
 
@@ -354,7 +376,7 @@ Let's simulate a Service Fabric cluster node failure by stopping a node. To do t
 
 Now that we have the node name of "_app_1" we can run our test.
 
-**Step 4.** Run this sample in PowerShell 
+**Step 4.** Run this sample in PowerShell
 
 ```powershell
 Connect-ServiceFabricCluster [your-server-cluster-address].[location].cloudapp.azure.com:19000
@@ -387,4 +409,4 @@ Invoke-ServiceFabricFailoverTestScenario -TimeToRunMinute $timeToRun -MaxService
 
 We can again see in the portal the actual instances being tampered with in the Service Fabric Explorer.
 
-In this lab you have learned how to set up and deploy a node application to service fabric. You have also learned how to set up MongoDB in Azure with ease. You then ran some tests to ensure your infrastructure could handle some potential hosting issues - like nodes randomly restarting and going off-line. This would help with finding potential bottlenecks and fixing them before you release your application. 
+In this lab you have learned how to set up and deploy a node application to service fabric. You have also learned how to set up MongoDB in Azure with ease. You then ran some tests to ensure your infrastructure could handle some potential hosting issues - like nodes randomly restarting and going off-line. This would help with finding potential bottlenecks and fixing them before you release your application.
