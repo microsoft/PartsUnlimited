@@ -310,7 +310,7 @@ Firstly we want to connect to the cluster.
 Connect-ServiceFabricCluster [your-server-cluster-address].[location].cloudapp.azure.com:19000
 ```
 
-Note: ensure the address does not have https:// - eg. `hackathon.westcentralus.cloudapp.azure.com:19000`
+Note: ensure the address does not have https:// and must specify port 19000 - eg. `hackathon.westcentralus.cloudapp.azure.com:19000`
 
 **Step 12.** Now we want to upload the application package to the cluster.
 
