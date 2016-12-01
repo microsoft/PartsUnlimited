@@ -39,24 +39,17 @@ namespace PartsUnlimited
         {
             //If this type is present - we're on mono
             var runningOnMono = Type.GetType("Mono.Runtime") != null;
-            var sqlConnectionString = Configuration[ConfigurationPath.Combine("Data", "DefaultConnection", "ConnectionString")];
+            var sqlConnectionString = Configuration[ConfigurationPath.Combine("ConnectionStrings", "DefaultConnectionString")];
             var useInMemoryDatabase = string.IsNullOrWhiteSpace(sqlConnectionString);
 
-            // Add EF services to the services container
             if (useInMemoryDatabase || runningOnMono)
             {
-                services.AddDbContext<PartsUnlimitedContext>(options =>
-                        {
-                            options.UseInMemoryDatabase();
-                        });
+                sqlConnectionString = "";
             }
-            else
-            {
-                services.AddDbContext<PartsUnlimitedContext>(options =>
-                        {
-                            options.UseSqlServer(sqlConnectionString);
-                        });
-            }
+
+            // Add EF services to the services container
+            services.AddDbContext<PartsUnlimitedContext>();
+
 
             // Add Identity services to the services container
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -97,8 +90,9 @@ namespace PartsUnlimited
                 return new ConfigurationApplicationInsightsSettings(Configuration.GetSection(ConfigurationPath.Combine("Keys", "ApplicationInsights")));
             });
 
-            // Associate IPartsUnlimitedContext with context
-            services.AddTransient<IPartsUnlimitedContext>(s => s.GetService<PartsUnlimitedContext>());
+            // Associate IPartsUnlimitedContext and PartsUnlimitedContext with context
+            services.AddTransient<IPartsUnlimitedContext>(x => new PartsUnlimitedContext(sqlConnectionString));
+            services.AddTransient(x => new PartsUnlimitedContext(sqlConnectionString));
 
             // We need access to these settings in a static extension method, so DI does not help us :(
             ContentDeliveryNetworkExtensions.Configuration = new ContentDeliveryNetworkConfiguration(Configuration.GetSection("CDN"));
