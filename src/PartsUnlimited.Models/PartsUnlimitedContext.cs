@@ -10,10 +10,6 @@ namespace PartsUnlimited.Models
     {
         private readonly string _connectionString;
 
-        public PartsUnlimitedContext()
-        {
-        }
-
         public PartsUnlimitedContext(string connectionString)
         {
             _connectionString = connectionString;

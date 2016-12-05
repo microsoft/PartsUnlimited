@@ -35,5 +35,8 @@
     "ApplicationInsights": {
       "InstrumentationKey": "efc04167-3227-40ff-aa88-46a271dba379"
     }
+  },
+  "ConnectionStrings": {
+    "DefaultConnectionString": ""
   }
 }
