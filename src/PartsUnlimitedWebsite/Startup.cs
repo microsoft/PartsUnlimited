@@ -125,7 +125,7 @@ namespace PartsUnlimited
             }
         }
 
-        //This method is invoked when KRE_ENV is 'Development' or is not defined
+        //This method is invoked when ASPNETCORE_ENVIRONMENT is 'Development' or is not defined
         //The allowed values are Development,Staging and Production
         public void ConfigureDevelopment(IApplicationBuilder app)
         {
@@ -137,7 +137,7 @@ namespace PartsUnlimited
             Configure(app);
         }
 
-        //This method is invoked when KRE_ENV is 'Staging'
+        //This method is invoked when ASPNETCORE_ENVIRONMENT is 'Staging'
         //The allowed values are Development,Staging and Production
         public void ConfigureStaging(IApplicationBuilder app)
         {
@@ -145,7 +145,7 @@ namespace PartsUnlimited
             Configure(app);
         }
 
-        //This method is invoked when KRE_ENV is 'Production'
+        //This method is invoked when ASPNETCORE_ENVIRONMENT is 'Production'
         //The allowed values are Development,Staging and Production
         public void ConfigureProduction(IApplicationBuilder app)
         {

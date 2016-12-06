@@ -100,6 +100,7 @@
     "include": [
       "wwwroot",
       "Views",
+      "Areas",
       "config.json",
       "web.config"
     ]
