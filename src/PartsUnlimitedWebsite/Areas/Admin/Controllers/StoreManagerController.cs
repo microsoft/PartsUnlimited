@@ -23,7 +23,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         private readonly IPartsUnlimitedContext _db;
          private readonly IMemoryCache _cache;
 
-        public StoreManagerController(IPartsUnlimitedContext context, ConnectionManager connectionManager, IMemoryCache memoryCache)
+        public StoreManagerController(IPartsUnlimitedContext context, IMemoryCache memoryCache)
         {
             _db = context;
             _cache = memoryCache;
