@@ -61,6 +61,31 @@ Congratulations, your code should now be in VSTS!
 
 ![](<media/CI22.png>)
 
+**2.** Clone the repo to your hard drive.
+
+> Note: You do not have to do this unless you are going to need the source code opened in Visual Studio.
+
+Create a parent **Working Directory** on your local file system. For instance, on a Windows OS you can create the following directory:
+
+```
+C:\Source\Repos
+```
+
+Open a command line (one that supports Git) and change to the directory you created above.
+
+In VSTS, right-click the `Clone` button on the top right of the repository File view. Click the `Copy` button to copy the URL of the repo to
+the clipboard.
+
+![](<media/CI23.png>)
+
+Clone the repository using the `git clone` command. Type `git clone`, then a space and then paste in the URL you just copied. You can optionally add another space and a repo name. In the example below, the clone will be copied into a directory named HOL. Feel free to use whatever directory name you like, or leave it blank to use the default directory name:
+
+```
+git clone <vsts-git-url> HOL
+```
+
+After a few seconds of downloading, all of the code should now be on your local machine.
+
 ### II. Create Continuous Integration Build
 
 A continuous integration build will give us the ability check whether the code
