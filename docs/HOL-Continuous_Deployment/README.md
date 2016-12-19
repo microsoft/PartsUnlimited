@@ -263,11 +263,11 @@ Click "Create" to start the release.
 Now that the infrastructure deployment is configured, you can add a task to deploy the web app to Dev.
 
 1. Click on the Dev environment in the Release Definition. Then click "+ Add tasks".
-2. Select the "Deploy" group in the left and click the add button next to "AzureRM Web App Deployment" to add the task. Close the task selector dialog.
+2. Select the "Deploy" group in the left and click the add button next to "Azure App Service Deploy" to add the task. Close the task selector dialog.
 
 	![](media/57.png)
 
-3. Click on the "AzureRM Web App Deployment" Task.
+3. Click on the "Azure App Service Deploy" Task.
 4. Select the Azure Service Endpoint you created earlier in the AzureRM Subscription drop down.
 5. For Web App Name, enter the `$(WebsiteName)` to use a variable. You defined this variable earlier when deploying
 the ARM Template. You will shortly "promote" it to a Release variable so that it can be used in all Environments in the Release.
