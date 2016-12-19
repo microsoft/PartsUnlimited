@@ -202,7 +202,7 @@ button next to "Azure Resource Group Deployment" to add the task. Close the "Tas
 		-CdnStorageContainerNameForDev $(ContainerName)-dev
 		-CdnStorageAccountNameForStaging $(StorageAccountName)-stage
 		-CdnStorageContainerNameForStaging $(ContainerName)-stage
-		-PartsUnlimitedServerAdminLoginPassword (ConvertTo-SecureString -String '$(AdminPassword)' -AsPlainText -Force)
+		-PartsUnlimitedServerAdminLoginPassword (ConvertTo-SecureString -String '$(AdminPw)' -AsPlainText -Force)
 		-PartsUnlimitedServerAdminLoginPasswordForTest (ConvertTo-SecureString -String '$(AdminTestPassword)' -AsPlainText -Force)
 		```
 		You will shortly define the values for each parameter, like `$(ServerName)`, in the Environment variables.
@@ -220,7 +220,7 @@ button next to "Azure Resource Group Deployment" to add the task. Close the "Tas
 	* **HostingPlan** - Name of the hosting plan for the website
 	* **StorageAccountName** - Storage account name prefix. Will have `-dev` or `-stage` added for dev/staging
 	* **ContainerName** - Container name prefix. Will have `-dev` or `-stage` added for dev/staging
-	* **AdminPassword** - Admin password for production database server
+	* **AdminPw** - Admin password for production database server
 	* **AdminTestPassword** - Admin password for dev and staging database servers
 	* **ResourceGroupName** - Name of the Resource Group.
 
