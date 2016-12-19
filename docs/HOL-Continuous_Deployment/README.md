@@ -274,7 +274,7 @@ the ARM Template. You will shortly "promote" it to a Release variable so that it
 6. Check the Deploy to Slot check box
 7. Enter `$(ResourceGroupName)` into the Resource Group Box.
 8. Enter "dev" for the Slot. This will deploy the site to the "dev" deployment slot. This allows you to deploy the site to an Azure deployment slot without affecting the Production site.
-9. Tick "Take App Offline". This stops the website for deployment period and takes it back online afterwards. This is required because sites receive requests all the time causing files to lock down (i.e. making them unmodifiable).
+9. Expand the "Additional Deployment Options" section. Check "Publish using Web Deploy" and then "Take App Offline". Taking the app offline stops the website for deployment period and takes it back online afterwards. This is required because sites receive requests all the time causing files to lock down (i.e. making them unmodifiable).
 10. Click the ellipsis (...) button, next to the Package box, to set the Web Deploy Package location. Browse to the PartsUnlimitedWebsite.zip file and click OK.
 
 	![](media/10.png)
