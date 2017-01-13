@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>PartsUnlimited : Fault Injection for Azure PaaS</title>
+        <meta name="description" content="example e-commerce website">
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/PartsUnlimited/css/syntax.css">
+        <link rel="stylesheet" href="/PartsUnlimited/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <div id="header" class="col-sm-12">
+                    <img class="logo" src="/PartsUnlimited/assets/logo-ms-dark.png" alt="Microsoft">
+<h4><a class="brand" href="/PartsUnlimited/">PartsUnlimited</a>
+    <small>example e-commerce website</small>
+</h4>
+
+                </div>
+            </div>
+
+            <div class="row">
+                
+                
+                    <div id="navigation" class="col-sm-3">
+                        <ul class="nav nav-list">
+    
+        <li><a href="/PartsUnlimited/">Welcome</a></li>
+    
+
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Basic DevOps Practices</li>
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/basic/manual-deployment.html">Manual Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/basic/ci.html">Continuous Integration</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/basic/cd.html">Continuous Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/basic/QuickStart.html">Quick Start</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/basic/GettingStartedLinuxOSX.html">Getting Started on Linux and OSX</a></li>
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/basic/GettingStarted.html">Getting Started</a></li>
+            
+        
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Advanced DevOps Practices</li>
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/advanced/UserTelemetry.html">User Telemetry</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/advanced/UsageAnalysis.html">Usage Analysis</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/advanced/TestingProd.html">Testing in Production</a></li>
+            
+        
+            
+
+            
+                <li data-order="6"><a href="/PartsUnlimited/advanced/FeatureFlagWebAdvanced.html">Advanced Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/advanced/FeatureFlagWeb.html">Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="7"><a href="/PartsUnlimited/advanced/FeatureFlagMobile.html">Feature Flag for a Mobile Solution</a></li>
+            
+        
+            
+
+            
+                <li data-order="8"><a href="/PartsUnlimited/advanced/FeatureFlagAPI.html">Feature Flag for an API</a></li>
+            
+        
+            
+
+            
+                <li data-order="11"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabricStarter.html">Fault Injection for Service Fabric Hackathon Starter</a></li>
+            
+        
+            
+
+            
+                <li data-order="10"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabric.html">Fault Injection for Service Fabric</a></li>
+            
+        
+            
+
+            
+                <li data-order="9"><a class="nav-active" href="/PartsUnlimited/advanced/FaultInjectionAzurePaaS.html">Fault Injection for Azure PaaS</a></li>  
+            
+        
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/advanced/ErrorReporting.html">Error Reporting</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/advanced/ABTesting.html">Experimentation and A/B Testing with Optimzely</a></li>
+            
+        
+    
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class="divider"></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id="content" class="col-sm-9">
+                        <div class="page-header">
+    <h2>Fault Injection for Azure PaaS
+        
+    </h2>
+</div>
+
+<h1 id="hol---fault-injection-for-azure-paas">HOL - Fault Injection for Azure PaaS</h1>
+
+<p>Your manager has expressed interest in the stability and fault-tolerance of the new cloud based infrastructure. It’s your task to determine how and if the system will still operate after injecting faults into the environment. The estimated number of concurrent users for this system is 600 people.</p>
+<blockquote>
+  <p><strong>Note:</strong> In this lab, knowledge of how to deploy a Azure Resource Management (ARM) template and how to publish a website to App Service in Azure is assumed.</p>
+</blockquote>
+
+<h2 id="pre-requisites">Pre-requisites:</h2>
+
+<ul>
+  <li>
+    <p><a href="https://www.visualstudio.com/downloads/">Visual Studio 2015 Update 3</a></p>
+  </li>
+  <li>
+    <p>Latest <a href="https://www.microsoft.com/en-us/download/details.aspx?id=53600">Azure SDK 2.9.5</a> installed</p>
+  </li>
+</ul>
+
+<h2 id="tasks-overview">Tasks Overview:</h2>
+<p><strong>1. Set up a scalable and highly available environment</strong> This will walk you through deploying main cluster and failover cluster to Azure using ARM template. You will also configure traffic manager and Geo-Replication of the production database from the main cluster to the failover cluster database.</p>
+
+<p><strong>2. Set up Application Insights</strong> In this task you will connect your main cluster’s App Service to an Application Insights instance.</p>
+
+<p><strong>3. Fault injection into the main cluster</strong> In this task you will configure a load test to simulate users browsing your website and then you will start to decrease number of VM instances run in your App Service.</p>
+
+<p><strong>4. Analyze results of the load test</strong> In this task you will collect data from different sources, like build-in App Service’s metrics, Application Insights’ metrics and VSTS’s load test metrics, then use it to draw a conclusion.</p>
+
+<p><strong>5. Test the traffic manager’s functionality</strong> In this task you will disable main cluster’s App Service, and confirm that traffic manager will start redirecting to your failover cluster.</p>
+
+<h2 id="hol">HOL:</h2>
+<h3 id="task-1-set-up-a-scalable-and-highly-available-environment">Task 1: Set up a scalable and highly available environment</h3>
+
+<p>In this task you can use any two regions for your clusters as long as <a href="https://azure.microsoft.com/en-us/documentation/articles/storage-redundancy/">Geo-Replication</a> is supported.</p>
+
+<p><strong>Step 1.</strong> Clone the PartsUnlimited repository to a local directory.</p>
+
+<ol>
+  <li>
+    <p>Open a command line (one that supports Git) and navigate to the directory where you want to store your local repositories. For example in a Windows OS, you can create and navigate to <code class="highlighter-rouge">C:\Source\Repos</code>.</p>
+  </li>
+  <li>
+    <p>Clone the repository with the following command:</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code> git clone https://github.com/Microsoft/PartsUnlimited.git
+</code></pre>
+    </div>
+    <blockquote>
+      <p>After a few seconds of downloading, all of the code should now be on your local machine.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Move into the repository directory that was just created. In a Windows OS, you can use this command:</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code> cd PartsUnlimited
+</code></pre>
+    </div>
+  </li>
+</ol>
+
+<p><strong>Step 2.</strong> Open the PartsUnlimited solution with Visual Studio</p>
+
+<p>In the command line, type the following:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>start PartsUnlimited.sln
+</code></pre>
+</div>
+<p>Alternatively, navigate to where you cloned the repository to e.g. <code class="highlighter-rouge">C:\Source\Repos\PartsUnlimited</code> with explorer and double click on PartsUnlimited.sln</p>
+
+<p><strong>Step 3.</strong> Deploying an ARM template for the main cluster.</p>
+
+<ol>
+  <li>
+    <p>Right click on <code class="highlighter-rouge">PartsUnlimitedEnv</code> project, select <code class="highlighter-rouge">Deploy</code> and click on <code class="highlighter-rouge">New...</code></p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/44.png" alt="" /></p>
+  </li>
+  <li>
+    <p>In the “Resource group” dropdown click on <code class="highlighter-rouge">&lt;Create new...&gt;</code>. Select your subscription, enter a name, select <code class="highlighter-rouge">East US</code> in the “Resource group location” dropdown and click on “Create”.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/1.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Select the “FullEnvironmentSetupMerged.json” template and the corresponding param file to deploy. Both files are located at <code class="highlighter-rouge">env</code> &gt;<code class="highlighter-rouge">Templates</code> folder of your local repository.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/2.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Click on “Edit Parameters…” and enter the details for the main cluster. Click on “Save” and then “Deploy”.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/3.png" alt="" /></p>
+    <blockquote>
+      <p><strong>Note:</strong> Make sure that:<br /> 1) All of the names will be specific to the main cluster and unique across Azure.<br /> 2) “PartsUnlimitedDBEdition” must be set to “Standard” for Geo-Replication to work.</p>
+    </blockquote>
+  </li>
+</ol>
+
+<p><strong>Step 4.</strong> Deploying an ARM template for the standby cluster.</p>
+
+<ol>
+  <li>
+    <p>Right click on <code class="highlighter-rouge">PartsUnlimitedEnv</code> project, select <code class="highlighter-rouge">Deploy</code> and click on <code class="highlighter-rouge">New...</code></p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/44.png" alt="" /></p>
+  </li>
+  <li>
+    <p>In the “Resource group” dropdown click on <code class="highlighter-rouge">&lt;Create new...&gt;</code>. Select your subscription, enter a name, select <code class="highlighter-rouge">West US</code> in the “Resource group location” dropdown and click on “Create”.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/4.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Select the “FullEnvironmentSetupMerged.json” template and the corresponding param file to deploy.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/5.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Click on “Edit Parameters…” and enter the details for the standby cluster. Click on “Save” and then “Deploy”.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/6.png" alt="" /></p>
+    <blockquote>
+      <p><strong>Note:</strong> Make sure that:<br /> 1) All of the names will be specific to the main cluster and unique across Azure.<br /> 2) “PartsUnlimitedDBEdition” must be set to “Standard” for Geo-Replication to work.</p>
+    </blockquote>
+  </li>
+</ol>
+
+<p><strong>Step 5.</strong> Publish PartsUnlimited to the main and standby clusters.</p>
+
+<ol>
+  <li>
+    <p>Right click on <code class="highlighter-rouge">PartsUnlimitedWebsite</code> project and select <code class="highlighter-rouge">Publish...</code></p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/45.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Click on “Microsoft Azure App Service”.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/7.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Select the main cluster, click “OK”, then “Publish”.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/8.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Similarly, repeat the previous steps for the standby cluster.</p>
+  </li>
+</ol>
+
+<p><strong>Step 6.</strong> Set up the scalability of the App Service.</p>
+
+<ol>
+  <li>
+    <p>Open the resource group of your main cluster and click on the “App Service” instance.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/19.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Click on “Scale out (App Service plan)”, make sure that “Scale by” is set to “an instance count that I enter manually”, increase the number of instances to 4, then click “Save”.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/20.png" alt="" /></p>
+  </li>
+  <li>
+    <p>In this lab we will leave the number of instances in the failover cluster at 1.</p>
+    <blockquote>
+      <p><strong>Note:</strong> In this lab we want to control the number of instances running in the App Service, then we can simulate an instance fault by decrementing the total available number of instances. Usually we would prefer to define rules such that the number of instances will scale automatically based on their metrics.</p>
+    </blockquote>
+  </li>
+</ol>
+
+<p><strong>Step 7.</strong> Set up the Geo-Replication of the production database.</p>
+
+<ol>
+  <li>
+    <p>Navigate to the “Overview” page of the main cluster’s resource group and click on the production database server.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/21.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Click on your database in the list of available databases.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/22.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Click on “Geo-Replication” and select “West US” in the “Target Regions” list.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/23.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Set “Secondary type” to “Readable”, select the production database in the standby cluster as a “Target server” and click “OK”.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/24.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Once the database has been copied, you should be able to see it on the overview page of the standby cluster’s resource group. Note that the production SQL server now has two databases in it.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/25.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Since we do not intend to use the production database in the standby cluster deployed by the ARM template, let’s delete it. Click on the production database, then on “Delete” and “OK” to confirm.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/26.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Finally, update the database connection string for the App Service in the standby cluster. Click on the App Service and select “Application settings”. Click on “&lt; Hidden for Security &gt;” to reveal your database connection string.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/27.png" alt="" /></p>
+
+    <p><strong>Note:</strong> You should find the data in the following format:</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code> Data Source=tcp:&lt;DBServerName&gt;.database.windows.net,1433;Initial Catalog=&lt;DBName&gt;;User Id=&lt;UserName&gt;@&lt;DBServerName&gt;;Password=&lt;YourPassword&gt;;
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p>Modify the username and password to match those selected during the ARM template deployment of the main cluster. Update the DBName to the newly migrated DBName (e.g. PartsUnlimitedMainDB in this Lab).</p>
+
+    <p><strong>Note:</strong> The final version of the database connection string in this lab should look as follows:</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code> Data Source=tcp:partsunlimitedstandbyserver.database.windows.net,1433;Initial Catalog=PartsUnlimitedMainDB;User Id=AdminUser@partsunlimitedstandbyserver;Password=************;
+</code></pre>
+    </div>
+  </li>
+</ol>
+
+<p><strong>Step 8.</strong> Creating and configuring the traffic manager in Azure.</p>
+
+<ol>
+  <li>
+    <p>Create a new resource group for the traffic manager.</p>
+
+    <ul>
+      <li>
+        <p>Click on “Resource Groups” and then click on “Add”.</p>
+
+        <p><img src="/PartsUnlimited/assets/fiazurepass/9.png" alt="" /></p>
+      </li>
+      <li>
+        <p>Enter the group name, select subscription, specify “East US 2” as a resource group location and click “Create”.</p>
+
+        <p><img src="/PartsUnlimited/assets/fiazurepass/10.png" alt="" /></p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Open the newly created resource group.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/11.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Click on the “Add” button.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/12.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Type “traffic manager” and press “Enter”. This will filter the options. Select “Traffic Manager profile” and click on the “Create” button.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/13.png" alt="" /></p>
+  </li>
+  <li>Enter the name, select “Priority” as the routing method and click “Create”.
+    <blockquote>
+      <p><strong>Note:</strong>
+ <br /> <strong>Priority:</strong> Traffic Manager will use a primary service endpoint for all traffic, and provide backups in case the primary endpoints are unavailable.
+ <br /> <strong>Weighted:</strong> Traffic Manager will distribute traffic across a set of endpoints, either evenly or according to weights, which you define.
+ <br /> <strong>Performance:</strong> Traffic Manager will redirect to the “closest” endpoint in terms of the lowest network latency for each user.</p>
+    </blockquote>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/14.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Navigate to the resource group where the new traffic manager was created and click on it.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/15.png" alt="" /></p>
+  </li>
+  <li>Add an endpoint to the App Service in the main cluster by clicking on “Add”, configuring the endpoint with the settings below, then clicking “OK”.
+    <ul>
+      <li>Type: “Azure endpoint”</li>
+      <li>Name: “PartsUnlimitedMain”</li>
+      <li>Target resource type: “App Service”</li>
+      <li>Target resource: Select the App Service in your main cluster</li>
+      <li>
+        <p>Priority: 1</p>
+
+        <p><img src="/PartsUnlimited/assets/fiazurepass/16.png" alt="" /></p>
+      </li>
+    </ul>
+  </li>
+  <li>Similarly, add the standby cluster endpoint, with the corresponding settings:
+    <ul>
+      <li>Type: “Azure endpoint”</li>
+      <li>Name: “PartsUnlimitedStandby”</li>
+      <li>Target resource type: “App Service”</li>
+      <li>Target resource: Select the App Service in your standby cluster</li>
+      <li>
+        <p>Priority: 2</p>
+
+        <p><img src="/PartsUnlimited/assets/fiazurepass/17.png" alt="" /></p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Navigate to “Configuration” page, change ‘DNS time to live (TTL)” from 300s to 60s and click on “Save”. Lower TTL is preferable in this case because it defines how often traffic manager will update DNS records and start redirecting to failover cluster in circumstances of the main cluster going offline.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/43.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Navigate to the “Overview” page of this traffic manager. Click on the link under “DNS name”. The traffic manager will redirect traffic to the main cluster if it’s available, otherwise it will navigate traffic to the standby cluster.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/18.png" alt="" /></p>
+  </li>
+</ol>
+
+<p>Congratulations, the scalable and highly available environment is now set up.</p>
+<blockquote>
+  <p><strong>Note:</strong> In a real life situation you might also have a domain name for your website which will need to be set up as a CNAME to the traffic manager’s DNS name.</p>
+</blockquote>
+
+<h3 id="task-2-set-up-application-insights">Task 2: Set up Application Insights</h3>
+
+<p><strong>Step 1.</strong> Navigate to App Service in your main cluster and click on “Application Insights”, then select your production Application Insights instance in the main cluster and click “OK”. Azure will connect this App Service to the Application Insights instance and will start collecting data.</p>
+
+<p><img src="/PartsUnlimited/assets/fiazurepass/41.png" alt="" /></p>
+
+<h3 id="task-3-fault-injection-into-the-main-cluster">Task 3: Fault injection into the main cluster</h3>
+
+<p>In this task you will simulate a fault in the main cluster by decreasing the number of instances available in your App Service.</p>
+
+<p><strong>Step 1.</strong> Set up a Performance test in Azure.
+In this step, we will run a load test to simulate traffic for the App Service.</p>
+
+<ol>
+  <li>
+    <p>Navigate to the resource group of your main cluster and click on the App Service instance.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/28.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Click on “Performance test” and then on “New”.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/29.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Click on “CONFIGURE TEST USING”, ensure the URL specified is your traffic manager’s URL, then select “Done”. Set “GENERATE LOAD FROM” to the closest region to your App Service to reduce latency. Enter 600 as your “USER LOAD” and 20 as your “Duration (MINUTES)”. Click “Run test”. The load test will be run from a linked VSTS account (which will be created if necessary) in 10-15 minutes.</p>
+
+    <blockquote>
+      <p><strong>Note:</strong> Make sure you familiarize yourself with the costs associated with load testing (<a href="https://azure.microsoft.com/en-us/pricing/details/visual-studio-team-services/">Visual Studio Team Services Pricing</a>).</p>
+    </blockquote>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/30.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Allow the load test to run for five minutes, then decrement the number of instances every five minutes to simulate a series of faults. Do this by scrolling down on the load test page and clicking on the scale of your hosting plan for the main cluster. Decrease the number of instances as appropriate, and click “Save”.</p>
+
+    <p><img src="/PartsUnlimited/assets/fiazurepass/31.png" alt="" /></p>
+  </li>
+</ol>
+
+<h3 id="task-4-analyze-results-of-the-load-test">Task 4: Analyze results of the load test</h3>
+<p>In this task we will analyze the information received from the load test and attempt to determine the optimal number of instances for the App Service.</p>
+
+<p><strong>Step 1.</strong> Navigate to the App Service in the main cluster, click on “Performance test” and then on the load test itself.</p>
+
+<p><img src="/PartsUnlimited/assets/fiazurepass/40.png" alt="" /></p>
+
+<p><img src="/PartsUnlimited/assets/fiazurepass/32.png" alt="" /></p>
+
+<p><strong>Step 2.</strong> Application Insights collected data can be found by navigating to the resource group of the main cluster and selecting the production instance.</p>
+
+<p><img src="/PartsUnlimited/assets/fiazurepass/42.png" alt="" /></p>
+
+<p><strong>Step 3.</strong> Navigate to the “Overview” of your App Service and click on “edit” on the monitoring graph. Select “past hour”, tick all of the http error codes, as well as “Http Server Errors” and click “OK”.</p>
+
+<p><img src="/PartsUnlimited/assets/fiazurepass/37.png" alt="" /></p>
+
+<p><img src="/PartsUnlimited/assets/fiazurepass/33.png" alt="" /></p>
+
+<p><strong>Step 4.</strong> Navigate to “Metrics per Instance (App Service plan)” in your App Service for more general performance analyses of the load test.</p>
+
+<p><img src="/PartsUnlimited/assets/fiazurepass/36.png" alt="" /></p>
+
+<p><img src="/PartsUnlimited/assets/fiazurepass/34.png" alt="" /></p>
+
+<p><img src="/PartsUnlimited/assets/fiazurepass/35.png" alt="" /></p>
+
+<p>Based on the graphs above you can see that with 4 instances in the App Service (first 5 mins), the load was manageable but once one of the instance “stopped” responding to the requests, “Http queue” started to build up. If we ran load test with 3 instance for longer than 10-15 minutes, we would start seeing timeouts for some requests even though request queue was building up relatively slowly. Once the second VM “faulted”, traffic became unmanageable for the other 2 instances and we saw about a thousand failed requests. Finally with one instance left response time raised to 9.5 seconds and we continued seeing more and more errors. Based on analysis above we can conclude that if you expect this website to have around 600 concurrent users, then you should absolute minimum of 3 instances and a recommended number of 4 or 5 instances running in your App Service.</p>
+
+<h3 id="task-5-test-the-traffic-managers-functionality">Task 5: Test the traffic manager’s functionality</h3>
+
+<p>Here we’re looking at how traffic manager can be used to handle fail over events where a datacenter is lost for some reason, perhaps a natural disaster. Main cluster will be simulated to go offline by turning its App Service off.</p>
+
+<p><strong>Step 1.</strong> Open your traffic manager’s URL in a browser. It can be found on the “Overview” page of your traffic manager under “DNS name”.</p>
+
+<p><img src="/PartsUnlimited/assets/fiazurepass/38.png" alt="" /></p>
+
+<p><strong>Step 2.</strong> Navigate to your App Service in the main cluster. Open the “Overview” page, click on “Stop” and confirm by clicking “Yes”.</p>
+
+<p><img src="/PartsUnlimited/assets/fiazurepass/39.png" alt="" /></p>
+
+<p><strong>Step 3.</strong> Return to the tab in your browser with your traffic manager’s URL. Refresh the page until the traffic manager redirects you to the standby cluster’s App Service. You will encounter 403 errors until the DNS changes are propagated.</p>
+<blockquote>
+  <p><strong>Note:</strong> The amount of time it takes for DNS changes to propagate through the system can be changed in traffic manager’s settings. By default, the refresh time is 300 seconds.</p>
+</blockquote>
+
+<h2 id="congratulations">Congratulations!</h2>
+<p>You’ve completed this HOL! In this lab you have learned how to inject a fault into a PaaS infrastructure, how to set up a failover cluster, run a load test and analyze the results.</p>
+
+<h2 id="further-readings">Further Readings</h2>
+<ol>
+  <li><a href="https://azure.microsoft.com/en-us/documentation/services/traffic-manager">Traffic Manager documentation</a></li>
+</ol>
+
+<h2 id="next-steps">Next steps</h2>
+
+<ul>
+  <li><a href="FaultInjectionServiceFabric">Fault Injection for Service Fabric</a></li>
+</ul>
+
+
+                    </div>
+                
+            </div>
+
+            
+
+            <div class="row">
+                <div id="footer" class="col-sm-12">
+                    Documentation for <a href="https://github.com/Microsoft/PartsUnlimited">PartsUnlimited</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+        
+    </body>
+</html>

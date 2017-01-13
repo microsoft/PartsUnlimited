@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>PartsUnlimited : Getting Started on Linux and OSX</title>
+        <meta name="description" content="example e-commerce website">
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/PartsUnlimited/css/syntax.css">
+        <link rel="stylesheet" href="/PartsUnlimited/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <div id="header" class="col-sm-12">
+                    <img class="logo" src="/PartsUnlimited/assets/logo-ms-dark.png" alt="Microsoft">
+<h4><a class="brand" href="/PartsUnlimited/">PartsUnlimited</a>
+    <small>example e-commerce website</small>
+</h4>
+
+                </div>
+            </div>
+
+            <div class="row">
+                
+                
+                    <div id="navigation" class="col-sm-3">
+                        <ul class="nav nav-list">
+    
+        <li><a href="/PartsUnlimited/">Welcome</a></li>
+    
+
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Basic DevOps Practices</li>
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/basic/manual-deployment.html">Manual Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/basic/ci.html">Continuous Integration</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/basic/cd.html">Continuous Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/basic/QuickStart.html">Quick Start</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a class="nav-active" href="/PartsUnlimited/basic/GettingStartedLinuxOSX.html">Getting Started on Linux and OSX</a></li>  
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/basic/GettingStarted.html">Getting Started</a></li>
+            
+        
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Advanced DevOps Practices</li>
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/advanced/UserTelemetry.html">User Telemetry</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/advanced/UsageAnalysis.html">Usage Analysis</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/advanced/TestingProd.html">Testing in Production</a></li>
+            
+        
+            
+
+            
+                <li data-order="6"><a href="/PartsUnlimited/advanced/FeatureFlagWebAdvanced.html">Advanced Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/advanced/FeatureFlagWeb.html">Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="7"><a href="/PartsUnlimited/advanced/FeatureFlagMobile.html">Feature Flag for a Mobile Solution</a></li>
+            
+        
+            
+
+            
+                <li data-order="8"><a href="/PartsUnlimited/advanced/FeatureFlagAPI.html">Feature Flag for an API</a></li>
+            
+        
+            
+
+            
+                <li data-order="11"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabricStarter.html">Fault Injection for Service Fabric Hackathon Starter</a></li>
+            
+        
+            
+
+            
+                <li data-order="10"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabric.html">Fault Injection for Service Fabric</a></li>
+            
+        
+            
+
+            
+                <li data-order="9"><a href="/PartsUnlimited/advanced/FaultInjectionAzurePaaS.html">Fault Injection for Azure PaaS</a></li>
+            
+        
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/advanced/ErrorReporting.html">Error Reporting</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/advanced/ABTesting.html">Experimentation and A/B Testing with Optimzely</a></li>
+            
+        
+    
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class="divider"></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id="content" class="col-sm-9">
+                        <div class="page-header">
+    <h2>Getting Started on Linux and OSX
+        
+    </h2>
+</div>
+
+<h2 id="get-dnvm">Get DNVM</h2>
+
+<p>The CoreCLR-based <code class="highlighter-rouge">dnu</code> doesn’t support all the available features
+yet.  So to develop on Linux or Mac OS X we still need to install a Mono-based
+DNX runtime and use <code class="highlighter-rouge">dnu</code> from it.</p>
+
+<p>Please follow the instructions at
+<a href="https://github.com/aspnet/Home">https://github.com/aspnet/Home</a> to get DNVM and run the <code class="highlighter-rouge">upgrade</code>
+command. (Note For Linux the doc there doesn’t list <code class="highlighter-rouge">unzip</code> as a
+prerequisites, however you need to install that as well, otherwise
+DNVM commands would fail to install DNX runtimes.)</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    dnvm upgrade -u
+</code></pre>
+</div>
+
+<p>The <code class="highlighter-rouge">-u</code> switch uses the unstable DNX feed, which is default to
+<a href="https://www.myget.org/F/aspnetvnext/api/v2">https://www.myget.org/F/aspnetvnext/api/v2</a>.</p>
+
+<p>Run <code class="highlighter-rouge">dnvm list</code> to show the installed DNX runtimes.  You should see output
+similar to below</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Active Version              Runtime Arch OperatingSystem Alias
+------ -------              ------- ---- --------------- -----
+       1.0.0-beta5          coreclr x64  linux
+  *    1.0.0-beta5          mono         linux/darwin
+       1.0.0-beta7-12335    coreclr x64  linux           default
+       1.0.0-beta7-12335    mono         linux/darwin
+</code></pre>
+</div>
+
+<p>A specific version of the CoreCLR runtime can be installed via</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    dnvm install 1.0.0-beta7-12335 -u -r coreclr -arch x64
+</code></pre>
+</div>
+
+<h2 id="get-nodejs-bower-and-grunt">Get NodeJS, Bower, and Grunt</h2>
+
+<p>These tools are used in <code class="highlighter-rouge">dnu restore</code>.</p>
+
+<h3 id="for-linux">For Linux</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    sudo apt-get install npm nodejs
+    sudo npm install bower -g
+    sudo npm install grunt-cli -g
+</code></pre>
+</div>
+
+<p>In Debian-based distros, <code class="highlighter-rouge">node</code> is renamed to <code class="highlighter-rouge">nodejs</code> to avoid
+conflict with other legacy packages.  Assuming we don’t care about
+those legacy packages, workaround by</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    sudo ln -s  /usr/bin/nodejs /usr/bin/node
+</code></pre>
+</div>
+
+<h3 id="for-mac-os-x">For Mac OS X</h3>
+
+<p>Download then install nodejs from <a href="https://nodejs.org/download/">https://nodejs.org/download/</a>, then
+run the following commands</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    sudo npm install bower -g
+    sudo npm install grunt-cli -g
+</code></pre>
+</div>
+
+<h2 id="develop">Develop</h2>
+
+<p>To install the beta5 CoreCLR runtime, we need to customize the unstable
+DNX feed as the packages are hosted there.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    export DNX_UNSTABLE_FEED=https://www.myget.org/F/aspnetmaster/api/v2
+    dnvm install 1.0.0-beta5 -r coreclr -u
+</code></pre>
+</div>
+
+<p>Switch to use a Mono-based DNX runtime since the CoreCLR-based <code class="highlighter-rouge">dnu</code>
+doesn’t support restore/publish scenarios yet.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    dnvm install 1.0.0-beta5 -r mono
+</code></pre>
+</div>
+
+<p>Then you can use commands like <code class="highlighter-rouge">dnu build</code>, <code class="highlighter-rouge">dnu pack</code>, <code class="highlighter-rouge">dnu publish</code>,
+etc., on your ASP.Net vNext projects.</p>
+
+<p>For example on <strong>Linux</strong>, the following commands publish the PartsUnlimited website app to <code class="highlighter-rouge">~/site</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    cd src/Partsunlimited.Models
+    dnu restore
+    cd ../PartsUnlimitedWebsite
+    dnu restore
+    dnu publish --runtime ~/.dnx/runtimes/dnx-coreclr-linux-x64.1.0.0-beta5 -o ~/site
+</code></pre>
+</div>
+
+<p>The specified CoreCLR runtime is bundled with the app.</p>
+
+<p>For <strong>Mac</strong>, the only difference is in the path name.  Replace <code class="highlighter-rouge">linux</code>
+with <code class="highlighter-rouge">darwin</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    cd src/Partsunlimited.Models
+    dnu restore
+    cd ../PartsUnlimitedWebsite
+    dnu restore
+    cd PartsUnlimitedWebsite
+    dnu publish --runtime ~/.dnx/runtimes/dnx-coreclr-darwin-x64.1.0.0-beta5 -o ~/site
+</code></pre>
+</div>
+
+<p>Run the app by</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    ~/site/Kestrel
+</code></pre>
+</div>
+
+<p>Use your favorite web browser to navigate to <code class="highlighter-rouge">http://localhost:5001</code>.
+<code class="highlighter-rouge">lynx</code> and <code class="highlighter-rouge">links</code> are text-based web browsers, if you don’t have GUI
+installed for your Linux machine.</p>
+
+<p>If you want to use a runtime installed on your machine, just modify
+the path of <code class="highlighter-rouge">dnx</code> command in <code class="highlighter-rouge">~/site/Kestrel</code>.  For example, use the
+following commands to remove the bundled CoreCLR runtime, add a shared DNX
+runtime installed under <code class="highlighter-rouge">~/.dnx</code> to <code class="highlighter-rouge">$PATH</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    rm -rf ~/site/approot/packages/dnx-coreclr-linux-x64.1.0.0-beta5/
+    dnvm use 1.0.0-beta5 -r coreclr -arch x64
+</code></pre>
+</div>
+
+<p>Again for <strong>Mac</strong> replace <code class="highlighter-rouge">linux</code> in the above with <code class="highlighter-rouge">darwin</code>.</p>
+
+<p>Then change the last line of <code class="highlighter-rouge">~/site/Kestrel</code> so it look like this</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    exec "dnx" --appbase "$DNX_APPBASE" Microsoft.Framework.ApplicationHost Kestrel "$@"
+</code></pre>
+</div>
+
+<p>Run the <code class="highlighter-rouge">~/site/Kestrel</code> command again to verify that the website works.</p>
+
+<h2 id="next-steps">Next steps</h2>
+<p><a href="ci">Continuous Integration</a></p>
+
+
+                    </div>
+                
+            </div>
+
+            
+
+            <div class="row">
+                <div id="footer" class="col-sm-12">
+                    Documentation for <a href="https://github.com/Microsoft/PartsUnlimited">PartsUnlimited</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+        
+    </body>
+</html>

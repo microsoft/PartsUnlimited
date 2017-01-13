@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>PartsUnlimited : Experimentation and A/B Testing with Optimzely</title>
+        <meta name="description" content="example e-commerce website">
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/PartsUnlimited/css/syntax.css">
+        <link rel="stylesheet" href="/PartsUnlimited/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <div id="header" class="col-sm-12">
+                    <img class="logo" src="/PartsUnlimited/assets/logo-ms-dark.png" alt="Microsoft">
+<h4><a class="brand" href="/PartsUnlimited/">PartsUnlimited</a>
+    <small>example e-commerce website</small>
+</h4>
+
+                </div>
+            </div>
+
+            <div class="row">
+                
+                
+                    <div id="navigation" class="col-sm-3">
+                        <ul class="nav nav-list">
+    
+        <li><a href="/PartsUnlimited/">Welcome</a></li>
+    
+
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Basic DevOps Practices</li>
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/basic/manual-deployment.html">Manual Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/basic/ci.html">Continuous Integration</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/basic/cd.html">Continuous Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/basic/QuickStart.html">Quick Start</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/basic/GettingStartedLinuxOSX.html">Getting Started on Linux and OSX</a></li>
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/basic/GettingStarted.html">Getting Started</a></li>
+            
+        
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Advanced DevOps Practices</li>
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/advanced/UserTelemetry.html">User Telemetry</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/advanced/UsageAnalysis.html">Usage Analysis</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/advanced/TestingProd.html">Testing in Production</a></li>
+            
+        
+            
+
+            
+                <li data-order="6"><a href="/PartsUnlimited/advanced/FeatureFlagWebAdvanced.html">Advanced Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/advanced/FeatureFlagWeb.html">Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="7"><a href="/PartsUnlimited/advanced/FeatureFlagMobile.html">Feature Flag for a Mobile Solution</a></li>
+            
+        
+            
+
+            
+                <li data-order="8"><a href="/PartsUnlimited/advanced/FeatureFlagAPI.html">Feature Flag for an API</a></li>
+            
+        
+            
+
+            
+                <li data-order="11"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabricStarter.html">Fault Injection for Service Fabric Hackathon Starter</a></li>
+            
+        
+            
+
+            
+                <li data-order="10"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabric.html">Fault Injection for Service Fabric</a></li>
+            
+        
+            
+
+            
+                <li data-order="9"><a href="/PartsUnlimited/advanced/FaultInjectionAzurePaaS.html">Fault Injection for Azure PaaS</a></li>
+            
+        
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/advanced/ErrorReporting.html">Error Reporting</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a class="nav-active" href="/PartsUnlimited/advanced/ABTesting.html">Experimentation and A/B Testing with Optimzely</a></li>  
+            
+        
+    
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class="divider"></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id="content" class="col-sm-9">
+                        <div class="page-header">
+    <h2>Experimentation and A/B Testing with Optimzely
+        
+    </h2>
+</div>
+
+<h1 id="hol---experimentation-and-ab-testing-with-optimizely">HOL - Experimentation and A/B Testing with Optimizely</h1>
+<p>The marketing team suspects that users don’t click on the “Shop Now” button as often as they would if it was more prominent on the page. Even though A/B Testing is comparing performance between two pages, in this lab we will experiment and create multiple variations of PartsUnlimited website and see which performs better using Optimizely.</p>
+<blockquote>
+  <p><strong>Note:</strong> To get a reliable results in A/B testing, the experiment should run long enough to collect data to draw a conclusion. Optimizely lets you know this on their “Results” page.</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>Note:</strong> Both website variations created in this HOL are relatively simple and the main purpose of them is to show an idea of how useful A/B Testing can be. A more complicated website variations might require writing/modifying JavaScript and more complicated CSS modifications.</p>
+</blockquote>
+
+<h3 id="pre-requisites">Pre-requisites:</h3>
+
+<ul>
+  <li>
+    <p>Completed <a href="../basic/ci">Continuous Integration</a> and <a href="../basic/cd">Continuous Deployment</a> HOLs</p>
+  </li>
+  <li>
+    <p>Visual Studio 2015 Update 3</p>
+  </li>
+</ul>
+
+<h3 id="tasks-overview">Tasks Overview:</h3>
+
+<ol>
+  <li>
+    <p>Setup first variation in Optimizely</p>
+  </li>
+  <li>
+    <p>Integrating Optimizely into PartsUnlimited</p>
+  </li>
+  <li>
+    <p>Setup second variation in Optimizely</p>
+  </li>
+  <li>
+    <p>Updating settings of your experiment</p>
+  </li>
+  <li>
+    <p>Viewing results of your experiment</p>
+  </li>
+</ol>
+
+<h3 id="task-1-setup-first-variation-in-optimizely">Task 1: Setup first variation in Optimizely</h3>
+<p><strong>Step 1.</strong> Create an account with <a href="https://www.optimizely.com/">Optimizely</a>. Login after confirming your email address and entering password.</p>
+
+<p><strong>Step 2.</strong> After being navigated to a “Welcome to Optimizely” page, click on “Create Web Project”.</p>
+
+<p><img src="/PartsUnlimited/assets/abtesting/1.png" alt="" /></p>
+
+<p><strong>Step 3.</strong> Enter your <code class="highlighter-rouge">production</code> site URL as a name for the new project and click on “Create Project”.</p>
+
+<p><img src="/PartsUnlimited/assets/abtesting/2.png" alt="" /></p>
+
+<p><strong>Step 4.</strong> Create a new experiment.</p>
+
+<ul>
+  <li>
+    <p>Click on “Create New” then “Experiment”.</p>
+
+    <p><img src="/PartsUnlimited/assets/abtesting/34.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Give experiment a name, then enter your <code class="highlighter-rouge">production</code> site URL as the Pages” and Set “Audiences” to Everyone which is the default value.
+click on “Create Experiment”.
+<img src="/PartsUnlimited/assets/abtesting/35.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Then Set the Metrics. Audiences and Metrics will be changed later. Click on “Create Experiment”.</p>
+
+    <p><img src="/PartsUnlimited/assets/abtesting/36.png" alt="" /></p>
+  </li>
+</ul>
+
+<p><strong>Step 5.</strong> Dismiss tutorial if it pop-ups. Let’s define the first variation where we will change the styling of “Shop Now” button.</p>
+<ul>
+  <li>
+    <p>Click on <code class="highlighter-rouge">Champaigns &gt; Variation #1</code> button in the right bottom corner.</p>
+
+    <p><img src="/PartsUnlimited/assets/abtesting/37.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Click on <code class="highlighter-rouge">Create</code> Then <code class="highlighter-rouge">Element Change</code>
+<img src="/PartsUnlimited/assets/abtesting/38.png" alt="" /></p>
+  </li>
+  <li>Enter the selector as “.carousel-link”.</li>
+  <li>
+    <p>Enter the color <code class="highlighter-rouge">rgba(28,54,124,1)</code> or <code class="highlighter-rouge">#1c367c</code> 
+<img src="/PartsUnlimited/assets/abtesting/39.png" alt="" /></p>
+  </li>
+  <li>Enter the <code class="highlighter-rouge">Enable Event Tracking</code></li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  Track click on this element: check
+  Name: Shop Button
+  Category: Converted
+</code></pre>
+</div>
+
+<p><img src="/PartsUnlimited/assets/abtesting/40.png" alt="" /></p>
+
+<ul>
+  <li>Click on “Save”.</li>
+</ul>
+
+<h3 id="task-2-integrating-optimizely-into-partsunlimited">Task 2: Integrating Optimizely into PartsUnlimited</h3>
+<p><strong>Step 1.</strong> Add the snippet of code you took a note of from Optimizely’s website to the head tag of <code class="highlighter-rouge">_Layout.cshtml</code> file in the PartsUnlimitedWebsite/Views/Shared/ directory.
+<img src="/PartsUnlimited/assets/abtesting/41.png" alt="" /></p>
+
+<p><img src="/PartsUnlimited/assets/abtesting/10.png" alt="" /></p>
+
+<p><strong>Step 2.</strong> Commit changes using the following commands:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git add .
+
+git commit -m "Added integration with Optimizely"
+
+git push
+</code></pre>
+</div>
+
+<p><strong>Step 3.</strong> Once the CI build and deployment to <code class="highlighter-rouge">dev</code> slot is completed, push your changes to the <code class="highlighter-rouge">staging</code> slot and finally <code class="highlighter-rouge">production</code> environment.</p>
+
+<h3 id="task-3-setup-second-variation-in-optimizely">Task 3: Setup second variation in Optimizely</h3>
+<p>Let’s go back to Optimizely website. Navigate Champaigns”, click on the experiment created in this lab.</p>
+
+<p><img src="/PartsUnlimited/assets/abtesting/47.png" alt="" /></p>
+
+<p><strong>Step 1.</strong> Click on “+ Add Variation”, ignore a warning about making changes while the experiment is running.</p>
+
+<p><img src="/PartsUnlimited/assets/abtesting/42.png" alt="" /></p>
+
+<p><strong>Step 2.</strong> Let’s remove “Fork me on Github” element in the top left corner from this variation. Click on it.</p>
+
+<p><img src="/PartsUnlimited/assets/abtesting/43.png" alt="" /></p>
+
+<p>Then chagne Layout &gt; Visibility to “Removed”.</p>
+
+<p><img src="/PartsUnlimited/assets/abtesting/44.png" alt="" /></p>
+
+<p><strong>Step 3.</strong> In this variation background color of all “Shop Now” buttons will be changed.</p>
+
+<ul>
+  <li>Change background color of the “Shop Button” in the carousel the same way as in variation 1.</li>
+  <li>
+    <p>Enter the <code class="highlighter-rouge">Enable Event Tracking</code> the same way as in variation 1 as well.</p>
+  </li>
+  <li>If you scroll down you will see that all elements in “Arrivals” and “Top selling” groups also contain their own “Shop Now” buttons. Their color hasn’t been changed because <code class="highlighter-rouge">.carousel-link</code> class is not used for these buttons.</li>
+  <li>
+    <p>We hope the color is like this.</p>
+
+    <p><img src="/PartsUnlimited/assets/abtesting/45.png" alt="" /></p>
+  </li>
+  <li>
+    <p>If you were to look at the DOM, you would see that all those “Shop Now” buttons are in div tags with class “shop-now”, i.e. changing the background color of that class will change background color of all “Shop Now” buttons.</p>
+
+    <p><img src="/PartsUnlimited/assets/abtesting/15.png" alt="" /></p>
+  </li>
+  <li>
+    <p>To change the color of these buttons, select the selector <code class="highlighter-rouge">.shop-now</code> and change color the same way as in variation 1. 
+<img src="/PartsUnlimited/assets/abtesting/46.png" alt="" /></p>
+  </li>
+  <li>Optionally: Create another tracking goal for every of these buttons.</li>
+</ul>
+
+<h3 id="task-4-updating-settings-of-your-experiment">Task 4: Updating settings of your experiment</h3>
+<p>Let’s look at the main settings that could be adjusted for an experiment. Navigate “Home” and click on the experiment created in this lab.</p>
+
+<p><img src="/PartsUnlimited/assets/abtesting/47.png" alt="" /></p>
+
+<p><strong>Step 1.</strong> Traffic Allocation:</p>
+<ol>
+  <li>Click on “Edit” next to “Traffic Allocation: 100%”.</li>
+  <li>Adjust amount of traffic to participate in this experiment.</li>
+  <li>Next, adjust the chance of seeing a particular variation of the website for the users included in this experiment.</li>
+  <li>
+    <p>Click on “Save”.</p>
+
+    <p><img src="/PartsUnlimited/assets/abtesting/48.png" alt="" /></p>
+  </li>
+</ol>
+
+<blockquote>
+  <p><strong>Note:</strong> If 0% are included then none of the users will see any changes.</p>
+</blockquote>
+
+<p><strong>Step 2.</strong> Metrics:</p>
+<ol>
+  <li>Click on “Metrics”.</li>
+  <li>Set “Shop Button” goal as a primary goal for this experiment.</li>
+  <li>Add any other goals you want to include in this experiment.</li>
+  <li>
+    <p>Click on “Save”.</p>
+
+    <p><img src="/PartsUnlimited/assets/abtesting/49.png" alt="" /></p>
+  </li>
+</ol>
+
+<p><strong>Step 3.</strong> Audiences:</p>
+<ol>
+  <li>Click on “Audiences”.</li>
+  <li>
+    <p>Click on “Create a New Audience”</p>
+
+    <p><img src="/PartsUnlimited/assets/abtesting/50.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Enter Name for your audience. Drag “Device” condition to “Audience Conditions” or any other condition you want to use and set it up as you wish. Click on “Save”</p>
+
+    <p><img src="/PartsUnlimited/assets/abtesting/51.png" alt="" /></p>
+    <blockquote>
+      <p><strong>Note:</strong> It’s possible to create logical expressions using these conditions by dragging them into “and” or “or” sections.</p>
+    </blockquote>
+  </li>
+  <li>Click on “Save”.</li>
+</ol>
+
+<p><strong>Step 4.</strong> Pages:</p>
+<ol>
+  <li>Click on “Pages”.</li>
+  <li>Let’s add <code class="highlighter-rouge">dev</code> and <code class="highlighter-rouge">staging</code> slots to this experiment.</li>
+  <li>
+    <p>Click on “Save”</p>
+
+    <p><img src="/PartsUnlimited/assets/abtesting/52.png" alt="" /></p>
+  </li>
+</ol>
+
+<p><strong>Step 5.</strong> Schedule:</p>
+<ol>
+  <li>Click on “Schedule”.</li>
+  <li>Select time when experiment will start</li>
+  <li>Select time when experiment will end</li>
+  <li>Select time zone.</li>
+  <li>
+    <p>Click on “Save”</p>
+
+    <p><img src="/PartsUnlimited/assets/abtesting/53.png" alt="" /></p>
+  </li>
+</ol>
+
+<h3 id="task-5-viewing-results-of-your-experiment">Task 5: Viewing results of your experiment</h3>
+<p>Let’s view some data collected by Optimizely.</p>
+<blockquote>
+  <p><strong>Note:</strong> Data can be generated by opening website in Incognito mode a few times and clicking on “Shop Now” button</p>
+</blockquote>
+
+<p><strong>Step 1.</strong> Click on “Results” button.
+  <img src="/PartsUnlimited/assets/abtesting/54.png" alt="" /></p>
+
+<p><strong>Step 2.</strong> Once navigated to the “Results” page, you will be able to see and break down all of the collected information. This data can be shared with stakeholders by clicking on “Share” button near the top right corner.</p>
+
+<p><img src="/PartsUnlimited/assets/abtesting/55.png" alt="" /></p>
+
+<p><strong>Step 3.</strong> This particular data indicates that users are more likely to click on the “Shop Now” button in “Variation #2” of the website than in any other variations.</p>
+
+<blockquote>
+  <p><strong>Note:</strong> Keep in mind that if the sample size of this experiment is not large enough then this data would most likely be meaningless.</p>
+</blockquote>
+
+<h2 id="summary">Summary</h2>
+<p>In this lab, you have learned how to integrate with Optimizely, create different variations of your website, set audience and traffic allocation for an experiment, view and export results.</p>
+
+<h2 id="next-step">Next step</h2>
+<ul>
+  <li><a href="FeatureFlagWeb">Feature Flag for Web Applications</a></li>
+</ul>
+
+
+                    </div>
+                
+            </div>
+
+            
+
+            <div class="row">
+                <div id="footer" class="col-sm-12">
+                    Documentation for <a href="https://github.com/Microsoft/PartsUnlimited">PartsUnlimited</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+        
+    </body>
+</html>

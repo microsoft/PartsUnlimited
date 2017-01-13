@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>PartsUnlimited : Quick Start</title>
+        <meta name="description" content="example e-commerce website">
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/PartsUnlimited/css/syntax.css">
+        <link rel="stylesheet" href="/PartsUnlimited/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <div id="header" class="col-sm-12">
+                    <img class="logo" src="/PartsUnlimited/assets/logo-ms-dark.png" alt="Microsoft">
+<h4><a class="brand" href="/PartsUnlimited/">PartsUnlimited</a>
+    <small>example e-commerce website</small>
+</h4>
+
+                </div>
+            </div>
+
+            <div class="row">
+                
+                
+                    <div id="navigation" class="col-sm-3">
+                        <ul class="nav nav-list">
+    
+        <li><a href="/PartsUnlimited/">Welcome</a></li>
+    
+
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Basic DevOps Practices</li>
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/basic/manual-deployment.html">Manual Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/basic/ci.html">Continuous Integration</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/basic/cd.html">Continuous Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a class="nav-active" href="/PartsUnlimited/basic/QuickStart.html">Quick Start</a></li>  
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/basic/GettingStartedLinuxOSX.html">Getting Started on Linux and OSX</a></li>
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/basic/GettingStarted.html">Getting Started</a></li>
+            
+        
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Advanced DevOps Practices</li>
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/advanced/UserTelemetry.html">User Telemetry</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/advanced/UsageAnalysis.html">Usage Analysis</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/advanced/TestingProd.html">Testing in Production</a></li>
+            
+        
+            
+
+            
+                <li data-order="6"><a href="/PartsUnlimited/advanced/FeatureFlagWebAdvanced.html">Advanced Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/advanced/FeatureFlagWeb.html">Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="7"><a href="/PartsUnlimited/advanced/FeatureFlagMobile.html">Feature Flag for a Mobile Solution</a></li>
+            
+        
+            
+
+            
+                <li data-order="8"><a href="/PartsUnlimited/advanced/FeatureFlagAPI.html">Feature Flag for an API</a></li>
+            
+        
+            
+
+            
+                <li data-order="11"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabricStarter.html">Fault Injection for Service Fabric Hackathon Starter</a></li>
+            
+        
+            
+
+            
+                <li data-order="10"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabric.html">Fault Injection for Service Fabric</a></li>
+            
+        
+            
+
+            
+                <li data-order="9"><a href="/PartsUnlimited/advanced/FaultInjectionAzurePaaS.html">Fault Injection for Azure PaaS</a></li>
+            
+        
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/advanced/ErrorReporting.html">Error Reporting</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/advanced/ABTesting.html">Experimentation and A/B Testing with Optimzely</a></li>
+            
+        
+    
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class="divider"></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id="content" class="col-sm-9">
+                        <div class="page-header">
+    <h2>Quick Start
+        
+    </h2>
+</div>
+
+<h1 id="hol---quick-start">HOL - Quick Start</h1>
+<p>In this lab we have an application called PartsUnlimited. We want to set up Continuous Integration (CI) and Continuous Deployment (CD) with Visual Studio Team Services (VSTS). Continuous Integration builds the app and runs unit tests whenever code is pushed to the master branch. After CI step succeeds it will trigger a deployment to a <code class="highlighter-rouge">dev</code> deployment slot. The <code class="highlighter-rouge">staging</code> slot and <code class="highlighter-rouge">production</code> will require an approver before the app is deployed into them. Once the approver confirms that <code class="highlighter-rouge">staging</code> slot is stable, the app will be deployed to the production site.</p>
+<blockquote>
+  <p><strong>Note:</strong> For more in-depth information on CI and CD please visit the following links:</p>
+  <ul>
+    <li><a href="ci">HOL - Parts Unlimited WebSite Continuous Integration with Visual Studio Team Services</a></li>
+    <li><a href="cd">HOL - Continuous Deployment with Release Management in Visual Studio Team Services</a></li>
+  </ul>
+</blockquote>
+
+<h2 id="pre-requisites">Pre-requisites:</h2>
+
+<ul>
+  <li>
+    <p>An active Visual Studio Team Services account</p>
+  </li>
+  <li>
+    <p>Project Admin rights to the Visual Studio Team Services account</p>
+  </li>
+  <li>
+    <p>An account in Azure</p>
+  </li>
+  <li>
+    <p><a href="https://marketplace.visualstudio.com/items?itemName=onlyutkarsh.ExportImportBuildDefinition">Export/Import Build Definition</a> extension for VSTS</p>
+  </li>
+</ul>
+
+<h2 id="tasks-overview">Tasks Overview:</h2>
+<p><strong>1. Import Source Code into your VSTS Account with Git:</strong> In this step you will download the PartsUnlimited source code, and then push it to your own Visual Studio Team Services account.</p>
+
+<p><strong>2. Setting up Service Endpoint in VSTS:</strong> In this step you will set up Service Endpoint in VSTS for Continues Deployment be able to deploy to Azure.</p>
+
+<p><strong>3. Continuous Integration:</strong> In this step you will import Build definition template and configure it for your repository.</p>
+
+<p><strong>4. Continuous Deployment:</strong> In this step you will import Release definition template and configure it for your build definition.</p>
+
+<p><strong>5. Export Build and Release Definitions from VSTS:</strong> In this step you will export Build and Release Definitions into your local repository.</p>
+
+<p><strong>6. Confirming successful deployment to Azure:</strong> In this step you will confirm the status of your deployment in VSTS and Azure.</p>
+
+<h2 id="tasks">Tasks</h2>
+<h3 id="task-1-import-source-code-into-your-vsts-account-with-git">Task 1: Import Source Code into your VSTS Account with Git</h3>
+<p>In order to use VSTS Build, your VSTS must contain source code for the application. For this lab we are using the VSTS Git project. The next couple of steps will allow you to add the PartUnlimited source to the Git master repository.</p>
+
+<p><strong>Step 1.</strong> If you haven’t already, create a new team project in your Visual Studio Team Services account that uses Git for source control. Click on “New”, enter project name, select “git” for “Version control” and click on “Create project” button.</p>
+
+<p><img src="/PartsUnlimited/assets/quickstart/28.png" alt="" /></p>
+
+<p><strong>Step 2.</strong> Clone the repository to a local directory.</p>
+
+<ul>
+  <li>
+    <p>Open a command line (one that supports Git) and navigate to the directory where you want to store your local repositories. For example in a Windows OS, you can create and navigate to <code class="highlighter-rouge">C:\Source\Repos</code>.</p>
+  </li>
+  <li>
+    <p>Clone the repository with the following command:</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>  git clone https://github.com/Microsoft/PartsUnlimited.git   &gt; After a few seconds of downloading, all of the code should now be on your local machine.
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p>Move into the repository directory that was just created. In a Windows OS, you can use this command:</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>  cd PartsUnlimited
+</code></pre>
+    </div>
+  </li>
+</ul>
+
+<p><strong>Step 3.</strong> Remove the link to GitHub.</p>
+
+<ul>
+  <li>
+    <p>The Git repo you just downloaded currently has a remote called <em>origin</em> that points to the GitHub repo.  Since we won’t be using it any longer, we can delete the reference. To delete the GitHub remote, use:</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>  git remote remove origin
+</code></pre>
+    </div>
+  </li>
+</ul>
+
+<p><strong>Step 4.</strong> Add the link to VSTS and push to your local Git repo.</p>
+
+<ul>
+  <li>
+    <p>Navigate to your VSTS and click on “Code” tab. Copy and execute commands marked with <code class="highlighter-rouge">2</code> and <code class="highlighter-rouge">3</code> in your command line.</p>
+
+    <p><img src="/PartsUnlimited/assets/quickstart/1.png" alt="" /></p>
+  </li>
+</ul>
+
+<p>Congratulations, your code should now be in VSTS.</p>
+
+<h3 id="task-2-setting-up-service-endpoint-in-vsts">Task 2: Setting up Service Endpoint in VSTS</h3>
+<p>Deploying <a href="https://azure.microsoft.com/en-us/documentation/articles/resource-group-authoring-templates/">ARM Templates</a>
+to Azure from Release Management requires an organizational account or a Service Principal. MSA Accounts and certificate-based connections are not supported. 
+For this HOL, you will use a Service Principal. Follow these instructions to quickly set it up: <a href="http://blog.jstroheker.com/2016/10/11/SPNAzure/">Create Azure Service Principal for VSTS</a></p>
+<blockquote>
+  <p><strong>IMPORTANT:</strong> For the following CD template to work, <code class="highlighter-rouge">Connection Name</code> must be <code class="highlighter-rouge">Azure For PartsUnlimited</code>.</p>
+</blockquote>
+
+<h3 id="task-3-continuous-integration">Task 3: Continuous Integration</h3>
+<p><strong>Step 1.</strong> Navigate to <code class="highlighter-rouge">Export/Import Build Definition</code> extension’s <a href="https://marketplace.visualstudio.com/items?itemName=onlyutkarsh.ExportImportBuildDefinition">link </a>. Click on “Install”, select VSTS instance you want to add this extension to and click “Confirm”.</p>
+
+<p><strong>Step 2.</strong> Navigate to the “Build &amp; Release” tab and click on “Builds”. If you already have at least one build definition then skip to the next step, otherwise we are going to create one very quickly to get an import build option.</p>
+
+<ul>
+  <li>
+    <p>Click on the “+ New” button, select “Empty” definition and click “Next”. On the next page click “Create”. This will create an empty build definition with default settings. Click on “Save” and then “OK”.</p>
+
+    <p><img src="/PartsUnlimited/assets/quickstart/4.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Click on “Build Definitions”.
+  <img src="/PartsUnlimited/assets/quickstart/27.png" alt="" /></p>
+  </li>
+</ul>
+
+<p><strong>Step 3.</strong> Click on the ellipsis (…) button next to any build and click on “Import” option.</p>
+
+<p><img src="/PartsUnlimited/assets/quickstart/5.png" alt="" /></p>
+
+<p><strong>Step 4.</strong> Click on “Browse” and select <code class="highlighter-rouge">dotnetcore CI HOL.json</code> file in <code class="highlighter-rouge">templates\build definitions</code> of your repository. Then click on “Import” button.</p>
+
+<p><img src="/PartsUnlimited/assets/quickstart/6.png" alt="" /></p>
+<blockquote>
+  <p><strong>Note:</strong> Since the template doesn’t contain any information related to this project or this repository, it will take settings from the first build definition the extension finds.  That’s why this extension requires at least one build definition to be there already.</p>
+</blockquote>
+
+<p><strong>Step 5.</strong> If you had to define an empty build definition before, it can now be deleted by clicking on the ellipsis (…) button and selecting “Delete definition”.</p>
+
+<p><img src="/PartsUnlimited/assets/quickstart/7.png" alt="" /></p>
+
+<p><strong>Step 6.</strong> Now, we need to define triggers for this imported build definition.</p>
+
+<ol>
+  <li>
+    <p>Click on the build definition and then click on “Edit”</p>
+
+    <p><img src="/PartsUnlimited/assets/quickstart/18.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Navigate to “Triggers” tab, check “Continuous integration (CI)” and make sure that your master branch is specified as a trigger. Click on “Save”, then “OK”.</p>
+
+    <p><img src="/PartsUnlimited/assets/quickstart/19.png" alt="" /></p>
+  </li>
+</ol>
+
+<p><strong>Step 7.</strong>  At this stage it’s a good idea to check that the imported build successfully builds your project. Trigger the new build with default settings by clicking on the “Queue new build…” button and then clicking on “OK”.</p>
+
+<p><img src="/PartsUnlimited/assets/quickstart/8.png" alt="" /></p>
+<blockquote>
+  <p><strong>Note:</strong> The build process may take a while, but there is no need to await its completion before proceeding.</p>
+</blockquote>
+
+<p>Congratulations, you have imported a build definition successfully.</p>
+
+<h3 id="task-4-continuous-deployment">Task 4: Continuous Deployment:</h3>
+<p><strong>Step 1.</strong> Navigate to the “Build &amp; Release” tab and click on “Releases”. If you already have at least one release definition then skip to the next step, otherwise we are going to create one very quickly to get an import release option.</p>
+
+<ul>
+  <li>
+    <p>Click on the “+ New definition” button and select “Empty” definition and click “Next”. On the next page click “Create”. This will create an empty release definition with default settings. Click on “Save” and “OK”.</p>
+
+    <p><img src="/PartsUnlimited/assets/quickstart/9.png" alt="" /></p>
+  </li>
+</ul>
+
+<p><strong>Step 2.</strong> To import a release template click on “+” button and select “Import release definition”.</p>
+
+<p><img src="/PartsUnlimited/assets/quickstart/10.png" alt="" /></p>
+
+<p><strong>Step 3.</strong> Click on “Browse” and select <code class="highlighter-rouge">PartsUnlimited.json</code> file in <code class="highlighter-rouge">templates\release definitions</code> of your repository. Then click on “Import” button.</p>
+
+<p><img src="/PartsUnlimited/assets/quickstart/11.png" alt="" /></p>
+
+<p><strong>Step 4.</strong> Let’s specify the artifacts(output from VSTS Build) for our release definition. Navigate to the “ Artifacts” tab and click on “Link to an artifact source”. Set it up as shown in the screenshot below and click “Link”.</p>
+
+<p><img src="/PartsUnlimited/assets/quickstart/20.png" alt="" /></p>
+
+<p><strong>Step 5.</strong> Right after the import, you should see your tasks highlighted in red. For each tasks you may have to select your Azure subscription for the yellow field called “Azure RM Subscription”.</p>
+<blockquote>
+  <p>The name of your Azure subscription should be ‘Azure For PartsUnlimited’ like descripted at the beginning of this HOL.</p>
+</blockquote>
+
+<p><img src="/PartsUnlimited/assets/quickstart/211.png" alt="" /></p>
+
+<p><strong>Step 6.</strong> The release definition’s trigger is the key to the Continuous Deployment. To deploy on every successful build there has to be a trigger referencing the CI step completed above. Navigate to “Triggers” tab, tick “Continuous Deployment” and select the previously imported build definition.</p>
+
+<p><img src="/PartsUnlimited/assets/quickstart/21.png" alt="" /></p>
+
+<p><strong>Step 7.</strong> Now we need to specify a deployment queue.</p>
+
+<ol>
+  <li>
+    <p>To do that click on the ellipsis (…) next to the “Dev” environment definition and select “Agent queue…”.</p>
+
+    <p><img src="/PartsUnlimited/assets/quickstart/12.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Select a “Hosted” deployment queue and click “OK”.</p>
+
+    <p><img src="/PartsUnlimited/assets/quickstart/13.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Repeat these steps for the other two environments.</p>
+  </li>
+</ol>
+
+<p><strong>Step 8.</strong> Our template cannot define approvers for your environments but it’s a very good idea to have them for staging and production deployments.</p>
+
+<ol>
+  <li>
+    <p>Click on the ellipsis (…) next to the “Staging” environment definition and select “Assign approvers…”.</p>
+
+    <p><img src="/PartsUnlimited/assets/quickstart/14.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Set pre-deployment and post-deployment approvers. Also tick “Send an email notification to the approver whom the approval is pending on” and click “OK”.</p>
+
+    <p><img src="/PartsUnlimited/assets/quickstart/15.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Similarly, specify a pre-deployment approver for the “Production” environment. A post-deployment approver will not be required here because production is the last deployment environment in this template.</p>
+
+    <p><img src="/PartsUnlimited/assets/quickstart/16.png" alt="" /></p>
+  </li>
+  <li>
+    <p>The “Dev” environment creates/updates the architecture in Azure for all three environments before deploying to the “dev” slot. For this to work you need to define passwords for test and production databases.</p>
+
+    <ul>
+      <li>
+        <p>Click on the ellipsis (…) button next to the “Dev” environment and click on “Configure variables…”.</p>
+
+        <p><img src="/PartsUnlimited/assets/quickstart/22.png" alt="" /></p>
+      </li>
+      <li>
+        <p>Enter passwords for AdminPassword and AdminTestPassword variables.</p>
+
+        <p><img src="/PartsUnlimited/assets/quickstart/23.png" alt="" /></p>
+        <blockquote>
+          <p><strong>Note:</strong> <code class="highlighter-rouge">AdminPassword</code> is the password for the production database. <code class="highlighter-rouge">AdminTestPassword</code> is the password for the test database.</p>
+        </blockquote>
+      </li>
+      <li>
+        <p>Change the values for the first fourth parameters by adding something unique like your initials at the end of the current one, for example in my case ‘jstr’, then click “OK”.</p>
+
+        <p><img src="/PartsUnlimited/assets/quickstart/231.png" alt="" /></p>
+        <blockquote>
+          <p><strong>Note:</strong> You have to use unique values on Azure, if not you may have an deployment error because someone is already using the same values.</p>
+        </blockquote>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Like the previous step, you have to modify the global variales of this definition. Click on the ‘Variables’ section and add something unique like your initials at the end of the current one, for example in my case ‘jstr’, then click “OK”. 
+Save the release definition by clicking on “Save” and “OK”.</p>
+
+    <p><img src="/PartsUnlimited/assets/quickstart/232.png" alt="" /></p>
+  </li>
+</ol>
+
+<p>Congratulations, you have imported a release definition successfully.</p>
+
+<ol>
+  <li>
+    <p>If you had to define an empty release definition before, then it can be now deleted by clicking on the dropdown arrow next to the empty definition and selecting “Delete”.</p>
+
+    <p><img src="/PartsUnlimited/assets/quickstart/17.png" alt="" /></p>
+  </li>
+</ol>
+
+<p>Congratulations, you have imported a release definition successfully.</p>
+
+<h3 id="task-5-export-build-and-release-definitions-from-vsts">Task 5: Export Build and Release Definitions from VSTS</h3>
+<p>Now that you have configured build and release definitions specifically for your repository in VSTS, it’s a good idea to replace the given templates with your own.</p>
+
+<p><strong>Step 1.</strong> Navigate to the “Build” tab. Click on the ellipsis (…) button next to the build definition you would like to export and select “Export”. This will trigger a download of the build definition in JSON format. Place this file in the <code class="highlighter-rouge">templates\build definitions</code> directory of your local repository.
+<img src="/PartsUnlimited/assets/quickstart/2.png" alt="" /></p>
+
+<p><strong>Step 2.</strong> Navigate to the “Release” tab. Click on the dropdown arrow next to the release definition you would like to export and select “Export”. This will trigger a download of the release definition in JSON format. Place this file in the <code class="highlighter-rouge">templates\release definitions</code> directory of your local repository.
+<img src="/PartsUnlimited/assets/quickstart/3.png" alt="" /></p>
+
+<p><strong>Step 3.</strong> Commit your changes using the following commands:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>		git add .
+</code></pre>
+</div>
+
+<blockquote>
+  <p>Stages all changes for the next commit</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>		git commit -m "added build and release definitions"
+</code></pre>
+</div>
+
+<blockquote>
+  <p>Creates a commit from all current staged changes.</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>		git push
+</code></pre>
+</div>
+
+<blockquote>
+  <p>Uploads commits to the remote repository.</p>
+</blockquote>
+
+<p>Congratulations, now you can reuse your templates with other projects.</p>
+
+<h3 id="task-6-confirming-successful-deployment-to-azure">Task 6: Confirming successful deployment to Azure</h3>
+<p>The changes you have just committed will trigger a CI build and a deployment to Azure.
+Once the deployment to the “dev” slot is completed, the pre-approver for the “Staging” environment will receive an email notification about the pending deployment to the “staging” slot.</p>
+
+<p><strong>Step 1.</strong> To approve/reject the request navigate to the “Release” tab, click on <img src="/PartsUnlimited/assets/quickstart/26.png" alt="" /> , optionally leave a comment and click on the “Approve” or “Reject” button.</p>
+
+<p><img src="/PartsUnlimited/assets/quickstart/24.png" alt="" /></p>
+
+<blockquote>
+  <p><strong>Note:</strong> The “Staging” environment also has a post-approver who must confirm that the app is stable and ready for the production environment. The pre-approver for the “Production” environment must also confirm before this final deployment.</p>
+</blockquote>
+
+<p><strong>Step 2.</strong> In Azure, find your App Service with the name <code class="highlighter-rouge">pudncore</code> and open its url (this is the production site).</p>
+
+<p><img src="/PartsUnlimited/assets/quickstart/25.png" alt="" /></p>
+<blockquote>
+  <p><strong>Note:</strong> In the “Deployment slots” section you can find the <code class="highlighter-rouge">dev</code> and <code class="highlighter-rouge">staging</code> slots with their respective urls.</p>
+</blockquote>
+
+<p>Congratulations on successfully setting up Continuous Integration and Continuous Deployment with VSTS.</p>
+
+<h2 id="next-steps">Next steps</h2>
+<p>In this lab, you have learned how to push new code to Visual Studio Team Services, setup a Git repo, create a Continuous Integration build that runs when new commits are pushed to the master branch and create a Continuous Deployment that deploys an application to environments automatically.
+This allows you to receive feedback as to whether your changes contain syntactical errors or break existing tests, as well as saving time by automating the deployment process.</p>
+
+<p>To learn more in-depth information about CI and CD try out these labs:</p>
+
+<ul>
+  <li><a href="ci">HOL - Parts Unlimited WebSite Continuous Integration with Visual Studio Team Services</a></li>
+  <li><a href="cd">HOL - Continuous Deployment with Release Management in Visual Studio Team Services</a></li>
+</ul>
+
+
+                    </div>
+                
+            </div>
+
+            
+
+            <div class="row">
+                <div id="footer" class="col-sm-12">
+                    Documentation for <a href="https://github.com/Microsoft/PartsUnlimited">PartsUnlimited</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+        
+    </body>
+</html>
