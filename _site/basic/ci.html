@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>PartsUnlimited : Continuous Integration</title>
+        <meta name="description" content="example e-commerce website">
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/PartsUnlimited/css/syntax.css">
+        <link rel="stylesheet" href="/PartsUnlimited/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <div id="header" class="col-sm-12">
+                    <img class="logo" src="/PartsUnlimited/assets/logo-ms-dark.png" alt="Microsoft">
+<h4><a class="brand" href="/PartsUnlimited/">PartsUnlimited</a>
+    <small>example e-commerce website</small>
+</h4>
+
+                </div>
+            </div>
+
+            <div class="row">
+                
+                
+                    <div id="navigation" class="col-sm-3">
+                        <ul class="nav nav-list">
+    
+        <li><a href="/PartsUnlimited/">Welcome</a></li>
+    
+
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Basic DevOps Practices</li>
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/basic/manual-deployment.html">Manual Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a class="nav-active" href="/PartsUnlimited/basic/ci.html">Continuous Integration</a></li>  
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/basic/cd.html">Continuous Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/basic/QuickStart.html">Quick Start</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/basic/GettingStartedLinuxOSX.html">Getting Started on Linux and OSX</a></li>
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/basic/GettingStarted.html">Getting Started</a></li>
+            
+        
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Advanced DevOps Practices</li>
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/advanced/UserTelemetry.html">User Telemetry</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/advanced/UsageAnalysis.html">Usage Analysis</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/advanced/TestingProd.html">Testing in Production</a></li>
+            
+        
+            
+
+            
+                <li data-order="6"><a href="/PartsUnlimited/advanced/FeatureFlagWebAdvanced.html">Advanced Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/advanced/FeatureFlagWeb.html">Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="7"><a href="/PartsUnlimited/advanced/FeatureFlagMobile.html">Feature Flag for a Mobile Solution</a></li>
+            
+        
+            
+
+            
+                <li data-order="8"><a href="/PartsUnlimited/advanced/FeatureFlagAPI.html">Feature Flag for an API</a></li>
+            
+        
+            
+
+            
+                <li data-order="11"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabricStarter.html">Fault Injection for Service Fabric Hackathon Starter</a></li>
+            
+        
+            
+
+            
+                <li data-order="10"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabric.html">Fault Injection for Service Fabric</a></li>
+            
+        
+            
+
+            
+                <li data-order="9"><a href="/PartsUnlimited/advanced/FaultInjectionAzurePaaS.html">Fault Injection for Azure PaaS</a></li>
+            
+        
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/advanced/ErrorReporting.html">Error Reporting</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/advanced/ABTesting.html">Experimentation and A/B Testing with Optimzely</a></li>
+            
+        
+    
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class="divider"></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id="content" class="col-sm-9">
+                        <div class="page-header">
+    <h2>Continuous Integration
+        
+    </h2>
+</div>
+
+<h1 id="hol---parts-unlimited-website-continuous-integration-with-visual-studio-team-services">HOL - Parts Unlimited WebSite Continuous Integration with Visual Studio Team Services</h1>
+<p>In this lab we have an application called PartsUnlimited. We want to set up
+Visual Studio Team Services to be able continuously integrate code into the master
+branch of code. This means that whenever code is committed and pushed to the
+master branch, we want to ensure that it integrates into our code correctly to
+get fast feedback. To do so, we are going to be setting up a Continuous Integration build (CI) that
+will allow us to compile and run unit tests on our code every time a commit is
+pushed to Visual Studio Team Services.</p>
+
+<h3 id="video">Video</h3>
+
+<p><a href="https://channel9.msdn.com/Series/Parts-Unlimited-Labs/Parts-Unlimited-Continuous-Integration"><img src="/PartsUnlimited/assets/ci/thumbnail.png" alt="" /></a></p>
+
+<h3 id="pre-requisites">Pre-requisites:</h3>
+
+<ul>
+  <li>An active Visual Studio Team Services account</li>
+</ul>
+
+<h3 id="tasks-overview">Tasks Overview:</h3>
+
+<p><strong>1. Import Source Code into your VSTS Account:</strong> In this step, you will connect your own Visual Studio Team Services account, download the PartsUnlimited source code, and then push it to your own Visual Studio Team Services account. There are two approaches to doing this: a) Use the Git command line, or b) Use Visual Studio.</p>
+
+<blockquote>
+  <p>Note: VSTS does support GitHub source code integration for use with VSTS builds, but is outside of the scope of this HOL</p>
+</blockquote>
+
+<p><strong>2. Create Continuous Integration Build:</strong> In this step, you will create a build definition that will be triggered every time a commit is pushed to your repository in Visual Studio Team Services.</p>
+
+<p><strong>3. Test the CI Trigger in Visual Studio Team Services:</strong> In this step, test the Continuous Integration build (CI) build we created by changing code in the Parts Unlimited project with Visual Studio Team Services.</p>
+
+<h3 id="i-import-source-code-into-your-vsts-account-with-git">I: Import Source Code into your VSTS Account with Git</h3>
+
+<p>We want to push the application code to your Visual Studio Team Services account in
+order to use VSTS Build.</p>
+
+<blockquote>
+  <p><strong>Talking Point:</strong> For this lab we are using the VSTS Git project. The next couple of steps will allow you to add the PartUnlimited source to the Git master repository.</p>
+</blockquote>
+
+<p>If you haven’t already, create a new team project in your Visual Studio Team Services account that uses Git for source control.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/empty-vsts-git.png" alt="" /></p>
+
+<p><strong>1.</strong> Clone the repository to a local directory.</p>
+
+<p>Create a parent <strong>Working Directory</strong> on your local file system. For instance, on a Windows OS you can create the following directory:</p>
+
+<p><code class="highlighter-rouge">C:\Source\Repos</code></p>
+
+<p>Open a command line (one that supports Git) and change to the directory you created above.</p>
+
+<p>Clone the repository with the following command. You can paste in the URL if you copied it in Step 1.  In the example below, the clone will be copied into a directory named HOL. Feel free to use whatever directory name you like, or leave it blank to use the default directory name:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git clone https://github.com/Microsoft/PartsUnlimited.git HOL
+</code></pre>
+</div>
+
+<p>After a few seconds of downloading, all of the code should now be on your local machine.</p>
+
+<p>Move into the directory that was just created.  In a Windows OS (and assuming you used HOL as the directory name), you can use this command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cd HOL
+</code></pre>
+</div>
+
+<p><strong>2.</strong> Remove the link to GitHub.</p>
+
+<p>The Git repo you just downloaded currently has a remote called <em>origin</em> that points to the GitHub repo.  Since we won’t be using it any longer, we can delete the reference.</p>
+
+<p>To delete the GitHub remote, use:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git remote remove origin
+</code></pre>
+</div>
+
+<p><strong>3.</strong> Find the URL to access the VSTS Git repo</p>
+
+<p>First, we need to find the URL to empty Git repository in VSTS.  If you remember your account name, and the Team Project name you created, the URL to the default Git repo is easily assembled:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>https://&lt;account&gt;.visualstudio.com\_git\&lt;project&gt;
+</code></pre>
+</div>
+
+<p>Alternatively, you can use a web browser to browse to your account, click into your project, and click the Code tab to get to your default Git repository:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>https://&lt;account&gt;.visualstudio.com
+</code></pre>
+</div>
+
+<p>Additionally, at the bottom of the web page, you will see the two commands that we will use to push the existing code to VSTS.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/findVstsRepoUrl.png" alt="" /></p>
+
+<p><strong>4.</strong> Add the link to VSTS and push your local Git repo</p>
+
+<p>In the local directory from Step 1, use the following command to add VSTS as the Git remote named <em>origin</em>. You can either type the URL you found in Step 3, or simply copy the first command from the VSTS web page.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git remote add origin https://&lt;account&gt;.visualstudio.com\&lt;project&gt;\_git\&lt;project&gt; Now you can push the code, including history, to VSTS:
+
+git push -u origin --all Congratulations, your code should now be in VSTS!
+</code></pre>
+</div>
+
+<h3 id="ii-create-continuous-integration-build">II. Create Continuous Integration Build</h3>
+
+<p>A continuous integration build will give us the ability check whether the code
+we checked in can compile and will successfully pass any automated tests that we
+have created against it.</p>
+
+<p><strong>1.</strong> Go to your <strong>account’s homepage</strong>:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>https://&lt;account&gt;.visualstudio.com
+</code></pre>
+</div>
+
+<p><strong>2.</strong> Click <strong>Browse</strong> and then select your team project and click
+<strong>Navigate</strong>.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI1.png" alt="" /></p>
+
+<p><strong>3.</strong> Once on the project’s home page, click on the <strong>Build</strong> hub at the top of the page, then on <strong>All Definitions</strong>, and then on <strong>New Definition</strong>.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI2.png" alt="" /></p>
+
+<p><strong>4.</strong> Select the <strong>Empty</strong> build definition, and then click <strong>Next</strong>.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI3.png" alt="" /></p>
+
+<blockquote>
+  <p><strong>Note:</strong> As you can see, you can now do Universal Windows Apps &amp; Xamarin Android/IOS Builds as well as Xcode builds.</p>
+</blockquote>
+
+<p><strong>5.</strong> After clicking the <strong>Next</strong> button, select <strong>HOL Team Project</strong>, select <strong>HOL</strong> Repository, select <strong>Master</strong> as the default branch and check <strong>Continuous Integration</strong> then click <strong>Create</strong>.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI4.png" alt="" /></p>
+
+<blockquote>
+  <p><strong>Note:</strong> We may have multiple repos and branches, so we need to select the correct Repo and Branch before we can select which Solution to build.</p>
+</blockquote>
+
+<p><strong>6.</strong> After clicking the <strong>Create</strong> button, On the <strong>Build</strong> tab click the <strong>Add build step</strong> in the Build pane.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI5.png" alt="" /></p>
+
+<p><strong>7.</strong> In the <strong>Add tasks</strong> dialog, select the <strong>Utility</strong> page and then add a <strong>PowerShell</strong> task.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI6.png" alt="" /></p>
+
+<p><strong>8.</strong> Still in the <strong>Add tasks</strong> dialog, select the <strong>Test</strong> page and add a <strong>Publish Test Results</strong>&amp; task.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI7.png" alt="" /></p>
+
+<p><strong>9.</strong> Select the <strong>Utility</strong> page again and add a <strong>Copy and Publish Artifacts</strong> task and then click on <strong>Close</strong>.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI8.png" alt="" /></p>
+
+<p><strong>10.</strong> On the <strong>PowerShell Script</strong> task, click on the blue <strong>rename</strong> pencil icon and change the name of the step to <strong>dotnet restore, build, test and publish</strong> and click <strong>OK</strong></p>
+
+<p><strong>11.</strong> Select <strong>File Path</strong> for the <strong>Type</strong> property, enter <strong>“build.ps1”</strong> for the <strong>Script filename</strong> property and <strong>$(BuildConfiguration) $(build.stagingDirectory)</strong> for the <strong>Arguments</strong> property.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI9.1.png" alt="" /></p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI9.2.png" alt="" /></p>
+
+<blockquote>
+  <p><strong>Note:</strong> The build.ps1 script contains commands using the <strong>dotnet.exe</strong> executable used by .Net Core.  The build script does the following: restore, build, test, publish, and produce an MSDeploy zip package.</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[CmdletBinding()]
+Param(
+	[Parameter(Mandatory=$True)] [string] $BuildConfiguration,
+	[Parameter(Mandatory=$True)] [string] $BuildStagingDirectory
+)
+$ErrorActionPreference = "Stop"
+#### Restore and build projects
+&amp; dotnet restore
+&amp; dotnet build .\src\PartsUnlimitedWebsite --configuration $BuildConfiguration
+&amp; dotnet build .\test\PartsUnlimited.UnitTests --configuration $BuildConfiguration
+#### Run tests
+&amp; dotnet test .\test\PartsUnlimited.UnitTests -xml testresults.xml
+#### Publish
+$publishDirectory = Join-Path $BuildStagingDirectory "Publish"
+$outputDirectory = Join-Path $publishDirectory "PartsUnlimited"
+&amp; dotnet publish .\src\PartsUnlimitedWebsite --framework netcoreapp1.0 --output $outputDirectory --configuration $BuildConfiguration --no-build
+#### Package to MSDeploy format
+</code></pre>
+</div>
+
+<p><strong>12.</strong> On the <strong>Publish Test Results</strong> task, change the <strong>Test Result Format</strong> to <strong>XUnit</strong> and the <strong>Test Results File</strong> to <strong>**/testresults.xml</strong>.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI10.png" alt="" /></p>
+
+<p><strong>13.</strong> On the <strong>Copy Publish Artifact</strong> task, change the <strong>Copy Root</strong> property to <strong>$(build.stagingDirectory)</strong>, The <strong>Contents</strong> property to <strong>**\*.zip</strong>, The <strong>Artifact Name</strong> property to <strong>drop</strong> and the <strong>Artifact Type</strong> to <strong>Server</strong>.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI11.png" alt="" /></p>
+
+<p><strong>14</strong> Select the <strong>Variables</strong> page and a new variable that will be used by the build.ps1 PowerShell script; <strong>BuildConfiguration</strong> with a value of <strong>release</strong>.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI12.png" alt="" /></p>
+
+<p><strong>15.</strong> Click on the <strong>Triggers</strong> tab and verify that the <strong>Continuous integration (CI)</strong> option is selected to build the solution everytime a change is checked in. Also make sure the filter includes the appropriate branch (in this case <strong>master</strong> and <strong>Batch Changes</strong> checkbox is unchecked</p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI13.png" alt="" /></p>
+
+<blockquote>
+  <p><strong>Note:</strong> To enable Continuous integration in your project, check the <strong>Continuous integration (CI)</strong> checkbox. You can select which branch you wish to monitor, as well.</p>
+</blockquote>
+
+<p><strong>16.</strong> Click <strong>Save</strong> and give the build definition a name.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI14.png" alt="" /></p>
+
+<h3 id="iii-test-the-ci-trigger-in-visual-studio-team-services">III. Test the CI Trigger in Visual Studio Team Services</h3>
+
+<p>We will now test the <strong>Continuous Integration build (CI)</strong> build we created by changing code in the Parts Unlimited project with Visual Studio Team Services.</p>
+
+<p><strong>1.</strong> Select the <strong>Code</strong> hub and then select your your repo, <strong>HOL</strong>.</p>
+
+<p><strong>2.</strong> Navigate to <strong>/src/PartsUnlimitedWebsite/Controllers</strong> in the PartsUnlimited project, then click on the elipsis to the right of <strong>HomeController.cs</strong> and click <strong>Edit</strong>.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI15.png" alt="" /></p>
+
+<p><strong>2.</strong> After clicking <strong>Edit</strong>, add in text (i.e. <em>This is a test of CI</em>) after the last <em>Using</em> statement. Once complete, click <strong>Save</strong>.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI16.png" alt="" /></p>
+
+<p><strong>3.</strong> Click <strong>Build</strong> hub. This should have triggered the build we previously created.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI17.png" alt="" /></p>
+
+<p><strong>4.</strong> Click on the <strong>Build Number</strong>, and you should get the build in progress. Here you can also see the commands being logged to console and the current steps that the build is on.
+<img src="/PartsUnlimited/assets/ci/CI17.1.png" alt="" /></p>
+
+<p><strong>4.</strong> Click on the <strong>Build Number</strong> on the top left and you should get a build summary similar to this, which includes test results.</p>
+
+<p><img src="/PartsUnlimited/assets/ci/CI18.png" alt="" /></p>
+
+<h2 id="next-steps">Next steps</h2>
+
+<p>In this lab, you learned how to push new code to Visual Studio Team Services, setup a Git repo and create a Continuous
+Integration build that runs when new commits are pushed to the master branch.
+This allows you to get feedback as to whether your changes made breaking syntax
+changes, or if they broke one or more automated tests, or if your changes are a
+okay.</p>
+
+<p>Try these lab out for next step:</p>
+
+<p><a href="cd">Continuous Deployment Lab</a></p>
+
+
+                    </div>
+                
+            </div>
+
+            
+
+            <div class="row">
+                <div id="footer" class="col-sm-12">
+                    Documentation for <a href="https://github.com/Microsoft/PartsUnlimited">PartsUnlimited</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+        
+    </body>
+</html>

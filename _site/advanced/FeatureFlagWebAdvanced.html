@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>PartsUnlimited : Advanced Feature Flag for Web Applications</title>
+        <meta name="description" content="example e-commerce website">
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/PartsUnlimited/css/syntax.css">
+        <link rel="stylesheet" href="/PartsUnlimited/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <div id="header" class="col-sm-12">
+                    <img class="logo" src="/PartsUnlimited/assets/logo-ms-dark.png" alt="Microsoft">
+<h4><a class="brand" href="/PartsUnlimited/">PartsUnlimited</a>
+    <small>example e-commerce website</small>
+</h4>
+
+                </div>
+            </div>
+
+            <div class="row">
+                
+                
+                    <div id="navigation" class="col-sm-3">
+                        <ul class="nav nav-list">
+    
+        <li><a href="/PartsUnlimited/">Welcome</a></li>
+    
+
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Basic DevOps Practices</li>
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/basic/manual-deployment.html">Manual Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/basic/ci.html">Continuous Integration</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/basic/cd.html">Continuous Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/basic/QuickStart.html">Quick Start</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/basic/GettingStartedLinuxOSX.html">Getting Started on Linux and OSX</a></li>
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/basic/GettingStarted.html">Getting Started</a></li>
+            
+        
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Advanced DevOps Practices</li>
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/advanced/UserTelemetry.html">User Telemetry</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/advanced/UsageAnalysis.html">Usage Analysis</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/advanced/TestingProd.html">Testing in Production</a></li>
+            
+        
+            
+
+            
+                <li data-order="6"><a class="nav-active" href="/PartsUnlimited/advanced/FeatureFlagWebAdvanced.html">Advanced Feature Flag for Web Applications</a></li>  
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/advanced/FeatureFlagWeb.html">Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="7"><a href="/PartsUnlimited/advanced/FeatureFlagMobile.html">Feature Flag for a Mobile Solution</a></li>
+            
+        
+            
+
+            
+                <li data-order="8"><a href="/PartsUnlimited/advanced/FeatureFlagAPI.html">Feature Flag for an API</a></li>
+            
+        
+            
+
+            
+                <li data-order="11"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabricStarter.html">Fault Injection for Service Fabric Hackathon Starter</a></li>
+            
+        
+            
+
+            
+                <li data-order="10"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabric.html">Fault Injection for Service Fabric</a></li>
+            
+        
+            
+
+            
+                <li data-order="9"><a href="/PartsUnlimited/advanced/FaultInjectionAzurePaaS.html">Fault Injection for Azure PaaS</a></li>
+            
+        
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/advanced/ErrorReporting.html">Error Reporting</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/advanced/ABTesting.html">Experimentation and A/B Testing with Optimzely</a></li>
+            
+        
+    
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class="divider"></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id="content" class="col-sm-9">
+                        <div class="page-header">
+    <h2>Advanced Feature Flag for Web Applications
+        
+    </h2>
+</div>
+
+<h1 id="hol---advanced-feature-flag-for-web-applications">HOL - Advanced Feature Flag for Web Applications</h1>
+
+<p>There’s a big sales initiative coming up next month to assist with a much anticipated product release. In the past infrastructure stability has been a massive concern and we have lost many customers with downtime and slow server response times. This time around we have a plan to stagger the release to different regions at different times to try distribute the load. You have been tasked with implementing the solution and will take advantage of feature flags to accomplish it.</p>
+
+<p>Note: <a href="https://launchdarkly.com/">Launch Darkly</a> is a great option for more advanced feature flag management. Version 3.0.0 of the Launch Darkly SDK supports .NET core.</p>
+
+<h3 id="pre-requisites">Pre-requisites:</h3>
+<ul>
+  <li>
+    <p>Visual Studio 2015 Update 3 or higher</p>
+  </li>
+  <li>
+    <p><a href="https://www.microsoft.com/net/core#windows">.Net Core 1.0.1 SDK</a> installed</p>
+  </li>
+</ul>
+
+<h3 id="tasks-overview">Tasks Overview:</h3>
+
+<ol>
+  <li>
+    <p>Add the back-end code required for feature flags - In this task we will go through the steps required to create advanced feature flags which are region and time based.</p>
+  </li>
+  <li>
+    <p>Try it out! - In this task we will see our feature flag in action, simulating a staggered release to countries.</p>
+  </li>
+</ol>
+
+<h3 id="task-1-add-the-back-end-code-required-for-feature-flags">Task 1: Add the back-end code required for feature flags</h3>
+
+<p><strong>Step 1.</strong> Clone the PartsUnlimited repository to a local directory.</p>
+
+<ul>
+  <li>
+    <p>Open a command line (one that supports Git) and navigate to the directory where you want to store your local repositories. For example in a Windows OS, you can create and navigate to <code class="highlighter-rouge">C:\Source\Repos</code>.</p>
+  </li>
+  <li>
+    <p>Clone the repository with the following command:</p>
+
+    <p>git clone https://github.com/Microsoft/PartsUnlimited.git</p>
+    <blockquote>
+      <p>After a few seconds of downloading, all of the code should now be on your local machine.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Move into the repository directory that was just created. In a Windows OS, you can use this command:</p>
+
+    <p>cd PartsUnlimited</p>
+  </li>
+</ul>
+
+<p><strong>Step 2.</strong> Open the PartsUnlimited solution with Visual Studio</p>
+
+<p>In the command line, type the following.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>start PartsUnlimited.sln
+</code></pre>
+</div>
+
+<p>Or navigate to where you cloned the repository to e.g. <code class="highlighter-rouge">C:\Source\Repos</code> with explorer and double click on PartsUnlimited.sln</p>
+
+<p><strong>Step 3.</strong> Let’s create a folder for our feature flag related classes. On the PartsUnlimitedWebsite solution, right click and create a new folder. We can call it something like ‘FeatureFlag’.</p>
+
+<p><img src="/PartsUnlimited/assets/advancedfeatureflagweb/new-folder.png" alt="" /></p>
+
+<p><strong>Step 4.</strong> Now we will create the first feature flag class. Right click on the newly created <strong>FeatureFlag</strong> folder -&gt; select <strong>‘Add’</strong> -&gt; select <strong>‘Class…‘</strong>.</p>
+
+<p><img src="/PartsUnlimited/assets/advancedfeatureflagweb/new-class.png" alt="" /></p>
+
+<p><strong>Step 5.</strong> Create a new class in this folder called <code class="highlighter-rouge">FeatureType.cs</code>. This will be used to define different types of features we have.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">namespace</span> <span class="nn">PartsUnlimited.FeatureFlag</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">enum</span> <span class="n">FeatureType</span>
+    <span class="p">{</span>
+        <span class="n">Default</span><span class="p">,</span>
+        <span class="n">Region</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 6.</strong> Add another class in the same folder called <code class="highlighter-rouge">Feature.cs</code>. This will define the structure of our features.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">namespace</span> <span class="nn">PartsUnlimited.FeatureFlag</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">Feature</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="nf">Feature</span><span class="p">(</span><span class="kt">string</span> <span class="n">key</span><span class="p">,</span> <span class="kt">string</span> <span class="n">description</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">active</span><span class="p">,</span> <span class="n">FeatureType</span> <span class="n">type</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Key</span> <span class="p">=</span> <span class="n">key</span><span class="p">;</span>
+            <span class="n">Description</span> <span class="p">=</span> <span class="n">description</span><span class="p">;</span>
+            <span class="n">Active</span> <span class="p">=</span> <span class="n">active</span><span class="p">;</span>
+            <span class="n">Type</span> <span class="p">=</span> <span class="n">type</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="n">FeatureType</span> <span class="n">Type</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="k">public</span> <span class="kt">bool</span> <span class="n">Active</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="k">public</span> <span class="kt">string</span> <span class="n">Description</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="k">public</span> <span class="kt">string</span> <span class="n">Key</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<ul>
+  <li><strong>Feature Type</strong> is an enum which represents the feature type.</li>
+  <li><strong>Active</strong> is going to be the current state for the feature flag.</li>
+  <li><strong>Description</strong> is going to be a brief description of what the feature flag is for.</li>
+  <li><strong>Key</strong> is going to be the unique identifier for that particular feature flag.</li>
+</ul>
+
+<p><strong>Step 7.</strong> We need an interface we will use to template all our different feature toggle types. Let’s call this <code class="highlighter-rouge">IFeatureFlagStrategy.cs</code> and store it in the same folder we’ve been using -&gt; <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimitedWebsite\FeatureFlag</code>. This interface will have two method signatures: ‘Can’ and ‘Do’. ‘Can’ will be used to decide which strategy should be run. ‘Do’ will perform the actual work required for the feature flag. Create this in the same ‘FeatureFlag’ folder we created before.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>
+<span class="k">namespace</span> <span class="nn">PartsUnlimited.FeatureFlag</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">interface</span> <span class="n">IFeatureStrategy</span>
+    <span class="p">{</span>
+        <span class="kt">bool</span> <span class="nf">Can</span><span class="p">(</span><span class="n">Feature</span> <span class="n">feature</span><span class="p">);</span>
+
+        <span class="kt">bool</span> <span class="nf">Do</span><span class="p">(</span><span class="n">Feature</span> <span class="n">feature</span><span class="p">,</span> <span class="kt">string</span> <span class="n">comparison</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 8.</strong> Now we want to create a feature manager class and interface. This will be used later on to toggle our features on and off. Let’s call it <code class="highlighter-rouge">FeatureManager.cs</code> and store it here -&gt; <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimitedWebsite\FeatureFlag\FeatureManager.cs</code></p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">PartsUnlimited.FeatureFlag</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">interface</span> <span class="n">IFeatureManager</span>
+    <span class="p">{</span>
+        <span class="kt">bool</span> <span class="nf">GetStatusByKey</span><span class="p">(</span><span class="kt">string</span> <span class="n">key</span><span class="p">,</span> <span class="kt">string</span> <span class="n">comparison</span><span class="p">);</span>
+        <span class="k">void</span> <span class="nf">ChangeFeatureToggles</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">selectedItems</span><span class="p">);</span>
+        <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">Feature</span><span class="p">&gt;</span> <span class="nf">RetrieveFeatures</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">FeatureManager</span><span class="p">:</span> <span class="n">IFeatureManager</span>
+    <span class="p">{</span>
+        <span class="k">private</span> <span class="k">readonly</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">Feature</span><span class="p">&gt;</span> <span class="n">_features</span><span class="p">;</span>
+        <span class="k">private</span> <span class="k">readonly</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">IFeatureStrategy</span><span class="p">&gt;</span> <span class="n">_strategies</span><span class="p">;</span>
+
+        <span class="k">public</span> <span class="nf">FeatureManager</span><span class="p">(</span><span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">Feature</span><span class="p">&gt;</span> <span class="n">features</span><span class="p">,</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">IFeatureStrategy</span><span class="p">&gt;</span> <span class="n">strategies</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">features</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">features</span><span class="p">));</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">strategies</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">strategies</span><span class="p">));</span>
+
+            <span class="n">_features</span> <span class="p">=</span> <span class="n">features</span><span class="p">;</span>
+            <span class="n">_strategies</span> <span class="p">=</span> <span class="n">strategies</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">Feature</span><span class="p">&gt;</span> <span class="nf">RetrieveFeatures</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">_features</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="kt">bool</span> <span class="nf">GetStatusByKey</span><span class="p">(</span><span class="kt">string</span> <span class="n">key</span><span class="p">,</span> <span class="kt">string</span> <span class="n">comparison</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">comparison</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">comparison</span><span class="p">));</span>
+            <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">key</span><span class="p">));</span>
+
+            <span class="n">Feature</span> <span class="n">feature</span> <span class="p">=</span> <span class="n">_features</span><span class="p">.</span><span class="nf">SingleOrDefault</span><span class="p">(</span><span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Key</span> <span class="p">==</span> <span class="n">key</span><span class="p">);</span>
+
+            <span class="k">foreach</span> <span class="p">(</span><span class="n">IFeatureStrategy</span> <span class="n">strategy</span> <span class="k">in</span> <span class="n">_strategies</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">strategy</span><span class="p">.</span><span class="nf">Can</span><span class="p">(</span><span class="n">feature</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="k">return</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">comparison</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">Exception</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"Unable to find a feature strategy for the key {0} with the comparison of {1}"</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">comparison</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">ChangeFeatureToggles</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">selectedItems</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">selectedItems</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">selectedItems</span><span class="p">));</span>
+
+            <span class="n">_features</span><span class="p">.</span><span class="nf">AsParallel</span><span class="p">().</span><span class="nf">ForAll</span><span class="p">(</span>
+                <span class="n">f</span> <span class="p">=&gt;</span>
+                <span class="p">{</span>
+                    <span class="n">f</span><span class="p">.</span><span class="n">Active</span> <span class="p">=</span> <span class="n">selectedItems</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">Key</span><span class="p">);</span>
+                <span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+</div>
+
+<p>Now let’s explain the sections of the above code.</p>
+
+<ul>
+  <li><strong>Features</strong> is a list of features we want to use with the application.</li>
+  <li><strong>GetStatusByKey</strong> is a method we will use to get the current status for a particular key. This will check to see if there’s an existing strategy which can handle this feature flag.</li>
+  <li><strong>ChangeFeatureToggles</strong> takes in a list of selected feature toggles. If the key exists in any of our ‘features’ that status will be toggled.</li>
+</ul>
+
+<p><em>Note: It’s a much better idea to store these flags in a database. For simplicity’s sake we have stored them in memory.</em></p>
+
+<p><strong>Step 9.</strong> Now lets create a region specific feature. The first file will be called <code class="highlighter-rouge">FeatureFlags.cs</code> and it will be responsible for storing the parameters required for specific features. This should be stored in the same FeatureFlag folder we created earlier <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimitedWebsite\FeatureFlag</code>.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>
+<span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">PartsUnlimited.FeatureFlag</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">interface</span> <span class="n">IFeatureFlags</span>
+    <span class="p">{</span>
+        <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">&gt;</span> <span class="n">Regions</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">FeatureFlags</span> <span class="p">:</span> <span class="n">IFeatureFlags</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">&gt;</span> <span class="n">Regions</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="k">public</span> <span class="nf">FeatureFlags</span><span class="p">(</span><span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">&gt;</span> <span class="n">regions</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">regions</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">regions</span><span class="p">));</span>
+            <span class="n">Regions</span> <span class="p">=</span> <span class="n">regions</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+</div>
+
+<p>The second file will be called <code class="highlighter-rouge">FeatureRegionStrategy.cs</code> and will contain the core logic of our region specific feature flag. It should be created in the location as the previous file -&gt; <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimitedWebsite\FeatureFlag</code>.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>
+<span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">PartsUnlimited.FeatureFlag</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">FeatureRegionStrategy</span> <span class="p">:</span> <span class="n">IFeatureStrategy</span>
+    <span class="p">{</span>
+        <span class="k">private</span> <span class="k">readonly</span> <span class="n">IFeatureFlags</span> <span class="n">_featureFlags</span><span class="p">;</span>
+
+        <span class="k">public</span> <span class="nf">FeatureRegionStrategy</span><span class="p">(</span><span class="n">IFeatureFlags</span> <span class="n">featureFlags</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">featureFlags</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">featureFlags</span><span class="p">));</span>
+            <span class="n">_featureFlags</span> <span class="p">=</span> <span class="n">featureFlags</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">public</span> <span class="kt">bool</span> <span class="nf">Can</span><span class="p">(</span><span class="n">Feature</span> <span class="n">feature</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">feature</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">feature</span><span class="p">));</span>
+
+            <span class="k">return</span> <span class="n">feature</span><span class="p">.</span><span class="n">Type</span> <span class="p">==</span> <span class="n">FeatureType</span><span class="p">.</span><span class="n">Region</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="kt">bool</span> <span class="nf">Do</span><span class="p">(</span><span class="n">Feature</span> <span class="n">feature</span><span class="p">,</span> <span class="kt">string</span> <span class="n">comparison</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">feature</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">feature</span><span class="p">));</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">comparison</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">comparison</span><span class="p">));</span>
+
+            <span class="kt">string</span><span class="p">[]</span> <span class="n">activeRegions</span> <span class="p">=</span> <span class="n">_featureFlags</span><span class="p">.</span><span class="n">Regions</span><span class="p">.</span><span class="n">Keys</span><span class="p">.</span><span class="nf">ToArray</span><span class="p">();</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">feature</span><span class="p">.</span><span class="n">Active</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="kt">bool</span> <span class="n">isRegionActive</span> <span class="p">=</span> <span class="n">activeRegions</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="n">comparison</span><span class="p">);</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">isRegionActive</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">DateTime</span> <span class="n">featureActiveFromTime</span> <span class="p">=</span> <span class="n">_featureFlags</span><span class="p">.</span><span class="n">Regions</span><span class="p">[</span><span class="n">comparison</span><span class="p">];</span>
+                    <span class="k">return</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span> <span class="p">&gt;</span> <span class="n">featureActiveFromTime</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 10.</strong> Now we want to create a static constants class to store the key and description of our feature flags. Let’s call this <code class="highlighter-rouge">FeatureConstants.cs</code> and store it here -&gt; <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimitedWebsite</code></p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>
+<span class="k">namespace</span> <span class="nn">PartsUnlimited</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="k">class</span> <span class="nc">FeatureConstants</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="k">static</span> <span class="kt">string</span> <span class="n">BulkBuyKey</span> <span class="p">=&gt;</span> <span class="s">"BulkBuyKey"</span><span class="p">;</span>
+        <span class="k">public</span> <span class="k">static</span> <span class="kt">string</span> <span class="n">BulkBuyDescription</span> <span class="p">=&gt;</span> <span class="s">"Ability to quickly add 10 of one item to the cart"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 11.</strong> Add the following section to your <code class="highlighter-rouge">config.json</code>, set any date time string for now as we will change this later. This file can be found here -&gt; <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimitedWebsite\config.json</code></p>
+
+<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="err">...</span><span class="w">
+
+    </span><span class="nt">"FeatureFlags"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"Region"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"New Zealand"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-11-04T12:20:29"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"Australia"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-11-04T12:25:29"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p><strong>Step 12.</strong> Now we need to manage our dependencies. Navigate to <code class="highlighter-rouge">Startup.cs</code> located here -&gt; <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimitedWebsite\Startup.cs</code>. Add the following code below to the ConfigureServices method.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="p">...</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">PartsUnlimited.FeatureFlag</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">PartsUnlimited</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">ConfigureServices</span><span class="p">(</span><span class="n">IServiceCollection</span> <span class="n">services</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="c1">// This will get the configuration section out of the config.json file
+</span>        <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">IConfigurationSection</span><span class="p">&gt;</span> <span class="n">configurationSections</span> <span class="p">=</span> <span class="n">Configuration</span><span class="p">.</span><span class="nf">GetSection</span><span class="p">(</span><span class="s">"FeatureFlags:Region"</span><span class="p">).</span><span class="nf">GetChildren</span><span class="p">();</span>
+
+        <span class="c1">// This will map the config.json region values to a dictionary&lt;string, Date&gt;
+</span>        <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">&gt;</span> <span class="n">regions</span> <span class="p">=</span> <span class="n">configurationSections</span><span class="p">.</span><span class="nf">ToDictionary</span><span class="p">(</span><span class="n">config</span> <span class="p">=&gt;</span> <span class="n">config</span><span class="p">.</span><span class="n">Key</span><span class="p">,</span> <span class="n">config</span> <span class="p">=&gt;</span> <span class="n">DateTime</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">Value</span><span class="p">));</span>
+
+        <span class="n">FeatureFlags</span> <span class="n">featureFlags</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FeatureFlags</span><span class="p">(</span><span class="n">regions</span><span class="p">);</span>
+
+        <span class="c1">// This will make our feature flags available across the application
+</span>        <span class="n">services</span><span class="p">.</span><span class="n">AddScoped</span><span class="p">&lt;</span><span class="n">IFeatureFlags</span><span class="p">&gt;(</span>
+            <span class="n">p</span> <span class="p">=&gt;</span> <span class="n">featureFlags</span><span class="p">);</span>
+
+        <span class="c1">// Here is where we will define our feature flag strategies and bind them to the feature manager
+</span>        <span class="kt">var</span> <span class="n">strategies</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">IFeatureStrategy</span><span class="p">&gt;</span> <span class="p">{</span>
+            <span class="k">new</span> <span class="nf">FeatureRegionStrategy</span><span class="p">(</span><span class="n">featureFlags</span><span class="p">)</span>
+        <span class="p">};</span>
+        <span class="kt">var</span> <span class="n">features</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Feature</span><span class="p">&gt;</span>
+        <span class="p">{</span>
+            <span class="k">new</span> <span class="nf">Feature</span><span class="p">(</span><span class="n">FeatureConstants</span><span class="p">.</span><span class="n">BulkBuyKey</span><span class="p">,</span> <span class="n">FeatureConstants</span><span class="p">.</span><span class="n">BulkBuyDescription</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="n">FeatureType</span><span class="p">.</span><span class="n">Region</span><span class="p">)</span>
+        <span class="p">};</span>
+        <span class="n">services</span><span class="p">.</span><span class="n">AddScoped</span><span class="p">&lt;</span><span class="n">IFeatureManager</span><span class="p">&gt;(</span><span class="n">m</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="nf">FeatureManager</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">strategies</span><span class="p">));</span>
+        <span class="p">...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 13.</strong> We need to store a user’s location in order to apply our region flag correctly. Navigate to <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimited.Models\ApplicationUser.cs</code> and add the ‘Location’ property as seen below.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">ApplicationUser</span> <span class="p">:</span> <span class="n">IdentityUser</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Location</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 14.</strong> Navigate to <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimitedWebsite\Models\ManageViewModels.cs</code> and look inside the IndexViewModel class. We need to add the location and feature flags properties here.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="p">...</span>
+<span class="k">using</span> <span class="nn">PartsUnlimited.FeatureFlag</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">IndexViewModel</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Location</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">IFeatureFlags</span> <span class="n">FeatureFlags</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 15.</strong> Navigate to the <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimitedWebsite\Controllers\ManageController.cs</code> class and add the <strong>IFeatureManager</strong> to the constructor.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="p">...</span>
+<span class="k">using</span> <span class="nn">PartsUnlimited.FeatureFlag</span><span class="p">;</span>
+
+<span class="p">...</span>
+<span class="na">[Authorize]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ManageController</span> <span class="p">:</span> <span class="n">Controller</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">IFeatureManager</span> <span class="n">_featureManager</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">IFeatureFlags</span> <span class="n">_featureFlags</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">ManageController</span><span class="p">(</span><span class="n">UserManager</span><span class="p">&lt;</span><span class="n">ApplicationUser</span><span class="p">&gt;</span> <span class="n">userManager</span><span class="p">,</span>
+    <span class="n">SignInManager</span><span class="p">&lt;</span><span class="n">ApplicationUser</span><span class="p">&gt;</span> <span class="n">signInManager</span><span class="p">,</span>
+    <span class="n">IFeatureManager</span> <span class="n">featureManager</span><span class="p">,</span> <span class="n">IFeatureFlags</span> <span class="n">featureFlags</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_featureManager</span> <span class="p">=</span> <span class="n">featureManager</span><span class="p">;</span>
+        <span class="n">_featureFlags</span> <span class="p">=</span> <span class="n">featureFlags</span><span class="p">;</span>
+        <span class="n">UserManager</span> <span class="p">=</span> <span class="n">userManager</span><span class="p">;</span>
+        <span class="n">SignInManager</span> <span class="p">=</span> <span class="n">signInManager</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="p">...</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 16.</strong> Now in the Index method inside <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimitedWebsite\Controllers\ManageController.cs</code> we need to populate our location value with the correct value from the user.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="c1">//
+// GET: /Manage/Index
+</span><span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">ActionResult</span><span class="p">&gt;</span> <span class="nf">Index</span><span class="p">(</span><span class="n">ManageMessageId</span><span class="p">?</span> <span class="n">message</span> <span class="p">=</span> <span class="k">null</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+
+    <span class="kt">var</span> <span class="n">model</span> <span class="p">=</span> <span class="k">new</span> <span class="n">IndexViewModel</span>
+    <span class="p">{</span>
+        <span class="p">...</span>
+
+        <span class="n">Location</span> <span class="p">=</span> <span class="n">user</span><span class="p">.</span><span class="n">Location</span><span class="p">,</span>
+        <span class="n">FeatureFlags</span> <span class="p">=</span> <span class="n">_featureFlags</span>
+    <span class="p">};</span>
+
+    <span class="k">return</span> <span class="nf">View</span><span class="p">(</span><span class="n">model</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 17.</strong> Navigate to <code class="highlighter-rouge">Index.cshtml</code> inside the Views -&gt; Manage folder, we then need add the following at the top of the file.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="n">@using</span> <span class="n">System</span><span class="p">.</span><span class="n">Threading</span><span class="p">.</span><span class="n">Tasks</span>
+</code></pre>
+</div>
+
+<p>Then at the bottom of the page <strong>just inside the last closing <code class="highlighter-rouge">&lt;/dl&gt;</code> tag</strong> we want to add the following code.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="p">...</span>
+
+<span class="p">&lt;</span><span class="n">dt</span><span class="p">&gt;</span><span class="n">Location</span><span class="p">:&lt;/</span><span class="n">dt</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="n">dd</span><span class="p">&gt;</span>
+    <span class="nf">@using</span> <span class="p">(</span><span class="n">Html</span><span class="p">.</span><span class="nf">BeginForm</span><span class="p">(</span><span class="s">"AddLocation"</span><span class="p">,</span> <span class="s">"Manage"</span><span class="p">,</span> <span class="n">FormMethod</span><span class="p">.</span><span class="n">Post</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">@class</span> <span class="p">=</span> <span class="s">"form-horizontal"</span><span class="p">,</span> <span class="n">role</span> <span class="p">=</span> <span class="s">"form"</span> <span class="p">}))</span>
+    <span class="p">{</span>
+        <span class="n">@Html</span><span class="p">.</span><span class="nf">AntiForgeryToken</span><span class="p">()</span>
+
+        <span class="n">@Html</span><span class="p">.</span><span class="nf">DropDownListFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Location</span><span class="p">,</span> <span class="n">Model</span><span class="p">.</span><span class="n">FeatureFlags</span><span class="p">.</span><span class="n">Regions</span><span class="p">.</span><span class="n">Keys</span><span class="p">.</span><span class="nf">ToArray</span><span class="p">().</span><span class="nf">Select</span><span class="p">(</span><span class="n">i</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="n">SelectListItem</span> <span class="p">{</span> <span class="n">Text</span> <span class="p">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">Value</span> <span class="p">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">Selected</span> <span class="p">=</span> <span class="p">(</span><span class="n">i</span> <span class="p">==</span> <span class="n">Model</span><span class="p">.</span><span class="n">Location</span><span class="p">)</span> <span class="p">}))</span>
+
+        <span class="p">&lt;</span><span class="n">span</span><span class="p">&gt;[</span> <span class="p">&lt;</span><span class="n">input</span> <span class="n">type</span><span class="p">=</span><span class="s">"button"</span> <span class="k">value</span><span class="p">=</span><span class="s">"Save location"</span> <span class="k">class</span><span class="err">="</span><span class="nc">btn</span> <span class="n">btn</span><span class="p">-</span><span class="n">link</span><span class="s">" data-toggle="</span><span class="n">modal</span><span class="s">" data-target="</span><span class="err">#</span><span class="n">confirmation</span><span class="p">-</span><span class="n">modal</span><span class="s">"/&gt; ]&lt;/span&gt;
+</span>
+        <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">modal</span> <span class="n">fade</span><span class="s">" id="</span><span class="n">confirmation</span><span class="p">-</span><span class="n">modal</span><span class="s">"  tabindex="</span><span class="p">-</span><span class="m">1</span><span class="s">" role="</span><span class="n">dialog</span><span class="s">" aria-hidden="</span><span class="k">true</span><span class="s">"&gt;
+</span>            <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">modal</span><span class="p">-</span><span class="n">dialog</span><span class="s">" role="</span><span class="n">document</span><span class="s">"&gt;
+</span>                <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">modal</span><span class="p">-</span><span class="n">content</span><span class="s">"&gt;
+</span>                    <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">modal</span><span class="p">-</span><span class="n">header</span><span class="s">"&gt;
+</span>                        <span class="p">&lt;</span><span class="n">button</span> <span class="n">type</span><span class="p">=</span><span class="s">"button"</span> <span class="k">class</span><span class="err">="</span><span class="nc">close</span><span class="s">" data-dismiss="</span><span class="n">modal</span><span class="s">" aria-label="</span><span class="n">Close</span><span class="s">"&gt;
+</span>                            <span class="p">&lt;</span><span class="n">span</span> <span class="n">aria</span><span class="p">-</span><span class="n">hidden</span><span class="p">=</span><span class="s">"true"</span><span class="p">&gt;&amp;</span><span class="n">times</span><span class="p">;&lt;/</span><span class="n">span</span><span class="p">&gt;</span>
+                        <span class="p">&lt;/</span><span class="n">button</span><span class="p">&gt;</span>
+                        <span class="p">&lt;</span><span class="n">h4</span> <span class="k">class</span><span class="err">="</span><span class="nc">modal</span><span class="p">-</span><span class="n">title</span><span class="s">"&gt;Confirmation&lt;/h4&gt;
+</span>                    <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+                    <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">modal</span><span class="p">-</span><span class="n">body</span><span class="s">"&gt;
+</span>                        <span class="p">&lt;</span><span class="n">p</span><span class="p">&gt;</span><span class="n">Are</span> <span class="n">you</span> <span class="n">sure</span> <span class="n">you</span> <span class="n">wish</span> <span class="n">to</span> <span class="n">change</span> <span class="n">your</span> <span class="n">location</span><span class="p">?&lt;/</span><span class="n">p</span><span class="p">&gt;</span>
+                    <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+                    <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">modal</span><span class="p">-</span><span class="n">footer</span><span class="s">"&gt;
+</span>                        <span class="p">&lt;</span><span class="n">button</span> <span class="n">type</span><span class="p">=</span><span class="s">"button"</span> <span class="k">class</span><span class="err">="</span><span class="nc">btn</span> <span class="n">btn</span><span class="p">-</span><span class="n">secondary</span><span class="s">" style="</span><span class="kt">float</span><span class="p">:</span> <span class="n">left</span><span class="p">;</span><span class="s">" data-dismiss="</span><span class="n">modal</span><span class="s">"&gt;Close&lt;/button&gt;
+</span>                        <span class="p">&lt;</span><span class="n">button</span> <span class="n">type</span><span class="p">=</span><span class="s">"submit"</span> <span class="k">class</span><span class="err">="</span><span class="nc">btn</span> <span class="n">btn</span><span class="p">-</span><span class="n">primary</span><span class="s">" style="</span><span class="kt">float</span><span class="p">:</span> <span class="n">left</span><span class="p">;</span><span class="s">"&gt;Save changes&lt;/button&gt;
+</span>                    <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+                <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;&lt;!--</span> <span class="p">/.</span><span class="n">modal</span><span class="p">-</span><span class="n">content</span> <span class="p">--&gt;</span>
+            <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;&lt;!--</span> <span class="p">/.</span><span class="n">modal</span><span class="p">-</span><span class="n">dialog</span> <span class="p">--&gt;</span>
+        <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;&lt;!--</span> <span class="p">/.</span><span class="n">modal</span> <span class="p">--&gt;</span>
+    <span class="p">}</span>
+<span class="p">&lt;/</span><span class="n">dd</span><span class="p">&gt;</span>
+<span class="p">...</span>
+</code></pre>
+</div>
+
+<p><strong>Step 18.</strong> Now we need to ensure that when a user clicks the ‘save location’ button it actually saves! Navigate to <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimitedWebsite\Controllers\ManageController.cs</code> again and create a new POST method.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="p">...</span>
+
+<span class="na">[Authorize]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ManageController</span> <span class="p">:</span> <span class="n">Controller</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+
+    <span class="c1">//
+</span>    <span class="c1">// POST: /Manage/AddLocation
+</span>    <span class="p">[</span><span class="n">HttpPost</span><span class="p">]</span>
+    <span class="p">[</span><span class="n">ValidateAntiForgeryToken</span><span class="p">]</span>
+    <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">IActionResult</span><span class="p">&gt;</span> <span class="nf">AddLocation</span><span class="p">(</span><span class="n">IndexViewModel</span> <span class="n">indexViewModel</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">indexViewModel</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">indexViewModel</span><span class="p">));</span>
+
+        <span class="kt">var</span> <span class="n">user</span> <span class="p">=</span> <span class="k">await</span> <span class="nf">GetCurrentUserAsync</span><span class="p">();</span>
+        <span class="n">user</span><span class="p">.</span><span class="n">Location</span> <span class="p">=</span> <span class="n">indexViewModel</span><span class="p">.</span><span class="n">Location</span><span class="p">;</span>
+        <span class="k">await</span> <span class="n">UserManager</span><span class="p">.</span><span class="nf">UpdateAsync</span><span class="p">(</span><span class="n">user</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nf">RedirectToAction</span><span class="p">(</span><span class="s">"Index"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 19.</strong> We need a way to bulk add items to a users cart. Navigate to <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimited.Models\ShoppingCart.cs</code> and add the following method.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">BulkAddToCart</span><span class="p">(</span><span class="n">Product</span> <span class="n">product</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">bulkItemAmount</span> <span class="p">=</span> <span class="m">10</span><span class="p">;</span>
+    <span class="c1">// Get the matching cart and product instances
+</span>    <span class="kt">var</span> <span class="n">cartItem</span> <span class="p">=</span> <span class="n">_db</span><span class="p">.</span><span class="n">CartItems</span><span class="p">.</span><span class="nf">SingleOrDefault</span><span class="p">(</span>
+        <span class="n">c</span> <span class="p">=&gt;</span> <span class="n">c</span><span class="p">.</span><span class="n">CartId</span> <span class="p">==</span> <span class="n">ShoppingCartId</span>
+        <span class="p">&amp;&amp;</span> <span class="n">c</span><span class="p">.</span><span class="n">ProductId</span> <span class="p">==</span> <span class="n">product</span><span class="p">.</span><span class="n">ProductId</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">cartItem</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Create a new cart item if no cart item exists
+</span>        <span class="n">cartItem</span> <span class="p">=</span> <span class="k">new</span> <span class="n">CartItem</span>
+        <span class="p">{</span>
+            <span class="n">ProductId</span> <span class="p">=</span> <span class="n">product</span><span class="p">.</span><span class="n">ProductId</span><span class="p">,</span>
+            <span class="n">CartId</span> <span class="p">=</span> <span class="n">ShoppingCartId</span><span class="p">,</span>
+            <span class="n">Count</span> <span class="p">=</span> <span class="n">bulkItemAmount</span><span class="p">,</span>
+            <span class="n">DateCreated</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span>
+        <span class="p">};</span>
+
+        <span class="n">_db</span><span class="p">.</span><span class="n">CartItems</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">cartItem</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="c1">// If the item does exist in the cart, then add one to the quantity
+</span>        <span class="n">cartItem</span><span class="p">.</span><span class="n">Count</span> <span class="p">+=</span> <span class="n">bulkItemAmount</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 20.</strong> Let’s wire up the required feature information to <code class="highlighter-rouge">StoreController.cs</code> located here -&gt; <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimitedWebsite\Controllers\StoreController.cs</code>. We want to add the following code to the controller.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="p">...</span>
+<span class="k">using</span> <span class="nn">Microsoft.AspNetCore.Identity</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">PartsUnlimited.FeatureFlag</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Threading.Tasks</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">PartsUnlimited.Controllers</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">StoreController</span> <span class="p">:</span> <span class="n">Controller</span>
+    <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="k">private</span> <span class="k">readonly</span> <span class="n">IFeatureManager</span> <span class="n">_featureManager</span><span class="p">;</span>
+        <span class="k">private</span> <span class="k">readonly</span> <span class="n">UserManager</span><span class="p">&lt;</span><span class="n">ApplicationUser</span><span class="p">&gt;</span> <span class="n">_userManager</span><span class="p">;</span>
+
+        <span class="k">public</span> <span class="nf">StoreController</span><span class="p">(</span><span class="n">IPartsUnlimitedContext</span> <span class="n">context</span><span class="p">,</span> <span class="n">IMemoryCache</span> <span class="n">memoryCache</span><span class="p">,</span> <span class="n">IFeatureManager</span> <span class="n">featureManager</span><span class="p">,</span> <span class="n">UserManager</span><span class="p">&lt;</span><span class="n">ApplicationUser</span><span class="p">&gt;</span> <span class="n">userManager</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="p">...</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">featureManager</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">featureManager</span><span class="p">));</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">userManager</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">userManager</span><span class="p">));</span>
+
+            <span class="p">...</span>
+            <span class="n">_featureManager</span> <span class="p">=</span> <span class="n">featureManager</span><span class="p">;</span>
+            <span class="n">_userManager</span> <span class="p">=</span> <span class="n">userManager</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="p">...</span>
+
+        <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">IActionResult</span><span class="p">&gt;</span> <span class="nf">Details</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Product</span> <span class="n">productData</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">HttpContext</span><span class="p">.</span><span class="n">User</span><span class="p">.</span><span class="n">Identity</span><span class="p">.</span><span class="n">IsAuthenticated</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">ApplicationUser</span> <span class="n">user</span> <span class="p">=</span> <span class="k">await</span> <span class="n">_userManager</span><span class="p">.</span><span class="nf">FindByIdAsync</span><span class="p">(</span><span class="n">_userManager</span><span class="p">.</span><span class="nf">GetUserId</span><span class="p">(</span><span class="n">HttpContext</span><span class="p">.</span><span class="n">User</span><span class="p">));</span>
+                <span class="n">ViewBag</span><span class="p">.</span><span class="n">IsFeatureActive</span> <span class="p">=</span> <span class="n">_featureManager</span><span class="p">.</span><span class="nf">GetStatusByKey</span><span class="p">(</span><span class="n">FeatureConstants</span><span class="p">.</span><span class="n">BulkBuyKey</span><span class="p">,</span> <span class="n">user</span><span class="p">.</span><span class="n">Location</span> <span class="p">??</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">ViewBag</span><span class="p">.</span><span class="n">IsFeatureActive</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="p">...</span>
+
+            <span class="k">return</span> <span class="nf">View</span><span class="p">(</span><span class="n">productData</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+</div>
+
+<p>We also want to include the bulk add method to <code class="highlighter-rouge">ShoppingCartController.cs</code> located here -&gt; <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimitedWebsite\Controllers\ShoppingCartController.cs</code>.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>
+        <span class="c1">//
+</span>        <span class="c1">// GET: /ShoppingCart/BulkAddToCart/5
+</span>        <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">IActionResult</span><span class="p">&gt;</span> <span class="nf">BulkAddToCart</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Retrieve the product from the database
+</span>            <span class="kt">var</span> <span class="n">addedProduct</span> <span class="p">=</span> <span class="n">_db</span><span class="p">.</span><span class="n">Products</span>
+                <span class="p">.</span><span class="nf">Single</span><span class="p">(</span><span class="n">product</span> <span class="p">=&gt;</span> <span class="n">product</span><span class="p">.</span><span class="n">ProductId</span> <span class="p">==</span> <span class="n">id</span><span class="p">);</span>
+
+            <span class="c1">// Start timer for save process telemetry
+</span>            <span class="kt">var</span> <span class="n">startTime</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">;</span>
+
+            <span class="c1">// Add it to the shopping cart
+</span>            <span class="kt">var</span> <span class="n">cart</span> <span class="p">=</span> <span class="n">ShoppingCart</span><span class="p">.</span><span class="nf">GetCart</span><span class="p">(</span><span class="n">_db</span><span class="p">,</span> <span class="n">HttpContext</span><span class="p">);</span>
+
+            <span class="n">cart</span><span class="p">.</span><span class="nf">BulkAddToCart</span><span class="p">(</span><span class="n">addedProduct</span><span class="p">);</span>
+
+            <span class="k">await</span> <span class="n">_db</span><span class="p">.</span><span class="nf">SaveChangesAsync</span><span class="p">(</span><span class="n">HttpContext</span><span class="p">.</span><span class="n">RequestAborted</span><span class="p">);</span>
+
+            <span class="c1">// Trace add process
+</span>            <span class="kt">var</span> <span class="n">measurements</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">double</span><span class="p">&gt;()</span>
+            <span class="p">{</span>
+                <span class="p">{</span><span class="s">"ElapsedMilliseconds"</span><span class="p">,</span> <span class="n">System</span><span class="p">.</span><span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="nf">Subtract</span><span class="p">(</span><span class="n">startTime</span><span class="p">).</span><span class="n">TotalMilliseconds</span> <span class="p">}</span>
+            <span class="p">};</span>
+            <span class="n">_telemetry</span><span class="p">.</span><span class="nf">TrackEvent</span><span class="p">(</span><span class="s">"Cart/Server/Add"</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="n">measurements</span><span class="p">);</span>
+
+            <span class="c1">// Go back to the main store page for more shopping
+</span>            <span class="k">return</span> <span class="nf">RedirectToAction</span><span class="p">(</span><span class="s">"Index"</span><span class="p">);</span>
+        <span class="p">}</span>
+
+</code></pre>
+</div>
+
+<p><strong>Step 21.</strong> Now lets add the actual feature toggle on the <code class="highlighter-rouge">Details.cshtml</code> file located here -&gt; <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimitedWebsite\Views\Store\Details.cshtml</code>. Take note of the comments below - we want to find where the first section (under the first comment) of code is and replace it with the second section (under the second comment).</p>
+
+<p>Look for the following tag below.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>
+<span class="p">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="p">=</span><span class="s">"@Url.Action("</span><span class="n">AddToCart</span><span class="s">", "</span><span class="n">ShoppingCart</span><span class="s">", new { id = Model.ProductId })"</span> <span class="k">class</span><span class="err">="</span><span class="nc">btn</span><span class="s">"&gt;Add to Cart&lt;/a&gt;
+</span>
+</code></pre>
+</div>
+
+<p>Replace the code above with the code below.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>
+<span class="p">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="p">=</span><span class="s">"@Url.Action("</span><span class="n">AddToCart</span><span class="s">", "</span><span class="n">ShoppingCart</span><span class="s">", new { id = Model.ProductId })"</span> <span class="k">class</span><span class="err">="</span><span class="nc">btn</span><span class="s">"&gt;Add to Cart&lt;/a&gt;
+</span>
+<span class="err">@</span><span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ViewBag</span><span class="p">.</span><span class="n">IsFeatureActive</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="p">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="p">=</span><span class="s">"@Url.Action("</span><span class="n">BulkAddToCart</span><span class="s">", "</span><span class="n">ShoppingCart</span><span class="s">", new { id = Model.ProductId })"</span> <span class="k">class</span><span class="err">="</span><span class="nc">btn</span><span class="s">"&gt;Bulk Add (10) to Cart&lt;/a&gt;
+</span>    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<h3 id="task-2-try-it-out">Task 2: Try it out!</h3>
+
+<p><strong>Step 1.</strong> Before launching the site, locate the  <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimitedWebsite\config.json</code> file and alter the region active times. Make the New Zealand region five minutes from now and the Australian region 10 minutes from now.</p>
+
+<p><strong>Step 2.</strong> Now launch the site. You can do this but pressing f5 or hitting the button shown below in Visual Studio.</p>
+
+<p><img src="/PartsUnlimited/assets/advancedfeatureflagweb/iis-express.png" alt="" /></p>
+
+<p><img src="/PartsUnlimited/assets/advancedfeatureflagweb/splash.png" alt="" /></p>
+
+<p><strong>Step 3.</strong> Now log in with any account.</p>
+
+<p>Or alternatively you can use the administrator account. This can be found in <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimitedWebsite\config.json</code>.</p>
+
+<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="s2">"AdminRole"</span><span class="err">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"UserName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Administrator@test.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"Password"</span><span class="p">:</span><span class="w"> </span><span class="s2">"YouShouldChangeThisPassword1!"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p><strong>Step 4.</strong> Select ‘Manage Account’ at the top right corner.</p>
+
+<p><img src="/PartsUnlimited/assets/advancedfeatureflagweb/manage.png" alt="" /></p>
+
+<p><strong>Step 5.</strong> Now select ‘Australia’ and then save it.</p>
+
+<p><img src="/PartsUnlimited/assets/advancedfeatureflagweb/location.png" alt="" /></p>
+
+<p><strong>Step 6.</strong> Now navigate to the ‘Breaks’ section from the main navigation.</p>
+
+<p><img src="/PartsUnlimited/assets/advancedfeatureflagweb/breaks.png" alt="" /></p>
+
+<p>Notice the bulk buy is not available yet. This should change in a couple of minutes.</p>
+
+<p><img src="/PartsUnlimited/assets/advancedfeatureflagweb/break-no-bulk.png" alt="" /></p>
+
+<p><strong>Step 7.</strong> Once the current time is past the time set in the <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimitedWebsite\config.json</code> for New Zealand. Refresh the page and you should see the bulk buy option. The same thing will happen 5 minutes later for any Australian users.</p>
+
+<p><img src="/PartsUnlimited/assets/advancedfeatureflagweb/break-bulk.png" alt="" /></p>
+
+<p>In this lab you have learned how to implement time and region based feature flags for a web application. This gives you the ability stagger releases to assist with distributing load or potentially A/B testing in regions that are more accustomed to change.</p>
+
+<h2 id="next-steps">Next steps</h2>
+
+<ul>
+  <li><a href="FeatureFlagMobile">Feature Flag for a Mobile Solution</a></li>
+</ul>
+
+
+                    </div>
+                
+            </div>
+
+            
+
+            <div class="row">
+                <div id="footer" class="col-sm-12">
+                    Documentation for <a href="https://github.com/Microsoft/PartsUnlimited">PartsUnlimited</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+        
+    </body>
+</html>

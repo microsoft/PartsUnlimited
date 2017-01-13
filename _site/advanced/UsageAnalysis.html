@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>PartsUnlimited : Usage Analysis</title>
+        <meta name="description" content="example e-commerce website">
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/PartsUnlimited/css/syntax.css">
+        <link rel="stylesheet" href="/PartsUnlimited/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <div id="header" class="col-sm-12">
+                    <img class="logo" src="/PartsUnlimited/assets/logo-ms-dark.png" alt="Microsoft">
+<h4><a class="brand" href="/PartsUnlimited/">PartsUnlimited</a>
+    <small>example e-commerce website</small>
+</h4>
+
+                </div>
+            </div>
+
+            <div class="row">
+                
+                
+                    <div id="navigation" class="col-sm-3">
+                        <ul class="nav nav-list">
+    
+        <li><a href="/PartsUnlimited/">Welcome</a></li>
+    
+
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Basic DevOps Practices</li>
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/basic/manual-deployment.html">Manual Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/basic/ci.html">Continuous Integration</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/basic/cd.html">Continuous Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/basic/QuickStart.html">Quick Start</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/basic/GettingStartedLinuxOSX.html">Getting Started on Linux and OSX</a></li>
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/basic/GettingStarted.html">Getting Started</a></li>
+            
+        
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Advanced DevOps Practices</li>
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/advanced/UserTelemetry.html">User Telemetry</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a class="nav-active" href="/PartsUnlimited/advanced/UsageAnalysis.html">Usage Analysis</a></li>  
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/advanced/TestingProd.html">Testing in Production</a></li>
+            
+        
+            
+
+            
+                <li data-order="6"><a href="/PartsUnlimited/advanced/FeatureFlagWebAdvanced.html">Advanced Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/advanced/FeatureFlagWeb.html">Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="7"><a href="/PartsUnlimited/advanced/FeatureFlagMobile.html">Feature Flag for a Mobile Solution</a></li>
+            
+        
+            
+
+            
+                <li data-order="8"><a href="/PartsUnlimited/advanced/FeatureFlagAPI.html">Feature Flag for an API</a></li>
+            
+        
+            
+
+            
+                <li data-order="11"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabricStarter.html">Fault Injection for Service Fabric Hackathon Starter</a></li>
+            
+        
+            
+
+            
+                <li data-order="10"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabric.html">Fault Injection for Service Fabric</a></li>
+            
+        
+            
+
+            
+                <li data-order="9"><a href="/PartsUnlimited/advanced/FaultInjectionAzurePaaS.html">Fault Injection for Azure PaaS</a></li>
+            
+        
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/advanced/ErrorReporting.html">Error Reporting</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/advanced/ABTesting.html">Experimentation and A/B Testing with Optimzely</a></li>
+            
+        
+    
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class="divider"></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id="content" class="col-sm-9">
+                        <div class="page-header">
+    <h2>Usage Analysis
+        
+    </h2>
+</div>
+
+<h1 id="hol---usage-analysis-for-web-applications-with-application-insights">HOL - Usage analysis for web applications with Application Insights</h1>
+<p>Users are reporting slow response times on the PartsUnlimited website. None of our current telemetry is logging custom events. We want to track what items are being removed from the cart and how long it is taking from the site. We also want to dive a bit deeper in to our current analytic reports and dig up some useful data to provide a better experience for our users.</p>
+
+<h3 id="pre-requisites">Pre-requisites:</h3>
+<ul>
+  <li><a href="https://www.microsoft.com/net/core#windows">.Net Core</a> SDK</li>
+</ul>
+
+<h3 id="tasks-overview">Tasks Overview:</h3>
+<p><strong>Task 1. Set up Application Insights for PartsUnlimited</strong> This will walk through creating an Application Insights instance in Azure and connecting it to the PartsUnlimited solution.</p>
+
+<p><strong>Task 2. Create a custom telemetry event on the client side</strong> In this task you will set the App Insights key and create a custom event tracker, so that client side’s JavaScript can start logging events.</p>
+
+<p><strong>Task 3. Create a custom telemetry event on the server side</strong> In this task you will create an Application Insights telemetry provider which will log data on the server side of the PartsUnlimited’s website.</p>
+
+<p><strong>Task 4. Trigger some events</strong> This task will walk you through generating some data for the next task based on the logging we have set up in the previous task.</p>
+
+<p><strong>Task 5. Build a custom query to view performance metrics and data</strong> Once you have generated data to work with, this step will walk you through where this data can be found and how to query it.</p>
+
+<h3 id="task-1-set-up-application-insights-for-partsunlimited">Task 1: Set up Application Insights for PartsUnlimited</h3>
+<p>Configure Application Insights with PartsUnlimited solution by following these steps: <a href="https://github.com/Microsoft/ApplicationInsights-aspnetcore/wiki/Getting-Started">Application Insights - Getting Started</a></p>
+
+<h3 id="task-2-create-a-custom-telemetry-event-on-the-client-side">Task 2: Create a custom telemetry event on the client side</h3>
+<p>Let’s say we want to see how often people are removing items from the cart and how long it is taking for the system to complete this action.</p>
+
+<p><strong>Step 1.</strong>
+We need to make sure we have the Application Insights script included in the application. This should already exist in the PartsUnlimited solution under wwwroot/Scripts/AppInsights.js</p>
+
+<p>We also want to check the config.json and ensure our Application Insights InstrumentationKey is correct. This file should be sitting under the root of the PartsUnlimitedWebsite project.</p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/config-file-instrumentation-key.png" alt="" /></p>
+
+<p><strong>Step 2.</strong>
+Now we want to track when users click remove items from the cart. This could provide valuable information around how the UI is responding for the user.</p>
+
+<p>It’s really easy to add tracking for this in our cart. If you open the template file for the shopping cart found at <b>Views -&gt; ShoppingCart -&gt; Index.cshtml </b> you will be able to find some custom event logging already in action! The startTrackEvent will start a timer and reference the record the user wants to remove from the cart. Once stopTrackEvent is called the timer log the time taken from start to finish and add a custom measurement of ‘duration’.</p>
+
+<pre><code class="language-C#">...
+window.appInsights.startTrackEvent(recordToDelete);
+...
+// ajax call to remove item from the cart
+...
+ window.appInsights.stopTrackEvent(recordToDelete);
+...
+</code></pre>
+
+<h3 id="task-3-create-a-custom-telemetry-event-on-the-server-side">Task 3: Create a custom telemetry event on the server side</h3>
+<p><strong>Step 1.</strong>
+Firstly we need an Application Insights telemetry provider. This will essentially wrap up any Application Insights specific calls inside an common interface. This means we can swap out specific tracing implementations either before or at runtime. Add a new class to “Telemetry” folder, name it <code class="highlighter-rouge">ApplicationInsightsTelemetryProvider.cs</code>.</p>
+
+<p><strong>Step 3.</strong>
+Implement the already existing ITelemetryProvider and wire up the methods to use the application insights telemetry client.</p>
+
+<pre><code class="language-C#">public class ApplicationInsightsTelemetryProvider : ITelemetryProvider
+    {
+        private readonly TelemetryClient _telemetry;
+
+        public ApplicationInsightsTelemetryProvider()
+        {
+            _telemetry = new TelemetryClient();
+        }
+
+        public void TrackTrace(string message)
+        {
+            _telemetry.TrackTrace(message);
+        }
+
+        public void TrackEvent(string message)
+        {
+            _telemetry.TrackEvent(message);
+        }
+
+        public void TrackEvent(string message, Dictionary&lt;string, string&gt; properties, Dictionary&lt;string, double&gt; measurements)
+        {
+            _telemetry.TrackEvent(message, properties, measurements);
+        }
+
+        public void TrackException(Exception exception)
+        {
+            _telemetry.TrackException(exception);
+        }
+    }
+</code></pre>
+
+<pre><code class="language-C#">public class VersionedTelemetryInitializer : ITelemetryInitializer
+{
+    public void Initialize(ITelemetry telemetry)
+    {
+        // you could possibly pull this from the assembly version
+        telemetry.Context.Properties["Version"] = "1.0.0.1";
+    }
+}
+</code></pre>
+
+<blockquote>
+  <p><strong>Note:</strong> You can add context here for the TelemetryClient to use. This could be used to filter results to a specific version. If we released a new version with some features in a pilot sample of users, we could see if this has inadvertently impacted other parts of the solution.</p>
+</blockquote>
+
+<pre><code class="language-C#">public class ApplicationInsightsTelemetryProvider : ITelemetryProvider
+{
+    private readonly TelemetryClient _telemetry;
+
+    public ApplicationInsightsTelemetryProvider()
+    {
+          TelemetryConfiguration telemetryConfiguration = new TelemetryConfiguration
+          {
+              TelemetryInitializers = { new MyTelemetryInitializer() }
+          };
+
+          _telemetry = new TelemetryClient(telemetryConfiguration);      
+    }
+    ...
+</code></pre>
+
+<p><strong>Step 4.</strong>
+In <strong><em>Startup.cs</em></strong> we need to rewire out dependency injector. Currently it’s using an <strong><em>EmptyTelemetryProvider</em></strong>. We want to swap this out with our newly created <strong><em>ApplicationInsightsTelemetryProvider</em></strong>. Locate the line where the <strong><em>ITelemetryProvider</em></strong> is bound. It should look something like this</p>
+
+<p><strong><em>(Before)</em></strong></p>
+<pre><code class="language-C#">public void ConfigureServices(IServiceCollection services)
+{
+    ...
+    services.AddSingleton&lt;ITelemetryProvider, EmptyTelemetryProvider&gt;();
+    ...
+}
+</code></pre>
+
+<p><strong><em>(After)</em></strong></p>
+<pre><code class="language-C#">public void ConfigureServices(IServiceCollection services)
+{
+    ...
+    services.AddSingleton&lt;ITelemetryProvider, ApplicationInsightsTelemetryProvider&gt;();
+    ...
+}
+</code></pre>
+
+<p><strong>Step 5.</strong>
+Locate the <b>OrdersController</b> class at <b>Controllers -&gt; OrdersController.cs </b>. Here you will see our telemetry client already in action! The only difference here is that we’re now using Application Insights. You can also see the different types of tracing. We’re using TrackTrace to log paths taken through the application. This is useful for checking when a null id is supplied or a username miss match is triggered. We’re also using TrackEvent - with this method we can supply extra parameters to provide better context when surfacing this error in the management portal. This could be used to resolve issues faced by a specific user or order.</p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/custom-telemetry.png" alt="" /></p>
+
+<p>Also check out the <b>ShoppingCartController</b> class at <b>Controllers -&gt; ShoppingCartController.cs </b>. Here you can see the measurements parameter being used to check the time taken for the order process. This could be used to display performance issues with the database.</p>
+
+<pre><code class="language-C#">public async Task&lt;IActionResult&gt; AddToCart(int id)
+{
+    ...
+    // Start timer for save process telemetry
+    var startTime = System.DateTime.Now;
+    ...
+
+    ...
+    // Trace add process
+    var measurements = new Dictionary&lt;string, double&gt;()
+    {
+       {"ElapsedMilliseconds", System.DateTime.Now.Subtract(startTime).TotalMilliseconds }
+    };
+    _telemetry.TrackEvent("Cart/Server/Add", null, measurements);
+    ...
+}
+</code></pre>
+
+<h3 id="task-4-trigger-some-events">Task 4: Trigger some events</h3>
+
+<p><strong>Step 1.</strong>
+Firstly, we’ll need to fire up the application. Open up a command line, navigate to your repository and then to <code class="highlighter-rouge">src</code> &gt; <code class="highlighter-rouge">PartsUnlimitedWebsite&gt;</code>. Run the following command to host the website locally:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>dotnet run
+</code></pre>
+</div>
+<blockquote>
+  <p><strong>Note:</strong> The project will be compiled, then hosted on the URL specified in your command line (e.g. http://localhost:5000).<br />
+<img src="/PartsUnlimited/assets/usageanalysis/dotnet-run.png" alt="" /></p>
+</blockquote>
+
+<p><strong>Step 2.</strong>
+Open the website’s URL in a browser. Now we want to trigger some of the custom events described earlier. Lets add some items to our shopping cart.</p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/website-home.png" alt="" /></p>
+
+<p>First we need to set up a new account.</p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/register.png" alt="" /></p>
+
+<p>Follow these steps to register an account.</p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/register-steps.png" alt="" /></p>
+
+<p>You will need to confirm the email provided.</p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/confirm-email.png" alt="" /></p>
+
+<p>We will then need to log in again.</p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/login-again.png" alt="" /></p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/login.png" alt="" /></p>
+
+<p>Now that we’re logged in, lets add something to our cart.</p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/website-home-logged-in.png" alt="" /></p>
+
+<p>Select one of the products.</p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/website-select-product.png" alt="" /></p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/add-to-cart.png" alt="" /></p>
+
+<p>For the payment page, specify the ‘FREE’ promotional code to ensure the order goes through.</p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/payment.png" alt="" /></p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/checkout-complete.png" alt="" /></p>
+
+<p>Now lets go check and make sure our order went through.</p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/view-order.png" alt="" /></p>
+
+<p>Now to trigger the remove product client side tracing. Add another product to your cart and then remove it.</p>
+
+<h3 id="task-5-build-a-custom-query-to-view-performance-metrics-and-data">Task 5. Build a custom query to view performance metrics and data</h3>
+
+<p><strong>Step 1.</strong> Lets go back to the Azure portal, navigate to <a href="http://ms.portal.azure.com">http://ms.portal.azure.com</a> and
+sign in with your credentials.</p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/prereq-step1.png" alt="" /></p>
+
+<p><strong>Step 2.</strong> Click on the “More services” tile on the left column, and select “Application Insights”.</p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/prereq-step1.1.png" alt="" /></p>
+
+<p><strong>Step 3.</strong> Click on the name of the Application Insights instance that was created when you deployed the resource group using the Deployment template in the PartsUnlimited solution.</p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/prereq-step2.png" alt="" /></p>
+
+<p><strong>Step 2.</strong> Select the Analytics link in the portal</p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/analytics-link-azure.png" alt="" /></p>
+
+<p><strong>Step 3.</strong> Now we want to create a new query. Hit the ‘+’ icon as shown below.</p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/new-query-tab.png" alt="" /></p>
+
+<p><strong>Step 4.</strong> Let us check and see if our analytics are pushing through from the application. In the query window simply type ‘customEvents’, then hit go. We can see the custom dimensions and measurements we sent through when navigating around the site.</p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/custom-events.png" alt="" /></p>
+
+<p><strong>Step 5.</strong>
+Lets see the last couple hours of custom events on a line chart. Here we will use the ‘summarize’ function. This applies a specified aggregation function over groups of rows, in our case the aggregation function is to count the number of custom events ‘by’ the time they occurred. Then we simply use the render function and add the chart we want to be rendered.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>customEvents
+     | summarize event_count=count() by timestamp
+     | render timechart
+</code></pre>
+</div>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/line-graph-simple.png" alt="" /></p>
+
+<p><strong>Step 6.</strong> Lets have a look at the top 10 custom events of our application. Copy and run the query below. This will filter the result set to the last 24hrs. It’s good practice to ensure query result sets are always filtered down to a manageable set. We then aggregate
+the event count by the time the events occurred. We then want to grab the top 10 results and render a barchart.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>customEvents
+ | where timestamp &gt;= ago(24h)
+ | summarize count() by name
+ | top 10 by count_
+ | render barchart
+</code></pre>
+</div>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/top-custom-queries-name.png" alt="" /></p>
+
+<p><strong>Optional Hardcore mode, skip this step if you don’t want to dive this deep!</strong> What if we want to find out the ranges of durations cover different percentages of sessions?</p>
+
+<ul>
+  <li>Here we want to get all requests where a valid session id exists. This is to filter out requests unrelated to session data.</li>
+  <li>We then want to perform the aggregate function of grabbing the min and max timestamp for each request.</li>
+  <li>We leverage the ‘extend’ function to add columns to the existing ones. In the example below we are creating a new column called ‘sesh’ which is the subtraction of the summarized min and max values we got earlier in the query.</li>
+  <li>We add an extra ‘where’ clause to filter out sessions that are under one second in length.</li>
+  <li>We then perform another aggregate function of grouping the count of sessions by the rounded down (floor) value grouped in to three second ‘bins’</li>
+  <li>We finally group the result set in to percentiles of 5, 20, 50 80 and 95.</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>requests
+   | where isnotnull(session_Id) and isnotempty(session_Id)
+   | summarize min(timestamp), max(timestamp) by session_Id
+   | extend sesh = max_timestamp - min_timestamp
+   | where sesh &gt; 1s
+   | summarize count() by floor(sesh, 3s)
+   | summarize percentiles(sesh, 5, 20, 50, 80, 95)
+</code></pre>
+</div>
+
+<p>Note you may see different data depending on the interaction you had with the application. From the data we can see that 50% of sessions lasted around 1 minute and 15 seconds. 5% of sessions lasted only 3 seconds! At the other end 5% of sessions lasted 1 minute and 47 seconds.</p>
+
+<p><img src="/PartsUnlimited/assets/usageanalysis/percentiles-table.png" alt="" /></p>
+
+<p>In this lab, you learnt how to get up and running with Application Insights. You also learnt how to leverage the power of the Analytics suite and build custom queries to gain insight in to how your application is running.</p>
+
+<h2 id="next-steps">Next steps</h2>
+
+<p>Try these labs out for next steps:</p>
+
+<ul>
+  <li><a href="ErrorReporting">Error Reporting and Monitoring with DataDog</a></li>
+</ul>
+
+
+                    </div>
+                
+            </div>
+
+            
+
+            <div class="row">
+                <div id="footer" class="col-sm-12">
+                    Documentation for <a href="https://github.com/Microsoft/PartsUnlimited">PartsUnlimited</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+        
+    </body>
+</html>
