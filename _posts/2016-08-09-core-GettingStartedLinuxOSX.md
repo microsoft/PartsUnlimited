@@ -5,6 +5,8 @@ category: core
 order: 1
 ---
 
+### /!\ This documentation is currently outdated
+
 ## Get DNVM
 
 The CoreCLR-based `dnu` doesn't support all the available features
