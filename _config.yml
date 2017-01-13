@@ -19,8 +19,8 @@ codeurl: 'https://github.com/Microsoft/PartsUnlimited'
 
 # Default categories (in order) to appear in the navigation
 sections: [
-    ['core', '.NET Core'],
-    ['45', '.NET 4.5']
+    ['basic', 'Basic DevOps Practices'],
+    ['advanced', 'Advanced DevOps Practices']
 ]
 
 # Keep as an empty string if served up at the root. If served up at a specific

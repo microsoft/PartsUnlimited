@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>PartsUnlimited : Feature Flag for an API</title>
+        <meta name="description" content="example e-commerce website">
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/PartsUnlimited/css/syntax.css">
+        <link rel="stylesheet" href="/PartsUnlimited/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <div id="header" class="col-sm-12">
+                    <img class="logo" src="/PartsUnlimited/assets/logo-ms-dark.png" alt="Microsoft">
+<h4><a class="brand" href="/PartsUnlimited/">PartsUnlimited</a>
+    <small>example e-commerce website</small>
+</h4>
+
+                </div>
+            </div>
+
+            <div class="row">
+                
+                
+                    <div id="navigation" class="col-sm-3">
+                        <ul class="nav nav-list">
+    
+        <li><a href="/PartsUnlimited/">Welcome</a></li>
+    
+
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Basic DevOps Practices</li>
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/basic/manual-deployment.html">Manual Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/basic/ci.html">Continuous Integration</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/basic/cd.html">Continuous Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/basic/QuickStart.html">Quick Start</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/basic/GettingStartedLinuxOSX.html">Getting Started on Linux and OSX</a></li>
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/basic/GettingStarted.html">Getting Started</a></li>
+            
+        
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Advanced DevOps Practices</li>
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/advanced/UserTelemetry.html">User Telemetry</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/advanced/UsageAnalysis.html">Usage Analysis</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/advanced/TestingProd.html">Testing in Production</a></li>
+            
+        
+            
+
+            
+                <li data-order="6"><a href="/PartsUnlimited/advanced/FeatureFlagWebAdvanced.html">Advanced Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/advanced/FeatureFlagWeb.html">Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="7"><a href="/PartsUnlimited/advanced/FeatureFlagMobile.html">Feature Flag for a Mobile Solution</a></li>
+            
+        
+            
+
+            
+                <li data-order="8"><a class="nav-active" href="/PartsUnlimited/advanced/FeatureFlagAPI.html">Feature Flag for an API</a></li>  
+            
+        
+            
+
+            
+                <li data-order="11"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabricStarter.html">Fault Injection for Service Fabric Hackathon Starter</a></li>
+            
+        
+            
+
+            
+                <li data-order="10"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabric.html">Fault Injection for Service Fabric</a></li>
+            
+        
+            
+
+            
+                <li data-order="9"><a href="/PartsUnlimited/advanced/FaultInjectionAzurePaaS.html">Fault Injection for Azure PaaS</a></li>
+            
+        
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/advanced/ErrorReporting.html">Error Reporting</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/advanced/ABTesting.html">Experimentation and A/B Testing with Optimzely</a></li>
+            
+        
+    
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class="divider"></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id="content" class="col-sm-9">
+                        <div class="page-header">
+    <h2>Feature Flag for an API
+        
+    </h2>
+</div>
+
+<h1 id="hol---feature-flag-for-an-api">HOL - Feature Flag for an API</h1>
+
+<p>The project manager decided to roll out a new feature but it has to be done one group of users at the time for a couple reasons. First of all, the marketing team needs more time to localize their tactics for different countries; and second, the data analytics team want to make sure that the new feature will not have a negative impact on the number of users. Your task is to implement an API which returns different information based on the user id specified as a parameter in a URL.</p>
+
+<h2 id="pre-requisites">Pre-requisites:</h2>
+
+<ul>
+  <li>
+    <p>Azure account with an active subscription.</p>
+  </li>
+  <li>
+    <p>Visual Studio 2015 Update 3</p>
+  </li>
+  <li>
+    <p><a href="https://www.microsoft.com/net/core#windows">.Net Core 1.0.1 SDK</a> installed</p>
+  </li>
+  <li>
+    <p><a href="https://developer.microsoft.com/en-us/windows/downloads/sdk-archive">Windows SDK and emulator</a> installed</p>
+  </li>
+  <li>
+    <p><a href="https://developer.android.com/studio/index.html">Android SDK</a> and <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java JDK</a> installed</p>
+  </li>
+  <li>
+    <p><a href="https://www.visualstudio.com/vs/msft-android-emulator/">Visual Studio Emulator for Android</a> installed.</p>
+  </li>
+  <li>
+    <p><a href="https://developer.xamarin.com/guides/cross-platform/windows/visual-studio/">Xamarin</a> installed and set up for Visual Studio.</p>
+
+    <blockquote>
+      <p><strong>Note:</strong> This includes <a href="https://developer.xamarin.com/guides/ios/getting_started/installation/windows/connecting-to-mac/">Mac setup</a>, if you have intentions to run iOS app.</p>
+    </blockquote>
+  </li>
+</ul>
+
+<h2 id="tasks-overview">Tasks Overview:</h2>
+
+<p><strong>1. Clone repository using Git.</strong> In this task you will get the source code for the PartsUnlimited solution.</p>
+
+<p><strong>2. Create API endpoints.</strong> In this task you will create two versions of an API. The first one is the original API, the second one is the API with the new functionality.</p>
+
+<p><strong>3. Set up Azure function.</strong> In this task you will create an Azure function which will retrieve data from either v1 or v2 of the API based on the user ID.</p>
+
+<p><strong>4: Update Website to retrieve products on special from API.</strong> In this step you will update the PartsUnlimited website to make calls to your API controllers.</p>
+
+<p><strong>5: Update Xamarin app to retrieve products on special from API.</strong> In this step you will update the PartsUnlimited Xamarin app to make requests to the API controller.</p>
+
+<h2 id="tasks">Tasks</h2>
+<h3 id="task-1-clone-repository-using-git">Task 1: Clone repository using Git</h3>
+<p>Let’s get the PartsUnlimited’s source code. If you already have the source code on your machine then skip to the next task.</p>
+
+<p><strong>Step 1.</strong> Open a command line (one that supports Git) and navigate to the directory where you want to store your local repositories. For example you can create and navigate to <code class="highlighter-rouge">C:\Source\Repos</code>.</p>
+
+<p><strong>Step 2.</strong> Clone the repository with the following command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>	git clone https://github.com/Microsoft/PartsUnlimited.git
+</code></pre>
+</div>
+
+<blockquote>
+  <p>After a few seconds of downloading, all of the code should now be on your local machine.</p>
+</blockquote>
+
+<h3 id="task-2-create-api-endpoints">Task 2: Create API endpoints</h3>
+
+<p><strong>Step 1.</strong> Open Visual Studio as administrator. Open Start menu, locate Visual Studio 2015, right click on it, select “More” and then click on “Run as administrator”.</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagapi/1.png" alt="" /></p>
+
+<p><strong>Step 2.</strong> Open PartsUnlimited solution.</p>
+
+<ol>
+  <li>
+    <p>Click on “File”, “Open”, then on “Project/Solution…”.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/2.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Navigate to the directory where you cloned the repository, select “PartsUnlimited.sln” and click on “Open”.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/3.png" alt="" /></p>
+  </li>
+</ol>
+
+<p><strong>Step 3.</strong> Create a new API project in this solution.</p>
+
+<ol>
+  <li>
+    <p>Right click on “src” folder, then click on “Add” and select “New Project…”.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/4.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Select “Web” under “Visual C#” category, select <code class="highlighter-rouge">ASP.NET Core Web Application (.NET Core)</code> as the type of this project, enter <code class="highlighter-rouge">PartsUnlimited.API</code> into the name field and append <code class="highlighter-rouge">\scr</code> at the end of the location, then click on “OK”.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/5.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Select <code class="highlighter-rouge">Web API</code> template, uncheck the “Host in the cloud” box and click on “OK”.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/6.png" alt="" /></p>
+  </li>
+</ol>
+
+<p><strong>Step 4.</strong> Reference PartsUnlimited.Models from your API project.</p>
+
+<ol>
+  <li>
+    <p>Right click on your API project’s “References”, then click on “Add Reference…”.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/22.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Tick a box next to <b>PartsUnlimited.Models</b> and click on “OK”.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/23.png" alt="" /></p>
+  </li>
+</ol>
+
+<p><strong>Step 5.</strong> Define the original API.</p>
+
+<ol>
+  <li>
+    <p>Right click on “Controllers” folder, click on “Add”, then “Class…”.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/7.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Enter <code class="highlighter-rouge">SpecialsController.cs</code> as the name of this class and click on “Add”.</p>
+  </li>
+  <li>
+    <p>Replace class with the following code:</p>
+
+    <div class="language-csharp highlighter-rouge"><pre class="highlight"><code> <span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+ <span class="k">using</span> <span class="nn">Microsoft.AspNetCore.Mvc</span><span class="p">;</span>
+ <span class="k">using</span> <span class="nn">PartsUnlimited.Models</span><span class="p">;</span>
+
+ <span class="k">namespace</span> <span class="nn">PartsUnlimited.API.Controllers</span>
+ <span class="p">{</span>
+     <span class="p">[</span><span class="nf">Route</span><span class="p">(</span><span class="s">"api/v1/specials"</span><span class="p">)]</span>
+     <span class="k">public</span> <span class="k">class</span> <span class="nc">SpecialsController</span> <span class="p">:</span> <span class="n">Controller</span>
+     <span class="p">{</span>
+         <span class="p">[</span><span class="nf">HttpGet</span><span class="p">(</span><span class="s">"{id}"</span><span class="p">)]</span>
+         <span class="k">public</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">Product</span><span class="p">&gt;</span> <span class="nf">GetSpecialsByUserId</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">)</span>
+         <span class="p">{</span>
+             <span class="kt">var</span> <span class="n">productsOnSpecial</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Product</span><span class="p">&gt;</span>
+             <span class="p">{</span>
+                 <span class="k">new</span> <span class="n">Product</span>
+                 <span class="p">{</span>
+                     <span class="n">SkuNumber</span> <span class="p">=</span> <span class="s">"OIL-0001"</span><span class="p">,</span>
+                     <span class="n">Title</span> <span class="p">=</span> <span class="s">"Filter Set V1"</span><span class="p">,</span>
+                     <span class="n">CategoryId</span> <span class="p">=</span> <span class="m">5</span><span class="p">,</span>
+                     <span class="n">Price</span> <span class="p">=</span> <span class="m">28.99</span><span class="n">M</span><span class="p">,</span>
+                     <span class="n">SalePrice</span> <span class="p">=</span> <span class="m">28.99</span><span class="n">M</span><span class="p">,</span>
+                     <span class="n">ProductArtUrl</span> <span class="p">=</span> <span class="s">"https://raw.githubusercontent.com/Microsoft/PartsUnlimited/master/src/PartsUnlimitedWebsite/images/product_oil_filters.jpg"</span><span class="p">,</span>
+                     <span class="n">ProductDetails</span> <span class="p">=</span> <span class="s">"{ \"Filter Type\" : \"Canister and Cartridge\", \"Thread Size\" : \"0.75-16 in.\", \"Anti-Drainback Valve\" : \"Yes\"}"</span><span class="p">,</span>
+                     <span class="n">Description</span> <span class="p">=</span> <span class="s">"Ensure that your vehicle's engine has a longer life with our new filter set. Trapping more dirt to ensure old freely circulates through your engine."</span><span class="p">,</span>
+                     <span class="n">Inventory</span> <span class="p">=</span> <span class="m">3</span><span class="p">,</span>
+                     <span class="n">LeadTime</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span>
+                     <span class="n">RecommendationId</span> <span class="p">=</span> <span class="m">16</span>
+                 <span class="p">},</span>
+                 <span class="k">new</span> <span class="n">Product</span>
+                 <span class="p">{</span>
+                     <span class="n">SkuNumber</span> <span class="p">=</span> <span class="s">"OIL-0002"</span><span class="p">,</span>
+                     <span class="n">Title</span> <span class="p">=</span> <span class="s">"Oil and Filter Combo V1"</span><span class="p">,</span>
+                     <span class="n">CategoryId</span> <span class="p">=</span> <span class="m">5</span><span class="p">,</span>
+                     <span class="n">Price</span> <span class="p">=</span> <span class="m">34.49</span><span class="n">M</span><span class="p">,</span>
+                     <span class="n">SalePrice</span> <span class="p">=</span> <span class="m">34.49</span><span class="n">M</span><span class="p">,</span>
+                     <span class="n">ProductArtUrl</span> <span class="p">=</span> <span class="s">"https://raw.githubusercontent.com/Microsoft/PartsUnlimited/master/src/PartsUnlimitedWebsite/images/product_oil_oil-filter-combo.jpg"</span><span class="p">,</span>
+                     <span class="n">ProductDetails</span> <span class="p">=</span> <span class="s">"{ \"Filter Type\" : \"Canister\", \"Thread Size\" : \"0.75-16 in.\", \"Anti-Drainback Valve\" : \"Yes\", \"Size\" : \"1.1 gal.\", \"Synthetic\" : \"No\" }"</span><span class="p">,</span>
+                     <span class="n">Description</span> <span class="p">=</span> <span class="s">"This Oil and Oil Filter combo is suitable for all types of passenger and light commercial vehicles. Providing affordable performance through excellent lubrication and breakdown resistance."</span><span class="p">,</span>
+                     <span class="n">Inventory</span> <span class="p">=</span> <span class="m">5</span><span class="p">,</span>
+                     <span class="n">LeadTime</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span>
+                     <span class="n">RecommendationId</span> <span class="p">=</span> <span class="m">17</span>
+                 <span class="p">},</span>
+                 <span class="k">new</span> <span class="n">Product</span>
+                 <span class="p">{</span>
+                     <span class="n">SkuNumber</span> <span class="p">=</span> <span class="s">"OIL-0003"</span><span class="p">,</span>
+                     <span class="n">Title</span> <span class="p">=</span> <span class="s">"Synthetic Engine Oil V1"</span><span class="p">,</span>
+                     <span class="n">CategoryId</span> <span class="p">=</span> <span class="m">5</span><span class="p">,</span>
+                     <span class="n">Price</span> <span class="p">=</span> <span class="m">36.49</span><span class="n">M</span><span class="p">,</span>
+                     <span class="n">SalePrice</span> <span class="p">=</span> <span class="m">36.49</span><span class="n">M</span><span class="p">,</span>
+                     <span class="n">ProductArtUrl</span> <span class="p">=</span> <span class="s">"https://raw.githubusercontent.com/Microsoft/PartsUnlimited/master/src/PartsUnlimitedWebsite/images/product_oil_premium-oil.jpg"</span><span class="p">,</span>
+                     <span class="n">ProductDetails</span> <span class="p">=</span> <span class="s">"{ \"Size\" :  \"1.1 Gal.\" , \"Synthetic \" : \"Yes\"}"</span><span class="p">,</span>
+                     <span class="n">Description</span> <span class="p">=</span> <span class="s">"This Oil is designed to reduce sludge deposits and metal friction throughout your cars engine. Provides performance no matter the condition or temperature."</span><span class="p">,</span>
+                     <span class="n">Inventory</span> <span class="p">=</span> <span class="m">11</span><span class="p">,</span>
+                     <span class="n">LeadTime</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span>
+                     <span class="n">RecommendationId</span> <span class="p">=</span> <span class="m">18</span>
+                 <span class="p">}</span>
+             <span class="p">};</span>
+             <span class="k">return</span> <span class="n">productsOnSpecial</span><span class="p">;</span>
+         <span class="p">}</span>
+     <span class="p">}</span>
+ <span class="p">}</span>
+
+</code></pre>
+    </div>
+  </li>
+</ol>
+
+<p><strong>Step 6.</strong> Define an API with a new feature.</p>
+
+<ol>
+  <li>
+    <p>Similarly create a new controller, name it <code class="highlighter-rouge">V2SpecialsController.cs</code> and copy the following code into it:</p>
+
+    <div class="language-csharp highlighter-rouge"><pre class="highlight"><code> <span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+ <span class="k">using</span> <span class="nn">Microsoft.AspNetCore.Mvc</span><span class="p">;</span>
+ <span class="k">using</span> <span class="nn">PartsUnlimited.Models</span><span class="p">;</span>
+
+ <span class="k">namespace</span> <span class="nn">PartsUnlimited.API.Controllers</span>
+ <span class="p">{</span>
+     <span class="p">[</span><span class="nf">Route</span><span class="p">(</span><span class="s">"api/v2/specials"</span><span class="p">)]</span>
+     <span class="k">public</span> <span class="k">class</span> <span class="nc">V2SpecialsController</span> <span class="p">:</span> <span class="n">Controller</span>
+     <span class="p">{</span>
+         <span class="p">[</span><span class="nf">HttpGet</span><span class="p">(</span><span class="s">"{id}"</span><span class="p">)]</span>
+         <span class="k">public</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">Product</span><span class="p">&gt;</span> <span class="nf">GetSpecialsByUserId</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">)</span>
+         <span class="p">{</span>
+             <span class="kt">var</span> <span class="n">productsOnSpecial</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Product</span><span class="p">&gt;</span>
+             <span class="p">{</span>
+                 <span class="k">new</span> <span class="n">Product</span>
+                 <span class="p">{</span>
+                     <span class="n">SkuNumber</span> <span class="p">=</span> <span class="s">"OIL-0001"</span><span class="p">,</span>
+                     <span class="n">Title</span> <span class="p">=</span> <span class="s">"Filter Set V2"</span><span class="p">,</span>
+                     <span class="n">CategoryId</span> <span class="p">=</span> <span class="m">5</span><span class="p">,</span>
+                     <span class="n">Price</span> <span class="p">=</span> <span class="m">28.99</span><span class="n">M</span><span class="p">,</span>
+                     <span class="n">SalePrice</span> <span class="p">=</span> <span class="m">28.99</span><span class="n">M</span><span class="p">,</span>
+                     <span class="n">ProductArtUrl</span> <span class="p">=</span> <span class="s">"https://raw.githubusercontent.com/Microsoft/PartsUnlimited/master/src/PartsUnlimitedWebsite/images/product_oil_filters.jpg"</span><span class="p">,</span>
+                     <span class="n">ProductDetails</span> <span class="p">=</span> <span class="s">"{ \"Filter Type\" : \"Canister and Cartridge\", \"Thread Size\" : \"0.75-16 in.\", \"Anti-Drainback Valve\" : \"Yes\"}"</span><span class="p">,</span>
+                     <span class="n">Description</span> <span class="p">=</span> <span class="s">"Ensure that your vehicle's engine has a longer life with our new filter set. Trapping more dirt to ensure old freely circulates through your engine."</span><span class="p">,</span>
+                     <span class="n">Inventory</span> <span class="p">=</span> <span class="m">3</span><span class="p">,</span>
+                     <span class="n">LeadTime</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span>
+                     <span class="n">RecommendationId</span> <span class="p">=</span> <span class="m">16</span>
+                 <span class="p">},</span>
+                 <span class="k">new</span> <span class="n">Product</span>
+                 <span class="p">{</span>
+                     <span class="n">SkuNumber</span> <span class="p">=</span> <span class="s">"OIL-0002"</span><span class="p">,</span>
+                     <span class="n">Title</span> <span class="p">=</span> <span class="s">"Oil and Filter Combo V2"</span><span class="p">,</span>
+                     <span class="n">CategoryId</span> <span class="p">=</span> <span class="m">5</span><span class="p">,</span>
+                     <span class="n">Price</span> <span class="p">=</span> <span class="m">34.49</span><span class="n">M</span><span class="p">,</span>
+                     <span class="n">SalePrice</span> <span class="p">=</span> <span class="m">34.49</span><span class="n">M</span><span class="p">,</span>
+                     <span class="n">ProductArtUrl</span> <span class="p">=</span> <span class="s">"https://raw.githubusercontent.com/Microsoft/PartsUnlimited/master/src/PartsUnlimitedWebsite/images/product_oil_oil-filter-combo.jpg"</span><span class="p">,</span>
+                     <span class="n">ProductDetails</span> <span class="p">=</span> <span class="s">"{ \"Filter Type\" : \"Canister\", \"Thread Size\" : \"0.75-16 in.\", \"Anti-Drainback Valve\" : \"Yes\", \"Size\" : \"1.1 gal.\", \"Synthetic\" : \"No\" }"</span><span class="p">,</span>
+                     <span class="n">Description</span> <span class="p">=</span> <span class="s">"This Oil and Oil Filter combo is suitable for all types of passenger and light commercial vehicles. Providing affordable performance through excellent lubrication and breakdown resistance."</span><span class="p">,</span>
+                     <span class="n">Inventory</span> <span class="p">=</span> <span class="m">5</span><span class="p">,</span>
+                     <span class="n">LeadTime</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span>
+                     <span class="n">RecommendationId</span> <span class="p">=</span> <span class="m">17</span>
+                 <span class="p">},</span>
+                 <span class="k">new</span> <span class="n">Product</span>
+                 <span class="p">{</span>
+                     <span class="n">SkuNumber</span> <span class="p">=</span> <span class="s">"OIL-0003"</span><span class="p">,</span>
+                     <span class="n">Title</span> <span class="p">=</span> <span class="s">"Synthetic Engine Oil V2"</span><span class="p">,</span>
+                     <span class="n">CategoryId</span> <span class="p">=</span> <span class="m">5</span><span class="p">,</span>
+                     <span class="n">Price</span> <span class="p">=</span> <span class="m">36.49</span><span class="n">M</span><span class="p">,</span>
+                     <span class="n">SalePrice</span> <span class="p">=</span> <span class="m">36.49</span><span class="n">M</span><span class="p">,</span>
+                     <span class="n">ProductArtUrl</span> <span class="p">=</span> <span class="s">"https://raw.githubusercontent.com/Microsoft/PartsUnlimited/master/src/PartsUnlimitedWebsite/images/product_oil_premium-oil.jpg"</span><span class="p">,</span>
+                     <span class="n">ProductDetails</span> <span class="p">=</span> <span class="s">"{ \"Size\" :  \"1.1 Gal.\" , \"Synthetic\" : \"Yes\"}"</span><span class="p">,</span>
+                     <span class="n">Description</span> <span class="p">=</span> <span class="s">"This Oil is designed to reduce sludge deposits and metal friction throughout your cars engine. Provides performance no matter the condition or temperature."</span><span class="p">,</span>
+                     <span class="n">Inventory</span> <span class="p">=</span> <span class="m">11</span><span class="p">,</span>
+                     <span class="n">LeadTime</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span>
+                     <span class="n">RecommendationId</span> <span class="p">=</span> <span class="m">18</span>
+                 <span class="p">}</span>
+             <span class="p">};</span>
+             <span class="k">return</span> <span class="n">productsOnSpecial</span><span class="p">;</span>
+         <span class="p">}</span>
+     <span class="p">}</span>
+ <span class="p">}</span>
+
+</code></pre>
+    </div>
+    <blockquote>
+      <p><strong>Note:</strong> For the demo purposes the new feature here is just modified text for each product on special.</p>
+    </blockquote>
+  </li>
+</ol>
+
+<p><strong>Step 7.</strong> Deploy API to Azure.</p>
+
+<ol>
+  <li>
+    <p>Right click on your API project, then click on “Publish…”.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/8.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Select <code class="highlighter-rouge">Microsoft Azure App Service</code> as a deployment target.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/9.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Click on “New…”.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/10.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Select your subscription, create a new “Resource Group” and “App Service Plan”, then click on “Create”.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/11.png" alt="" /></p>
+  </li>
+  <li>
+    <p>After the new resource group and app service is created, click on “Publish”.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/12.png" alt="" /></p>
+  </li>
+  <li>
+    <p>After deployment is finished, URL link to the App Service will be opened in your default browser. Add <code class="highlighter-rouge">api/v1/specials/getbytheuserid?id=1</code> at the end and see the output of your API. Try out <code class="highlighter-rouge">api/v2/specials/getbytheuserid?id=1</code> as well, it should return a slightly different JSON back. Note the URI, you will need it later on for Azure Function.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/13.png" alt="" />
+ <img src="/PartsUnlimited/assets/featureflagapi/14.png" alt="" /></p>
+  </li>
+</ol>
+
+<h3 id="task-3-set-up-an-azure-function">Task 3: Set up an Azure Function.</h3>
+
+<p>The Azure Function created in this task is acting as a switching proxy to send certain users to the API v1 and others to the API v2. Although we use a simple condition here, this could also use more complex rules which could potentially be hidden behind another web api call.</p>
+
+<p><strong>Step 1.</strong> Open <a href="https://portal.azure.com/">Azure Portal</a> and login with your account.</p>
+
+<p><strong>Step 2.</strong> Click on “Resources Groups”, select the resource group you deployed your API project to, then on “Overview” page click on “Add”.</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagapi/15.png" alt="" /></p>
+
+<p><strong>Step 3.</strong> Filter down options by typing “Function App”, click on “Function App” option, then on “Create”.</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagapi/16.png" alt="" /></p>
+
+<p><strong>Step 4.</strong> Enter a name for your Function App, choose your subscription, select “App Service Plan” as your “Hosting plan” and click on “Create”.</p>
+<blockquote>
+  <p><strong>Note:</strong> We selected “App Service Plan” because in this demo our App Service is running on a VM which is not fully utilized. Visit <a href="https://azure.microsoft.com/en-us/documentation/articles/functions-scale/">How to scale Azure Functions</a> to find out more about <code class="highlighter-rouge">App Service plan</code> and <code class="highlighter-rouge">Dynamic Service plan</code> differences.</p>
+</blockquote>
+
+<p><img src="/PartsUnlimited/assets/featureflagapi/17.png" alt="" /></p>
+
+<p><strong>Step 5.</strong> Navigate to the resource group where you added your Azure function and click on it.</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagapi/18.png" alt="" /></p>
+
+<p><strong>Step 6.</strong> Click on “New Function”, filter options down by picking <code class="highlighter-rouge">C#</code> as the <code class="highlighter-rouge">Language</code> and <code class="highlighter-rouge">API &amp; Webhooks</code> as the <code class="highlighter-rouge">Scenario</code>,  select “HttpTrigger-CSharp” template, enter a name for your function and click on “Create”.</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagapi/20.png" alt="" /></p>
+
+<p><strong>Step 7.</strong> Enter the following code and click on “Save”:</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">public</span> <span class="k">static</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">HttpResponseMessage</span><span class="p">&gt;</span> <span class="nf">Run</span><span class="p">(</span><span class="n">HttpRequestMessage</span> <span class="n">req</span><span class="p">,</span> <span class="n">TraceWriter</span> <span class="n">log</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">userIdKey</span> <span class="p">=</span> <span class="n">req</span><span class="p">.</span><span class="nf">GetQueryNameValuePairs</span><span class="p">().</span><span class="nf">FirstOrDefault</span><span class="p">(</span><span class="n">q</span> <span class="p">=&gt;</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Equals</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">Key</span><span class="p">,</span> <span class="s">"UserId"</span><span class="p">,</span> <span class="n">StringComparison</span><span class="p">.</span><span class="n">OrdinalIgnoreCase</span><span class="p">));</span>
+    <span class="kt">var</span> <span class="n">userId</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">userIdKey</span><span class="p">.</span><span class="n">Value</span><span class="p">)</span> <span class="p">?</span> <span class="kt">int</span><span class="p">.</span><span class="n">MaxValue</span> <span class="p">:</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToInt64</span><span class="p">(</span><span class="n">userIdKey</span><span class="p">.</span><span class="n">Value</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">url</span> <span class="p">=</span><span class="err">$</span><span class="s">"http://YourAppServiceUrl.azurewebsites.net/api/{(userId &gt; 10 ? "</span><span class="n">v1</span><span class="s">" : "</span><span class="n">v2</span><span class="s">")}/specials/GetSpecialsByUserId?id={userId}"</span><span class="p">;</span>
+    <span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">httpClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span><span class="p">())</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">httpClient</span><span class="p">.</span><span class="nf">GetAsync</span><span class="p">(</span><span class="n">url</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<blockquote>
+  <p><strong>Note:</strong><br />
+1) Replace <code class="highlighter-rouge">YourAppServiceUrl</code> in <code class="highlighter-rouge">url</code> variable with URL for the App Service with your API. <br />
+2) Users with IDs &lt; 10 will be redirected to the new v2 version of the specials controller, while the rest of users will be redirected to v1 controller.<br />
+3) Function’s URL is used to trigger the execution of this piece of code (Azure Function) and can be found above the section where you have entered the function’s code.<br />
+<img src="/PartsUnlimited/assets/featureflagapi/21.png" alt="" /></p>
+</blockquote>
+
+<p><strong>Step 8.</strong> Test Azure Function by navigating to the Function’s URL with <code class="highlighter-rouge">&amp;userid=15</code> at the end. This should return version V1 of the data back. If you change <code class="highlighter-rouge">userid</code> to 5, then it should return V2 of the data back. This Azure Function is acting as a switching proxy to send certain users to the API v1 and others to the API v2, allowing us to turn on the feature for specific groups of users. Although we use a simple condition here, this could also use more complex rules which could potentially be hidden behind another web api call.</p>
+
+<h3 id="task-4-update-website-to-retrieve-products-on-special-from-api">Task 4: Update Website to retrieve products on special from API.</h3>
+
+<p>At the current time of this feature deployment we want only administrator to see it, so you will assign UserID 1 to administrator’s account, every other account will have UserID 50.</p>
+<blockquote>
+  <p><strong>Note:</strong> For demo purposes only admin will be redirected to v2 controller. Ideally users should be assigned to some groups, each representing either a region or some other factor the products on special could differ on.</p>
+</blockquote>
+
+<p><strong>Step 1.</strong> Open <b>StoreController</b> located at <b> PartsUnlimitedWebsite &gt; Controllers &gt; StoreController.cs</b></p>
+
+<p><img src="/PartsUnlimited/assets/featureflagapi/24.png" alt="" /></p>
+
+<p><strong>Step 2.</strong> Add the following using statements at the top of the class:</p>
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net.Http</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Threading.Tasks</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Newtonsoft.Json</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p><strong>Step 3.</strong> Replace <code class="highlighter-rouge">Browse</code> method with the following code:</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="c1">// GET: /Store/Browse?category=Brakes
+</span><span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">IActionResult</span><span class="p">&gt;</span> <span class="nf">Browse</span><span class="p">(</span><span class="kt">int</span> <span class="n">categoryId</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// Retrieve category and its associated products from database
+</span>    <span class="c1">// TODO [EF] Swap to native support for loading related data when available
+</span>    <span class="kt">var</span> <span class="n">categoryModel</span> <span class="p">=</span> <span class="n">_db</span><span class="p">.</span><span class="n">Categories</span><span class="p">.</span><span class="nf">Single</span><span class="p">(</span><span class="n">g</span> <span class="p">=&gt;</span> <span class="n">g</span><span class="p">.</span><span class="n">CategoryId</span> <span class="p">==</span> <span class="n">categoryId</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">categoryModel</span><span class="p">.</span><span class="n">Name</span><span class="p">.</span><span class="nf">ToLower</span><span class="p">().</span><span class="nf">Equals</span><span class="p">(</span><span class="s">"oil"</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">url</span> <span class="p">=</span> <span class="s">"https://&lt;YourAzureFunctionUrl&gt;.azurewebsites.net/api/SpecialsProxy?code=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">HttpContext</span><span class="p">.</span><span class="n">User</span><span class="p">.</span><span class="n">Identity</span><span class="p">.</span><span class="n">IsAuthenticated</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">url</span> <span class="p">+=</span> <span class="n">HttpContext</span><span class="p">.</span><span class="n">User</span><span class="p">.</span><span class="n">Identity</span><span class="p">.</span><span class="n">Name</span><span class="p">.</span><span class="nf">Equals</span><span class="p">(</span><span class="s">"Administrator@test.com"</span><span class="p">)</span> <span class="p">?</span> <span class="s">"&amp;UserID=1"</span> <span class="p">:</span> <span class="s">"&amp;UserID=50"</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">jsonProducts</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="nf">GetStringAsync</span><span class="p">(</span><span class="n">url</span><span class="p">);</span>
+            <span class="kt">var</span> <span class="n">products</span> <span class="p">=</span> <span class="n">JsonConvert</span><span class="p">.</span><span class="n">DeserializeObject</span><span class="p">&lt;</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Product</span><span class="p">&gt;&gt;(</span><span class="n">jsonProducts</span><span class="p">);</span>
+            <span class="k">foreach</span> <span class="p">(</span><span class="n">Product</span> <span class="n">product</span> <span class="k">in</span> <span class="n">products</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">product</span><span class="p">.</span><span class="n">ProductId</span> <span class="p">=</span> <span class="n">_db</span><span class="p">.</span><span class="n">Products</span><span class="p">.</span><span class="nf">First</span><span class="p">(</span><span class="n">a</span> <span class="p">=&gt;</span> <span class="n">a</span><span class="p">.</span><span class="n">SkuNumber</span> <span class="p">==</span> <span class="n">product</span><span class="p">.</span><span class="n">SkuNumber</span><span class="p">).</span><span class="n">ProductId</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">categoryModel</span><span class="p">.</span><span class="n">Products</span> <span class="p">=</span> <span class="n">products</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">categoryModel</span><span class="p">.</span><span class="n">Products</span> <span class="p">=</span> <span class="n">_db</span><span class="p">.</span><span class="n">Products</span><span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">a</span> <span class="p">=&gt;</span> <span class="n">a</span><span class="p">.</span><span class="n">CategoryId</span> <span class="p">==</span> <span class="n">categoryModel</span><span class="p">.</span><span class="n">CategoryId</span><span class="p">).</span><span class="nf">ToList</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nf">View</span><span class="p">(</span><span class="n">categoryModel</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<blockquote>
+  <p><strong>Note:</strong> <br />
+1) You have to replace <code class="highlighter-rouge">url</code> variable’s value with your full Azure Function’s URL including its code parameter at the end.<br />
+2) Only <code class="highlighter-rouge">Administrator@test.com</code> will be able to see version 2 of the API output. Credentials for this account can be found bellow or in <code class="highlighter-rouge">config.json</code> file which is located in the root of <code class="highlighter-rouge">PartsUnlimitedWebsite</code> project:<br /></p>
+  <div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="s2">"AdminRole"</span><span class="err">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"UserName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Administrator@test.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"Password"</span><span class="p">:</span><span class="w"> </span><span class="s2">"YouShouldChangeThisPassword1!"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+  </div>
+</blockquote>
+
+<p><strong>Step 4.</strong> Previously all images were local, so now we need to update the view to deal with two sources of images. Open <b>_ProductList.cshtml</b> located at <b> PartsUnlimitedWebsite &gt; Views &gt; Shared &gt; _ProductList.cshtml </b>.</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagapi/25.png" alt="" /></p>
+
+<p><strong>Step 5.</strong> Replace everything in the file with the following code:</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="n">@model</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">PartsUnlimited</span><span class="p">.</span><span class="n">Models</span><span class="p">.</span><span class="n">Product</span><span class="p">&gt;</span>
+
+<span class="nf">@if</span> <span class="p">((</span><span class="n">Model</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+     <span class="p">||</span> <span class="p">!</span><span class="n">Model</span><span class="p">.</span><span class="nf">Any</span><span class="p">())</span>
+<span class="p">{</span>
+    <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">alert</span> <span class="n">alert</span><span class="p">-</span><span class="n">warning</span><span class="s">" role="</span><span class="n">alert</span><span class="s">"&gt;No products found!&lt;/div&gt;
+</span><span class="p">}</span>
+<span class="k">else</span>
+<span class="p">{</span>
+    <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">row</span><span class="s">"&gt;
+</span>        <span class="nf">@foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">product</span> <span class="k">in</span> <span class="n">Model</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(!</span><span class="n">product</span><span class="p">.</span><span class="n">ProductArtUrl</span><span class="p">.</span><span class="nf">StartsWith</span><span class="p">(</span><span class="s">"http://"</span><span class="p">,</span> <span class="n">StringComparison</span><span class="p">.</span><span class="n">OrdinalIgnoreCase</span><span class="p">)</span>
+                <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="n">product</span><span class="p">.</span><span class="n">ProductArtUrl</span><span class="p">.</span><span class="nf">StartsWith</span><span class="p">(</span><span class="s">"https://"</span><span class="p">,</span> <span class="n">StringComparison</span><span class="p">.</span><span class="n">OrdinalIgnoreCase</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">product</span><span class="p">.</span><span class="n">ProductArtUrl</span> <span class="p">=</span> <span class="err">$</span><span class="s">"/images/{product.ProductArtUrl}"</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">col</span><span class="p">-</span><span class="n">lg</span><span class="p">-</span><span class="m">3</span> <span class="n">col</span><span class="p">-</span><span class="n">md</span><span class="p">-</span><span class="m">3</span> <span class="n">col</span><span class="p">-</span><span class="n">sm</span><span class="p">-</span><span class="m">3</span> <span class="n">col</span><span class="p">-</span><span class="n">xs</span><span class="p">-</span><span class="m">12</span><span class="s">"&gt;
+</span>                <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">list</span><span class="p">-</span><span class="n">item</span><span class="p">-</span><span class="n">part</span><span class="s">"&gt;
+</span>                    <span class="p">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="p">=</span><span class="s">"@Url.Action("</span><span class="n">Details</span><span class="s">", "</span><span class="n">Store</span><span class="s">", new { id = product.ProductId })"</span> <span class="n">title</span><span class="p">=</span><span class="s">"@product.Title"</span><span class="p">&gt;</span>
+                        <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">product</span><span class="p">-</span><span class="n">image</span><span class="p">-</span><span class="n">container</span> <span class="n">hover</span><span class="p">-</span><span class="n">over</span> <span class="n">hidden</span><span class="p">-</span><span class="n">xs</span><span class="s">"&gt;
+</span>                            <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">image</span><span class="s">"&gt;
+</span>
+                                <span class="p">&lt;</span><span class="n">img</span> <span class="n">src</span><span class="p">=</span><span class="s">"@product.ProductArtUrl"</span> <span class="n">alt</span><span class="p">=</span><span class="s">"@product.Title"</span><span class="p">/&gt;</span>
+                            <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+                            <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">detail</span><span class="s">"&gt;
+</span>                                <span class="p">&lt;</span><span class="n">h4</span><span class="p">&gt;</span><span class="n">@product</span><span class="p">.</span><span class="n">Title</span><span class="p">&lt;/</span><span class="n">h4</span><span class="p">&gt;</span>
+                                <span class="p">&lt;</span><span class="n">h5</span><span class="p">&gt;</span><span class="n">@product</span><span class="p">.</span><span class="n">Price</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(</span><span class="s">"C"</span><span class="p">)&lt;/</span><span class="n">h5</span><span class="p">&gt;</span>
+                            <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+                            <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">mouse</span><span class="p">-</span><span class="n">over</span> <span class="n">hidden</span><span class="p">-</span><span class="n">xs</span><span class="s">"&gt;
+</span>                                <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">image</span><span class="p">-</span><span class="n">second</span><span class="s">"&gt;
+</span>                                    <span class="p">&lt;</span><span class="n">img</span> <span class="n">src</span><span class="p">=</span><span class="s">"@product.ProductArtUrl"</span> <span class="n">alt</span><span class="p">=</span><span class="s">"@product.Title zoom"</span><span class="p">/&gt;</span>
+                                <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+
+                                <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">shop</span><span class="p">-</span><span class="n">now</span><span class="s">"&gt;
+</span>                                    <span class="p">&lt;</span><span class="n">span</span> <span class="k">class</span><span class="err">="</span><span class="nc">glyphicon</span> <span class="n">glyphicon</span><span class="p">-</span><span class="n">shopping</span><span class="p">-</span><span class="n">cart</span><span class="s">"&gt;&lt;/span&gt;&amp;nbsp;&lt;span&gt;Shop Now&lt;/span&gt;
+</span>                                <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+                            <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+                        <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+
+                        <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">row</span> <span class="n">visible</span><span class="p">-</span><span class="n">xs</span><span class="s">"&gt;
+</span>                            <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">col</span><span class="p">-</span><span class="n">xs</span><span class="p">-</span><span class="m">4</span> <span class="n">col</span><span class="p">-</span><span class="n">sm</span><span class="p">-</span><span class="m">12</span> <span class="n">col</span><span class="p">-</span><span class="n">md</span><span class="p">-</span><span class="m">12</span> <span class="n">no</span><span class="p">-</span><span class="n">gutter</span><span class="p">-</span><span class="n">sm</span> <span class="n">no</span><span class="p">-</span><span class="n">gutter</span> <span class="n">image</span><span class="s">"&gt;
+</span>                                <span class="p">&lt;</span><span class="n">img</span> <span class="n">src</span><span class="p">=</span><span class="s">"@product.ProductArtUrl"</span> <span class="n">alt</span><span class="p">=</span><span class="s">"@product.Title"</span><span class="p">/&gt;</span>
+                            <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+                            <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">col</span><span class="p">-</span><span class="n">xs</span><span class="p">-</span><span class="m">8</span> <span class="n">col</span><span class="p">-</span><span class="n">sm</span><span class="p">-</span><span class="m">12</span> <span class="n">col</span><span class="p">-</span><span class="n">md</span><span class="p">-</span><span class="m">12</span> <span class="n">detail</span><span class="s">"&gt;
+</span>                                <span class="p">&lt;</span><span class="n">h4</span><span class="p">&gt;</span><span class="n">@product</span><span class="p">.</span><span class="n">Title</span><span class="p">&lt;/</span><span class="n">h4</span><span class="p">&gt;</span>
+                                <span class="p">&lt;</span><span class="n">h5</span><span class="p">&gt;</span><span class="n">@product</span><span class="p">.</span><span class="n">Price</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(</span><span class="s">"C"</span><span class="p">)&lt;/</span><span class="n">h5</span><span class="p">&gt;</span>
+                            <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+                        <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+                    <span class="p">&lt;/</span><span class="n">a</span><span class="p">&gt;</span>
+                <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+        <span class="p">}</span>
+    <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 6.</strong> Deploy Website to Azure to confirm use of the API</p>
+
+<ul>
+  <li>
+    <p>Right click on <code class="highlighter-rouge">PartsUnlimitedWebsite</code>, then on “Publish…”</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/26.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Create a new App Service for the website, similarly to how you created an App Service for the API project. Once you created the new App Service, click on “Publish” button to deploy the PartsUnlimited website.</p>
+  </li>
+</ul>
+
+<p><strong>Step 7.</strong> Verify Website you deployed calls your APIs</p>
+
+<ul>
+  <li>
+    <p>Navigate to <code class="highlighter-rouge">Oil</code> category without logging in, notice that products have <code class="highlighter-rouge">V1</code> in their names, indicating they have been received from the original V1 controller.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/27.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Log in as <code class="highlighter-rouge">Administrator@test.com</code> and navigate to <code class="highlighter-rouge">Oil</code> category again. You will notice that for this user Azure function proxies us to V2 controller.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/28.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Create another account and login as that user. You will see V1 returned again.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/29.png" alt="" /></p>
+  </li>
+</ul>
+
+<p>Congratulations, you have connected PartsUnlimited website to your API!</p>
+
+<h3 id="task-5-update-xamarin-app-to-retrieve-products-on-special-from-api">Task 5: Update Xamarin app to retrieve products on special from API.</h3>
+
+<p><strong>Step 1.</strong> Open <code class="highlighter-rouge">PartsUnlimited.Mobile</code> solution.</p>
+
+<ol>
+  <li>
+    <p>Press <code class="highlighter-rouge">Ctrl+Shift+O</code> to open <code class="highlighter-rouge">Open Project</code> window.</p>
+  </li>
+  <li>
+    <p>Navigate to the directory where you cloned the repository, select “PartsUnlimited.Mobile.sln” and click on “Open”.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/30.png" alt="" /></p>
+  </li>
+</ol>
+
+<p><strong>Step 2.</strong> You will be prompted to connect to Mac machine if you haven’t done so before. You can just close it, all examples are going to be shown on Android emulator, so you don’t need to connect to Mac machine just to follow this lab.</p>
+
+<blockquote>
+  <p><strong>Note:</strong> Mac machine is required only if you want to run the iOS app.</p>
+</blockquote>
+
+<p><strong>Step 3.</strong> Build this solution.</p>
+<blockquote>
+  <p><strong>Note:</strong> The first build usually takes a few minutes. Do not stop/cancel it or you will corrupt the zip archive it generates for all of the packages and cause errors on the next build.</p>
+</blockquote>
+
+<p><strong>Step 4.</strong> Install Newtonsoft.Json package.</p>
+
+<ol>
+  <li>
+    <p>Right click on <code class="highlighter-rouge">PartsUnlimited.Mobile</code> solution and click on <code class="highlighter-rouge">Manage NuGet Packages for Solution...</code></p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/31.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Navigate to “Browse” tab, enter “Newtonsoft.Json” into filter/search field, select Newtonsoft.Json package, tick checkbox next to each project and click on “Install”.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/32.png" alt="" /></p>
+  </li>
+</ol>
+
+<p><strong>Step 5.</strong> Add a new “ProductDto” class. Right click on PartsUnlimited (Portable) project, click on “Add”, then “Class…”. Enter “ProductDto.cs” into the name field and click on “OK”. Add the following code to that class:</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">ProductDto</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">SkuNumber</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">ProductId</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">RecommendationId</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">CategoryId</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Title</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">decimal</span> <span class="n">Price</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">decimal</span> <span class="n">SalePrice</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">ProductArtUrl</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">DateTime</span> <span class="n">Created</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Description</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">ProductDetails</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Inventory</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">LeadTime</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 6.</strong> Let’s add System.Net.Http reference to the PartsUnlimited (Portable) project.</p>
+
+<ol>
+  <li>
+    <p>Right-click on the PartsUnlimited (Portable) project and select <code class="highlighter-rouge">Unload Project</code>.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/35.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Right-click on the project again and select <code class="highlighter-rouge">Edit PartsUnlimited.csproj</code>.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/36.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Scroll down until you see ItemGroup with project’s references and add the following to them:</p>
+
+    <div class="language-csharp highlighter-rouge"><pre class="highlight"><code> <span class="p">&lt;</span><span class="n">Reference</span> <span class="n">Include</span><span class="p">=</span><span class="s">"System.Net.Http"</span><span class="p">&gt;</span>
+     <span class="p">&lt;</span><span class="n">HintPath</span><span class="p">&gt;..</span><span class="err">\</span><span class="p">..</span><span class="err">\</span><span class="p">..</span><span class="err">\</span><span class="p">..</span><span class="err">\</span><span class="p">..</span><span class="err">\</span><span class="p">..</span><span class="err">\</span><span class="p">..</span><span class="err">\</span><span class="n">Program</span> <span class="nf">Files</span> <span class="p">(</span><span class="n">x86</span><span class="p">)</span><span class="err">\</span><span class="n">Reference</span> <span class="n">Assemblies</span><span class="err">\</span><span class="n">Microsoft</span><span class="err">\</span><span class="n">Framework</span><span class="err">\</span><span class="p">.</span><span class="n">NETPortable</span><span class="err">\</span><span class="n">v4</span><span class="p">.</span><span class="m">5</span><span class="err">\</span><span class="n">System</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">Http</span><span class="p">.</span><span class="n">dll</span><span class="p">&lt;/</span><span class="n">HintPath</span><span class="p">&gt;</span>
+ <span class="p">&lt;/</span><span class="n">Reference</span><span class="p">&gt;</span>
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p>Save the file with you changes.</p>
+  </li>
+  <li>
+    <p>Right-Click on the project again and select <code class="highlighter-rouge">Reload Project</code>. Click on <code class="highlighter-rouge">Yes</code> to close <code class="highlighter-rouge">PartsUnlimited.csproj</code> file.</p>
+
+    <p><img src="/PartsUnlimited/assets/featureflagapi/37.png" alt="" /></p>
+  </li>
+</ol>
+
+<p><strong>Step 7.</strong> Open <b>MainPageViewModel</b> class located at <b> PartsUnlimited &gt; ViewModels &gt;MainPageViewModel.cs </b>. Add the following method into it:</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">GetDataFromApi</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Task</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="k">async</span> <span class="p">()</span> <span class="p">=&gt;</span>
+    <span class="p">{</span>
+        <span class="n">List</span><span class="p">&lt;</span><span class="n">ProductDto</span><span class="p">&gt;</span> <span class="n">apiProducts</span><span class="p">;</span>
+        <span class="kt">var</span> <span class="n">url</span> <span class="p">=</span> <span class="s">"https://&lt;YourAzureFunctionUrl&gt;.azurewebsites.net/api/SpecialsProxy?code=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"</span><span class="p">;</span>
+        <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">jsonProducts</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="nf">GetStringAsync</span><span class="p">(</span><span class="n">url</span> <span class="p">+</span> <span class="s">"&amp;UserID=1"</span><span class="p">);</span>
+            <span class="n">apiProducts</span> <span class="p">=</span> <span class="n">JsonConvert</span><span class="p">.</span><span class="n">DeserializeObject</span><span class="p">&lt;</span><span class="n">List</span><span class="p">&lt;</span><span class="n">ProductDto</span><span class="p">&gt;&gt;(</span><span class="n">jsonProducts</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">ShoppingItems</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ObservableCollection</span><span class="p">&lt;</span><span class="n">ShoppingItemViewModel</span><span class="p">&gt;(</span>
+                <span class="n">apiProducts</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="n">ShoppingItemViewModel</span>
+                <span class="p">{</span>
+                    <span class="n">DiscountPercentage</span> <span class="p">=</span> <span class="m">100</span> <span class="p">*</span> <span class="p">(</span><span class="m">1</span> <span class="p">-</span> <span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">SalePrice</span> <span class="p">/</span> <span class="n">x</span><span class="p">.</span><span class="n">Price</span><span class="p">)),</span>
+                    <span class="n">Price</span> <span class="p">=</span> <span class="n">x</span><span class="p">.</span><span class="n">Price</span><span class="p">,</span>
+                    <span class="n">ImageSource</span> <span class="p">=</span> <span class="n">x</span><span class="p">.</span><span class="n">ProductArtUrl</span><span class="p">,</span>
+                    <span class="n">ItemName</span> <span class="p">=</span> <span class="n">x</span><span class="p">.</span><span class="n">Title</span>
+                <span class="p">}));</span>
+    <span class="p">}</span>
+    <span class="p">).</span><span class="nf">Wait</span><span class="p">();</span>
+<span class="p">}</span>
+
+</code></pre>
+</div>
+<blockquote>
+  <p><strong>Note:</strong> You have to replace <code class="highlighter-rouge">url</code> variable’s value with your full Azure Function’s URL including its code parameter at the end.</p>
+</blockquote>
+
+<p><strong>Step 8.</strong> Add the following using statements at the top of the class:</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Threading.Tasks</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Newtonsoft.Json</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net.Http</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p><strong>Step 9.</strong> Update MainPageViewModel’s constructor to call <code class="highlighter-rouge">GetDataFromApi</code> method in the following way:</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">public</span> <span class="nf">MainPageViewModel</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nf">GetDataFromApi</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 10.</strong> Select PartsUnlimited.Droid as a StartUp Project and click “Run”</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagapi/33.png" alt="" /></p>
+
+<p><strong>Step 11.</strong> You should see the following data returns from the API v2 controller:</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagapi/34.png" alt="" /></p>
+
+<h2 id="congratulations-you-have-completed-this-lab">Congratulations, you have completed this lab!</h2>
+
+<p>In this lab, you have learned how to set up a feature flag for your API using Azure Functions, how to call to that API from the website’s backend code as well as from Xamarin app. Another great option to control your APIs is <a href="https://azure.microsoft.com/en-gb/documentation/services/api-management/">Azure API Managment</a>. It provides features like URL redirection based on policy, API protection with an allowed requests limit, API access key management and many more.</p>
+
+<h2 id="next-steps">Next steps</h2>
+
+<ul>
+  <li><a href="FaultInjectionAzurePaaS">Fault Injection for Azure PaaS</a></li>
+</ul>
+
+
+                    </div>
+                
+            </div>
+
+            
+
+            <div class="row">
+                <div id="footer" class="col-sm-12">
+                    Documentation for <a href="https://github.com/Microsoft/PartsUnlimited">PartsUnlimited</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+        
+    </body>
+</html>

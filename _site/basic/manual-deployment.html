@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>PartsUnlimited : Manual Deployment</title>
+        <meta name="description" content="example e-commerce website">
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/PartsUnlimited/css/syntax.css">
+        <link rel="stylesheet" href="/PartsUnlimited/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <div id="header" class="col-sm-12">
+                    <img class="logo" src="/PartsUnlimited/assets/logo-ms-dark.png" alt="Microsoft">
+<h4><a class="brand" href="/PartsUnlimited/">PartsUnlimited</a>
+    <small>example e-commerce website</small>
+</h4>
+
+                </div>
+            </div>
+
+            <div class="row">
+                
+                
+                    <div id="navigation" class="col-sm-3">
+                        <ul class="nav nav-list">
+    
+        <li><a href="/PartsUnlimited/">Welcome</a></li>
+    
+
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Basic DevOps Practices</li>
+            
+
+            
+                <li data-order="3"><a class="nav-active" href="/PartsUnlimited/basic/manual-deployment.html">Manual Deployment</a></li>  
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/basic/ci.html">Continuous Integration</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/basic/cd.html">Continuous Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/basic/QuickStart.html">Quick Start</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/basic/GettingStartedLinuxOSX.html">Getting Started on Linux and OSX</a></li>
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/basic/GettingStarted.html">Getting Started</a></li>
+            
+        
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Advanced DevOps Practices</li>
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/advanced/UserTelemetry.html">User Telemetry</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/advanced/UsageAnalysis.html">Usage Analysis</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/advanced/TestingProd.html">Testing in Production</a></li>
+            
+        
+            
+
+            
+                <li data-order="6"><a href="/PartsUnlimited/advanced/FeatureFlagWebAdvanced.html">Advanced Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/advanced/FeatureFlagWeb.html">Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="7"><a href="/PartsUnlimited/advanced/FeatureFlagMobile.html">Feature Flag for a Mobile Solution</a></li>
+            
+        
+            
+
+            
+                <li data-order="8"><a href="/PartsUnlimited/advanced/FeatureFlagAPI.html">Feature Flag for an API</a></li>
+            
+        
+            
+
+            
+                <li data-order="11"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabricStarter.html">Fault Injection for Service Fabric Hackathon Starter</a></li>
+            
+        
+            
+
+            
+                <li data-order="10"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabric.html">Fault Injection for Service Fabric</a></li>
+            
+        
+            
+
+            
+                <li data-order="9"><a href="/PartsUnlimited/advanced/FaultInjectionAzurePaaS.html">Fault Injection for Azure PaaS</a></li>
+            
+        
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/advanced/ErrorReporting.html">Error Reporting</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/advanced/ABTesting.html">Experimentation and A/B Testing with Optimzely</a></li>
+            
+        
+    
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class="divider"></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id="content" class="col-sm-9">
+                        <div class="page-header">
+    <h2>Manual Deployment
+        
+    </h2>
+</div>
+
+<p>For full deployments, you can deploy the PartsUnlimited app to slots as needed. The website is setup to keep the connection strings with the slots. This means that if staging and main website slots are switched, the main website will still use the production database, while the staging slot will keep pointing to the staging database.</p>
+
+<h2 id="how-to-manually-deploy-full-environment-and-publish-website">How to Manually Deploy Full Environment And Publish Website</h2>
+<ol>
+  <li>Open PartsUnlimited.sln at the root of the directory</li>
+  <li>If you haven’t already done so, install PowerShell Tools for Visual Studio by following these steps:
+    <ul>
+      <li>Go to Tools - Extensions and Updates and search for “PowerShell”
+<img src="/PartsUnlimited/assets/manualdeployment/PowerShellToolsVS.jpg" alt="PowerShell Tools for Visual Studio" /></li>
+      <li>If it is not present, then click the Online - Visual Studio Gallery section and search for “PowerShell” there and then install.</li>
+      <li>Restart Visual Studio to complete the installation</li>
+      <li>Re-open the Visual Studio project PartsUnlimited.sln</li>
+    </ul>
+  </li>
+  <li>Right-click on the <code class="highlighter-rouge">PartsUnlimitedEnv</code> folder (the deployment project root) and choose Deploy -&gt; New…</li>
+  <li>Choose subscription to deploy to.</li>
+  <li>Under Resource Group choose New…
+    <ul>
+      <li>Enter Resource Group name
+        <ul>
+          <li>Name should not include periods.</li>
+        </ul>
+      </li>
+      <li>Choose Resource group location.</li>
+    </ul>
+  </li>
+  <li>For Deployment template, choose <code class="highlighter-rouge">fullenvironmentsetupmerged.json</code>.</li>
+  <li>For Deployment template parameters, choose <code class="highlighter-rouge">fullenvironmentsetupmerged.param.json</code>.</li>
+  <li>Click OK.</li>
+  <li>If prompted, edit the parameter to add any required value for the deployment template and click Save.
+    <ul>
+      <li>Do not fill in values for anything that has ‘auto-generated’ for its value.</li>
+      <li><code class="highlighter-rouge">PartsUnlimitedHostingPlanSKU</code> needs to be value that supports slots or else the deployment will fail.  (I took out the Free hosting plan from available hosting plans for the full setup template, but still worth noting for</li>
+      <li>The SQL Server name (specified by <code class="highlighter-rouge">PartsUnlimitedServerName</code>) should be all lowercase</li>
+      <li>The Storage Account names (specified by <code class="highlighter-rouge">CdnStorageAccountName</code>, <code class="highlighter-rouge">CdnStorageAccountNameForDev</code> and <code class="highlighter-rouge">CdnStorageAccountNameForStaging</code>) should be all lowercase and be 3 to 24 characters in length</li>
+      <li>The Storage Container names (specified by <code class="highlighter-rouge">CdnStorageContainerName</code>, <code class="highlighter-rouge">CdnStorageContainerNameForDev</code> and <code class="highlighter-rouge">CdnStorageContainerNameForStaging</code>) should be all lowercase and be 3 to 63 characters in length</li>
+    </ul>
+  </li>
+  <li>If prompted fill in any values the scripts ask for.  This will only happen if you leave a non-auto-generated parameter blank.</li>
+  <li>Now that the environment is setup, it is time to publish the website bits.</li>
+  <li>Open PartsUnlimited.sln.</li>
+  <li>Wait for package loads to complete.</li>
+  <li>Build the project</li>
+  <li>Right-click on <code class="highlighter-rouge">src\PartsUnlimitedWebsite</code> project and choose Publish…</li>
+  <li>For Publish Web Wizard
+    <ul>
+      <li>On Profile Page choose ‘Microsoft Azure App Service’ under ‘Select a publish target’.</li>
+      <li>On the App Service page select the right subscription and view resource group. Open the resource group and the website created above (Website name specified by <code class="highlighter-rouge">WebsiteName</code> parameter name in previous steps.) This time choose a slot to publish the website to. Click OK.</li>
+      <li>On Connection Page, just click Next.  This should be automatically filled out when the website was chosen on the previous page.</li>
+      <li>On Settings Page, verify the configuration is what you want (i.e. Release – Any CPU) and click Next.</li>
+      <li>On Preview Page, click Publish
+        <ul>
+          <li>Users can click ‘Start Preview’ to verify the deployment will work, if they wish.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Wait for publish to complete and load the website.
+    <ul>
+      <li>The website is set up to automatically update the database shape, only if the database is empty.  No extra EF migrations commands needed for the first deployment.</li>
+    </ul>
+  </li>
+  <li>Website is all setup to use slot switching.  Users can publish to individual slots as they need.  Website is setup to keep the connection strings with the slots.  This means that if staging and main website slots are switched the main website still uses the production database.</li>
+</ol>
+
+
+                    </div>
+                
+            </div>
+
+            
+
+            <div class="row">
+                <div id="footer" class="col-sm-12">
+                    Documentation for <a href="https://github.com/Microsoft/PartsUnlimited">PartsUnlimited</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+        
+    </body>
+</html>

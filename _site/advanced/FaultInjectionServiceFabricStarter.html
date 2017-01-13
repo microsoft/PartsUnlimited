@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>PartsUnlimited : Fault Injection for Service Fabric Hackathon Starter</title>
+        <meta name="description" content="example e-commerce website">
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/PartsUnlimited/css/syntax.css">
+        <link rel="stylesheet" href="/PartsUnlimited/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <div id="header" class="col-sm-12">
+                    <img class="logo" src="/PartsUnlimited/assets/logo-ms-dark.png" alt="Microsoft">
+<h4><a class="brand" href="/PartsUnlimited/">PartsUnlimited</a>
+    <small>example e-commerce website</small>
+</h4>
+
+                </div>
+            </div>
+
+            <div class="row">
+                
+                
+                    <div id="navigation" class="col-sm-3">
+                        <ul class="nav nav-list">
+    
+        <li><a href="/PartsUnlimited/">Welcome</a></li>
+    
+
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Basic DevOps Practices</li>
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/basic/manual-deployment.html">Manual Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/basic/ci.html">Continuous Integration</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/basic/cd.html">Continuous Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/basic/QuickStart.html">Quick Start</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/basic/GettingStartedLinuxOSX.html">Getting Started on Linux and OSX</a></li>
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/basic/GettingStarted.html">Getting Started</a></li>
+            
+        
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Advanced DevOps Practices</li>
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/advanced/UserTelemetry.html">User Telemetry</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/advanced/UsageAnalysis.html">Usage Analysis</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/advanced/TestingProd.html">Testing in Production</a></li>
+            
+        
+            
+
+            
+                <li data-order="6"><a href="/PartsUnlimited/advanced/FeatureFlagWebAdvanced.html">Advanced Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/advanced/FeatureFlagWeb.html">Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="7"><a href="/PartsUnlimited/advanced/FeatureFlagMobile.html">Feature Flag for a Mobile Solution</a></li>
+            
+        
+            
+
+            
+                <li data-order="8"><a href="/PartsUnlimited/advanced/FeatureFlagAPI.html">Feature Flag for an API</a></li>
+            
+        
+            
+
+            
+                <li data-order="11"><a class="nav-active" href="/PartsUnlimited/advanced/FaultInjectionServiceFabricStarter.html">Fault Injection for Service Fabric Hackathon Starter</a></li>  
+            
+        
+            
+
+            
+                <li data-order="10"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabric.html">Fault Injection for Service Fabric</a></li>
+            
+        
+            
+
+            
+                <li data-order="9"><a href="/PartsUnlimited/advanced/FaultInjectionAzurePaaS.html">Fault Injection for Azure PaaS</a></li>
+            
+        
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/advanced/ErrorReporting.html">Error Reporting</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/advanced/ABTesting.html">Experimentation and A/B Testing with Optimzely</a></li>
+            
+        
+    
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class="divider"></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id="content" class="col-sm-9">
+                        <div class="page-header">
+    <h2>Fault Injection for Service Fabric Hackathon Starter
+        
+    </h2>
+</div>
+
+<p>#Fault Injection for Service Fabric Hackathon Starter</p>
+
+<p>Service uptime is one of the most important metrics for any application. Users are quick to switch if they cannot have access 24/7. Azure Service Fabric is a platform designed to make it easy to package, deploy and scale reliable applications. You have been tasked with improving availability for the hackathon starter app.</p>
+
+<p><strong>Prerequisites</strong></p>
+
+<ul>
+  <li>
+    <p><a href="https://portal.azure.com">An active Azure subscription</a></p>
+  </li>
+  <li>
+    <p><a href="https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-get-started">Service Fabric SDK</a></p>
+  </li>
+  <li>
+    <p><a href="http://nodejs.org">Node.js 6.0+</a></p>
+  </li>
+  <li>
+    <p><a href="https://git-scm.com/downloads">Git</a></p>
+  </li>
+  <li>
+    <p><a href="https://www.mongodb.com/">MongoDB</a></p>
+  </li>
+</ul>
+
+<p><strong>Tasks Overview</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Get the source code for the Hackathon starter</strong> - in this task we will go through pulling down the hackathon source code and testing it locally.</p>
+  </li>
+  <li>
+    <p><strong>Prepare the Hackathon Service Fabric package</strong> - in this task we will go through the steps required to create a deployment package for the hackathon starter app.</p>
+  </li>
+  <li>
+    <p><strong>Set up MongoDB</strong> - in this step we’ll set up a MongoDB instance in Azure.</p>
+  </li>
+  <li>
+    <p><strong>Deploy the Service Fabric package to a windows cluster</strong> - in this step we will deploy the actual service fabric package to Azure.</p>
+  </li>
+  <li>
+    <p><strong>Run some tests against the cluster</strong> - In this step we’ll go through some basic tests you can run against an Azure Service Fabric cluster.</p>
+  </li>
+</ol>
+
+<h3 id="task-1-get-the-source-code-for-the-hackathon-starter">Task 1: Get the source code for the Hackathon starter.</h3>
+
+<p><strong>Step 1.</strong> Open and command prompt of your choice which has support for git</p>
+
+<p><strong>Step 2.</strong> Navigate to your chosen working directory</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="nb">cd</span> <span class="s2">"C:</span><span class="se">\d</span><span class="s2">ev</span><span class="se">\r</span><span class="s2">epos"</span>
+</code></pre>
+</div>
+
+<p><strong>Step 3.</strong> Firstly, we want to clone the Hackathon starter repository and install our dependencies.</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="c"># Get the latest snapshot</span>
+git clone --depth<span class="o">=</span>1 https://github.com/sahat/hackathon-starter.git hackathon-starter
+
+<span class="c"># Change directory</span>
+<span class="nb">cd </span>hackathon-starter
+
+<span class="c"># Install NPM dependencies</span>
+npm install
+</code></pre>
+</div>
+
+<p><strong>Step 4.</strong> We need to make sure MongoDB is running before we try and start the application. Open a second command prompt and run the following command</p>
+
+<p><code class="highlighter-rouge">mongod</code></p>
+
+<blockquote>
+  <p>If MongoDB is not on the path on Windows it will fail to start.</p>
+
+  <p>You can lauch it directly, the default installation directory is <code class="highlighter-rouge">C:\Program Files\MongoDB\Server\3.2\bin</code></p>
+</blockquote>
+
+<blockquote>
+  <p>You may receive the following error: <code class="highlighter-rouge">Data directory C:\data\db\ not found., terminating</code></p>
+
+  <p>This means you need to create a ‘data’ folder on whatever drive you’re running the CMD instance on, with a sub folder of ‘db’. MongoDB uses this location to store the database.</p>
+</blockquote>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/mongod.png" alt="" /></p>
+
+<p><strong>Step 5.</strong> Lets try run the application locally.</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>node app.js
+</code></pre>
+</div>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/app-running.png" alt="" /></p>
+
+<p><strong>Step 6.</strong> In your browser, navigate to <code class="highlighter-rouge">http://localhost:3000/</code></p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/hackathon-starter-site.png" alt="" /></p>
+
+<h4 id="task-2-prepare-the-hackathon-service-fabric-package">Task 2: Prepare the Hackathon Service Fabric package.</h4>
+
+<p><strong>Step 1.</strong> Create a new folder that we will use to package the Hackathon application in. For example -&gt; <code class="highlighter-rouge">C:\release</code></p>
+
+<p><strong>Step 2.</strong> Let’s set up the package structure required by Service Fabric.</p>
+
+<p>Firstly in the package root folder we want to create a new folder called <code class="highlighter-rouge">NodeService</code> eg <code class="highlighter-rouge">C:\release\NodeService</code></p>
+
+<p><strong>Step 3.</strong> Now add another file to the package root directory (<code class="highlighter-rouge">C:\release</code>) called ApplicationManifest.xml and add the following to the file.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+    <span class="nt">&lt;ApplicationManifest</span> <span class="na">xmlns:xsd=</span><span class="s">"http://www.w3.org/2001/XMLSchema"</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="na">ApplicationTypeName=</span><span class="s">"NodeAppType"</span> <span class="na">ApplicationTypeVersion=</span><span class="s">"1.0"</span> <span class="na">xmlns=</span><span class="s">"http://schemas.microsoft.com/2011/01/fabric"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;Parameters&gt;</span>
+        <span class="nt">&lt;Parameter</span> <span class="na">Name=</span><span class="s">"Website_InstanceCount"</span> <span class="na">DefaultValue=</span><span class="s">"-1"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/Parameters&gt;</span>
+    <span class="nt">&lt;ServiceManifestImport&gt;</span>
+        <span class="nt">&lt;ServiceManifestRef</span> <span class="na">ServiceManifestName=</span><span class="s">"NodeService"</span> <span class="na">ServiceManifestVersion=</span><span class="s">"1.0"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/ServiceManifestImport&gt;</span>
+    <span class="nt">&lt;DefaultServices&gt;</span>
+        <span class="nt">&lt;Service</span> <span class="na">Name=</span><span class="s">"NodeServiceService"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;StatelessService</span> <span class="na">ServiceTypeName=</span><span class="s">"NodeService"</span> <span class="na">InstanceCount=</span><span class="s">"[Website_InstanceCount]"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;SingletonPartition</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/StatelessService&gt;</span>
+        <span class="nt">&lt;/Service&gt;</span>
+    <span class="nt">&lt;/DefaultServices&gt;</span>
+<span class="nt">&lt;/ApplicationManifest&gt;</span>
+</code></pre>
+</div>
+
+<p><strong>Step 4.</strong>
+In the NodeService folder create the following ServiceManifest.xml file (<code class="highlighter-rouge">C:\release\NodeService\ServiceManifest.xml</code>), this file should have the following contents inside.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code>    <span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+        <span class="nt">&lt;ServiceManifest</span> <span class="na">xmlns:xsd=</span><span class="s">"http://www.w3.org/2001/XMLSchema"</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="na">Name=</span><span class="s">"NodeService"</span> <span class="na">Version=</span><span class="s">"1.0"</span> <span class="na">xmlns=</span><span class="s">"http://schemas.microsoft.com/2011/01/fabric"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;ServiceTypes&gt;</span>
+            <span class="nt">&lt;StatelessServiceType</span> <span class="na">ServiceTypeName=</span><span class="s">"NodeService"</span> <span class="na">UseImplicitHost=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;Extensions&gt;</span>
+                    <span class="nt">&lt;Extension</span> <span class="na">Name=</span><span class="s">"__GeneratedServiceType__"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;GeneratedNames</span> <span class="na">xmlns=</span><span class="s">"http://schemas.microsoft.com/2015/03/fabact-no-schema"</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;DefaultService</span> <span class="na">Name=</span><span class="s">"NodeServiceService"</span> <span class="nt">/&gt;</span>
+                        <span class="nt">&lt;ServiceEndpoint</span> <span class="na">Name=</span><span class="s">"NodeServiceTypeEndpoint"</span> <span class="nt">/&gt;</span>
+                    <span class="nt">&lt;/GeneratedNames&gt;</span>
+                    <span class="nt">&lt;/Extension&gt;</span>
+                <span class="nt">&lt;/Extensions&gt;</span>
+            <span class="nt">&lt;/StatelessServiceType&gt;</span>
+        <span class="nt">&lt;/ServiceTypes&gt;</span>
+        <span class="nt">&lt;CodePackage</span> <span class="na">Name=</span><span class="s">"C"</span> <span class="na">Version=</span><span class="s">"1.0"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;EntryPoint&gt;</span>
+                <span class="nt">&lt;ExeHost&gt;</span>
+                    <span class="nt">&lt;Program&gt;</span>node.exe<span class="nt">&lt;/Program&gt;</span>
+                    <span class="nt">&lt;Arguments&gt;</span>app.js<span class="nt">&lt;/Arguments&gt;</span>
+                    <span class="nt">&lt;WorkingFolder&gt;</span>CodePackage<span class="nt">&lt;/WorkingFolder&gt;</span>
+                <span class="nt">&lt;/ExeHost&gt;</span>
+            <span class="nt">&lt;/EntryPoint&gt;</span>
+        <span class="nt">&lt;/CodePackage&gt;</span>
+        <span class="nt">&lt;Resources&gt;</span>
+            <span class="nt">&lt;Endpoints&gt;</span>
+                <span class="nt">&lt;Endpoint</span> <span class="na">Name=</span><span class="s">"NodeServiceTypeEndpoint"</span> <span class="na">Protocol=</span><span class="s">"http"</span> <span class="na">Type=</span><span class="s">"Input"</span> <span class="na">Port=</span><span class="s">"3000"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/Endpoints&gt;</span>
+        <span class="nt">&lt;/Resources&gt;</span>
+    <span class="nt">&lt;/ServiceManifest&gt;</span>
+</code></pre>
+</div>
+
+<p><strong>Step 5.</strong> Inside the NodeService folder, create a folder called C (<code class="highlighter-rouge">C:\release\NodeService\C</code>). This will store the code for our node application.</p>
+
+<p><strong>Step 6.</strong> Inside the NodeService folder, create a folder called config (<code class="highlighter-rouge">C:\release\NodeService\config</code>) You should now have the following folder and file structure:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>|-- ApplicationPackageRoot
+
+    |-- NodeService
+        |-- C
+        |-- config
+        |-- ServiceManifest.xml
+    |-- ApplicationManifest.xml
+</code></pre>
+</div>
+
+<p><strong>Step 7.</strong> We need to bundle node and the Hackathon Starter code within our self contained Service Fabric package.</p>
+
+<p>Grab the node.exe from whatever location shows up and copy it to a new deployment folder. For the example below we’re using <code class="highlighter-rouge">xcopy "from/here" "to/here"</code></p>
+
+<blockquote>
+  <p>Note that the <code class="highlighter-rouge">where</code> command is only available in the Windows CMD prompt and not when using PowerShell</p>
+</blockquote>
+
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code>
+<span class="nb">where </span>node.exe
+
+xcopy <span class="s2">"C:</span><span class="se">\P</span><span class="s2">rogram Files</span><span class="se">\n</span><span class="s2">odejs</span><span class="se">\n</span><span class="s2">ode.exe"</span> <span class="s2">"C:</span><span class="se">\r</span><span class="s2">elease</span><span class="se">\N</span><span class="s2">odeService</span><span class="se">\C</span><span class="s2">"</span>
+
+xcopy <span class="s2">"C:</span><span class="se">\d</span><span class="s2">ev</span><span class="se">\r</span><span class="s2">epos</span><span class="se">\h</span><span class="s2">ackathon-starter</span><span class="se">\*</span><span class="s2">"</span> <span class="s2">"C:</span><span class="se">\r</span><span class="s2">elease</span><span class="se">\N</span><span class="s2">odeService</span><span class="se">\C</span><span class="s2">"</span> /s /i
+
+</code></pre>
+</div>
+
+<p>Alternatively you can use the linux commands <code class="highlighter-rouge">which nodejs</code> then <code class="highlighter-rouge">cp from to</code></p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>
+which nodejs
+
+cp node/location/node.exe /release/NodeService/C/
+
+cp -a /repos/hackathon-starter/. /release/NodeService/C/
+
+</code></pre>
+</div>
+<p>You should now have the following folder and file structure:
+    |– ApplicationPackageRoot</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    |-- ApplicationManifest.xml
+    |-- NodeService
+        |-- C
+            |-- Hackathon application files (the ones you got from Github)
+            |-- node.exe
+        |-- config
+        |-- ServiceManifest.xml
+</code></pre>
+</div>
+
+<h3 id="task-3-set-up-our-azure-mongodb-instance">Task 3: Set up our Azure MongoDB instance.</h3>
+
+<p><strong>Step 1.</strong> Navigate to the <a href="https://ms.portal.azure.com">Azure portal</a> and select ‘New’</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/azure1.png" alt="" /></p>
+
+<p><strong>Step 2.</strong> Search for ‘MongoDB’ and select the ‘Database as a service for MongoDB’, published by Microsoft.</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/add-mongo.png" alt="" /></p>
+
+<p><strong>Step 3.</strong> On the next promp, scroll down to the bottom and hit ‘create’.</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/mongo-create.png" alt="" /></p>
+
+<p><strong>Step 4.</strong> On the next screen specify all the required configuration values as seen below. You may need to accept that you are using a preview service if you haven’t used this particular service before. Note you will need to find an available ID as some names may already be taken. Also create a resource group which ties to this lab (e.g. hackathon-sf).</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/mongo-config.png" alt="" /></p>
+
+<p><strong>Step 5.</strong> Navigate to the main resource group list and locate the group you just created. In the example above we used the name ‘hackathon-sf’.</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/locate-mongo.png" alt="" /></p>
+
+<p><strong>Step 6.</strong> Now we want to grab the connection string. Select ‘Connection String’ and copy down the value supplied somewhere for the next step.</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/mongo-connection.png" alt="" /></p>
+
+<p><strong>Step 7.</strong> Navigate back to the hackathon solution Service Fabric package and open the <code class="highlighter-rouge">C:\release\NodeService\C\.env.example</code> file</p>
+
+<p>At the top of the file you will see two environment variables set ‘MONGODB_URI’ and ‘MONGOLAB_URI’. We want to change the values set to be the connection string we pulled from Azure in the previous step.</p>
+
+<p>For example:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>MONGODB_URI=mongodb://hack-db:qC9Hhe3Gk...==@hack-db.documents.azure.com:10250/?ssl=true
+MONGOLAB_URI=mongodb://hack-db:qC9Hhe...==@hack-db.documents.azure.com:10250/?ssl=true
+...
+</code></pre>
+</div>
+
+<h3 id="task-4-deploy-the-service-fabric-package-to-a-windows-cluster">Task 4: Deploy the Service Fabric package to a windows cluster.</h3>
+<p>Let’s deploy to a Windows cluster in Azure.</p>
+
+<p><strong>Step 1.</strong> First things first, let’s create a Service Fabric container for our Hackathon starter site.</p>
+
+<p>Navigate to the Azure portal and select ‘New’ -&gt; https://ms.portal.azure.com</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/azure1.png" alt="" /></p>
+
+<p><strong>Step 2.</strong> Search for ‘Service Fabric Cluster’ then select the top option.</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/azure2.png" alt="" /></p>
+
+<p><strong>Step 3.</strong> Select the ‘Create’ button at the bottom of the ‘Service Fabric Cluster’ window.</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/azure3.png" alt="" /></p>
+
+<p><strong>Step 4.</strong> Fill out the basics required. Note: ensure you add a unique cluster name as some common ones may already be taken.</p>
+
+<p>Select a secure user name and password combination.</p>
+
+<p>Select the subscription and resource group that applies to this lab.</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/azure4.png" alt="" /></p>
+
+<p><strong>Step 5.</strong> Here we only have one node type. We want to give this node type a name and allocate a machine size. We can set the initial VM scale as well.</p>
+
+<p>Add the custom endpoint of 3000 as this is the default port that the app is hosted on.</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/azure5.png" alt="" /></p>
+
+<p><strong>Step 6.</strong> For demo purposes we will use the insecure setting as there are quite a few steps involved in setting this up in Azure. If you want more information visit https://azure.microsoft.com/en-us/documentation/articles/key-vault-get-started/.</p>
+
+<p>It is strongly advised to use the secure mode in production.</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/azure7.png" alt="" /></p>
+
+<p><strong>Step 7.</strong> Check over the settings one last time and ensure everything looks OK. Once you have validated the settings select ‘Create’.</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/azure8.png" alt="" /></p>
+
+<p><strong>Step 8.</strong> On the Azure dashboard, we can now see that the Service Fabric Cluster is being set up. This may take some time.</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/azure9.png" alt="" /></p>
+
+<p>After it has successfully deployed you may see the following on the Azure dashboard.</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/azure10.png" alt="" /></p>
+
+<p>In some instances as the Service Fabric Cluster provisions the portal may automatically open the blade for you</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/azure10a.png" alt="" /></p>
+
+<blockquote>
+  <p>Note: You must wait until the status listed for your cluster is <strong>Ready</strong> otherwise the next step will fail.</p>
+</blockquote>
+
+<p><strong>Step 9.</strong> Select the Hackathon cluster, then select ‘Custom fabric settings’. Add a new value for the <strong>EseStore</strong> with the parameter <strong>MaxCursors</strong> and the value <strong>65536</strong>. This is to ensure our node modules folder will be able to be registered correctly. Service fabric currently has a hard limit on the amount of files and will timeout if this value is not increased. <em>Ideally you should have a build task that minifies and concatenates all your vendor dependencies</em>. This may take some time to complete as it needs to propagate across the scale set.</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/sf-settings.png" alt="" /></p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/max-cursors.png" alt="" /></p>
+
+<blockquote>
+  <p>Note: You must again wait until the status listed for your cluster is <strong>Ready</strong> otherwise the next step will fail. This can take a very long time.</p>
+</blockquote>
+
+<p>Navigate back to the ‘Overview’ section inside the service fabric cluster. Then copy the ‘Service Fabric Explorer’ link and paste it in your browser of choice.</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/azure11.png" alt="" /></p>
+
+<p><strong>Step 10.</strong> This is the Azure Service Fabric Explorer.</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/sfe.png" alt="" /></p>
+
+<p><strong>Step 11.</strong> OK, now Azure is ready we need to push up the Hackathon starter solution. Open up PowerShell in administrator mode.</p>
+
+<p>Firstly we want to connect to the cluster.</p>
+
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code>Connect-ServiceFabricCluster <span class="o">[</span>your-server-cluster-address].[location].cloudapp.azure.com:19000
+</code></pre>
+</div>
+
+<p>Note: ensure the address does not have https:// and must specify port 19000 - eg. <code class="highlighter-rouge">hackathon.westcentralus.cloudapp.azure.com:19000</code></p>
+
+<p><strong>Step 12.</strong> Now we want to upload the application package to the cluster.</p>
+
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code><span class="nb">Copy</span>-ServiceFabricApplicationPackage -ApplicationPackagePath <span class="s1">'C:\release'</span> -ImageStoreConnectionString <span class="s1">'fabric:imagestore'</span> -ApplicationPackagePathInImageStore <span class="s1">'Apps\Hackathon'</span> -TimeoutSec 600
+</code></pre>
+</div>
+
+<p><strong>Step 13.</strong> Then we want to register the application type in our cluster.</p>
+
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code>Register-ServiceFabricApplicationType -ApplicationPathInImageStore <span class="s1">'Apps\Hackathon'</span> -TimeoutSec 600
+</code></pre>
+</div>
+
+<p><strong>Step 14.</strong> Now we want to create a new Service Fabric application.</p>
+
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code>New-ServiceFabricApplication -ApplicationName <span class="s1">'fabric:/Hackathon'</span> -ApplicationTypeName <span class="s1">'NodeAppType'</span> -ApplicationTypeVersion 1.0
+</code></pre>
+</div>
+
+<p><strong>Step 15.</strong> Go back to the Service Fabric dashboard and check to see if the application has deployed successfully.</p>
+
+<p>http://[your-server-cluster-address].[location].cloudapp.azure.com:19080/Explorer/index.html#/</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/azure12.png" alt="" /></p>
+
+<p><strong>Step 16.</strong> Now let’s see if the application is also running. Navigate to http://[your-server-cluster-address].[location].cloudapp.azure.com:3000 and you should see the following screen.</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/hackathon-landing.png" alt="" /></p>
+
+<h3 id="task-5-run-some-tests-against-the-cluster">Task 5: Run some tests against the cluster.</h3>
+
+<p>Now let’s cause some mayhem. Service Fabric provides a ‘chaos’ scenario that will causes faults across the entire Service Fabric cluster.</p>
+
+<p><em>“The chaos test scenario generates faults across the entire Service Fabric cluster. The scenario compresses faults generally seen over months or years to a few hours. The combination of interleaved faults with a high fault rate finds corner cases that would otherwise be missed.”</em></p>
+
+<p><strong>Step 1.</strong> Run the following commands in PowerShell.</p>
+
+<p>Firstly we want to connect to the cluster (note you may already be connected)
+    Connect-ServiceFabricCluster [your-server-cluster-address].[location].cloudapp.azure.com:19000</p>
+
+<p>Now for the core of the script. Specify a desired time to run (the below example will run for 10 minutes)</p>
+
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code><span class="nv">$timeToRun</span> <span class="o">=</span> 10
+<span class="nv">$maxStabilizationTimeSecs</span> <span class="o">=</span> 180
+<span class="nv">$concurrentFaults</span> <span class="o">=</span> 3
+<span class="nv">$waitTimeBetweenIterationsSec</span> <span class="o">=</span> 60
+
+Invoke-ServiceFabricChaosTestScenario -TimeToRunMinute <span class="nv">$timeToRun</span> -MaxClusterStabilizationTimeoutSec <span class="nv">$maxStabilizationTimeSecs</span> -MaxConcurrentFaults <span class="nv">$concurrentFaults</span> -EnableMoveReplicaFaults -WaitTimeBetweenIterationsSec <span class="nv">$waitTimeBetweenIterationsSec</span>
+</code></pre>
+</div>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/powershell.png" alt="" /></p>
+
+<p><strong>Step 2.</strong> While the test scenario is running you should be able to see errors occurring in the Service Fabric Explorer.</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/sf-error.png" alt="" /></p>
+
+<p><strong>Step 3.</strong> If we want to run some specific failures you can get a list of possible testability actions from here -&gt; https://azure.microsoft.com/en-us/documentation/articles/service-fabric-testability-actions/</p>
+
+<p>Let’s simulate a Service Fabric cluster node failure by stopping a node. To do this we will need to find the name of a node to test.</p>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/node-app.png" alt="" /></p>
+
+<p>Now that we have the node name of “_app_1” we can run our test.</p>
+
+<p><strong>Step 4.</strong> Run this sample in PowerShell</p>
+
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code>Connect-ServiceFabricCluster <span class="o">[</span>your-server-cluster-address].[location].cloudapp.azure.com:19000
+
+Stop-ServiceFabricNode -NodeName <span class="s2">"_app_1"</span>
+</code></pre>
+</div>
+
+<p><img src="/PartsUnlimited/assets/fiservicefabricstarter/node-down.png" alt="" /></p>
+
+<p><strong>Step 5.</strong> If you want to turn the node back on use the following command.</p>
+
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code><span class="nb">Start</span>-ServiceFabricNode -NodeName <span class="s2">"_app_1"</span>
+</code></pre>
+</div>
+
+<p><strong>Step 6.</strong> We can try another test scenario included in the Service Fabric SDK. This is the ‘fail-over test scenario’.</p>
+
+<p><em>“The failover test scenario targets a specific service partition instead of the entire cluster, and it leaves other services unaffected. The scenario iterates through a sequence of simulated faults in service validation while your business logic runs. A failure in service validation indicates an issue that needs further investigation. The failover test induces only one fault at a time, as opposed to the chaos test scenario, which can induce multiple faults.”</em></p>
+
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code>Connect-ServiceFabricCluster <span class="o">[</span>your-server-cluster-address].[location].cloudapp.azure.com:19000
+
+<span class="nv">$timeToRun</span> <span class="o">=</span> 10
+<span class="nv">$maxStabilizationTimeSecs</span> <span class="o">=</span> 180
+<span class="nv">$waitTimeBetweenFaultsSec</span> <span class="o">=</span> 10
+<span class="nv">$serviceName</span> <span class="o">=</span> <span class="s2">"fabric:/WebApp/WebAppService"</span>
+
+Invoke-ServiceFabricFailoverTestScenario -TimeToRunMinute <span class="nv">$timeToRun</span> -MaxServiceStabilizationTimeoutSec <span class="nv">$maxStabilizationTimeSecs</span> -WaitTimeBetweenFaultsSec <span class="nv">$waitTimeBetweenFaultsSec</span> -ServiceName <span class="nv">$serviceName</span> -PartitionKindSingleton
+</code></pre>
+</div>
+
+<p>We can again see in the portal the actual instances being tampered with in the Service Fabric Explorer.</p>
+
+<p>In this lab you have learned how to set up and deploy a node application to service fabric. You have also learned how to set up MongoDB in Azure with ease. You then ran some tests to ensure your infrastructure could handle some potential hosting issues - like nodes randomly restarting and going off-line. This would help with finding potential bottlenecks and fixing them before you release your application.</p>
+
+
+                    </div>
+                
+            </div>
+
+            
+
+            <div class="row">
+                <div id="footer" class="col-sm-12">
+                    Documentation for <a href="https://github.com/Microsoft/PartsUnlimited">PartsUnlimited</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+        
+    </body>
+</html>

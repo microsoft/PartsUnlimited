@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>PartsUnlimited : Continuous Deployment</title>
+        <meta name="description" content="example e-commerce website">
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/PartsUnlimited/css/syntax.css">
+        <link rel="stylesheet" href="/PartsUnlimited/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <div id="header" class="col-sm-12">
+                    <img class="logo" src="/PartsUnlimited/assets/logo-ms-dark.png" alt="Microsoft">
+<h4><a class="brand" href="/PartsUnlimited/">PartsUnlimited</a>
+    <small>example e-commerce website</small>
+</h4>
+
+                </div>
+            </div>
+
+            <div class="row">
+                
+                
+                    <div id="navigation" class="col-sm-3">
+                        <ul class="nav nav-list">
+    
+        <li><a href="/PartsUnlimited/">Welcome</a></li>
+    
+
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Basic DevOps Practices</li>
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/basic/manual-deployment.html">Manual Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/basic/ci.html">Continuous Integration</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a class="nav-active" href="/PartsUnlimited/basic/cd.html">Continuous Deployment</a></li>  
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/basic/QuickStart.html">Quick Start</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/basic/GettingStartedLinuxOSX.html">Getting Started on Linux and OSX</a></li>
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/basic/GettingStarted.html">Getting Started</a></li>
+            
+        
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Advanced DevOps Practices</li>
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/advanced/UserTelemetry.html">User Telemetry</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/advanced/UsageAnalysis.html">Usage Analysis</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/advanced/TestingProd.html">Testing in Production</a></li>
+            
+        
+            
+
+            
+                <li data-order="6"><a href="/PartsUnlimited/advanced/FeatureFlagWebAdvanced.html">Advanced Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/advanced/FeatureFlagWeb.html">Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="7"><a href="/PartsUnlimited/advanced/FeatureFlagMobile.html">Feature Flag for a Mobile Solution</a></li>
+            
+        
+            
+
+            
+                <li data-order="8"><a href="/PartsUnlimited/advanced/FeatureFlagAPI.html">Feature Flag for an API</a></li>
+            
+        
+            
+
+            
+                <li data-order="11"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabricStarter.html">Fault Injection for Service Fabric Hackathon Starter</a></li>
+            
+        
+            
+
+            
+                <li data-order="10"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabric.html">Fault Injection for Service Fabric</a></li>
+            
+        
+            
+
+            
+                <li data-order="9"><a href="/PartsUnlimited/advanced/FaultInjectionAzurePaaS.html">Fault Injection for Azure PaaS</a></li>
+            
+        
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/advanced/ErrorReporting.html">Error Reporting</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/advanced/ABTesting.html">Experimentation and A/B Testing with Optimzely</a></li>
+            
+        
+    
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class="divider"></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id="content" class="col-sm-9">
+                        <div class="page-header">
+    <h2>Continuous Deployment
+        
+    </h2>
+</div>
+
+<h1 id="hol---continuous-deployment-with-release-management-in-visual-studio-team-services">HOL - Continuous Deployment with Release Management in Visual Studio Team Services</h1>
+<p>In this lab, you have an application called PartsUnlimited, committed to a Git repo
+in Visual Studio Team Services (VSTS) and a Continuous Integration build that builds the app and
+runs unit tests whenever code is pushed to the master branch. Please refer to the
+<a href="ci">HOL - Parts Unlimited WebSite Continuous Integration with Visual Studio Team Services</a>
+in order to see how the CI build was set up.
+Now you want to set up Release Management (a feature of Visual Studio Team Services)
+to be able continuously deploy the application to an Azure Web App. Initially the
+app will be deployed to a <code class="highlighter-rouge">dev</code> deployment slot. The <code class="highlighter-rouge">staging</code> slot will require and
+approver before the app is deployed into it. Once an approver approves the <code class="highlighter-rouge">staging</code> slot,
+the app will be deployed to the production site.</p>
+
+<h3 id="video">Video</h3>
+
+<p><a href="https://channel9.msdn.com/Series/Parts-Unlimited-Labs/Parts-Unlimited-HOL-Continuous-Deployment"><img src="/PartsUnlimited/assets/cd/thumbnail.png" alt="" /></a></p>
+
+<h2 id="pre-requisites">Pre-requisites:</h2>
+<ul>
+  <li>An active Visual Studio Team Services account</li>
+  <li>An Visual Studio 2015 Update 3 client</li>
+  <li>Project Admin rights to the Visual Studio Team Services account</li>
+  <li>
+    <p>An active Azure account to host the PartsUnlimited Website as a Web App</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: In order to use deployment slots, you’ll need to configure the Web App to use Standard or Premium App Service Plan mode. You <strong>cannot</strong> create deployment slots for Basic or Free Azure Web Apps. To learn more about deployment slots, see <a href="https://azure.microsoft.com/en-us/documentation/articles/web-sites-staged-publishing/">this article</a>.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>You have completed the <a href="ci">HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services</a></p>
+  </li>
+  <li>
+    <p>An organizational account that is a co-administrator on your Azure account</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: This is required because deploying <a href="https://azure.microsoft.com/en-us/documentation/articles/resource-group-authoring-templates/">ARM Templates</a> to Azure requires an organizational account or a <a href="http://blogs.msdn.com/b/visualstudioalm/archive/2015/10/04/automating-azure-resource-group-deployment-using-a-service-principal-in-visual-studio-online-build-release-management.aspx">Service Principal</a>. MSA Account and certificate-based connections are not supported. For this HOL, you will use an organizational account.</p>
+    </blockquote>
+  </li>
+</ul>
+
+<h2 id="tasks-overview">Tasks Overview:</h2>
+<p><strong>1. Complete the <a href="ci">HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services</a>.</strong>
+This will walk through creating a Visual Studio Team Services account, committing the PartsUnlimited source code
+and setting up the Continuous Integration (CI) build.</p>
+
+<p><strong>2. Modify the CI Build to include ARM Templates</strong>
+The source code already defines the infrastructure required by the application in code (Infrastructure as Code). The
+code is a json file based on the Azure Resource Manager (ARM) template schema. You will use the template to deploy
+or update the infrastructure as part of the release.</p>
+
+<p><strong>3. Create a Service Endpoint in Visual Studio Team Services to an Azure Account.</strong>
+In this step you’ll download your Azure publish settings file and create Service Endpoint in Visual Studio Team Services for
+your Azure account. This will enable you to configure deployment of the PartsUnlimited Website to Azure as an Azure
+Web Application from Builds or Releases.</p>
+
+<p><strong>4. Create a Release Pipeline for the Parts Unlimited Website.</strong>
+In this step, you will create a Release definition for the PartsUnlimited Website. You’ll use the CI build output
+as the input artefact for the Release and then define how the release moves through <code class="highlighter-rouge">environments</code> with approvals
+in between.</p>
+
+<p><strong>5. Trigger a Release.</strong>
+Once the Release Definition is set up, you will trigger a release and see the pipeline in action.</p>
+
+<h2 id="hol">HOL:</h2>
+<h3 id="task-1-complete-hol---parts-unlimited-website-continuous-integration-with-visual-studio-team-services">Task 1: Complete HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services</h3>
+<p>Make sure you’ve completed <a href="ci">HOL - Parts Unlimited Website Continuous Integration with Visual Studio Team Services</a>.</p>
+
+<h3 id="task-2-modify-the-ci-build-to-include-the-arm-templates">Task 2: Modify the CI Build to include the ARM Templates</h3>
+<p>In order to deploy to Azure, you’re going to specify the infrastructure that the PartsUnlimited Website requires. For example, the site requires an Azure SQL Database and an Azure Web App. Rather than create these by hand, you are going to use the Azure Resource Manager (ARM) templates that describe this infrastructure in a json file. This is good practice, since you’re describing infrastructure as code.</p>
+
+<p>The task that will deploy the ARM template will create the resource group if it does not exist. If the resource group does
+exist, then the template is used to update the existing resources.</p>
+
+<blockquote>
+  <p><strong>Note:</strong> The infrastructure described in the ARM templates for this HOL will create resources that are not free. It creates an Azure Web App with 3 deployment slots. Deployment slots are only available on Standard or Premium App Service Plans. They are <strong>not</strong> available on Free or Basic plans. Once you’ve completed this lab, you probably want to delete the resource group in order to minimize charges to your Azure account.</p>
+</blockquote>
+
+<p><strong>Step 1.</strong> Log into your VSTS account and click on the BUILD hub.</p>
+
+<p><strong>Step 2.</strong> Click the HOL Build that you configured in the Continuous Integration HOL, and click “Edit”.</p>
+
+<p><strong>Step 3.</strong> Click “+ Add build step…” and add a new “Publish Build Artifacts”. Configure it as follows:
+	<img src="/PartsUnlimited/assets/cd/49.png" alt="" />
+	* For <code class="highlighter-rouge">Path to Publish</code>, click the “…” button and browse to the env/Templates folder
+	* For <code class="highlighter-rouge">Artifact Name</code>, enter “ARMTemplates”
+	* For <code class="highlighter-rouge">Artifact Type</code>, select “Server”</p>
+
+<p><strong>Step 4.</strong> Save the updated build definition and queue a new build by clicking the “Queue new build” button. Accept the defaults and click OK.</p>
+
+<blockquote>
+  <p><strong>Note:</strong> The build process may take a while, but there is no need to await its completion before proceeding. Come back and do the last step after task 3.</p>
+</blockquote>
+
+<p><strong>Step 5.</strong> When the build has completed, verify that there are 2 folders: drop and ARMTemplates.</p>
+
+<p><img src="/PartsUnlimited/assets/cd/55.png" alt="" /></p>
+
+<ul>
+  <li>
+    <p>The drop folder should contain a single file: PartsUnlimitedWebsite.zip (click “Explore” to view the contents)</p>
+  </li>
+  <li>
+    <p>The ARMTemplates folder should contain a number of environment template and parameters JSON files.</p>
+  </li>
+</ul>
+
+<h3 id="task-3-create-a-service-link-from-visual-studio-team-services-to-an-azure-account">Task 3: Create a Service Link from Visual Studio Team Services to an Azure Account</h3>
+<p>In order to interact with Azure, you’ll need to create a Service Endpoint in VSTS. This Endpoint includes the
+authentication information required to deploy to Azure.</p>
+
+<blockquote>
+  <p><strong>Note</strong>: Deploying <a href="https://azure.microsoft.com/en-us/documentation/articles/resource-group-authoring-templates/">ARM Templates</a> to Azure from Release Management requires an organizational account or a <a href="http://blog.jstroheker.com/2016/10/11/SPNAzure/">Service Principal</a>. MSA Accounts and certificate-based connections are not supported. For this HOL, you will use an organizational account, but you can create a Service Principal if you wish to.</p>
+</blockquote>
+
+<p><strong>Step 1.</strong>  Create an organizational account in Azure</p>
+<ol>
+  <li>Create a user in the Azure Active Directory from the old Azure portal (https://manage.windowsazure.com). If you do not have
+a custom domain, then use the <code class="highlighter-rouge">onmicrosoft.com</code> domain (the default domain). The user should be something like <code class="highlighter-rouge">testuser@myazure.onmicrosoft.com</code></li>
+  <li>After adding the account, the following two things need to be done to use the account during a VSTS release:
+    <ul>
+      <li>Add the Active Directory account to the co-administrators in the subscription. Go to the Settings hub (click on the Gear
+ icon in the left-hand main menu) and then click on administrators and add the account as a co-admin.</li>
+      <li>Login to the portal with this Active Directory account (e.g. <code class="highlighter-rouge">testuser@myazure.onmicrosoft.com</code>, and change the password.
+ Initially a temporary password is created and that needs to be changed at the first login.</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Step 2.</strong>  Create an Azure Service Endpoint in Visual Studio Team Services</p>
+<ol>
+  <li>Log in to your VSTS account.</li>
+  <li>
+    <p>Open the project administration page by clicking the gear icon in the upper right.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/1.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Click on the Services tab</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/2.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Click on “New Service Endpoint” and select Azure Resource Manager from the list</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/3.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Fill out the form below to create a <a href="http://blog.jstroheker.com/2016/10/11/SPNAzure/">Service Pincipal</a>. Click on “Verify connection” button to check that all details were filed in correctly and then click on “OK” button.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/4.png" alt="" /></p>
+  </li>
+  <li>
+    <p>You should see a new Service Endpoint. You can close the project administration page.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/5.png" alt="" /></p>
+  </li>
+</ol>
+
+<h3 id="task-4-create-a-release-definition">Task 4: Create a Release Definition</h3>
+<p>Now that you have an Azure Service Endpoint to deploy to, and a package to deploy (from your CI build),
+you can create a Release Definition. The Release Definition defines how your application moves through
+various Environments, including Tasks to update infrastructure, deploy your application, run scripts and
+run tests. You can also configure incoming or outgoing approvals for each Environment.</p>
+
+<p>An Environment is simply a logical grouping of tasks - it may or may not correspond to a set of machines.
+For this Release Definition, you will create 3 Environments: Dev, Staging and Production.</p>
+
+<p>The infrastructure required for all 3 environments is described in an ARM Template. The ARM Template will
+be invoked during the deployment in the Dev Environment before deploying the website to Dev. It will not
+be necessary to run any infrastructure tasks during Staging or Production deployments in this case.</p>
+
+<p><strong>Step 1.</strong>  Create a Release Definition to Deploy Infrastructure and Deploy to Dev</p>
+
+<ol>
+  <li>
+    <p>In VSTS, click on Releases. Then click on the “+ New definition” button to create a new definition. This will	launch a wizard prompting you to select a deployment template. Click on “Empty” to start with an empty	release and click “Next”. For this lab you can simply use the defaults on the next page of the wizard and click “Create”.
+ <img src="/PartsUnlimited/assets/cd/6.png" alt="" /></p>
+  </li>
+  <li>
+    <p>The template has created a single Environment (called Environment 1).</p>
+  </li>
+  <li>
+    <p>Enter “PartsUnlimited” into the name field at the top to name this Release Definition.</p>
+  </li>
+  <li>
+    <p>Before completing the “Azure Web App Deployment” task, you’ll need to configure the source package. Click on the “Artifacts” link.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/7.png" alt="" /></p>
+  </li>
+  <li>
+    <p>If build definition did not get linked automatically then click on “Link to an artifact source” link, otherwise check that it has the correct settings.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/8.png" alt="" /></p>
+  </li>
+  <li>
+    <p>You’ll now link this Release Definition to the CI build. Select the Project and Build from the drop downs and click “Link”.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/9.png" alt="" /></p>
+    <blockquote>
+      <p><strong>Note:</strong> It is possible to Link other package sources, but you only need the CI build for this Release.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Click on the Environments link to go back to the Environments page.</p>
+  </li>
+  <li>
+    <p>Click the name label “Environment 1” and change the name to “Dev”.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/12.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Click on the “+ Add tasks” button to add a task for this environment. In the “Deploy” group, click the “Add”
+button next to “Azure Resource Group Deployment” to add the task. Close the “Task catalogue” dialog.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/42.png" alt="" /></p>
+  </li>
+  <li>Click on the “Azure Resource Group Deployment” task. Configure it as follows:
+    <ul>
+      <li><code class="highlighter-rouge">Azure Connection Type</code>: Azure Resource Manager</li>
+      <li><code class="highlighter-rouge">Azure RM Subscription</code>: select the Azure subscription endpoint that you created in Task 2</li>
+      <li><code class="highlighter-rouge">Action</code>: select “Create or Update Resource Group”</li>
+      <li><code class="highlighter-rouge">Resource Group</code>: enter <code class="highlighter-rouge">$(ResourceGroupName)</code> into the box, you will create a variable named this shortly.</li>
+      <li><code class="highlighter-rouge">Location</code>: select an Azure location</li>
+      <li>
+        <p><code class="highlighter-rouge">Template</code>: click the “…” button and browse to the FullEnvironmentSetupMerged.json file in the ARMTemplates
+folder.</p>
+
+        <p><img src="/PartsUnlimited/assets/cd/43.png" alt="" /></p>
+      </li>
+      <li>
+        <p><code class="highlighter-rouge">Template Parameters</code>: click the “…” button and browse to the FullEnvironmentSetupMerged.param.json file in the ARMTemplates folder.</p>
+
+        <p><img src="/PartsUnlimited/assets/cd/56.png" alt="" /></p>
+      </li>
+      <li><code class="highlighter-rouge">Override Template Parameters</code>: Enter the following in a single line (shown split here for convenience):
+        <div class="language-powershell highlighter-rouge"><pre class="highlight"><code>  -WebsiteName <span class="k">$(</span>WebsiteName<span class="k">)</span>
+  -PartsUnlimitedServerName <span class="k">$(</span>ServerName<span class="k">)</span>
+  -PartsUnlimitedHostingPlanName <span class="k">$(</span>HostingPlan<span class="k">)</span>
+  -CdnStorageAccountName <span class="k">$(</span>StorageAccountName<span class="k">)</span>
+  -CdnStorageContainerName <span class="k">$(</span>ContainerName<span class="k">)</span>
+  -CdnStorageAccountNameForDev <span class="k">$(</span>StorageAccountName<span class="k">)</span>-dev
+  -CdnStorageContainerNameForDev <span class="k">$(</span>ContainerName<span class="k">)</span>-dev
+  -CdnStorageAccountNameForStaging <span class="k">$(</span>StorageAccountName<span class="k">)</span>-stage
+  -CdnStorageContainerNameForStaging <span class="k">$(</span>ContainerName<span class="k">)</span>-stage
+  -PartsUnlimitedServerAdminLoginPassword <span class="o">(</span><span class="nb">ConvertTo-SecureString</span> -String <span class="s1">'$(AdminPassword)'</span> -AsPlainText -Force<span class="o">)</span>
+  -PartsUnlimitedServerAdminLoginPasswordForTest <span class="o">(</span><span class="nb">ConvertTo-SecureString</span> -String <span class="s1">'$(AdminTestPassword)'</span> -AsPlainText -Force<span class="o">)</span>
+</code></pre>
+        </div>
+        <p>You will shortly define the values for each parameter, like <code class="highlighter-rouge">$(ServerName)</code>, in the Environment variables.</p>
+        <blockquote>
+          <p><strong>Note</strong>: If you open the FullEnvironmentSetupMerged.param.json file, you will see empty placeholders for these parameters. You could hard code values in the file instead of specifying them as “overrides”. Either way is valid. If you do specify  values in the params file, remember that in order to change values, you would have to edit the file, commit and create a  new build in order for the Release to have access the new values.</p>
+        </blockquote>
+      </li>
+      <li>Make sure the <code class="highlighter-rouge">Output -&gt; Resource Group</code> parameter is empty. It is not required for this release.</li>
+    </ul>
+  </li>
+  <li>
+    <p>Click on the ellipsis (…) button next to the Environment and select “Configure variables…”</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/44.png" alt="" /></p>
+  </li>
+  <li>Create the following variables, adding values too.
+    <ul>
+      <li><strong>WebsiteName</strong> - Name of the website in Azure</li>
+      <li><strong>ServerName</strong> - Prefix for the name of the database servers. Will have <code class="highlighter-rouge">-dev</code> or <code class="highlighter-rouge">-stage</code> added for dev/staging</li>
+      <li><strong>HostingPlan</strong> - Name of the hosting plan for the website</li>
+      <li><strong>StorageAccountName</strong> - Storage account name prefix. Will have <code class="highlighter-rouge">-dev</code> or <code class="highlighter-rouge">-stage</code> added for dev/staging</li>
+      <li><strong>ContainerName</strong> - Container name prefix. Will have <code class="highlighter-rouge">-dev</code> or <code class="highlighter-rouge">-stage</code> added for dev/staging</li>
+      <li><strong>AdminPassword</strong> - Admin password for production database server</li>
+      <li><strong>AdminTestPassword</strong> - Admin password for dev and staging database servers</li>
+      <li>
+        <p><strong>ResourceGroupName</strong> - Name of the Resource Group.</p>
+
+        <p><img src="/PartsUnlimited/assets/cd/50.png" alt="" /></p>
+        <blockquote>
+          <p><strong>Note</strong>: Use unique values for your variables by adding something custom at the end like your initials. Example for WebsiteName : pudncorejstr</p>
+        </blockquote>
+
+        <blockquote>
+          <p><strong>Note</strong>: You can hide passwords and other sensitive fields by clicking the padlock icon to the right of the value text box.</p>
+        </blockquote>
+      </li>
+    </ul>
+  </li>
+  <li>Save the definition.</li>
+</ol>
+
+<p><strong>Step 2.</strong> Test the ARM Template Deployment</p>
+
+<p>Before moving on, it is a good idea to test the template so far.</p>
+
+<ol>
+  <li>
+    <p>Click on “+ Release” in the toolbar and select “Create Release” to start a new release.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/45.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Select the latest build from the drop-down, and then select “Dev” as the target environment.
+Click “Create” to start the release.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/46.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Click the “Release-x” link to open the release.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/47.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Click on the Logs link to open and monitor the deployment logs.</p>
+  </li>
+  <li>
+    <p>You should see a successful release after a few minutes.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/51.png" alt="" /></p>
+  </li>
+  <li>
+    <p>If you log into the Azure Portal, you will see the Resource Group has been created.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/52.png" alt="" /></p>
+  </li>
+</ol>
+
+<p><strong>Step 3.</strong>  Add Web Deployment Tasks to Deploy the Web App</p>
+
+<p>Now that the infrastructure deployment is configured, you can add a task to deploy the web app to Dev.</p>
+
+<ol>
+  <li>Click on the Dev environment in the Release Definition. Then click “+ Add tasks”.</li>
+  <li>
+    <p>Select the “Deploy” group in the left and click the add button next to “AzureRM Web App Deployment” to add the task. Close the task selector dialog.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/57.png" alt="" /></p>
+  </li>
+  <li>Click on the “AzureRM Web App Deployment” Task.</li>
+  <li>Select the Azure Service Endpoint you created earlier in the AzureRM Subscription drop down.</li>
+  <li>For Web App Name, enter the <code class="highlighter-rouge">$(WebsiteName)</code> to use a variable. You defined this variable earlier when deploying
+the ARM Template. You will shortly “promote” it to a Release variable so that it can be used in all Environments in the Release.</li>
+  <li>Check the Deploy to Slot check box</li>
+  <li>Enter <code class="highlighter-rouge">$(ResourceGroupName)</code> into the Resource Group Box.</li>
+  <li>Enter “dev” for the Slot. This will deploy the site to the “dev” deployment slot. This allows you to deploy the site to an Azure deployment slot without affecting the Production site.</li>
+  <li>Tick “Take App Offline”. This stops the website for deployment period and takes it back online afterwards. This is required because sites receive requests all the time causing files to lock down (i.e. making them unmodifiable).</li>
+  <li>
+    <p>Click the ellipsis (…) button, next to the Package box, to set the Web Deploy Package location. Browse to the PartsUnlimitedWebsite.zip file and click OK.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/10.png" alt="" /></p>
+  </li>
+  <li>Clear the “Additional Arguments” parameter. The ARM template you deployed has already configured all the slot-specific
+app settings and connection strings.</li>
+  <li>
+    <p>The Task should look like this:</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/11.png" alt="" /></p>
+    <blockquote>
+      <p><strong>Note</strong>: It is a good practice to run smoke tests to validate the website after deployment, or to run load tests. The code-base you are using
+does not have any such tests defined. You can also run quick cloud-performance tests to validate that the site is up and running. For more
+information on quick load tests, see <a href="https://channel9.msdn.com/Events/Visual-Studio/Connect-event-2015/Cloud-Loading-Testing-in-Visual-Studio-Team-Service">this video</a>
+from around the 6 minute mark.</p>
+    </blockquote>
+  </li>
+  <li>Promote the WebSite Environment variables to a Release Variables
+    <ul>
+      <li>Click on the “Dev” environment, click the ellipsis (…) button select “Configure Variables”.</li>
+      <li>Make a note of the <code class="highlighter-rouge">WebsiteName</code> and <code class="highlighter-rouge">ResourceGroupName</code> variables’ values and delete them from this list. Click OK.</li>
+      <li>Click on “Variables” to open the Release variables. These are “global” variables that any Environment can use.</li>
+      <li>Enter “WebsiteName” for the name and enter the value for the Website in Azure.
+ Enter “ResourceGroupName” for the name and enter the value for the Resource group in Azure.</li>
+    </ul>
+
+    <p><img src="/PartsUnlimited/assets/cd/53.png" alt="" /></p>
+  </li>
+  <li>Click Save to save the Release Definition.</li>
+</ol>
+
+<p><strong>Step 4.</strong>  Test the Dev Environment</p>
+
+<p>You will shortly clone the Dev Environment into both Staging and Prod environments. However, before you do that
+it’s a good idea to test that the Dev Environment is correctly configured by creating a new Release.</p>
+
+<ol>
+  <li>
+    <p>Click on the “+ Release” button and select Create Release.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/15.png" alt="" /></p>
+  </li>
+  <li>You can enter a Release Description if you want to.</li>
+  <li>Select the latest build from the HOL Build drop down and click on “Create”.</li>
+  <li>
+    <p>Click the Release link to open the Release.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/21.png" alt="" /></p>
+  </li>
+  <li>Click on the Logs link to open the deployment logs.</li>
+  <li>
+    <p>Once the deployment completes, you can check that the site was in fact deployed successfully by navigating to the site url.</p>
+
+    <blockquote>
+      <p>Since you deployed to the dev slot, you will need to navigate to <code class="highlighter-rouge">http://{siteName}-dev.azurewebsites.net</code> where siteName is the name of your Web App in Azure.</p>
+    </blockquote>
+
+    <p><img src="/PartsUnlimited/assets/cd/27.png" alt="" /></p>
+
+    <blockquote>
+      <p>By default you will only receive email notifications on failed release. This can be changed in settings for each environment. Click the ellipsis (…) on the Dev Environment card and select “Assign approvers..”. Navigate to “General tab” and set the desired behavior.</p>
+    </blockquote>
+  </li>
+</ol>
+
+<p><strong>Step 5.</strong>  Clone the Dev environment to Staging and Production</p>
+
+<p>Now that you have verified that the Dev Environment is configured correctly, you can clone it to Staging and Production.</p>
+
+<ol>
+  <li>
+    <p>Click on the PartsUnlimited link and then the Edit link to open the Release Definition.</p>
+
+    <blockquote>
+      <p><strong>Note:</strong> It is possible to change the definition for a Release without changing the Release Definition (i.e. the Release is an instance of the Release Definition that you can edit). You want to make sure that you are editing the Release Definition, not a Release.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Click the ellipsis (…) on the Dev Environment card and select “Clone environment”.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/28.png" alt="" /></p>
+  </li>
+  <li>
+    <p>In the Dev Environment, you did not define any approvers. For Staging, however, you should configure approvers. In “Pre-deployment approval” section choose people who will approve deployments to staging environment and click “Create”.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/13.png" alt="" /></p>
+  </li>
+  <li>A new Environment is created. Enter “Staging” for the name.</li>
+  <li>Delete the “Azure Resource Group Deployment” task. This is not required in this Environment since the ARM template deployed the infrastructure for all 3 environments.</li>
+  <li>Click the ellipsis (…) on the Staging Environment card and select “Configure variables”.</li>
+  <li>Delete all the variables. These are used by the “Azure Resource Group Deployment” task which you just deleted, so they are not necessary in this Environment.</li>
+  <li>
+    <p>On the Azure Web App Deployment task, set the Slot to <code class="highlighter-rouge">staging</code>.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/29.png" alt="" /></p>
+
+    <blockquote>
+      <p><strong>Note</strong>: If you had environment-specific variables, you would be able to set Staging-specific values. It is not necessary in this case.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>When we cloned dev to staging we set one person for staging’s pre-approvals. We can adjust it even further by clicking ellipsis (…) on the Staging Environment card and select “Assign approvers…”. For this HOL, you can be both incoming and the outgoing approver.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/14.png" alt="" /></p>
+  </li>
+  <li>In this case, you want to pause the deployment coming in. This ensures that if someone is testing in the Staging environment,
+they don’t suddenly get a new build unexpectedly.</li>
+  <li>
+    <p>Configure approvers for the Staging environment</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/33.png" alt="" /></p>
+
+    <blockquote>
+      <p><strong>Pre-deployment approvers</strong> must approve a deployment coming <em>into</em> the environment. The deployment will stop and wait before executing any tasks in the environment until approval is granted.<br /> <strong>Post-deployment approvers</strong> approve deployments so that the <em>next</em> Environment can begin. They act as sign-off for the current environment.<br /> <strong>Approvers</strong> can be individuals or groups.</p>
+    </blockquote>
+  </li>
+  <li>Clone the Staging environment to Production.
+    <ul>
+      <li>Untick “Deploy to Slot” (i.e. the site will be deployed to the production slot).</li>
+      <li>Update the approvers - again, you can be both approvers.</li>
+    </ul>
+  </li>
+  <li>Save the Release Definition.</li>
+</ol>
+
+<p><strong>Step 6.</strong> Configure Continuous Deployment for this Release Definition</p>
+
+<ol>
+  <li>Click on the Triggers link of the Release Definition.</li>
+  <li>For “Release trigger” pick “Continuous Deployment” and set trigger to the build definition created before.
+    <blockquote>
+      <p>Selecting the build as the trigger means that any time the artifact build
+completes, a new release will automatically start using the latest build.</p>
+    </blockquote>
+  </li>
+  <li>Set “Environment triggers” to the following settings:
+    <ul>
+      <li>Deployment to “Dev” environment should be triggered after release is created.</li>
+      <li>Deployment to “Staging” can be triggered on successful deployment to “Dev”.</li>
+      <li>Deployment to “Production” can be triggered on successful deployment to “Staging”.</li>
+    </ul>
+
+    <p><img src="/PartsUnlimited/assets/cd/35.png" alt="" /></p>
+
+    <blockquote>
+      <p><strong>Note:</strong> Since the incoming build for this release is a CI build, you probably don’t want to deploy the build all the way to Production. Setting the Release to stop at Dev means that you will need to create a new Release with Production as the target environment if you want to deploy to Production. This is of course configurable according to your own preference.</p>
+    </blockquote>
+  </li>
+</ol>
+
+<h3 id="task-5-create-a-release">Task 5: Create a Release</h3>
+<p>Now that you have configured the Release Pipeline, you are ready to trigger a complete
+release.</p>
+
+<ol>
+  <li>Click on “+ Release” to create a new Release.</li>
+  <li>
+    <p>Select the latest build, click Create.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/36.png" alt="" /></p>
+    <blockquote>
+      <p><strong>Note</strong>: You can adjust whether to deploy this release to a particular environment.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Once the Dev stage has completed deployment, you will see a notification that
+an approval is pending (you will also have received an email notification if you ticked “Send an email notification to the approver whom the approval is pending on” option in settings for this environment).
+Check the dev slot of the PartsUnlimited site in Azure to ensure that the Dev
+environment is good, and then click Approve.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/37.png" alt="" /></p>
+  </li>
+  <li>
+    <p>You can also see pending approvals in the overview pane:</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/32.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Optionally enter a comment and click the Approve button.</p>
+  </li>
+  <li>This will trigger the release into the Staging environment.
+    <blockquote>
+      <p><strong>Note</strong>: You can reassign the approval if required.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Once the Staging deployment has completed, you will need to approve that
+staging is OK.</p>
+  </li>
+  <li>
+    <p>This will then trigger the pre-approval for Production. Once you’ve approved
+that, deployment into the Production environment will begin.</p>
+  </li>
+  <li>
+    <p>To see all your releases and where they are in their respective pipelines, click on All Releases and then click the Overview link.</p>
+
+    <p><img src="/PartsUnlimited/assets/cd/39.png" alt="" /></p>
+  </li>
+</ol>
+
+<h2 id="congratulations">Congratulations!</h2>
+<p>You’ve completed this HOL!</p>
+
+<blockquote>
+  <p><strong>Note:</strong> Deployment of schemas and data is beyond the scope of this HOL. It is recommended that you investigate
+<a href="https://msdn.microsoft.com/en-us/library/hh272686(v=vs.103).aspx">SQL Server Data Tools (SSDT)</a> for
+managing database schema deployments.</p>
+</blockquote>
+
+<h2 id="further-reading">Further Reading</h2>
+<ol>
+  <li><a href="https://msdn.microsoft.com/Library/vs/alm/release/overview-rmpreview">Release Management for Visual Studio Team Services</a></li>
+  <li><a href="https://channel9.msdn.com/Events/Visual-Studio/Connect-event-2015/Cloud-Loading-Testing-in-Visual-Studio-Team-Service">Cloud Load Testing in Visual Studio Team Services</a></li>
+  <li><a href="../advanced/UserTelemetry">User Telemetry and Application Performance Monitoring with Application Insights</a></li>
+  <li><a href="../advanced/TestingProd">Testing in Production with Azure Websites - PartsUnlimited</a></li>
+</ol>
+
+
+                    </div>
+                
+            </div>
+
+            
+
+            <div class="row">
+                <div id="footer" class="col-sm-12">
+                    Documentation for <a href="https://github.com/Microsoft/PartsUnlimited">PartsUnlimited</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+        
+    </body>
+</html>

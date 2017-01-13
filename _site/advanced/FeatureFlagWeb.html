@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>PartsUnlimited : Feature Flag for Web Applications</title>
+        <meta name="description" content="example e-commerce website">
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/PartsUnlimited/css/syntax.css">
+        <link rel="stylesheet" href="/PartsUnlimited/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <div id="header" class="col-sm-12">
+                    <img class="logo" src="/PartsUnlimited/assets/logo-ms-dark.png" alt="Microsoft">
+<h4><a class="brand" href="/PartsUnlimited/">PartsUnlimited</a>
+    <small>example e-commerce website</small>
+</h4>
+
+                </div>
+            </div>
+
+            <div class="row">
+                
+                
+                    <div id="navigation" class="col-sm-3">
+                        <ul class="nav nav-list">
+    
+        <li><a href="/PartsUnlimited/">Welcome</a></li>
+    
+
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Basic DevOps Practices</li>
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/basic/manual-deployment.html">Manual Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/basic/ci.html">Continuous Integration</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/basic/cd.html">Continuous Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/basic/QuickStart.html">Quick Start</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/basic/GettingStartedLinuxOSX.html">Getting Started on Linux and OSX</a></li>
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/basic/GettingStarted.html">Getting Started</a></li>
+            
+        
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Advanced DevOps Practices</li>
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/advanced/UserTelemetry.html">User Telemetry</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/advanced/UsageAnalysis.html">Usage Analysis</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/advanced/TestingProd.html">Testing in Production</a></li>
+            
+        
+            
+
+            
+                <li data-order="6"><a href="/PartsUnlimited/advanced/FeatureFlagWebAdvanced.html">Advanced Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a class="nav-active" href="/PartsUnlimited/advanced/FeatureFlagWeb.html">Feature Flag for Web Applications</a></li>  
+            
+        
+            
+
+            
+                <li data-order="7"><a href="/PartsUnlimited/advanced/FeatureFlagMobile.html">Feature Flag for a Mobile Solution</a></li>
+            
+        
+            
+
+            
+                <li data-order="8"><a href="/PartsUnlimited/advanced/FeatureFlagAPI.html">Feature Flag for an API</a></li>
+            
+        
+            
+
+            
+                <li data-order="11"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabricStarter.html">Fault Injection for Service Fabric Hackathon Starter</a></li>
+            
+        
+            
+
+            
+                <li data-order="10"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabric.html">Fault Injection for Service Fabric</a></li>
+            
+        
+            
+
+            
+                <li data-order="9"><a href="/PartsUnlimited/advanced/FaultInjectionAzurePaaS.html">Fault Injection for Azure PaaS</a></li>
+            
+        
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/advanced/ErrorReporting.html">Error Reporting</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/advanced/ABTesting.html">Experimentation and A/B Testing with Optimzely</a></li>
+            
+        
+    
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class="divider"></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id="content" class="col-sm-9">
+                        <div class="page-header">
+    <h2>Feature Flag for Web Applications
+        
+    </h2>
+</div>
+
+<h1 id="hol---feature-flag-for-web-applications">HOL - Feature Flag for Web Applications</h1>
+<p>Feature flags provide the ability to turn features of your application on and off at a moments notice, no code deployments required. With feature flags you can test your features in production, getting early feedback from a subset of production users, and incrementally enable it to different sets of users. Once the feature is enabled for everyone and becomes part of the product, the flag code can be removed.
+In this lab you will add the foundation for feature flags to the PartsUnlimited project, and implement a simple feature flag for phone number validation. 
+The users will be able to self-subscribe to this feature. For your own projects you can decide how the flags are enabled and to which customers.</p>
+
+<p>Note: <a href="https://launchdarkly.com/">Launch Darkly</a> is a great option for more advanced feature flag management. Version 3.0.0 of the Launch Darkly SDK supports .NET core.</p>
+
+<h3 id="pre-requisites">Pre-requisites:</h3>
+<ul>
+  <li>Visual Studio 2015 Update 3 or higher</li>
+</ul>
+
+<h3 id="tasks-overview">Tasks Overview:</h3>
+<p><strong>Task 1. Add the backend code required for feature flags</strong> - in this task we will add in the required code to enable feature flags for our application.</p>
+
+<p><strong>Task 2. Create a new page under the user section for users to enable/disable features</strong> - in this task we will add a section for users to opt in for specific features.</p>
+
+<p><strong>Task 3. Try it out!</strong> - in this task we will try out our feature flag to ensure it’s working as expected.</p>
+
+<p>###Task 1: Add the backend code required for feature flags</p>
+
+<p><strong>Step 1.</strong> Clone the PartsUnlimited repository to a local directory.</p>
+
+<ul>
+  <li>
+    <p>Open a command line (one that supports Git) and navigate to the directory where you want to store your local repositories. For example in a Windows OS, you can create and navigate to <code class="highlighter-rouge">C:\Source\Repos</code>.</p>
+  </li>
+  <li>
+    <p>Clone the repository with the following command:</p>
+
+    <p>git clone https://github.com/Microsoft/PartsUnlimited.git</p>
+    <blockquote>
+      <p>After a few seconds of downloading, all of the code should now be on your local machine.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Move into the repository directory that was just created. In a Windows OS, you can use this command:</p>
+
+    <p>cd PartsUnlimited</p>
+  </li>
+</ul>
+
+<p><strong>Step 2.</strong> Open the PartsUnlimited solution with Visual Studio</p>
+
+<p>In the command line, type the following.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>start PartsUnlimited.sln
+</code></pre>
+</div>
+
+<p>Or navigate to where you cloned the repository to e.g. <code class="highlighter-rouge">C:\Source\Repos\PartsUnlimited</code> with explorer and double click on PartsUnlimited.sln</p>
+
+<p><strong>Step 3.</strong> Let’s create a folder for our feature flag related classes. On the PartsUnlimitedWebsite solution, right click and create a new folder. We can call it something like ‘FeatureFlag’.</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/new-folder.png" alt="" /></p>
+
+<p><strong>Step 4.</strong> Now we will create the first feature flag class, this will represent a feature flag in our application. Right click on the newly created <strong>FeatureFlag</strong> folder -&gt; select <strong>‘Add’</strong> -&gt; select <strong>‘Class…‘</strong>.</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/new-class.png" alt="" /></p>
+
+<p><strong>Step 5.</strong> Name the new class <strong>‘Feature.cs’</strong> then select <strong>‘Add’</strong></p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/modal-class.png" alt="" /></p>
+
+<p><strong>Step 6.</strong> Add the following properties for the Feature.cs class</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Feature</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Key</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Description</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">bool</span> <span class="n">Active</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<ul>
+  <li><strong>Key</strong> is going to be the unique identifier for that particular feature flag.</li>
+  <li><strong>Description</strong> is going to be a brief description of what the feature flag is for.</li>
+  <li><strong>Active</strong> is going to be the current state for the feature flag.</li>
+</ul>
+
+<p><strong>Step 7.</strong> We also want to add a property in ApplicationUser.cs called <strong>ActiveFeatures</strong></p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">ApplicationUser</span> <span class="p">:</span> <span class="n">IdentityUser</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">ActiveFeatures</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 8.</strong> Now we want to create a simple feature manager class. This will be used later on to toggle our features on and off. Under the same FeatureFlag folder create a new class called <strong>FeatureManager.cs</strong></p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Security.Claims</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Threading.Tasks</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Microsoft.AspNetCore.Identity</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">PartsUnlimited.Models</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">interface</span> <span class="n">IFeatureManager</span>
+<span class="p">{</span>
+    <span class="n">Task</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="nf">GetStatusByKey</span><span class="p">(</span><span class="kt">string</span> <span class="n">key</span><span class="p">,</span> <span class="n">ClaimsPrincipal</span> <span class="n">userClaim</span><span class="p">);</span>
+    <span class="n">Task</span> <span class="nf">ChangeFeatureToggles</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">selectedItems</span><span class="p">,</span> <span class="n">ClaimsPrincipal</span> <span class="n">userClaim</span><span class="p">);</span>
+    <span class="n">Task</span><span class="p">&lt;</span><span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">Feature</span><span class="p">&gt;&gt;</span> <span class="nf">GetUserFeatures</span><span class="p">(</span><span class="n">ClaimsPrincipal</span> <span class="n">userClaim</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">FeatureManager</span> <span class="p">:</span> <span class="n">IFeatureManager</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">UserManager</span><span class="p">&lt;</span><span class="n">ApplicationUser</span><span class="p">&gt;</span> <span class="n">_userManager</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">FeatureManager</span><span class="p">(</span><span class="n">UserManager</span><span class="p">&lt;</span><span class="n">ApplicationUser</span><span class="p">&gt;</span> <span class="n">userManager</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">userManager</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">userManager</span><span class="p">));</span>
+        <span class="n">_userManager</span> <span class="p">=</span> <span class="n">userManager</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">static</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">Feature</span><span class="p">&gt;</span> <span class="n">Features</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Feature</span><span class="p">&gt;</span>
+    <span class="p">{</span>
+        <span class="k">new</span> <span class="n">Feature</span>
+        <span class="p">{</span>
+            <span class="n">Description</span> <span class="p">=</span> <span class="s">"New screen for adding phone numbers"</span><span class="p">,</span>
+            <span class="n">Key</span> <span class="p">=</span> <span class="n">PhoneNumberKey</span><span class="p">,</span>
+            <span class="n">Active</span> <span class="p">=</span> <span class="k">false</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">Feature</span><span class="p">&gt;&gt;</span> <span class="nf">GetUserFeatures</span><span class="p">(</span><span class="n">ClaimsPrincipal</span> <span class="n">userClaim</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ApplicationUser</span> <span class="n">applicationUser</span> <span class="p">=</span> <span class="k">await</span> <span class="n">_userManager</span><span class="p">.</span><span class="nf">GetUserAsync</span><span class="p">(</span><span class="n">userClaim</span><span class="p">);</span>
+
+        <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">applicationUserActiveFeatures</span> <span class="p">=</span> <span class="p">!</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">applicationUser</span><span class="p">.</span><span class="n">ActiveFeatures</span><span class="p">)</span> <span class="p">?</span> <span class="n">applicationUser</span><span class="p">.</span><span class="n">ActiveFeatures</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span><span class="sc">','</span><span class="p">)</span> <span class="p">:</span> <span class="n">Enumerable</span><span class="p">.</span><span class="n">Empty</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
+
+        <span class="k">return</span> <span class="n">applicationUserActiveFeatures</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">feature</span> <span class="p">=&gt;</span> <span class="n">Features</span><span class="p">.</span><span class="nf">First</span><span class="p">(</span><span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Key</span> <span class="p">==</span> <span class="n">feature</span><span class="p">)).</span><span class="nf">ToList</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="nf">GetStatusByKey</span><span class="p">(</span><span class="kt">string</span> <span class="n">key</span><span class="p">,</span> <span class="n">ClaimsPrincipal</span> <span class="n">userClaim</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">key</span><span class="p">));</span>
+
+        <span class="n">ApplicationUser</span> <span class="n">applicationUser</span> <span class="p">=</span> <span class="k">await</span> <span class="n">_userManager</span><span class="p">.</span><span class="nf">GetUserAsync</span><span class="p">(</span><span class="n">userClaim</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="p">!</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">applicationUser</span><span class="p">.</span><span class="n">ActiveFeatures</span><span class="p">)</span> <span class="p">&amp;&amp;</span> <span class="n">applicationUser</span><span class="p">.</span><span class="n">ActiveFeatures</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span><span class="sc">','</span><span class="p">).</span><span class="nf">Any</span><span class="p">(</span><span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span> <span class="p">==</span> <span class="n">key</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span> <span class="nf">ChangeFeatureToggles</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">selectedItems</span><span class="p">,</span> <span class="n">ClaimsPrincipal</span> <span class="n">userClaim</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">selectedItems</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">selectedItems</span><span class="p">));</span>
+
+        <span class="n">ApplicationUser</span> <span class="n">applicationUser</span> <span class="p">=</span> <span class="k">await</span> <span class="n">_userManager</span><span class="p">.</span><span class="nf">GetUserAsync</span><span class="p">(</span><span class="n">userClaim</span><span class="p">);</span>
+
+        <span class="n">applicationUser</span><span class="p">.</span><span class="n">ActiveFeatures</span> <span class="p">=</span> <span class="n">selectedItems</span><span class="p">.</span><span class="nf">Any</span><span class="p">()</span> <span class="p">?</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="s">","</span><span class="p">,</span> <span class="n">selectedItems</span><span class="p">)</span> <span class="p">:</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+
+        <span class="k">await</span> <span class="n">_userManager</span><span class="p">.</span><span class="nf">UpdateAsync</span><span class="p">(</span><span class="n">applicationUser</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">const</span> <span class="kt">string</span> <span class="n">PhoneNumberKey</span> <span class="p">=</span> <span class="s">"Phone-Number"</span><span class="p">;</span>
+
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>Now let’s explain the sections of the above code.</p>
+
+<ul>
+  <li><strong>Features</strong> is a list of features we want to use with the application.</li>
+  <li><strong>GetStatusByKey</strong> is a method we will use to get the current status for a given user for a particular feature key.</li>
+  <li><strong>ChangeFeatureToggles</strong> takes in a list of selected feature toggles and a user. If the key exists that status will be toggled for that user.</li>
+  <li><strong>GetUserFeatures</strong> will get the current list of active features for a given user.</li>
+</ul>
+
+<p><em>Note: In a real world implementation we would store these flags in a database. For simplicity’s sake we have stored them in memory. This also gives you the ability to extenalize the on/off switch for your features</em></p>
+
+<p>We also want to set up our dependency injection for the FeatureManager. Navigate to Startup.cs and add the service binding shown below.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="p">...</span>
+<span class="k">using</span> <span class="nn">PartsUnlimited.FeatureFlag</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Startup</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">ConfigureServices</span><span class="p">(</span><span class="n">IServiceCollection</span> <span class="n">services</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">...</span>
+
+        <span class="n">services</span><span class="p">.</span><span class="n">AddScoped</span><span class="p">&lt;</span><span class="n">IFeatureManager</span><span class="p">,</span> <span class="n">FeatureManager</span><span class="p">&gt;();</span>
+    <span class="p">}</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 9.</strong> Now that we have the basics set up let’s create our first actual feature. We want to display a different placeholder and utilize HTML5 validation for updating phone numbers. In ManageViewModels.cs we want to add an additional properties on the AddPhoneNumberViewModel class. This will be used on the view to check if the new phone number feature is active.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>    <span class="p">...</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">AddPhoneNumberViewModel</span>
+    <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="k">public</span> <span class="kt">bool</span> <span class="n">IsPhoneFeatureActive</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="p">...</span>
+</code></pre>
+</div>
+
+<p>In ManageController.cs we want to alter two of the existing methods. This is located here -&gt; <code class="highlighter-rouge">.\PartsUnlimited\src\PartsUnlimitedWebsite\Controllers\ManageController.cs</code></p>
+
+<p>Note the <code class="highlighter-rouge">AddPhoneNumber()</code> method already exists but we need to change a few things. This needs to become an async method that returns <code class="highlighter-rouge">Task&lt;IActionResult&gt;</code>. Replace the whole method with the one below.</p>
+
+<p>Also for the <code class="highlighter-rouge">AddPhoneNumber(AddPhoneNumberViewModel model)</code> we will be replacing the existing return statement with the one displayed below.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="p">...</span>
+<span class="k">using</span> <span class="nn">PartsUnlimited.FeatureFlag</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ManageController</span> <span class="p">:</span> <span class="n">Controller</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">IFeatureManager</span> <span class="n">_featureManager</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">ManageController</span><span class="p">(...,</span> <span class="n">IFeatureManager</span> <span class="n">featureManager</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">featureManager</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">featureManager</span><span class="p">));</span>
+        <span class="n">_featureManager</span> <span class="p">=</span> <span class="n">featureManager</span><span class="p">;</span>
+        <span class="p">...</span>
+    <span class="p">}</span>
+
+    <span class="p">...</span>
+
+    <span class="c1">//
+</span>    <span class="c1">// GET: /Account/AddPhoneNumber
+</span>    <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">IActionResult</span><span class="p">&gt;</span> <span class="nf">AddPhoneNumber</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">statusByKey</span> <span class="p">=</span> <span class="k">await</span> <span class="n">_featureManager</span><span class="p">.</span><span class="nf">GetStatusByKey</span><span class="p">(</span><span class="n">FeatureManager</span><span class="p">.</span><span class="n">PhoneNumberKey</span><span class="p">,</span> <span class="n">HttpContext</span><span class="p">.</span><span class="n">User</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nf">View</span><span class="p">(</span><span class="k">new</span> <span class="n">AddPhoneNumberViewModel</span> <span class="p">{</span> <span class="n">IsPhoneFeatureActive</span> <span class="p">=</span> <span class="n">statusByKey</span> <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="c1">//
+</span>    <span class="c1">// POST: /Account/AddPhoneNumber
+</span>    <span class="p">[</span><span class="n">HttpPost</span><span class="p">]</span>
+    <span class="p">[</span><span class="n">ValidateAntiForgeryToken</span><span class="p">]</span>
+    <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">IActionResult</span><span class="p">&gt;</span> <span class="nf">AddPhoneNumber</span><span class="p">(</span><span class="n">AddPhoneNumberViewModel</span> <span class="n">model</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="kt">var</span> <span class="n">statusByKey</span> <span class="p">=</span> <span class="k">await</span> <span class="n">_featureManager</span><span class="p">.</span><span class="nf">GetStatusByKey</span><span class="p">(</span><span class="n">FeatureManager</span><span class="p">.</span><span class="n">PhoneNumberKey</span><span class="p">,</span> <span class="n">HttpContext</span><span class="p">.</span><span class="n">User</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nf">RedirectToAction</span><span class="p">(</span><span class="s">"VerifyPhoneNumber"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">PhoneNumber</span> <span class="p">=</span> <span class="n">model</span><span class="p">.</span><span class="n">Number</span><span class="p">,</span> <span class="n">IsPhoneFeatureActive</span> <span class="p">=</span> <span class="n">statusByKey</span> <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 10.</strong> Now we want to conditionally display a block of code relating to the new feature. Navigate to AddPhoneNumber.cshtml</p>
+
+<p>Find the following line of code in the same file (<strong>AddPhoneNumber.cshtml</strong>), located at line 20.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="n">@Html</span><span class="p">.</span><span class="nf">TextBoxFor</span><span class="p">(</span><span class="n">m</span> <span class="p">=&gt;</span> <span class="n">m</span><span class="p">.</span><span class="n">Number</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">@class</span> <span class="p">=</span> <span class="s">"form-control"</span><span class="p">,</span> <span class="n">placeholder</span> <span class="p">=</span> <span class="s">"Phone Number"</span> <span class="p">})</span>
+</code></pre>
+</div>
+<p>Replace it with this code block</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="err">@</span><span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Model</span><span class="p">.</span><span class="n">IsPhoneFeatureActive</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">@Html</span><span class="p">.</span><span class="nf">TextBoxFor</span><span class="p">(</span><span class="n">m</span> <span class="p">=&gt;</span> <span class="n">m</span><span class="p">.</span><span class="n">Number</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">@class</span> <span class="p">=</span> <span class="s">"form-control"</span><span class="p">,</span> <span class="n">placeholder</span> <span class="p">=</span> <span class="s">"555-555-5555"</span><span class="p">,</span> <span class="n">type</span> <span class="p">=</span> <span class="s">"tel"</span><span class="p">,</span> <span class="n">pattern</span> <span class="p">=</span> <span class="s">"\\d{3}[\\-]\\d{3}[\\-]\\d{4}"</span><span class="p">,</span> <span class="n">id</span> <span class="p">=</span> <span class="s">"phone"</span> <span class="p">})</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">@Html</span><span class="p">.</span><span class="nf">TextBoxFor</span><span class="p">(</span><span class="n">m</span> <span class="p">=&gt;</span> <span class="n">m</span><span class="p">.</span><span class="n">Number</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">@class</span> <span class="p">=</span> <span class="s">"form-control"</span><span class="p">,</span> <span class="n">placeholder</span> <span class="p">=</span> <span class="s">"Phone Number"</span> <span class="p">})</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>The key difference here is inside the input tag properties</p>
+
+<ul>
+  <li><strong>placeholder = “555-555-5555”</strong> this will display a sample number for the display to assist users in knowing what format is required.</li>
+  <li><strong>type = “tel”</strong> this is the new HTML5 input type for phone numbers</li>
+  <li><strong>pattern = “\d{3}[\-]\d{3}[\-]\d{4}”</strong> this is a regex patter to ensure the user types in a phone number with the format 555-555-5555</li>
+</ul>
+
+<p>At the bottom of the file, under the closing section tag, add the following</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="err">@</span><span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Model</span><span class="p">.</span><span class="n">IsPhoneFeatureActive</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="p">&lt;</span><span class="n">script</span><span class="p">&gt;</span>
+            <span class="p">(</span><span class="nf">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="kt">var</span> <span class="n">phone</span> <span class="p">=</span> <span class="n">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="s">"phone"</span><span class="p">);</span>
+
+                <span class="n">phone</span><span class="p">.</span><span class="nf">addEventListener</span><span class="p">(</span><span class="s">"keyup"</span><span class="p">,</span> <span class="nf">function</span> <span class="p">()</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">phone</span><span class="p">.</span><span class="n">validity</span><span class="p">.</span><span class="n">patternMismatch</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">phone</span><span class="p">.</span><span class="nf">setCustomValidity</span><span class="p">(</span><span class="s">"Please enter the correct phone number format e.g. 555-555-5555"</span><span class="p">);</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="n">phone</span><span class="p">.</span><span class="nf">setCustomValidity</span><span class="p">(</span><span class="s">""</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">});</span>
+            <span class="p">})();</span>
+        <span class="p">&lt;/</span><span class="n">script</span><span class="p">&gt;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 11.</strong> We also want to make sure that the proper CSS is applied for the HTML5 validation. Navigate to <strong>Site.scss</strong> (located in <code class="highlighter-rouge">./PartsUnlimited/src/PartsUnlimitedWebsite/Content/Site.scss</code>)</p>
+
+<p><strong>Step 12.</strong> Add the following to Site.scss - this will ensure a red border is applied when the pattern or input field type is invalid.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>input:invalid {border:3px solid red;}
+input[pattern]:invalid{border:3px solid red;}
+</code></pre>
+</div>
+
+<p>###Task 2: Create a new page under the user section for users to enable/disable features
+Now we need to create an administration view to toggle these features on and off from the site.</p>
+
+<p><strong>Step 1.</strong> In order to create a new page on the site, we need to create a ViewModel that will represent the data we need to use on that page.</p>
+
+<p>Under the <code class="highlighter-rouge">./PartsUnlimited/src/PartsUnlimitedWebsite/ViewModels</code> folder, create a new class called FeaturesViewModel.cs</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">PartsUnlimited.FeatureFlag</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">PartsUnlimited.ViewModels</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">FeaturesViewModel</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">Feature</span><span class="p">&gt;</span> <span class="n">AvailableFeatures</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">public</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">Feature</span><span class="p">&gt;</span> <span class="n">UserFeatures</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+</div>
+
+<p><strong>Step 2.</strong> Navigate to <code class="highlighter-rouge">./PartsUnlimited/src/PartsUnlimitedWebsite/Controllers</code> and create a new controller called <strong>FeaturesController.cs</strong></p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Threading.Tasks</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Microsoft.AspNetCore.Mvc</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">PartsUnlimited.FeatureFlag</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">PartsUnlimited.ViewModels</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">PartsUnlimited.Controllers</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">FeaturesController</span> <span class="p">:</span> <span class="n">Controller</span>
+    <span class="p">{</span>
+        <span class="k">private</span> <span class="k">readonly</span> <span class="n">IFeatureManager</span> <span class="n">_featureManager</span><span class="p">;</span>
+
+        <span class="k">public</span> <span class="nf">FeaturesController</span><span class="p">(</span><span class="n">IFeatureManager</span> <span class="n">featureManager</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">featureManager</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">featureManager</span><span class="p">));</span>
+            <span class="n">_featureManager</span> <span class="p">=</span> <span class="n">featureManager</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">IActionResult</span><span class="p">&gt;</span> <span class="nf">Index</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">FeaturesViewModel</span> <span class="n">featuresViewModel</span> <span class="p">=</span> <span class="k">new</span> <span class="n">FeaturesViewModel</span>
+            <span class="p">{</span>
+                <span class="n">UserFeatures</span> <span class="p">=</span> <span class="k">await</span> <span class="n">_featureManager</span><span class="p">.</span><span class="nf">GetUserFeatures</span><span class="p">(</span><span class="n">HttpContext</span><span class="p">.</span><span class="n">User</span><span class="p">),</span>
+                <span class="n">AvailableFeatures</span> <span class="p">=</span> <span class="n">FeatureManager</span><span class="p">.</span><span class="n">Features</span>
+            <span class="p">};</span>
+
+            <span class="k">return</span> <span class="nf">View</span><span class="p">(</span><span class="n">featuresViewModel</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="p">[</span><span class="n">ValidateAntiForgeryToken</span><span class="p">]</span>
+        <span class="p">[</span><span class="n">HttpPost</span><span class="p">]</span>
+        <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">ActionResult</span><span class="p">&gt;</span> <span class="nf">SaveFeatureToggles</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">selectedItems</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">await</span> <span class="n">_featureManager</span><span class="p">.</span><span class="nf">ChangeFeatureToggles</span><span class="p">(</span><span class="n">selectedItems</span><span class="p">,</span> <span class="n">HttpContext</span><span class="p">.</span><span class="n">User</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="nf">RedirectToAction</span><span class="p">(</span><span class="s">"Index"</span><span class="p">,</span> <span class="s">"Features"</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 3.</strong> Now to tie everything together we need a view. Navigate to PartsUnlimitedWebsite -&gt; Views and create a new folder called <strong>‘Features’</strong></p>
+
+<p><strong>Step 4.</strong> Inside the folder you just created, right click and select ‘Add’. Now add a View called <strong>Index.cshtml</strong>. Insert the contents shown below in to this new file.</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/add-view.png" alt="" /></p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/add-view-dialog.png" alt="" /></p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="n">@model</span> <span class="n">PartsUnlimited</span><span class="p">.</span><span class="n">ViewModels</span><span class="p">.</span><span class="n">FeaturesViewModel</span>
+<span class="p">&lt;</span><span class="n">br</span> <span class="p">/&gt;</span>
+<span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">panel</span> <span class="n">panel</span><span class="p">-</span><span class="n">primary</span><span class="s">" style="</span><span class="n">width</span><span class="p">:</span><span class="m">100</span><span class="p">%</span><span class="s">"&gt;
+</span>    <span class="p">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="err">="</span><span class="nc">panel</span><span class="p">-</span><span class="n">heading</span><span class="s">"&gt;
+</span>        <span class="p">&lt;</span><span class="n">span</span> <span class="n">style</span><span class="p">=</span><span class="s">"font-size: 20px; font-style: oblique"</span><span class="p">&gt;&lt;</span><span class="n">span</span><span class="p">&gt;&lt;</span><span class="n">span</span> <span class="n">style</span><span class="p">=</span><span class="s">"margin-right: 5px"</span> <span class="k">class</span><span class="err">="</span><span class="nc">glyphicon</span> <span class="n">glyphicon</span><span class="p">-</span><span class="n">star</span><span class="s">"&gt;&lt;/span&gt;Enable or disable features&lt;/span&gt;&lt;/span&gt;
+</span>    <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+
+    <span class="nf">@using</span> <span class="p">(</span><span class="n">Html</span><span class="p">.</span><span class="nf">BeginForm</span><span class="p">(</span><span class="s">"SaveFeatureToggles"</span><span class="p">,</span> <span class="s">"Features"</span><span class="p">,</span> <span class="n">FormMethod</span><span class="p">.</span><span class="n">Post</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="p">&lt;</span><span class="n">table</span> <span class="k">class</span><span class="err">="</span><span class="nc">table</span> <span class="n">table</span><span class="p">-</span><span class="n">striped</span> <span class="n">table</span><span class="p">-</span><span class="n">hover</span> <span class="n">table</span><span class="p">-</span><span class="n">responsive</span> <span class="n">table</span><span class="p">-</span><span class="n">condensed</span><span class="s">"&gt;
+</span>            <span class="p">&lt;</span><span class="n">tr</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="n">th</span><span class="p">&gt;</span>
+                    <span class="p">&lt;</span><span class="n">h4</span><span class="p">&gt;&lt;</span><span class="n">span</span> <span class="n">style</span><span class="p">=</span><span class="s">"font-weight: bolder"</span><span class="p">&gt;</span><span class="n">Description</span><span class="p">&lt;/</span><span class="n">span</span><span class="p">&gt;&lt;/</span><span class="n">h4</span><span class="p">&gt;</span>
+                <span class="p">&lt;/</span><span class="n">th</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="n">th</span><span class="p">&gt;</span>
+                    <span class="p">&lt;</span><span class="n">h4</span><span class="p">&gt;&lt;</span><span class="n">span</span> <span class="n">style</span><span class="p">=</span><span class="s">"font-weight: bolder"</span><span class="p">&gt;</span><span class="n">Key</span><span class="p">&lt;/</span><span class="n">span</span><span class="p">&gt;&lt;/</span><span class="n">h4</span><span class="p">&gt;</span>
+                <span class="p">&lt;/</span><span class="n">th</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="n">th</span><span class="p">&gt;</span>
+                    <span class="p">&lt;</span><span class="n">h4</span><span class="p">&gt;&lt;</span><span class="n">span</span> <span class="n">style</span><span class="p">=</span><span class="s">"font-weight: bolder"</span><span class="p">&gt;</span><span class="n">Active</span><span class="p">&lt;/</span><span class="n">span</span><span class="p">&gt;&lt;/</span><span class="n">h4</span><span class="p">&gt;</span>
+                <span class="p">&lt;/</span><span class="n">th</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="n">th</span><span class="p">&gt;&lt;/</span><span class="n">th</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="n">tr</span><span class="p">&gt;</span>
+
+            <span class="nf">@foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">item</span> <span class="k">in</span> <span class="n">Model</span><span class="p">.</span><span class="n">AvailableFeatures</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="p">&lt;</span><span class="n">tr</span><span class="p">&gt;</span>
+                    <span class="p">&lt;</span><span class="n">td</span> <span class="k">class</span><span class="err">="</span><span class="nc">col</span><span class="p">-</span><span class="n">lg</span><span class="p">-</span><span class="m">4</span><span class="s">"&gt;
+</span>                        <span class="p">&lt;</span><span class="n">span</span> <span class="n">style</span><span class="p">=</span><span class="s">"font-size: 17px;"</span><span class="p">&gt;</span><span class="n">@item</span><span class="p">.</span><span class="n">Description</span><span class="p">&lt;/</span><span class="n">span</span><span class="p">&gt;</span>
+                    <span class="p">&lt;/</span><span class="n">td</span><span class="p">&gt;</span>
+                    <span class="p">&lt;</span><span class="n">td</span> <span class="k">class</span><span class="err">="</span><span class="nc">col</span><span class="p">-</span><span class="n">lg</span><span class="p">-</span><span class="m">4</span><span class="s">"&gt;
+</span>                        <span class="p">&lt;</span><span class="n">span</span> <span class="n">style</span><span class="p">=</span><span class="s">"font-size: 17px;"</span><span class="p">&gt;</span><span class="n">@item</span><span class="p">.</span><span class="n">Key</span><span class="p">&lt;/</span><span class="n">span</span><span class="p">&gt;</span>
+                    <span class="p">&lt;/</span><span class="n">td</span><span class="p">&gt;</span>
+                    <span class="p">&lt;</span><span class="n">td</span> <span class="k">class</span><span class="err">="</span><span class="nc">col</span><span class="p">-</span><span class="n">lg</span><span class="p">-</span><span class="m">4</span><span class="s">"&gt;
+</span>                        <span class="p">&lt;</span><span class="n">div</span><span class="p">&gt;</span>
+                            <span class="n">@Html</span><span class="p">.</span><span class="nf">AntiForgeryToken</span><span class="p">()</span>
+                            <span class="p">&lt;</span><span class="n">input</span> <span class="n">type</span><span class="p">=</span><span class="s">"checkbox"</span> <span class="n">name</span><span class="p">=</span><span class="s">"selectedItems"</span> <span class="k">value</span><span class="p">=</span><span class="s">"@item.Key"</span> <span class="k">checked</span><span class="p">=</span><span class="s">"@Model.UserFeatures.Any(a =&gt; a.Key == item.Key)"</span><span class="p">&gt;</span>
+                        <span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+                    <span class="p">&lt;/</span><span class="n">td</span><span class="p">&gt;</span>
+                <span class="p">&lt;/</span><span class="n">tr</span><span class="p">&gt;</span>
+            <span class="p">}</span>
+        <span class="p">&lt;/</span><span class="n">table</span><span class="p">&gt;</span>
+
+        <span class="p">&lt;</span><span class="n">div</span><span class="p">&gt;&lt;</span><span class="n">input</span> <span class="n">type</span><span class="p">=</span><span class="s">"submit"</span> <span class="k">value</span><span class="p">=</span><span class="s">"Save"</span> <span class="n">style</span><span class="p">=</span><span class="s">"float: right;"</span> <span class="p">/&gt;&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+    <span class="p">}</span>
+
+
+<span class="p">&lt;/</span><span class="n">div</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="n">br</span> <span class="p">/&gt;&lt;</span><span class="n">br</span> <span class="p">/&gt;</span>
+</code></pre>
+</div>
+
+<p><strong>Step 5.</strong> We need to link to our new page. Navigate to PartsUnlimitedWebsite -&gt; Views -&gt; Shared -&gt; _Login.cshtml</p>
+
+<p>Add the following list item to the bottom of the menu.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="p">&lt;</span><span class="n">ul</span><span class="p">&gt;</span>
+    <span class="p">...</span>
+    <span class="p">&lt;</span><span class="n">li</span><span class="p">&gt;</span> <span class="n">@Html</span><span class="p">.</span><span class="nf">ActionLink</span><span class="p">(</span><span class="s">"View Features"</span><span class="p">,</span> <span class="s">"Index"</span><span class="p">,</span> <span class="s">"Features"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">area</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span> <span class="p">})</span> <span class="p">&lt;/</span><span class="n">li</span><span class="p">&gt;</span>  
+<span class="p">&lt;/</span><span class="n">ul</span><span class="p">&gt;</span>
+</code></pre>
+</div>
+
+<p>###Task 3: Try it out!</p>
+
+<p><strong>Step 1.</strong> Now launch the site. You can do this but pressing f5 or hitting the button shown below in Visual Studio.</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/iis-express.png" alt="" /></p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/splash.png" alt="" /></p>
+
+<p><strong>Step 2.</strong> Now log in with the administrator account. This can be found in config.json.</p>
+
+<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="s2">"AdminRole"</span><span class="err">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"UserName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Administrator@test.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"Password"</span><span class="p">:</span><span class="w"> </span><span class="s2">"YouShouldChangeThisPassword1!"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/login.png" alt="" /></p>
+
+<p><strong>Step 3.</strong> Navigate to the page we created earlier under Profile -&gt; View Features.</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/view-features.png" alt="" /></p>
+
+<p><strong>Step 4.</strong> Now we can see our active feature flags displayed in a list. We can also toggle them on and off from here!</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/view-features-unticked.png" alt="" /></p>
+
+<p><strong>Step 5.</strong> In your browser navigate back to the home page.</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/home.png" alt="" /></p>
+
+<p><strong>Step 6.</strong> Select Profile -&gt; Manage Account.</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/manage-account.png" alt="" /></p>
+
+<p><strong>Step 7.</strong> Now we need to modify our phone number. Select ‘Add’ next to the ‘Phone Number’ label.</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/add-phone.png" alt="" /></p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/placeholder-before.png" alt="" /></p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/error-submit-before.png" alt="" /></p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/after-submit.png" alt="" /></p>
+
+<p><strong>Step 8.</strong> Make sure you saved the changes, then navigate back to the feature flag page (Profile -&gt; View Features). Now toggle the flag to be on. Let’s see if our changes are pushed through.</p>
+
+<p><strong>Step 9.</strong> Navigate back to the user management page (Profile -&gt; Manage Account)</p>
+
+<p>Notice the placeholder is different to the one before.</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/placeholder.png" alt="" /></p>
+
+<p>Also when you start typing a red border appears around the input. This will continue until you supply a valid input similar to the placeholder pattern.</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/text-error.png" alt="" /></p>
+
+<p>Try clicking submit, you will notice the error dialog pop up asking the user to enter the correct format.</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/validation.png" alt="" /></p>
+
+<p>Now when we add the correct format the red border will disappear.</p>
+
+<p><img src="/PartsUnlimited/assets/featureflagweb/valid-number.png" alt="" /></p>
+
+<h2 id="next-steps">Next steps</h2>
+<p>In this lab you have learned how to implement feature flags in a web application. This gives you the ability to seamlessly manage features in your application. You can give users access to beta functionality to give you better test coverage and deliver continuous improvement.</p>
+
+<ul>
+  <li>
+    <p><a href="FeatureFlagWebAdvanced">Advanced Feature Flag for Web Applications</a></p>
+  </li>
+  <li>
+    <p><a href="https://blogs.msdn.microsoft.com/buckh/2016/09/30/controlling-exposure-through-feature-flags-in-vs-team-services/">Controlling exposure through feature flags in VS Team Services</a></p>
+  </li>
+</ul>
+
+
+                    </div>
+                
+            </div>
+
+            
+
+            <div class="row">
+                <div id="footer" class="col-sm-12">
+                    Documentation for <a href="https://github.com/Microsoft/PartsUnlimited">PartsUnlimited</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+        
+    </body>
+</html>

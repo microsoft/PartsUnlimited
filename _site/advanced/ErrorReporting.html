@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>PartsUnlimited : Error Reporting</title>
+        <meta name="description" content="example e-commerce website">
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/PartsUnlimited/css/syntax.css">
+        <link rel="stylesheet" href="/PartsUnlimited/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <div id="header" class="col-sm-12">
+                    <img class="logo" src="/PartsUnlimited/assets/logo-ms-dark.png" alt="Microsoft">
+<h4><a class="brand" href="/PartsUnlimited/">PartsUnlimited</a>
+    <small>example e-commerce website</small>
+</h4>
+
+                </div>
+            </div>
+
+            <div class="row">
+                
+                
+                    <div id="navigation" class="col-sm-3">
+                        <ul class="nav nav-list">
+    
+        <li><a href="/PartsUnlimited/">Welcome</a></li>
+    
+
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Basic DevOps Practices</li>
+            
+
+            
+                <li data-order="3"><a href="/PartsUnlimited/basic/manual-deployment.html">Manual Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/basic/ci.html">Continuous Integration</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/basic/cd.html">Continuous Deployment</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/basic/QuickStart.html">Quick Start</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/basic/GettingStartedLinuxOSX.html">Getting Started on Linux and OSX</a></li>
+            
+        
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/basic/GettingStarted.html">Getting Started</a></li>
+            
+        
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Advanced DevOps Practices</li>
+            
+
+            
+                <li data-order="0"><a href="/PartsUnlimited/advanced/UserTelemetry.html">User Telemetry</a></li>
+            
+        
+            
+
+            
+                <li data-order="2"><a href="/PartsUnlimited/advanced/UsageAnalysis.html">Usage Analysis</a></li>
+            
+        
+            
+
+            
+                <li data-order="1"><a href="/PartsUnlimited/advanced/TestingProd.html">Testing in Production</a></li>
+            
+        
+            
+
+            
+                <li data-order="6"><a href="/PartsUnlimited/advanced/FeatureFlagWebAdvanced.html">Advanced Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="5"><a href="/PartsUnlimited/advanced/FeatureFlagWeb.html">Feature Flag for Web Applications</a></li>
+            
+        
+            
+
+            
+                <li data-order="7"><a href="/PartsUnlimited/advanced/FeatureFlagMobile.html">Feature Flag for a Mobile Solution</a></li>
+            
+        
+            
+
+            
+                <li data-order="8"><a href="/PartsUnlimited/advanced/FeatureFlagAPI.html">Feature Flag for an API</a></li>
+            
+        
+            
+
+            
+                <li data-order="11"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabricStarter.html">Fault Injection for Service Fabric Hackathon Starter</a></li>
+            
+        
+            
+
+            
+                <li data-order="10"><a href="/PartsUnlimited/advanced/FaultInjectionServiceFabric.html">Fault Injection for Service Fabric</a></li>
+            
+        
+            
+
+            
+                <li data-order="9"><a href="/PartsUnlimited/advanced/FaultInjectionAzurePaaS.html">Fault Injection for Azure PaaS</a></li>
+            
+        
+            
+
+            
+                <li data-order="3"><a class="nav-active" href="/PartsUnlimited/advanced/ErrorReporting.html">Error Reporting</a></li>  
+            
+        
+            
+
+            
+                <li data-order="4"><a href="/PartsUnlimited/advanced/ABTesting.html">Experimentation and A/B Testing with Optimzely</a></li>
+            
+        
+    
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class="divider"></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id="content" class="col-sm-9">
+                        <div class="page-header">
+    <h2>Error Reporting
+        
+    </h2>
+</div>
+
+<h1 id="hol---error-reporting-and-monitoring-with-datadog">HOL - Error Reporting and Monitoring with DataDog</h1>
+<p>A dormant bug may exist in the PartsUnlimited site but it has yet to show itself. We want to give customers the best experience possible in terms of getting issues resolved quickly. To do so, we are going to be setting up logging and custom event monitoring for the PartsUnlimited solution using DataDog. This will assist our engineers by providing rapid feedback around critical releases. Proactive monitoring adds to an all around better user experience and gives our engineering team greater confidence when deploying changes.</p>
+
+<p>Datadog may be preferable due to a slight difference in it’s target user base (admins, operators and the like) as opposed to other APM software. It also has some great infrastructure monitoring executables that are easy to install and provide great coverage around your application stack.</p>
+
+<h3 id="pre-requisites">Pre-requisites:</h3>
+<ul>
+  <li>
+    <p>Visual Studio 2015 Update 3 (NOTE: Visual Studio 2015 preview 5 <strong>does not</strong> support .net core tooling, ensure the version you are running supports .net core tooling before continuing).</p>
+  </li>
+  <li>
+    <p>An active <a href="https://www.datadoghq.com/datadog-signup/">DataDog account</a></p>
+  </li>
+  <li>
+    <p><a href="https://app.datadoghq.com/account/settings#api">A DataDog API key</a> (after signing up)</p>
+  </li>
+</ul>
+
+<h3 id="tasks-overview">Tasks Overview:</h3>
+<p><strong>Task 1. Create a custom wrapper to log metrics to DataDog</strong> - In this task we will be writing some code to perform our logging calls to DataDog. We will go over the steps required to monitor three different areas of the application - the shopping cart, logins and global exceptions thrown by the application that aren’t handled elsewhere.</p>
+
+<p><strong>Task 2. Deploy the PartsUnlimited Solution to Azure</strong> - In this task we will be going through the steps required to deploy the PartsUnlimited site to Azure.</p>
+
+<p><strong>Task 3. Trigger some logging to DataDog</strong> - In this task we will be using the deployed PartsUnlimited site to trigger some events that will be logged to DataDog.</p>
+
+<p><strong>Task 4. Set up a custom event monitor in DataDog</strong> - In this task we will set up a custom monitor to look for particular events logged, then trigger email sendouts to critical or/and on call members of our engineering team.</p>
+
+<h3 id="task-1-create-a-custom-wrapper-to-log-metrics-to-datadog">Task 1: Create a custom wrapper to log metrics to DataDog</h3>
+<p><strong>Step 1.</strong> Clone the repository to a local directory.</p>
+
+<p>Create a parent <strong>Working Directory</strong> on your local file system. For instance, on a Windows OS you can create the following directory:</p>
+
+<p><code class="highlighter-rouge">C:\Source\Repos</code></p>
+
+<p>Open a command line (one that supports Git) and change to the directory you created above.</p>
+
+<p>Clone the repository with the following command. You can paste in the URL if you copied it in Step 1.  In the example below, the clone will be copied into a directory named HOL. Feel free to use whatever directory name you like, or leave it blank to use the default directory name:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git clone https://github.com/Microsoft/PartsUnlimited.git HOL
+</code></pre>
+</div>
+
+<p>After a few seconds of downloading, all of the code should now be on your local machine.</p>
+
+<p>Move into the directory that was just created.  In a Windows OS (and assuming you used HOL as the directory name), you can use this command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cd HOL
+</code></pre>
+</div>
+
+<p><strong>Step 2.</strong> Create a new setting for our datadog <a href="https://app.datadoghq.com/account/settings#api">API key</a> and base URL. This is located inside the website project -&gt; <code class="highlighter-rouge">./HOL/src/PartsUnlimitedWebsite/config.json</code></p>
+
+<p>This will sit under the “Keys” section.</p>
+<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="w">    </span><span class="s2">"Keys"</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="err">...</span><span class="w">
+        </span><span class="nt">"DataDog"</span><span class="p">:{</span><span class="w">
+            </span><span class="nt">"ApiKey"</span><span class="p">:</span><span class="w"> </span><span class="s2">"XXXXXXXXXXXXXXXX"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"BaseUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://app.datadoghq.com/api/v1/"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p><strong>Step 3.</strong> Create the configuration settings initializer. These can sit anywhere under the PartsUnlimitedWebsite project.</p>
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">interface</span> <span class="n">IDataDogSettings</span>
+    <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">ApiKey</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+        <span class="kt">string</span> <span class="n">BaseUrl</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">ConfigurationDataDogSettings</span> <span class="p">:</span> <span class="n">IDataDogSettings</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="nf">ConfigurationDataDogSettings</span><span class="p">(</span><span class="n">IConfiguration</span> <span class="n">config</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">ApiKey</span> <span class="p">=</span> <span class="n">config</span><span class="p">[</span><span class="nf">nameof</span><span class="p">(</span><span class="n">ApiKey</span><span class="p">)];</span>
+            <span class="n">BaseUrl</span> <span class="p">=</span> <span class="n">config</span><span class="p">[</span><span class="nf">nameof</span><span class="p">(</span><span class="n">BaseUrl</span><span class="p">)];</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="kt">string</span> <span class="n">ApiKey</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">public</span> <span class="kt">string</span> <span class="n">BaseUrl</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 4.</strong> Now we need to set up our dependency injection correctly. Navigate to the Startup class. This will tell our configuration where to look in order to load the DataDog specfic settings (Under Keys -&gt; DataDog)</p>
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">void</span> <span class="nf">ConfigureServices</span><span class="p">(</span><span class="n">IServiceCollection</span> <span class="n">services</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="p">...</span>
+
+        <span class="n">services</span><span class="p">.</span><span class="n">AddScoped</span><span class="p">&lt;</span><span class="n">IDataDogSettings</span><span class="p">&gt;(</span><span class="n">p</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="nf">ConfigurationDataDogSettings</span><span class="p">(</span><span class="n">Configuration</span><span class="p">.</span><span class="nf">GetSection</span><span class="p">(</span><span class="n">ConfigurationPath</span><span class="p">.</span><span class="nf">Combine</span><span class="p">(</span><span class="s">"Keys"</span><span class="p">,</span> <span class="s">"DataDog"</span><span class="p">))));</span>
+
+        <span class="p">...</span>
+    <span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 5.</strong> Now we want to create the contract we’re using to communicate with DataDog. This can be found in the DataDog API -&gt; http://docs.datadoghq.com/api/?lang=console#events. Create a new class called DataDogEventRequest.cs under the <code class="highlighter-rouge">Telemetry</code> folder -&gt; <code class="highlighter-rouge">./HOL/src/PartsUnlimitedWebsite/Telemetry/</code></p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">class</span> <span class="nc">DataDogEventRequest</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="kt">string</span> <span class="n">Title</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">public</span> <span class="kt">string</span> <span class="n">Text</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">public</span> <span class="kt">string</span> <span class="n">Priority</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">public</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">Tags</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">public</span> <span class="kt">string</span> <span class="n">Alert_Type</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre>
+</div>
+<p><strong>Step 6.</strong> Add the Microsoft.AspNet.WebApi.Client nuget package. We need this to perform the PostAsJsonAsync method on our HttpClient.</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/add-package.png" alt="" /></p>
+
+<p>NOTE: If you’re <strong>not using Visual Studio</strong> you will need to add the dependency in manually.</p>
+
+<ul>
+  <li>In <code class="highlighter-rouge">./HOL/src/PartsUnlimitedWebsite/project.json</code> under the ‘dependencies’ section add the following (don’t forget to add a comma on the line above). Check <a href="https://www.nuget.org/packages/microsoft.aspnet.webapi.client/">here</a> for the latest version of Microsoft.AspNet.WebApi.Client.</li>
+</ul>
+
+<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="w">    </span><span class="s2">"dependencies"</span><span class="err">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="err">...</span><span class="w">                                     
+        </span><span class="nt">"Microsoft.AspNet.WebApi.Client"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5.2.3"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<ul>
+  <li>After that is done run <code class="highlighter-rouge">dotnet restore</code> from the command line inside the project folder <code class="highlighter-rouge">./HOL/src/PartsUnlimitedWebsite/</code></li>
+</ul>
+
+<p><strong>Step 7.</strong> Create another class called DataDogEventLogger.cs</p>
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">interface</span> <span class="n">IEventLogger</span>
+    <span class="p">{</span>
+        <span class="k">void</span> <span class="nf">Trace</span><span class="p">(</span><span class="kt">string</span> <span class="n">message</span><span class="p">);</span>
+        <span class="k">void</span> <span class="nf">TrackException</span><span class="p">(</span><span class="n">Exception</span> <span class="n">exception</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">DataDogEventLogger</span> <span class="p">:</span> <span class="n">IEventLogger</span>
+    <span class="p">{</span>
+        <span class="k">private</span> <span class="k">readonly</span> <span class="n">IDataDogSettings</span> <span class="n">_config</span><span class="p">;</span>
+
+        <span class="k">public</span> <span class="nf">DataDogEventLogger</span><span class="p">(</span><span class="n">IDataDogSettings</span> <span class="n">config</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">config</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">config</span><span class="p">));</span>
+            <span class="n">_config</span> <span class="p">=</span> <span class="n">config</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">async</span> <span class="k">void</span> <span class="nf">Trace</span><span class="p">(</span><span class="kt">string</span> <span class="n">message</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">DataDogEventRequest</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="n">DataDogEventRequest</span>
+            <span class="p">{</span>
+                <span class="n">Title</span> <span class="p">=</span> <span class="n">message</span><span class="p">,</span>
+                <span class="n">Priority</span> <span class="p">=</span> <span class="s">"normal"</span><span class="p">,</span>
+                <span class="n">Text</span> <span class="p">=</span> <span class="n">message</span><span class="p">,</span>
+                <span class="n">Alert_Type</span> <span class="p">=</span> <span class="s">"info"</span><span class="p">,</span>
+                <span class="n">Tags</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="p">{</span> <span class="s">"trace"</span><span class="p">}</span>
+            <span class="p">};</span>
+            <span class="p">;</span>
+            <span class="k">await</span> <span class="nf">Request</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">"events"</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">async</span> <span class="k">void</span> <span class="nf">TrackException</span><span class="p">(</span><span class="n">Exception</span> <span class="n">exception</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">DataDogEventRequest</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="n">DataDogEventRequest</span>
+            <span class="p">{</span>
+                <span class="n">Title</span> <span class="p">=</span> <span class="n">exception</span><span class="p">.</span><span class="n">Message</span><span class="p">,</span>
+                <span class="n">Priority</span> <span class="p">=</span> <span class="s">"high"</span><span class="p">,</span>
+                <span class="n">Text</span> <span class="p">=</span> <span class="n">exception</span><span class="p">.</span><span class="n">StackTrace</span><span class="p">,</span>
+                <span class="n">Alert_Type</span> <span class="p">=</span> <span class="s">"error"</span><span class="p">,</span>
+                <span class="n">Tags</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="p">{</span> <span class="s">"exception"</span> <span class="p">}</span>
+            <span class="p">};</span>
+            <span class="k">await</span> <span class="nf">Request</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">"events"</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">private</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">HttpResponseMessage</span><span class="p">&gt;</span> <span class="n">Request</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">T</span> <span class="n">payload</span><span class="p">,</span> <span class="kt">string</span> <span class="n">target</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="n">client</span><span class="p">.</span><span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="n">_config</span><span class="p">.</span><span class="n">BaseUrl</span><span class="p">);</span>
+                <span class="n">client</span><span class="p">.</span><span class="n">DefaultRequestHeaders</span><span class="p">.</span><span class="n">Accept</span><span class="p">.</span><span class="nf">Clear</span><span class="p">();</span>
+                <span class="n">client</span><span class="p">.</span><span class="n">DefaultRequestHeaders</span><span class="p">.</span><span class="n">Accept</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">MediaTypeWithQualityHeaderValue</span><span class="p">(</span><span class="s">"application/json"</span><span class="p">));</span>
+
+                <span class="kt">string</span> <span class="n">requestTarget</span> <span class="p">=</span> <span class="n">target</span> <span class="p">+</span> <span class="err">$</span><span class="s">"?api_key={_config.ApiKey}"</span><span class="p">;</span>
+                <span class="k">return</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="nf">PostAsJsonAsync</span><span class="p">(</span><span class="n">requestTarget</span><span class="p">,</span> <span class="n">payload</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre>
+</div>
+<p>Let’s provide a bit more context for each of these methods.</p>
+
+<p>We have a private method in this class which will be wrapping up our REST requests to datadog (<strong>D</strong>ont <strong>R</strong>epeat <strong>Y</strong>ourself!). This creates a new client with all the required attributes to communicate with the datadog API (API keys and the base URL).</p>
+
+<p>We have the following:</p>
+
+<ul>
+  <li>
+    <p>The base address “https://app.datadoghq.com/api/v1/”</p>
+  </li>
+  <li>
+    <p>The JSON accept header of “application/json”</p>
+  </li>
+  <li>
+    <p>The API key attachment</p>
+  </li>
+</ul>
+
+<p>We also have the Trace and TrackException methods which, under the hood, are very similar. The only real difference being the information logged to DataDog.</p>
+
+<p><strong>Step 8.</strong> Now, in order to catch exceptions make by our application we are going to want some sort of global exception catcher. Let’s create a global exception <strong>filter</strong> for our application to ensure all unhandled exceptions are logged to DataDog.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">class</span> <span class="nc">CustomExceptionFilterAttribute</span> <span class="p">:</span> <span class="n">ExceptionFilterAttribute</span>
+    <span class="p">{</span>
+        <span class="k">private</span> <span class="k">readonly</span> <span class="n">IEventLogger</span> <span class="n">_eventLogger</span><span class="p">;</span>
+
+        <span class="k">public</span> <span class="nf">CustomExceptionFilterAttribute</span><span class="p">(</span>
+            <span class="n">IEventLogger</span> <span class="n">eventLogger</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">eventLogger</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="nf">nameof</span><span class="p">(</span><span class="n">eventLogger</span><span class="p">));</span>
+            <span class="n">_eventLogger</span> <span class="p">=</span> <span class="n">eventLogger</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnException</span><span class="p">(</span><span class="n">ExceptionContext</span> <span class="n">context</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">_eventLogger</span><span class="p">.</span><span class="nf">TrackException</span><span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">Exception</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre>
+</div>
+<p><strong>Step 9.</strong> To ensure this custom exception filter is applied across our application we can add it to the default set of MVC filters. Navigate back to the Startup.cs class. Note we also want to bind our event logger just in case we want this to be used somewhere else in the application.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>        <span class="k">public</span> <span class="k">void</span> <span class="nf">ConfigureServices</span><span class="p">(</span><span class="n">IServiceCollection</span> <span class="n">services</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="p">...</span>
+            <span class="c1">// get our datadog settings from the config file
+</span>            <span class="n">IDataDogSettings</span> <span class="n">configurationDataDogSettings</span> <span class="p">=</span>
+                <span class="k">new</span> <span class="nf">ConfigurationDataDogSettings</span><span class="p">(</span>
+                    <span class="n">Configuration</span><span class="p">.</span><span class="nf">GetSection</span><span class="p">(</span><span class="n">ConfigurationPath</span><span class="p">.</span><span class="nf">Combine</span><span class="p">(</span><span class="s">"Keys"</span><span class="p">,</span> <span class="s">"DataDog"</span><span class="p">)));</span>
+
+            <span class="n">services</span><span class="p">.</span><span class="nf">AddScoped</span><span class="p">(</span><span class="n">p</span> <span class="p">=&gt;</span> <span class="n">configurationDataDogSettings</span><span class="p">);</span>
+            <span class="n">services</span><span class="p">.</span><span class="n">AddScoped</span><span class="p">&lt;</span><span class="n">IEventLogger</span><span class="p">,</span> <span class="n">DataDogEventLogger</span><span class="p">&gt;();</span>
+            
+            <span class="c1">// add our custom exception handler to the application filter set
+</span>            <span class="n">services</span><span class="p">.</span><span class="nf">AddMvc</span><span class="p">(</span>
+                <span class="n">opts</span> <span class="p">=&gt;</span>
+                <span class="p">{</span>
+                    <span class="n">opts</span><span class="p">.</span><span class="n">Filters</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">CustomExceptionFilterAttribute</span><span class="p">(</span><span class="k">new</span> <span class="nf">DataDogEventLogger</span><span class="p">(</span><span class="n">configurationDataDogSettings</span><span class="p">)));</span>
+                <span class="p">});</span>
+
+            <span class="p">...</span>
+        <span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Step 10.</strong> Now, let’s add some tracing in our Controllers. Firstly, let’s add some tracing around when people add items to their cart. Navigate to ShoppingCartController.cs</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">class</span> <span class="nc">ShoppingCartController</span> <span class="p">:</span> <span class="n">Controller</span>
+    <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="k">private</span> <span class="k">readonly</span> <span class="n">IEventLogger</span> <span class="n">_eventLogger</span><span class="p">;</span>
+
+        <span class="k">public</span> <span class="nf">ShoppingCartController</span><span class="p">(</span>
+            <span class="p">...</span>
+            <span class="p">,</span> <span class="n">IEventLogger</span> <span class="n">eventLogger</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="p">...</span>
+            <span class="n">_eventLogger</span> <span class="p">=</span> <span class="n">eventLogger</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">IActionResult</span><span class="p">&gt;</span> <span class="nf">AddToCart</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Retrieve the product from the database
+</span>            <span class="kt">var</span> <span class="n">addedProduct</span> <span class="p">=</span> <span class="n">_db</span><span class="p">.</span><span class="n">Products</span>
+                <span class="p">.</span><span class="nf">Single</span><span class="p">(</span><span class="n">product</span> <span class="p">=&gt;</span> <span class="n">product</span><span class="p">.</span><span class="n">ProductId</span> <span class="p">==</span> <span class="n">id</span><span class="p">);</span>
+
+            <span class="n">_eventLogger</span><span class="p">.</span><span class="nf">Trace</span><span class="p">(</span><span class="err">$</span><span class="s">"Cart/Server/Add/{addedProduct.Title}"</span><span class="p">);</span>
+
+            <span class="p">...</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>Now we want to trace when an order has been completed. Navigate to CheckoutController.cs</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">class</span> <span class="nc">CheckoutController</span> <span class="p">:</span> <span class="n">Controller</span>
+    <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="k">private</span> <span class="k">readonly</span> <span class="n">IEventLogger</span> <span class="n">_eventLogger</span><span class="p">;</span>
+
+        <span class="k">public</span> <span class="nf">CheckoutController</span><span class="p">(</span>
+            <span class="p">...</span>
+            <span class="p">,</span> <span class="n">IEventLogger</span> <span class="n">eventLogger</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="p">...</span>
+            <span class="n">_eventLogger</span> <span class="p">=</span> <span class="n">eventLogger</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="n">IActionResult</span> <span class="nf">Complete</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="p">...</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">order</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">_eventLogger</span><span class="p">.</span><span class="nf">Trace</span><span class="p">(</span><span class="err">$</span><span class="s">"Checkout/Server/Complete/OrderId/{id}/Total/{order.Total}"</span><span class="p">);</span>
+                <span class="p">...</span>
+            <span class="p">}</span>
+            <span class="p">...</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>Let’s also trace when a category is browsed to - this could provide valuable data for the marketing team by showing them popular categories and not so popular categories. Navigate to StoreController.cs</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">class</span> <span class="nc">StoreController</span> <span class="p">:</span> <span class="n">Controller</span>
+    <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="k">private</span> <span class="k">readonly</span> <span class="n">IEventLogger</span> <span class="n">_eventLogger</span><span class="p">;</span>
+
+        <span class="k">public</span> <span class="nf">StoreController</span><span class="p">(</span>
+            <span class="p">...</span>
+            <span class="p">,</span> <span class="n">IEventLogger</span> <span class="n">eventLogger</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="p">...</span>
+            <span class="n">_eventLogger</span> <span class="p">=</span> <span class="n">eventLogger</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="n">IActionResult</span> <span class="nf">Browse</span><span class="p">(</span><span class="kt">int</span> <span class="n">categoryId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="p">...</span>
+            <span class="kt">var</span> <span class="n">categoryModel</span> <span class="p">=</span> <span class="n">_db</span><span class="p">.</span><span class="n">Categories</span><span class="p">.</span><span class="nf">Single</span><span class="p">(</span><span class="n">g</span> <span class="p">=&gt;</span> <span class="n">g</span><span class="p">.</span><span class="n">CategoryId</span> <span class="p">==</span> <span class="n">categoryId</span><span class="p">);</span>
+            <span class="n">_eventLogger</span><span class="p">.</span><span class="nf">Trace</span><span class="p">(</span><span class="err">$</span><span class="s">"Store/Server/Browse/{categoryModel.Name}"</span><span class="p">);</span>
+            <span class="p">...</span>
+        <span class="p">}</span>
+
+</code></pre>
+</div>
+
+<p>We also want to see what people are searching for, this could potentially assist our UX team to ensure the customer can get to what they want faster and more intuitively. Navigate to SearchController.cs</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">class</span> <span class="nc">SearchController</span> <span class="p">:</span> <span class="n">Controller</span>
+    <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="k">private</span> <span class="k">readonly</span> <span class="n">IEventLogger</span> <span class="n">_eventLogger</span><span class="p">;</span>
+
+        <span class="k">public</span> <span class="nf">SearchController</span><span class="p">(</span>
+            <span class="p">...</span>
+            <span class="p">,</span> <span class="n">IEventLogger</span> <span class="n">eventLogger</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="p">...</span>
+            <span class="n">_eventLogger</span> <span class="p">=</span> <span class="n">eventLogger</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">IActionResult</span><span class="p">&gt;</span> <span class="nf">Index</span><span class="p">(</span><span class="kt">string</span> <span class="n">q</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrWhiteSpace</span><span class="p">(</span><span class="n">q</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="nf">View</span><span class="p">(</span><span class="k">null</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="n">_eventLogger</span><span class="p">.</span><span class="nf">Trace</span><span class="p">(</span><span class="err">$</span><span class="s">"Search/Server/Index/Query/{q}"</span><span class="p">);</span>
+            <span class="p">...</span>
+        <span class="p">}</span>
+
+</code></pre>
+</div>
+
+<p>For our user management, we want to check failures on the change password action. Navigate to ManageController.cs</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">class</span> <span class="nc">ManageController</span> <span class="p">:</span> <span class="n">Controller</span>
+    <span class="p">{</span>
+        <span class="k">private</span> <span class="k">readonly</span> <span class="n">IEventLogger</span> <span class="n">_eventLogger</span><span class="p">;</span>
+
+        <span class="k">public</span> <span class="nf">ManageController</span><span class="p">(</span><span class="n">UserManager</span><span class="p">&lt;</span><span class="n">ApplicationUser</span><span class="p">&gt;</span> <span class="n">userManager</span><span class="p">,</span> <span class="n">SignInManager</span><span class="p">&lt;</span><span class="n">ApplicationUser</span><span class="p">&gt;</span> <span class="n">signInManager</span><span class="p">,</span> <span class="n">IEventLogger</span> <span class="n">eventLogger</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="p">...</span>
+            <span class="n">_eventLogger</span> <span class="p">=</span> <span class="n">eventLogger</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="p">...</span>
+
+        <span class="p">[</span><span class="n">HttpPost</span><span class="p">]</span>
+        <span class="p">[</span><span class="n">ValidateAntiForgeryToken</span><span class="p">]</span>
+        <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">IActionResult</span><span class="p">&gt;</span> <span class="nf">ChangePassword</span><span class="p">(</span><span class="n">ChangePasswordViewModel</span> <span class="n">model</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="p">...</span>
+            <span class="kt">var</span> <span class="n">user</span> <span class="p">=</span> <span class="k">await</span> <span class="nf">GetCurrentUserAsync</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">user</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="p">...</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">Succeeded</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="p">...</span>
+                <span class="p">}</span>
+                <span class="n">_eventLogger</span><span class="p">.</span><span class="nf">Trace</span><span class="p">(</span><span class="err">$</span><span class="s">"Manage/Server/ChangePassword/Failure/{user.Name}"</span><span class="p">);</span>
+                <span class="p">...</span>
+            <span class="p">}</span>
+            <span class="p">...</span>
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>Lets also log when a user has a failed login attempt. Navigate to the AccountController. Just underneath ModelState.AddModelError we want to trace the error and log it to DataDog.</p>
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">class</span> <span class="nc">AccountController</span> <span class="p">:</span> <span class="n">Controller</span>
+    <span class="p">{</span>
+        <span class="k">private</span> <span class="k">readonly</span> <span class="n">IEventLogger</span> <span class="n">_eventLogger</span><span class="p">;</span>
+
+        <span class="k">public</span> <span class="nf">AccountController</span><span class="p">(</span><span class="n">UserManager</span><span class="p">&lt;</span><span class="n">ApplicationUser</span><span class="p">&gt;</span> <span class="n">userManager</span><span class="p">,</span> <span class="n">SignInManager</span><span class="p">&lt;</span><span class="n">ApplicationUser</span><span class="p">&gt;</span> <span class="n">signInManager</span><span class="p">,</span> <span class="n">IEventLogger</span> <span class="n">eventLogger</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="p">...</span>
+            <span class="n">_eventLogger</span> <span class="p">=</span> <span class="n">eventLogger</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="p">...</span>
+
+        <span class="c1">// POST: /Account/Login
+</span>        <span class="p">[</span><span class="n">HttpPost</span><span class="p">]</span>
+        <span class="p">[</span><span class="n">AllowAnonymous</span><span class="p">]</span>
+        <span class="p">[</span><span class="n">ValidateAntiForgeryToken</span><span class="p">]</span>
+        <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">IActionResult</span><span class="p">&gt;</span> <span class="nf">Login</span><span class="p">(</span><span class="n">LoginViewModel</span> <span class="n">model</span><span class="p">,</span> <span class="kt">string</span> <span class="n">returnUrl</span> <span class="p">=</span> <span class="k">null</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="p">...</span>
+
+            <span class="n">ModelState</span><span class="p">.</span><span class="nf">AddModelError</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="s">"Invalid login attempt."</span><span class="p">);</span>
+            <span class="n">_eventLogger</span><span class="p">.</span><span class="nf">Trace</span><span class="p">(</span><span class="err">$</span><span class="s">"Account/Server/Login/Failure/{model.Email}"</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nf">View</span><span class="p">(</span><span class="n">model</span><span class="p">);</span>
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+</code></pre>
+</div>
+
+<h3 id="task-2-deploy-the-partsunlimited-solution-to-azure">Task 2: Deploy the PartsUnlimited Solution to Azure</h3>
+
+<p>Lets get our modified app in to Azure! From the solution view, right click on the PartsUnlimitedWebsite project and then select ‘Publish…’</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/publish.png" alt="" /></p>
+
+<p>Now we want to create a publish profile to a Microsoft Azure App Service.</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/publish1.png" alt="" /></p>
+
+<p>If you have an app service created in Azure, you can select it from here. Otherwise you can select ‘New…’ to create one.</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/publish2.png" alt="" /></p>
+
+<p>Create a unique web app name and assign it to a familar resource group. Note: Keep similar items in the same resource group. As your Azure subscription grows this will assist greatly for knowing which things are related.</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/publish3.png" alt="" /></p>
+
+<p>Now you should see the deployment step allocating your app.</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/publish4.png" alt="" /></p>
+
+<p>The following form should be filled out. Take note of the server you are deploying to so you can navigate to it in later steps. Select ‘Publish’ if everything looks good!</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/publish5.png" alt="" /></p>
+
+<p>NOTE: if you are <strong>not using Visual Studio</strong> you can set this up using the <a href="https://azure.microsoft.com/en-us/downloads/#cmd-line-tools">Azure CLI</a></p>
+
+<p>For example, if you have <a href="https://nodejs.org">nodejs</a> installed on a linux machine we can install the Azure CLI via NPM.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    npm install -g azure-cli
+</code></pre>
+</div>
+
+<p>Or you may need to use <strong>sudo</strong> to successfully run the npm command.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    sudo npm install -g azure-cli
+</code></pre>
+</div>
+
+<p>Now run the following commands to create an App Service resource in Azure.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    azure config mode arm
+    azure login
+</code></pre>
+</div>
+
+<p>This will prompt you to to login and provide command line access to your Azure subscription.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    azure group create -n "ExampleResourceGroup" -l "westus"
+
+    azure appserviceplan create --name partsunlimitedserviceplan --location "westus" --resource-group ExampleResourceGroup --sku P1
+
+    azure webapp create --name partsunlimitedsite --location "westus" --resource-group ExampleResourceGroup --plan partsunlimitedserviceplan
+</code></pre>
+</div>
+
+<p>Now you will need to navigate to the <a href="https://portal.azure.com">azure portal</a> and turn on local git deployments.</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/resource.png" alt="" /></p>
+
+<p>Look for the <strong>ExampleResourceGroup</strong> we created earlier, then find the <strong>partsunlimitedsite</strong> web app we created. We then want to alter the <strong>deployment options</strong>. Select <strong>Local Git Repository</strong>, create a deployment user then select <strong>OK</strong>.</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/git.png" alt="" /></p>
+
+<p>Now navigate to the overview page of the web app and note down the git clone url.</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/site-overview.png" alt="" /></p>
+
+<p>Now we want to create the git remote to deploy to (use the clone url we got from the azure portal)</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    git remote add azure https://theuseryoujustcreate@yoursitenamehere.scm.azurewebsites.net:443/yoursitenamehere.git
+</code></pre>
+</div>
+
+<p>Now we need to add a deployment script to ensure our application unpacks correctly on the app service. 
+Copy these files to the root folder of the application <code class="highlighter-rouge">./HOL</code>:</p>
+<ul>
+  <li><a href="/PartsUnlimited/assets/errorreporting/deployment"><code class="highlighter-rouge">deployment</code></a> (rename this file to <code class="highlighter-rouge">.deployment</code>)</li>
+  <li><a href="/PartsUnlimited/assets/errorreporting/deploy.cmd"><code class="highlighter-rouge">deploy.cmd</code></a></li>
+</ul>
+
+<p>Now we’re ready to deploy. Type the following commands to add the deployment files to source. This may take some time to complete.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    git add -A
+    git commit -m "Adding deployment scripts"
+    git push azure master
+</code></pre>
+</div>
+
+<h3 id="task-2-trigger-some-logging-to-datadog">Task 2: Trigger some logging to DataDog</h3>
+
+<p><strong>Step 1.</strong> Navigate to the deployed website.</p>
+
+<p><strong>Step 2.</strong> Now, lets trigger some actions.</p>
+
+<ul>
+  <li>Navigate to the login page and try any username with any password a few times.</li>
+  <li>Try and add an item to your cart.</li>
+  <li>Try using the search bar located at the top of the site.</li>
+  <li>Try completing an order.</li>
+  <li>Login with the following credentials -&gt; user: <code class="highlighter-rouge">Administrator@test.com</code> password: <code class="highlighter-rouge">YouShouldChangeThisPassword1!</code>. Then try to <strong>unsuccessfully</strong> change your password under the ‘Profile -&gt; Manage Account’ section.</li>
+</ul>
+
+<p><strong>Step 4.</strong> Navigate to the DataDog portal to check and see if everything was logged correctly -&gt; https://app.datadoghq.com/event/stream</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/datadog-events-extended.png" alt="" /></p>
+
+<h3 id="task-3-set-up-a-custom-event-monitor-in-datadog">Task 3: Set up a custom event monitor in DataDog</h3>
+
+<p>Lets say, for example, we want to add a monitor for when failed login attempts occur within a certain time peroid. Log in to the DataDog portal and create a new monitor (Monitors -&gt; New Monitor)</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/event-monitor-creation-1.png" alt="" /></p>
+
+<p>Select the ‘Event’ monitor</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/event-monitor-creation.png" alt="" /></p>
+
+<p>Here we want to track items with the #trace tag as that’s what we use for failed login attempts. Note: you can make these more specific if you wish!</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/login-watch-1.png" alt="" /></p>
+
+<p>Here we will set the criteria for the monitor to notify. Here we have set it to above or equal to 3. You will probably want to set this higher for production.</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/login-watch-2.png" alt="" /></p>
+
+<p>Here we can specify what we want to send once the monitor has been triggered. We can provide context to ensure the person or people notified have the best information available to fix the issue at hand.</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/login-watch-3.png" alt="" /></p>
+
+<p>Here you can set which team members you’d like notified if this monitor is triggered.</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/login-watch-4.png" alt="" /></p>
+
+<p>Now lets test it out! Go back to the application and trigger some failed login attempts.</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/failed-logins.png" alt="" /></p>
+
+<p>Give it some time then check your emails. You should have an alert sitting in your inbox.</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/email.png" alt="" /></p>
+
+<p>You will also get a follow up email if the event stops triggering after a set time period. You can leverage this to ensure you don’t have any false positives.</p>
+
+<p><img src="/PartsUnlimited/assets/errorreporting/recovered.png" alt="" /></p>
+
+<h2 id="next-steps">Next steps</h2>
+
+<p>Try these labs out for next steps:</p>
+
+<ul>
+  <li><a href="ABTesting">Experimentation and A/B Testing with Optimizely</a></li>
+</ul>
+
+
+                    </div>
+                
+            </div>
+
+            
+
+            <div class="row">
+                <div id="footer" class="col-sm-12">
+                    Documentation for <a href="https://github.com/Microsoft/PartsUnlimited">PartsUnlimited</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+        
+    </body>
+</html>
