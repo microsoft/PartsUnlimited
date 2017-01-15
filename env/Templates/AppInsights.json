@@ -10,7 +10,7 @@
         {
             "name": "[concat(parameters('WebsiteName'), 'Insights')]",
             "type": "Microsoft.Insights/components",
-            "location": "Central US",
+            "location": "East US",
             "apiVersion": "2014-04-01",
             "tags": {
                 "displayName": "insightsComponents"
