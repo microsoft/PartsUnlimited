@@ -9,7 +9,7 @@ The following instruction is for Windows. For Linux or Mac OS X, please see
 3. When Web Platform Installer opens, click the Add button for `Microsoft Azure SDK for .NET (VS 2015) - 2.9.5`
 4. When Web Platform Installer opens, click the Add button for `Microsoft Azure PowerShell`
 5. Click the Install button and follow the prompts to complete the installation
-6. Install [NodeJS](https://nodejs.org/en/)
+6. Install [NodeJS](https://nodejs.org/en/) (you will need to restart your PC)
 7. Then run the following commands:
 ```
     npm install bower -g
