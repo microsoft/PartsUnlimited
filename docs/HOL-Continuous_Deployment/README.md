@@ -98,8 +98,10 @@ authentication information required to deploy to Azure.
 > **Note**: Deploying [ARM Templates](https://azure.microsoft.com/en-us/documentation/articles/resource-group-authoring-templates/) to Azure from Release Management requires an organizational account or a [Service Principal](http://blog.jstroheker.com/2016/10/11/SPNAzure/). MSA Accounts and certificate-based connections are not supported. For this HOL, you will use an organizational account, but you can create a Service Principal if you wish to.
 
 **Step 1.**  Create an organizational account in Azure
+
 1. Create a user in the Azure Active Directory from the old Azure portal (https://manage.windowsazure.com). If you do not have
 a custom domain, then use the `onmicrosoft.com` domain (the default domain). The user should be something like `testuser@myazure.onmicrosoft.com`
+
 2. After adding the account, the following two things need to be done to use the account during a VSTS release:
 	* Add the Active Directory account to the co-administrators in the subscription. Go to the Settings hub (click on the Gear
 	icon in the left-hand main menu) and then click on administrators and add the account as a co-admin.
@@ -107,7 +109,9 @@ a custom domain, then use the `onmicrosoft.com` domain (the default domain). The
 	Initially a temporary password is created and that needs to be changed at the first login.
 
 **Step 2.**  Create an Azure Service Endpoint in Visual Studio Team Services
+
 1. Log in to your VSTS account.
+
 2. Open the project administration page by clicking the gear icon in the upper right.
 
 	![](media/1.png)
