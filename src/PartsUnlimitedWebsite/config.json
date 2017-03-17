@@ -11,9 +11,9 @@
       "jquery-ui": "/lib/jquery-ui/jquery-ui.js",
       "jquery-validation": "/lib/jquery-validation/jquery-validation.js",
       "jquery-zoom": "/lib/jquery-zoom/jquery.zoom.js",
-      "modernizr": "/lib/modernizr/modernizr.js",
+      "modernizr": "/lib/modernizr/src/modernizr.js",
       "respond": "/lib/respond/respond.src.js",
-      "site": "/Scripts/AppInsights.js /Scripts/NewStoreArrivals.js /Scripts/UI-Initialization.js /Scripts/Recommendations.js"
+      "site": "/Scripts/AppInsights.js /Scripts/UI-Initialization.js /Scripts/Recommendations.js"
     },
     "Styles": {
       "jquery-ui": "/lib/jquery-ui-smoothness/jquery-ui.css",
