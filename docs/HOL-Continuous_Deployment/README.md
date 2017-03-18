@@ -206,7 +206,7 @@ button next to "Azure Resource Group Deployment" to add the task. Close the "Tas
 		-CdnStorageContainerNameForDev $(ContainerName)-dev
 		-CdnStorageAccountNameForStaging $(StorageAccountName)-stage
 		-CdnStorageContainerNameForStaging $(ContainerName)-stage
-		-PartsUnlimitedServerAdminLoginPassword (ConvertTo-SecureString -String '$(AdminPassword)' -AsPlainText -Force)
+		-PartsUnlimitedServerAdminLoginPassword (ConvertTo-SecureString -String '$(AdminPw)' -AsPlainText -Force)
 		-PartsUnlimitedServerAdminLoginPasswordForTest (ConvertTo-SecureString -String '$(AdminTestPassword)' -AsPlainText -Force)
 		```
 		You will shortly define the values for each parameter, like `$(ServerName)`, in the Environment variables.
@@ -224,7 +224,7 @@ button next to "Azure Resource Group Deployment" to add the task. Close the "Tas
 	* **HostingPlan** - Name of the hosting plan for the website
 	* **StorageAccountName** - Storage account name prefix. Will have `-dev` or `-stage` added for dev/staging
 	* **ContainerName** - Container name prefix. Will have `-dev` or `-stage` added for dev/staging
-	* **AdminPassword** - Admin password for production database server
+	* **AdminPw** - Admin password for production database server
 	* **AdminTestPassword** - Admin password for dev and staging database servers
 	* **ResourceGroupName** - Name of the Resource Group.
 
@@ -267,18 +267,18 @@ Click "Create" to start the release.
 Now that the infrastructure deployment is configured, you can add a task to deploy the web app to Dev.
 
 1. Click on the Dev environment in the Release Definition. Then click "+ Add tasks".
-2. Select the "Deploy" group in the left and click the add button next to "AzureRM Web App Deployment" to add the task. Close the task selector dialog.
+2. Select the "Deploy" group in the left and click the add button next to "Azure App Service Deploy" to add the task. Close the task selector dialog.
 
 	![](media/57.png)
 
-3. Click on the "AzureRM Web App Deployment" Task.
+3. Click on the "Azure App Service Deploy" Task.
 4. Select the Azure Service Endpoint you created earlier in the AzureRM Subscription drop down.
 5. For Web App Name, enter the `$(WebsiteName)` to use a variable. You defined this variable earlier when deploying
 the ARM Template. You will shortly "promote" it to a Release variable so that it can be used in all Environments in the Release.
 6. Check the Deploy to Slot check box
 7. Enter `$(ResourceGroupName)` into the Resource Group Box.
 8. Enter "dev" for the Slot. This will deploy the site to the "dev" deployment slot. This allows you to deploy the site to an Azure deployment slot without affecting the Production site.
-9. Tick "Take App Offline". This stops the website for deployment period and takes it back online afterwards. This is required because sites receive requests all the time causing files to lock down (i.e. making them unmodifiable).
+9. Expand the "Additional Deployment Options" section. Check "Publish using Web Deploy" and then "Take App Offline". Taking the app offline stops the website for deployment period and takes it back online afterwards. This is required because sites receive requests all the time causing files to lock down (i.e. making them unmodifiable).
 10. Click the ellipsis (...) button, next to the Package box, to set the Web Deploy Package location. Browse to the PartsUnlimitedWebsite.zip file and click OK.
 
 	![](media/10.png)

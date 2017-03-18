@@ -225,7 +225,7 @@
     {
       "name": "[concat(parameters('WebsiteName'), '-Insights')]",
       "type": "Microsoft.Insights/components",
-      "location": "East US",
+      "location": "eastus",
       "apiVersion": "2014-04-01",
       "tags": {
         "displayName": "insightsComponents"
@@ -237,7 +237,7 @@
     {
       "name": "[concat(parameters('WebsiteName'), '-DevInsights')]",
       "type": "Microsoft.Insights/components",
-      "location": "East US",
+      "location": "eastus",
       "apiVersion": "2014-04-01",
       "tags": {
         "displayName": "insightsComponents"
@@ -249,7 +249,7 @@
     {
       "name": "[concat(parameters('WebsiteName'), '-StagingInsights')]",
       "type": "Microsoft.Insights/components",
-      "location": "East US",
+      "location": "eastus",
       "apiVersion": "2014-04-01",
       "tags": {
         "displayName": "insightsComponents"
