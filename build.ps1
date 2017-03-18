@@ -1,7 +1,7 @@
 [CmdletBinding()]
 Param(
-	[Parameter(Mandatory=$True)] [string] $BuildConfiguration,
-    [Parameter(Mandatory=$True)] [string] $BuildStagingDirectory
+     [Parameter(Mandatory=$True)] [string] $BuildConfiguration,
+     [string] $BuildStagingDirectory = ".\staging"
 )
 
 $ErrorActionPreference = "Stop"
