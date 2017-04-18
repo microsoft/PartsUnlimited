@@ -89,6 +89,7 @@
   "buildOptions": {
     "emitEntryPoint": true,
     "preserveCompilationContext": true,
+    "noWarn": ["CS0618"],
     "copyToOutput": "config.json"
   },
 
