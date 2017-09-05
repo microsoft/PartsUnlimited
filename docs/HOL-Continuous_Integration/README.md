@@ -141,6 +141,8 @@ have created against it.
 
 > **Note:** The build.ps1 script contains commands using the **dotnet.exe** executable used by .Net Core.  The build script does the following: restore, build, test, publish, and produce an MSDeploy zip package.
 
+> **Note:** The build.ps1 works just using the agent queue **Hosted**
+
 	[CmdletBinding()]
 	Param(
 		[Parameter(Mandatory=$True)] [string] $BuildConfiguration,
