@@ -1,4 +1,4 @@
-﻿---
+---
 layout: page
 title:  User Telemetry
 category: advanced
@@ -7,7 +7,7 @@ order: 0
 
 #User Telemetry and Performance Monitoring with Application Insights
 
-The marketing team has expressed interest in the behavior of users across the PartsUnlimited website for how to best market the products, especially how popular the web application is and where the users live. The development team would like to know which browsers and operating systems that most users browse to the site from to target better user experiences. The development team has also noticed that the recommendations page is slow to load and shows performance spikes in Application Insights telemetry. By viewing the details of performance monitoring through Application Insights, we will be able to drill down to the code that has affected the slow performance of the web application and fix the code. Test gitcmd.
+The marketing team has expressed interest in the behavior of users across the PartsUnlimited website for how to best market the products, especially how popular the web application is and where the users live. The development team would like to know which browsers and operating systems that most users browse to the site from to target better user experiences. The development team has also noticed that the recommendations page is slow to load and shows performance spikes in Application Insights telemetry. By viewing the details of performance monitoring through Application Insights, we will be able to drill down to the code that has affected the slow performance of the web application and fix the code.
 
 Using the out-of-box telemetry for Application Insights, the teams will be able to find out how people use the application and gain insights into the goals that they will need to achieve.
 
