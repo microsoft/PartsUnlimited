@@ -9,8 +9,12 @@ will allow us to compile and run unit tests on our code every time a commit is
 pushed to Visual Studio Team Services.
 
 ### Pre-requisites: ###
+- Complete [Getting Started](../GettingStarted.md) task.
+-   An active Visual Studio Team Services account.
 
--   An active Visual Studio Team Services account
+	 [Sign up for Visual Studio Team Services](https://www.visualstudio.com/en-us/docs/setup-admin/team-services/sign-up-for-visual-studio-team-services)
+
+NOte: the screenshots are out of date and need to be udpated. they are left as is for not to provide some guidance if it is needed.
 
 ### Tasks Overview: ###
 
@@ -109,11 +113,19 @@ have created against it.
 
 >**Note:** As you can see, you can now do Universal Windows Apps & Xamarin Android/IOS Builds as well as Xcode builds.
 
-**5.** After clicking the **Next** button, select **HOL Team Project**, select **HOL** Repository, select **Master** as the default branch and check **Continuous Integration** then click **Create**.
+**5.** After clicking the **Next** button:
+- Select **HOL Team Project**;
+- Select **HOL** Repository;
+- Select **Master** as the default branch;
+- Check **Continuous Integration**;
+- Change the **Default Agent Queue** to **Hosted VS2017**;
+- Click **Create**.
 
+<!--- Image needs to be update to highlight the change on the Default Agent Queue to **Hosted VS2017**.
 ![](<media/CI4.png>)
+--->
 
-> **Note:** We may have multiple repos and branches, so we need to select the correct Repo and Branch before we can select which Solution to build.
+> **Note:** We may have multiple repositories and branches, so we need to select the correct Repo and Branch before we can select which Solution to build.
 
 **6.** After clicking the **Create** button, On the **Build** tab click the **Add build step** in the Build pane.
 
@@ -123,7 +135,7 @@ have created against it.
 
 ![](<media/CI6.png>)
 
-**8.** Still in the **Add tasks** dialog, select the **Test** page and add a **Publish Test Results**& task.
+**8.** Still in the **Add tasks** dialog, select the **Test** page and add a **Publish Test Results**.
 
  ![](<media/CI7.png>)
 
@@ -133,35 +145,28 @@ have created against it.
 
 **10.** On the **PowerShell Script** task, click on the blue **rename** pencil icon and change the name of the step to **dotnet restore, build, test and publish** and click **OK**
 
-**11.** Select **File Path** for the **Type** property, enter **"build.ps1"** for the **Script filename** property and **$(BuildConfiguration) $(build.stagingDirectory)** for the **Arguments** property.
+**11.** Configure the Task:
+- Select **File Path** for the **Type** property
+- Enter **"build.ps1"** for the **Script filename** property
+- Set **$(BuildConfiguration) $(System.DefaultWorkingDirectory) $(build.stagingDirectory)** for the **Arguments** property. 
+- Click on Advanced and change the **Working Folder** to **$(System.DefaultWorkingDirectory)**
 
 ![](<media/CI9.1.png>)
 
-![](<media/CI9.2.png>)
+<!--- Image needs to be updated to have the new parameters as argument.
+ ![](<media/CI9.2.png>) 
+--->
 
 > **Note:** The build.ps1 script contains commands using the **dotnet.exe** executable used by .Net Core.  The build script does the following: restore, build, test, publish, and produce an MSDeploy zip package.
 
-	[CmdletBinding()]
-	Param(
-		[Parameter(Mandatory=$True)] [string] $BuildConfiguration,
-		[Parameter(Mandatory=$True)] [string] $BuildStagingDirectory
-	)
-	$ErrorActionPreference = "Stop"
-	#### Restore and build projects
-	& dotnet restore
-	& dotnet build .\src\PartsUnlimitedWebsite --configuration $BuildConfiguration
-	& dotnet build .\test\PartsUnlimited.UnitTests --configuration $BuildConfiguration
-	#### Run tests
-	& dotnet test .\test\PartsUnlimited.UnitTests -xml testresults.xml
-	#### Publish
-	$publishDirectory = Join-Path $BuildStagingDirectory "Publish"
-	$outputDirectory = Join-Path $publishDirectory "PartsUnlimited"
-	& dotnet publish .\src\PartsUnlimitedWebsite --framework netcoreapp1.0 --output $outputDirectory --configuration $BuildConfiguration --no-build
-	#### Package to MSDeploy format
+**12.** On the **Publish Test Results** task make the following changes:
+- Change the **Test Result Format** to **VSTest**.
+- On the **Test Results File** to **\*\*/testresults.xml**.
+- On **Search folder** enter the value **$(System.DefaultWorkingDirectory)**
 
-**12.** On the **Publish Test Results** task, change the **Test Result Format** to **XUnit** and the **Test Results File** to **\*\*/testresults.xml**.
-
+<!--- Image needs update to show the correct Test Result Format option
 ![](<media/CI10.png>)
+--->
 
 **13.** On the **Copy Publish Artifact** task, change the **Copy Root** property to **$(build.stagingDirectory)**, The **Contents** property to **\*\*\\\*.zip**, The **Artifact Name** property to **drop** and the **Artifact Type** to **Server**.
 
@@ -171,7 +176,7 @@ have created against it.
 
 ![](<media/CI12.png>)
 
-**15.** Click on the **Triggers** tab and verify that the **Continuous integration (CI)** option is selected to build the solution everytime a change is checked in. Also make sure the filter includes the appropriate branch (in this case **master** and **Batch Changes** checkbox is unchecked
+**15.** Click on the **Triggers** tab and verify that the **Continuous integration (CI)** option is selected to build the solution every time a change is checked in. Also make sure the filter includes the appropriate branch (in this case **master** and **Batch Changes** checkbox is unchecked
 
 ![](<media/CI13.png>)
 
@@ -187,7 +192,7 @@ We will now test the **Continuous Integration build (CI)** build we created by c
 
 **1.** Select the **Code** hub and then select your your repo, **HOL**.
 
-**2.** Navigate to **/src/PartsUnlimitedWebsite/Controllers** in the PartsUnlimited project, then click on the elipsis to the right of **HomeController.cs** and click **Edit**.
+**2.** Navigate to **/src/PartsUnlimitedWebsite/Controllers** in the PartsUnlimited project, then click on the ellipsis to the right of **HomeController.cs** and click **Edit**.
 
 ![](<media/CI15.png>)
 
