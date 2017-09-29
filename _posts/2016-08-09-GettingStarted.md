@@ -1,9 +1,4 @@
----
-layout: page
-title:  Getting Started
-category: basic
-order: 0
----
+
 
 The following instruction is for Windows. For Linux or Mac OS X, please see
 [Getting Started for Linux/OS X](GettingStartedLinuxOSX)
