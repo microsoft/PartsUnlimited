@@ -20,7 +20,7 @@ The following instruction is for Windows. For Linux or Mac OS X, please see
     npm install bower -g
     npm install grunt-cli -g
 ```
-The screenshots are out of date in these steps, but are left as they still be of some use.
+
 
 
 ## Get the source code ##
