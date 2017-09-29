@@ -1,9 +1,4 @@
----
-layout: page
-title:  Testing in Production
-category: advanced
-order: 1
----
+
 
 # Testing in Production with Azure Websites - PartsUnlimited
 
