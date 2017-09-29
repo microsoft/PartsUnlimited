@@ -1,23 +1,35 @@
 [CmdletBinding()]
 Param(
-	[Parameter(Mandatory=$True)] [string] $BuildConfiguration,
-    [Parameter(Mandatory=$True)] [string] $BuildStagingDirectory
+	[Parameter(Mandatory=$True, Position=1)] [string] $BuildConfiguration,
+	[Parameter(Mandatory=$True, Position=2)] [string] $BuildDir,
+  [Parameter(Mandatory=$True, Position=3)] [string] $BuildStagingDirectory
 )
 
 $ErrorActionPreference = "Stop"
 
+#$solution = Join-Path $BuildDir "PartsUnlimited.sln"
+#$webSiteDir = Join-Path $BuildDir "src\PartsUnlimitedWebSite"
+#$testDir = Join-Path $BuildDir "test\PartsUnlimited.UnitTests"
+#& Out-Host $solution $webSiteDir $testDir
+$solution = Join-Path "$BuildDir" "PartsUnlimited.sln"
+$webSite = Join-Path "$BuildDir" "src\PartsUnlimitedWebSite\PartsUnlimitedWebsite.csproj"
+$test = Join-Path "$BuildDir" "test\PartsUnlimited.UnitTests\PartsUnlimited.UnitTests.csproj"
+Write-Host "$solution"
+Write-Host "$webSiteDir"
+Write-Host "$testDir"
+
 # Restore and build projects
-& dotnet restore
-& dotnet build .\src\PartsUnlimitedWebsite --configuration $BuildConfiguration
-& dotnet build .\test\PartsUnlimited.UnitTests --configuration $BuildConfiguration
+& dotnet restore $solution
+& dotnet build $webSite --configuration $BuildConfiguration
+& dotnet build $test --configuration $BuildConfiguration
 
 # Run tests
-& dotnet test .\test\PartsUnlimited.UnitTests -xml testresults.xml
+& dotnet test $test --logger "trx;LogFileName=testresults.xml" --configuration $BuildConfiguration --no-build
 
 # Publish
 $publishDirectory = Join-Path $BuildStagingDirectory "Publish"
 $outputDirectory = Join-Path $publishDirectory "PartsUnlimited"
-& dotnet publish .\src\PartsUnlimitedWebsite --framework netcoreapp1.0 --output $outputDirectory --configuration $BuildConfiguration --no-build
+& dotnet publish $webSite --framework netcoreapp1.1 --output $outputDirectory --configuration $BuildConfiguration
 
 # Package to MSDeploy format
 $manifestFile = Join-Path $publishDirectory "manifest.xml"

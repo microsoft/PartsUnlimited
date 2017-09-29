@@ -17,7 +17,7 @@ In this lab we have an application called PartsUnlimited. We want to set up Cont
 
 - [Export/Import Build Definition](https://marketplace.visualstudio.com/items?itemName=onlyutkarsh.ExportImportBuildDefinition) extension for VSTS
 
-
+The screenshots are out of date in these steps, but are left as they still be of some use.
 
 ## Tasks Overview: ##
 **1. Import Source Code into your VSTS Account with Git:** In this step you will download the PartsUnlimited source code, and then push it to your own Visual Studio Team Services account.

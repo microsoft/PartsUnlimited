@@ -9,7 +9,7 @@ Parts Unlimited is an example eCommerce website site based for training purposes
 To get started, please view the [online documentation & hands-on labs website](https://microsoft.github.io/PartsUnlimited/)
 
 ## Key Features
-- Works with Visual Studio 2015 RC
+- Works with Visual Studio 2017
 - ASP.NET 5 support for Linux and Mono
 - Modern HTML5 responsive layout using bootstrap for mobile, tablet, and PC
 - Includes a Dockerfile and sample publishing profile to publish to a Docker container
