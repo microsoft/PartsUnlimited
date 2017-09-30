@@ -1,9 +1,4 @@
----
-layout: page
-title:  Quick Start
-category: basic
-order: 2
----
+
 
 HOL - Quick Start
 ====================================================================================
