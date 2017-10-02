@@ -18,8 +18,8 @@ The following instruction is for Windows. For Linux or Mac OS X, please see
 - **Azure development**
 
    If VS2017  is already installed you can add the required components by accessing ***Tools > Get Tools and Features***.
-3. Install [Azure Power Shell](https://docs.microsoft.com/en-us/powershell/azure/install-azurerm-ps?view=azurermps-4.1.0)
-4. Install [NodeJS](https://nodejs.org/en/) (we recommend the 6.11.0 LTS version)
+3. Install [Azure Power Shell](https://docs.microsoft.com/en-us/powershell/azure/install-azurerm-ps?view=azurermps-4.4.0)
+4. Install [NodeJS](https://nodejs.org/en/) (we recommend the 6.11.3 LTS version)
 5. Then run the following commands on a command line as administrator:
 ```
     npm install bower -g
