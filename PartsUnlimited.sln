@@ -1,25 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{44621553-AA7D-4893-8834-79582A7D8348}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7D749BDA-4638-4517-B66A-D40DEDEEB141}"
 	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
 		NuGet.config = NuGet.config
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B7B176B6-8D4D-4EF1-BBD2-DDA650C78FFF}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "PartsUnlimitedWebsite", "src\PartsUnlimitedWebsite\PartsUnlimitedWebsite.xproj", "{3CFBED5D-2ED8-49DB-96FB-BDAA748DC5A0}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "PartsUnlimited.Models", "src\PartsUnlimited.Models\PartsUnlimited.Models.xproj", "{AF7CC9D8-E786-472B-85CD-8EE5E7429D25}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{024D69BE-CCBC-4C2C-9D50-9AC33D2645FE}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "PartsUnlimited.UnitTests", "test\PartsUnlimited.UnitTests\PartsUnlimited.UnitTests.xproj", "{0C64E1A0-7791-457B-BD8A-60CBA4979702}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PartsUnlimitedWebsite", "src\PartsUnlimitedWebsite\PartsUnlimitedWebsite.csproj", "{3CFBED5D-2ED8-49DB-96FB-BDAA748DC5A0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PartsUnlimited.Models", "src\PartsUnlimited.Models\PartsUnlimited.Models.csproj", "{AF7CC9D8-E786-472B-85CD-8EE5E7429D25}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PartsUnlimited.UnitTests", "test\PartsUnlimited.UnitTests\PartsUnlimited.UnitTests.csproj", "{0C64E1A0-7791-457B-BD8A-60CBA4979702}"
 EndProject
 Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "PartsUnlimitedEnv", "env\PartsUnlimitedEnv.deployproj", "{BD52204A-7129-4FF2-B66C-34A5E6F70CDD}"
 EndProject
