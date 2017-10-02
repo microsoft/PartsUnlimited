@@ -14,8 +14,9 @@ The following instruction is for Windows. For Linux or Mac OS X, please see
 ## Set up your machine ##
 1. Install [Visual Studio 2017](http://go.microsoft.com/fwlink/?LinkId=517106). Visual Studio Community 2017 version is available to use for free if you need.
 2. During the VS2017 installation select the following components
-- **ASP.NET and web development**;
-- **Azure development**;
+- **ASP.NET and web development**
+- **Azure development**
+
 If VS2017  is already installed you can add the rewuired components by accessing Tools > Get Tools and Features.
 3. Install [Azure Power Shell](https://docs.microsoft.com/en-us/powershell/azure/install-azurerm-ps?view=azurermps-4.1.0)
 4. Install [NodeJS](https://nodejs.org/en/) (we recommend the 6.11.0 LTS version)
