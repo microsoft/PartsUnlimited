@@ -8,7 +8,8 @@ order: 0
 
 
 The following instruction is for Windows. For Linux or Mac OS X, please see
-[Getting Started for Linux/OS X](GettingStartedLinuxOSX.md)
+[Getting Started for Linux/OS X](GettingStartedLinuxOSX)
+
 
 ## Set up your machine ##
 1. Install [Visual Studio 2017](http://go.microsoft.com/fwlink/?LinkId=517106)
