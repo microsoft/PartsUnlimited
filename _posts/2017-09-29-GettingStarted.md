@@ -17,7 +17,7 @@ The following instruction is for Windows. For Linux or Mac OS X, please see
 - **ASP.NET and web development**
 - **Azure development**
 
-   If VS2017  is already installed you can add the required components by accessing ***Tools > Get Tools and Features***.
+   If VS2017  is already installed you can add the required components by accessing ***Tools > Get Tools and Features*** from within Visual Studio.
 3. Install [Azure Power Shell](https://docs.microsoft.com/en-us/powershell/azure/install-azurerm-ps?view=azurermps-4.4.0)
 4. Install [NodeJS](https://nodejs.org/en/) (we recommend the 6.11.3 LTS version)
 5. Then run the following commands on a command line as administrator:
@@ -31,7 +31,7 @@ The following instruction is for Windows. For Linux or Mac OS X, please see
 ## Get the source code ##
 1. Open Visual Studio 2017
 2. Go to View -> Team Explorer
-3. On the Connect page of the Team Explorer window, click the Clone drop-down located under the Local Git Repositories section
+3. Click the Manage Connections icon on the Team Explorer window, then under Local Git Repositories click the Clone drop-down
 4. Enter the URL https://github.com/Microsoft/PartsUnlimited.git
 5. If desired, change the local repository path
 6. Click the Clone button
