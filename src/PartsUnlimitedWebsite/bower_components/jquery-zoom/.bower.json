@@ -1,0 +1,39 @@
+{
+  "name": "jquery-zoom",
+  "description": "Enlarge images on click or mouseover.",
+  "dependencies": {
+    "jquery": ">=1.7"
+  },
+  "keywords": [
+    "zoom",
+    "images",
+    "ui",
+    "jQuery",
+    "jquery-plugin"
+  ],
+  "authors": [
+    {
+      "name": "Jack Moore",
+      "url": "http://www.jacklmoore.com",
+      "email": "hello@jacklmoore.com"
+    }
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/mit-license.php"
+    }
+  ],
+  "homepage": "http://www.jacklmoore.com/zoom",
+  "main": "jquery.zoom.js",
+  "version": "1.7.18",
+  "_release": "1.7.18",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.7.18",
+    "commit": "9d3b77b8e380a47330df61636014faf915f26bf4"
+  },
+  "_source": "https://github.com/jackmoore/zoom.git",
+  "_target": "1.7.18",
+  "_originalSource": "jquery-zoom"
+}

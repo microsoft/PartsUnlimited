@@ -1,0 +1,14 @@
+{
+  "name": "jquery-ui-smoothness",
+  "homepage": "https://github.com/CrankyDragon/jquery-ui-smoothness",
+  "version": "1.11.1",
+  "_release": "1.11.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.11.1",
+    "commit": "8b5712baf88eceaebe8b0a58acfebda1d850288d"
+  },
+  "_source": "https://github.com/CrankyDragon/jquery-ui-smoothness.git",
+  "_target": "1.11.1",
+  "_originalSource": "jquery-ui-smoothness"
+}

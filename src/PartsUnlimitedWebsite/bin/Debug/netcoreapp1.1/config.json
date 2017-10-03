@@ -1,0 +1,41 @@
+﻿{
+  "AdminRole": {
+    "UserName": "Administrator@test.com",
+    "Password": "YouShouldChangeThisPassword1!"
+  },
+  "CDN": {
+    "images": "/images",
+    "Scripts": {
+      "bootstrap": "/lib/bootstrap/js/bootstrap.js",
+      "jquery": "/lib/jquery/jquery.js",
+      "jquery-ui": "/lib/jquery-ui/jquery-ui.js",
+      "jquery-validation": "/lib/jquery-validation/jquery-validation.js",
+      "jquery-zoom": "/lib/jquery-zoom/jquery.zoom.js",
+      "respond": "/lib/respond/respond.src.js",
+      "site": "/Scripts/AppInsights.js /Scripts/UI-Initialization.js /Scripts/Recommendations.js"
+    },
+    "Styles": {
+      "jquery-ui": "/lib/jquery-ui-smoothness/jquery-ui.css",
+      "bootstrap": "/lib/bootstrap/css/bootstrap.css",
+      "bootstrap-switch": "/lib/bootstrap-switch/bootstrap-switch.css",
+      "site": "/Content/Site.css /Content/Home.css /Content/Account.css /Content/Store.css /Content/ShoppingCart.css"
+    }
+  },
+  "WebsiteOptions": {
+    "ShowRecommendations": "false"
+  },
+  "Keys": {
+    // To use Azure Machine Learning Frequently Bought Together Recommendation Service,
+    // please refer to the instructions under docs/MachineLearning.md in this repository.
+    //"AzureMLFrequentlyBoughtTogether": {
+    //  "AccountKey": "",
+    //  "ModelName": ""
+    //},
+    "ApplicationInsights": {
+      "InstrumentationKey": "efc04167-3227-40ff-aa88-46a271dba379"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnectionString": ""
+  }
+}

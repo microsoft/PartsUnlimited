@@ -1,0 +1,14 @@
+C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimitedWebsite\bin\Debug\netcoreapp1.1\config.json
+C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimitedWebsite\bin\Debug\netcoreapp1.1\PartsUnlimitedWebsite.deps.json
+C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimitedWebsite\bin\Debug\netcoreapp1.1\PartsUnlimitedWebsite.runtimeconfig.json
+C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimitedWebsite\bin\Debug\netcoreapp1.1\PartsUnlimitedWebsite.runtimeconfig.dev.json
+C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimitedWebsite\bin\Debug\netcoreapp1.1\PartsUnlimitedWebsite.dll
+C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimitedWebsite\bin\Debug\netcoreapp1.1\PartsUnlimitedWebsite.pdb
+C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimitedWebsite\bin\Debug\netcoreapp1.1\PartsUnlimited.Models.dll
+C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimitedWebsite\bin\Debug\netcoreapp1.1\PartsUnlimited.Models.pdb
+C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimitedWebsite\obj\Debug\netcoreapp1.1\PartsUnlimitedWebsite.csprojResolveAssemblyReference.cache
+C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimitedWebsite\obj\Debug\netcoreapp1.1\PartsUnlimitedWebsite.csproj.CoreCompileInputs.cache
+C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimitedWebsite\obj\Debug\netcoreapp1.1\PartsUnlimitedWebsite.AssemblyInfoInputs.cache
+C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimitedWebsite\obj\Debug\netcoreapp1.1\PartsUnlimitedWebsite.AssemblyInfo.cs
+C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimitedWebsite\obj\Debug\netcoreapp1.1\PartsUnlimitedWebsite.dll
+C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimitedWebsite\obj\Debug\netcoreapp1.1\PartsUnlimitedWebsite.pdb

@@ -1,0 +1,29 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "WebsiteName": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "name": "[concat(parameters('WebsiteName'), 'Insights')]",
+            "type": "Microsoft.Insights/components",
+            "location": "East US",
+            "apiVersion": "2014-04-01",
+            "tags": {
+                "displayName": "insightsComponents"
+            },
+            "properties": {
+                "ApplicationId": "[parameters('WebsiteName')]"
+            }
+        }
+    ],
+    "outputs": {
+        "instrumentationKey": {
+            "type": "string",
+            "value": "[reference(concat('Microsoft.Insights/components/', parameters('WebsiteName'), 'Insights')).InstrumentationKey]"
+        }
+    }
+}

@@ -1,0 +1,152 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "WebsiteName": {
+            "type": "string"
+        },
+        "HostingPlanName": {
+            "type": "string"
+        },
+        "DatabaseConnectionString": {
+            "type": "string"
+        },
+        "DevSlotDatabaseConnectionString": {
+            "type": "string"
+        },
+        "StageSlotDatabaseConnectionString": {
+            "type": "string"
+        },
+        "AppInsightsKey": {
+            "type": "string"
+        },
+        "DevSlotAppInsightsKey": {
+            "type": "string"
+        },
+        "StageSlotAppInsightsKey": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "name": "[parameters('WebsiteName')]",
+            "type": "Microsoft.Web/sites",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2014-06-01",
+            "tags": {
+                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('HostingPlanName'))]": "Resource",
+                "displayName": "PartsUnlimitedWebsite"
+            },
+            "properties": {
+                "name": "[parameters('WebsiteName')]",
+                "serverFarm": "[parameters('HostingPlanName')]"
+            },
+            "resources": [
+                {
+                    "name": "connectionstrings",
+                    "type": "config",
+                    "apiVersion": "2014-11-01",
+                    "dependsOn": [
+                        "[concat('Microsoft.Web/sites/', parameters('WebsiteName'))]"
+                    ],
+                    "properties": {
+                        "DefaultConnection": { "value": "[parameters('DatabaseConnectionString')]", "type": "SQLAzure" }
+                    }
+                },
+                {
+                    "name": "appsettings",
+                    "type": "config",
+                    "apiVersion": "2014-11-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', parameters('WebsiteName'))]"
+                    ],
+                    "properties": {
+                        "Keys:ApplicationInsights:InstrumentationKey": "[parameters('AppInsightsKey')]"
+                    }
+                },
+                {
+                    "name": "slotconfignames",
+                    "type": "config",
+                    "apiVersion": "2014-11-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', parameters('WebsiteName'))]"
+                    ],
+                    "properties": {
+                        "connectionStringNames": [ "defaultConnection" ],
+                        "appSettingNames": [ "keys:ApplicationInsights:InstrumentationKey" ]
+                    }
+                },
+                {
+                    "name": "Dev",
+                    "type": "slots",
+                    "location": "[resourceGroup().location]",
+                    "apiVersion": "2014-11-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', parameters('WebsiteName'))]"
+                    ],
+                    "properties": {
+                    },
+                    "resources": [
+                        {
+                            "name": "connectionstrings",
+                            "type": "config",
+                            "apiVersion": "2014-11-01",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites/slots', parameters('WebsiteName'), 'Dev')]"
+                            ],
+                            "properties": {
+                                "DefaultConnection": { "value": "[parameters('DevSlotDatabaseConnectionString')]", "type": "SQLAzure" }
+                            }
+                        },
+                        {
+                            "name": "appsettings",
+                            "type": "config",
+                            "apiVersion": "2014-11-01",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites/slots', parameters('WebsiteName'), 'Dev')]"
+                            ],
+                            "properties": {
+                                "Keys:ApplicationInsights:InstrumentationKey": "[parameters('DevSlotAppInsightsKey')]"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Staging",
+                    "type": "slots",
+                    "location": "[resourceGroup().location]",
+                    "apiVersion": "2014-11-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', parameters('WebsiteName'))]"
+                    ],
+                    "properties": {
+                    },
+                    "resources": [
+                        {
+                            "name": "connectionstrings",
+                            "type": "config",
+                            "apiVersion": "2014-11-01",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites/slots', parameters('WebsiteName'), 'Staging')]"
+                            ],
+                            "properties": {
+                                "DefaultConnection": { "value": "[parameters('StageSlotDatabaseConnectionString')]", "type": "SQLAzure" }
+                            }
+                        },
+                        {
+                            "name": "appsettings",
+                            "type": "config",
+                            "apiVersion": "2014-11-01",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites/slots', parameters('WebsiteName'), 'Staging')]"
+                            ],
+                            "properties": {
+                                "Keys:ApplicationInsights:InstrumentationKey": "[parameters('StageSlotAppInsightsKey')]"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
