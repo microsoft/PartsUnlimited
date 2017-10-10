@@ -5,7 +5,7 @@ category: advanced
 order: 1
 ---
 
-# Testing in Production with Azure Websites - PartsUnlimited
+# Testing in Production with Azure Web Apps - PartsUnlimited
 
 According to the internal sales team, oil and filters are still not selling with a 20% discount. The engineering team is looking for a way to remedy this and would like to try increasing the current 5 second-interval on the homepage carousel showing the 20% discount to 20 seconds. The team would like to have 20-second intervals in a test version of the website and keep the current 5-second interval in production.
 
