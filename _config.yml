@@ -21,8 +21,6 @@ codeurl: 'https://github.com/Microsoft/PartsUnlimited'
 sections: [
     ['basic', 'Basic DevOps Practices'],
     ['advanced', 'Advanced DevOps Practices']
-
-
 ]
 
 # Keep as an empty string if served up at the root. If served up at a specific
