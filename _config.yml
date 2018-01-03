@@ -21,10 +21,8 @@ codeurl: 'https://github.com/Microsoft/PartsUnlimited'
 sections: [
     ['basic', 'Basic DevOps Practices'],
     ['advanced', 'Advanced DevOps Practices']
-    ['PracticesandPrinciples', 'DevOps Practices and Principles'],
     ['IaC', 'Infrastructure as Code'],
-    ['CICD', 'Continuous Integration and Continuous Deployment'],
-    ['ConfigMgmt', 'Configuration Mgmt For Containerized Delivery'],
+
 ]
 
 # Keep as an empty string if served up at the root. If served up at a specific
