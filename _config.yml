@@ -21,7 +21,7 @@ codeurl: 'https://github.com/Microsoft/PartsUnlimited'
 sections: [
     ['basic', 'Basic DevOps Practices'],
     ['advanced', 'Advanced DevOps Practices']
-    ['IaC', 'Infrastructure as Code'],
+
 
 ]
 
