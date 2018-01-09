@@ -18,7 +18,7 @@ navigation: 2
 codeurl: 'https://github.com/Microsoft/PartsUnlimited'
 
 # Default categories (in order) to appear in the navigation
-sections: [['basic', 'Basic DevOps Practices'],['advanced', 'Advanced DevOps Practices'],['PandP',DevOps Practices and Principles],['IaC', 'Infrastructure as Code'],['CICD', 'Continuous Integration and Continuous Deployment'],['ConfigMgmt', 'Configuration Mgmt For Containerized Delivery'],]
+sections: [['basic', 'Basic DevOps Practices'],['advanced', 'Advanced DevOps Practices'],['PandP',DevOps Practices and Principles],['IaC', 'Infrastructure as Code'],['CICD', 'Continuous Integration and Continuous Deployment'],['ConfigMgmt', 'Configuration Mgmt For Containerized Delivery'],['Testing', 'Testing'],['db', 'DevOps for Databases'],['APM', 'Application Monitoring and Feedback Loops'],['mobile', 'DevOps for Mobile Apps'],['Arch', 'Architecting Distributed Cloud Applications']]
 
 # Keep as an empty string if served up at the root. If served up at a specific
 # path (e.g. on GitHub pages) leave off the trailing slash, e.g. /my-project
