@@ -24,7 +24,7 @@
 
         <!-- Wrapper for slides -->
         <div class="carousel-inner" role="listbox">
-        <div class="item active" @Html.ImageBackground("hero_image1.jpg")>
+            <div class="item active" style="background-image: url(/images/hero_image1.jpg)">
                 <a href="@Url.Action("Browse", "Store", new { categoryId = 5 })" class="carousel-wrapper-link"></a>
                 <p>All oil and filters</p>
                 <p>20%</p>
@@ -33,7 +33,7 @@
                     <a href="@Url.Action("Browse", "Store", new { categoryId = 5 })" class="carousel-link">Shop Now</a>
 </div>
             </div>
-            <div class="item" @Html.ImageBackground("hero_image2.jpg")>
+            <div class="item" style="background-image: url(/images/hero_image2.jpg)">
                 <a href="@Url.Action("Browse", "Store", new { categoryId = 3 })" class="carousel-wrapper-link"></a>
                 <div class="container">
                     <p>New tires</p>
@@ -47,7 +47,7 @@
                     <a href="@Url.Action("Browse", "Store", new { categoryId = 3 })" class="carousel-link">Shop Now</a>
                 </div>
             </div>
-            <div class="item" @Html.ImageBackground("hero_image3.jpg")>
+            <div class="item" style="background-image: url(/images/hero_image3.jpg)">
                 <a href="@Url.Action("Index", "Store")" class="carousel-wrapper-link"></a>
                 <p>Old<span> or </span>new</p>
                 <p>Find the parts for you</p>

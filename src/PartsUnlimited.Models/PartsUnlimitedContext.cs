@@ -38,12 +38,14 @@ namespace PartsUnlimited.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
             if (!string.IsNullOrWhiteSpace(_connectionString))
             {
                 optionsBuilder.UseSqlServer(_connectionString);
             }else
             {
-                optionsBuilder.UseInMemoryDatabase();
+                System.Data.SqlClient.SqlConnectionStringBuilder builder = new System.Data.SqlClient.SqlConnectionStringBuilder(_connectionString);
+                optionsBuilder.UseInMemoryDatabase("Test");
             }
         }
     }

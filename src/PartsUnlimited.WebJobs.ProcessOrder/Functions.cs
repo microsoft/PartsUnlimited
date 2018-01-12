@@ -61,7 +61,7 @@ namespace PartsUnlimited.WebJobs.ProcessOrder
                         };
                         var settings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
                         var message = JsonConvert.SerializeObject(queueOrder, settings);
-                        orderQueue.AddMessage(new CloudQueueMessage(message));
+                        orderQueue.AddMessageAsync(new CloudQueueMessage(message));
                         order.Processed = true;
                     }
                     context.SaveChanges();

@@ -48,16 +48,9 @@ namespace PartsUnlimited.Controllers
         {
             Product productData;
 
-            if (!_cache.TryGetValue(string.Format("product_{0}", id), out productData))
-            {
-                productData = _db.Products.Single(a => a.ProductId == id);
-                productData.Category = _db.Categories.Single(g => g.CategoryId == productData.CategoryId);
+            productData = _db.Products.Single(a => a.ProductId == id);
+            productData.Category = _db.Categories.Single(g => g.CategoryId == productData.CategoryId);
 
-                if (productData != null)
-                {
-                    _cache.Set(string.Format("product_{0}", id), productData, new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10)));
-                }                
-            }
 
             return View(productData);
         }

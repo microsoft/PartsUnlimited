@@ -92,7 +92,7 @@
                             <div class="col-xs-1 no-gutter-xs-right text-center-xs col-sm-2 col-sm-push-8 text-center-sm">
                                 <div class="item-label item-inventory">@item.Count</div>
                             </div>
-                            <div class="col-xs-3 col-sm-3 col-sm-pull-2 col-md-2">@Html.Image(item.Product.ProductArtUrl)</div>
+                            <div class="col-xs-3 col-sm-3 col-sm-pull-2 col-md-2"><img src="/images/@item.Product.ProductArtUrl" /></div>
                             <div class="col-xs-6 col-sm-2 col-sm-push-5 text-center-sm col-md-push-6">
                                 <div class="visible-xs item-label">@item.Product.Title</div>
                                 <div class="item-price">@item.Product.Price.ToString("C")</div>
@@ -100,7 +100,7 @@
                             <div class="visible-xs col-xs-2 text-right no-gutter-xs-left">
                                 <a href="#" class="remove-link" data-id="@item.CartItemId"
                                    data-url='@Url.Content("~/ShoppingCart/RemoveFromCart")'>
-                                    @Html.Image("remove_icon.png", "remove from cart icon")
+                                    <img src="/images/remove_icon.png"/> 
                                 </a>
                             </div>
                             <div class="col-xs-12 col-sm-5 col-sm-pull-4 col-md-6 description">

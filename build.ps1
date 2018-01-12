@@ -24,12 +24,12 @@ Write-Host "$testDir"
 & dotnet build $test --configuration $BuildConfiguration
 
 # Run tests
-& dotnet test $test --logger "trx;LogFileName=testresults.xml" --configuration $BuildConfiguration --no-build
+& dotnet test $test --configuration $BuildConfiguration --logger "trx;LogFileName=testresults.xml" --no-build
 
 # Publish
 $publishDirectory = Join-Path $BuildStagingDirectory "Publish"
 $outputDirectory = Join-Path $publishDirectory "PartsUnlimited"
-& dotnet publish $webSite --framework netcoreapp1.1 --output $outputDirectory --configuration $BuildConfiguration
+& dotnet publish $webSite --framework netcoreapp2.0 --output $outputDirectory --configuration $BuildConfiguration
 
 # Package to MSDeploy format
 $manifestFile = Join-Path $publishDirectory "manifest.xml"

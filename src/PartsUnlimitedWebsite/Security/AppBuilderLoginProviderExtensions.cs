@@ -1,48 +1,57 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace PartsUnlimited.Security
 {
     internal static class AppBuilderLoginProviderExtensions
     {
-        public static void AddLoginProviders(this IApplicationBuilder app, ILoginProviders loginProviders)
+        public static IConfigurationRoot Configuration { get; }
+
+        public static void AddLoginProviders(this IServiceCollection services, ILoginProviders loginProviders)
         {
             if (loginProviders.Azure.Use)
             {
-                app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions()
-                {
-                    ClientId = loginProviders.Azure.ClientId,
-                    Authority = loginProviders.Azure.Authority
-                });
+                services.AddAuthentication(options => {
+                                            options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                                            options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                                        })
+                        .AddCookie()
+                        .AddOpenIdConnect(options => {
+                            options.Authority = Configuration["auth:oidc:authority"];
+                            options.ClientId = Configuration["auth:oidc:clientid"];
+                        });
             }
 
             if (loginProviders.Facebook.Use)
             {
-                app.UseFacebookAuthentication(new FacebookOptions()
-                {
-                    AppId = loginProviders.Facebook.Key,
-                    AppSecret = loginProviders.Facebook.Secret
-                });
+                services.AddAuthentication()
+                        .AddFacebook(options => {
+                            options.AppId = Configuration["auth:facebook:appid"];
+                            options.AppSecret = Configuration["auth:facebook:appsecret"];
+                        });
             }
 
             if (loginProviders.Google.Use)
             {
-                app.UseGoogleAuthentication(new GoogleOptions()
-                {
-                    ClientId = loginProviders.Google.Key,
-                    ClientSecret = loginProviders.Google.Secret
-                });              
+                services.AddAuthentication()
+                        .AddGoogle(options => {
+                            options.ClientId = Configuration["auth:google:clientid"];
+                            options.ClientSecret = Configuration["auth:google:clientsecret"];
+                        });
             }
 
             if (loginProviders.Twitter.Use)
             {
-                app.UseTwitterAuthentication(new TwitterOptions() 
-                {
-                    ConsumerKey = loginProviders.Twitter.Key,
-                    ConsumerSecret = loginProviders.Twitter.Secret
-                });
+                services.AddAuthentication()
+                        .AddTwitter(options => {
+                            options.ConsumerKey = Configuration["auth:twitter:consumerkey"];
+                            options.ConsumerSecret = Configuration["auth:twitter:consumersecret"];
+                        });
             }
 
             if (loginProviders.Microsoft.Use)
@@ -63,11 +72,11 @@ namespace PartsUnlimited.Security
                 //The sample app can then be run via:
                 // k web
 
-                app.UseMicrosoftAccountAuthentication(new MicrosoftAccountOptions()
-                {
-                    ClientId = loginProviders.Microsoft.Key,
-                    ClientSecret = loginProviders.Microsoft.Secret
-                });
+                services.AddAuthentication()
+                        .AddMicrosoftAccount(options => {
+                            options.ClientId = Configuration["auth:microsoft:clientid"];
+                            options.ClientSecret = Configuration["auth:microsoft:clientsecret"];
+                        });
             }
         }
     }

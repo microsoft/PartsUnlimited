@@ -34,6 +34,10 @@ input[type='text'], input[type='password'], input[type='submit'], input[type='bu
 	border-radius: 0;
 }
 
+.back {
+    width: -webkit-fill-available;
+}
+
 select.form-control {
 	border-radius: 0;
 	max-width: none;

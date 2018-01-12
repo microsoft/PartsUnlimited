@@ -3,7 +3,6 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using PartsUnlimited.Models;
@@ -11,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Server.Kestrel.Internal.Http;
+//using Microsoft.AspNetCore.Server.Kestrel.Internal.Http;
 
 namespace PartsUnlimited.Areas.Admin.Controllers
 {
@@ -106,11 +105,10 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         {
             string cacheId = string.Format("product_{0}", id);
 
-            Product product;
-            if (!_cache.TryGetValue(cacheId, out product))
+            if (!_cache.TryGetValue(cacheId, out Product product))
             {
                 //If this returns null, don't stick it in the cache
-                product =  _db.Products.Where(a => a.ProductId == id).FirstOrDefault();
+                product =  _db.Products.FirstOrDefault(a => a.ProductId == id);
 
                 if (product != null)
                 {
@@ -122,7 +120,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
             if (product == null)
             {
                 _cache.Remove(cacheId);
-                return View(product);
+                return View((Product)null);
             }
 
             // TODO [EF] We don't query related data as yet. We have to populate this until we do automatically.
@@ -159,13 +157,8 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         // GET: /StoreManager/Edit/5
         public IActionResult Edit(int id)
         {
-            Product product = _db.Products.Where(a => a.ProductId == id).FirstOrDefault();
+            Product product = _db.Products.FirstOrDefault(a => a.ProductId == id);
             ViewBag.Categories = new SelectList(_db.Categories, "CategoryId", "Name", product.CategoryId).ToList();
-
-            if (product == null)
-            {
-                return View(product);
-            }
 
             return View(product);
         }
@@ -193,7 +186,7 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         // GET: /StoreManager/RemoveProduct/5
         public IActionResult RemoveProduct(int id)
         {
-            Product product = _db.Products.Where(a => a.ProductId == id).FirstOrDefault();
+            Product product = _db.Products.FirstOrDefault(a => a.ProductId == id);
             return View(product);
         }
 
@@ -202,8 +195,8 @@ namespace PartsUnlimited.Areas.Admin.Controllers
         [HttpPost, ActionName("RemoveProduct")]
         public async Task<IActionResult> RemoveProductConfirmed(int id)
         {
-            Product product = _db.Products.Where(a => a.ProductId == id).FirstOrDefault();
-            CartItem cartItem = _db.CartItems.Where(a => a.ProductId == id).FirstOrDefault();
+            Product product = _db.Products.FirstOrDefault(a => a.ProductId == id);
+            CartItem cartItem = _db.CartItems.FirstOrDefault(a => a.ProductId == id);
             List<OrderDetail> orderDetail = _db.OrderDetails.Where(a => a.ProductId == id).ToList();
             List<Raincheck> rainCheck = _db.RainChecks.Where(a => a.ProductId == id).ToList();
 
@@ -215,17 +208,11 @@ namespace PartsUnlimited.Areas.Admin.Controllers
                     await _db.SaveChangesAsync(HttpContext.RequestAborted);
                 }
 
-                if (orderDetail != null)
-                {
-                    _db.OrderDetails.RemoveRange(orderDetail);
-                    await _db.SaveChangesAsync(HttpContext.RequestAborted);
-                }
+                _db.OrderDetails.RemoveRange(orderDetail);
+                await _db.SaveChangesAsync(HttpContext.RequestAborted);
 
-                if (rainCheck != null)
-                {
-                    _db.RainChecks.RemoveRange(rainCheck);
-                    await _db.SaveChangesAsync(HttpContext.RequestAborted);
-                }
+                _db.RainChecks.RemoveRange(rainCheck);
+                await _db.SaveChangesAsync(HttpContext.RequestAborted);
 
                 _db.Products.Remove(product);
                 await _db.SaveChangesAsync(HttpContext.RequestAborted);

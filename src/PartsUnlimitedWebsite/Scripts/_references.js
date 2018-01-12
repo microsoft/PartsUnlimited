@@ -1,4 +1,4 @@
-﻿/// <reference path="../gruntfile.js" />
+﻿<reference path="../gruntfile.js" />;
 /// <reference path="AppInsights.js" />
 /// <reference path="../wwwroot/lib/bootstrap/bootstrap.js" />
 /// <reference path="../wwwroot/lib/jquery/jquery.js" />

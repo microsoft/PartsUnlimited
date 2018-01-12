@@ -16,4 +16,10 @@
             <li> @Html.ActionLink("View Rainchecks", "Index", "Raincheck", new { area = AdminConstants.Area }) </li>
         </ul>
     </li>
+
+    <script>
+        $(document).ready(function(){
+            $(".dropdown-toggle").dropdown("toggle");
+        });
+    </script>
 }

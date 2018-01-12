@@ -1,9 +1,0 @@
-C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimited.Models\bin\Debug\netstandard1.6\PartsUnlimited.Models.deps.json
-C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimited.Models\bin\Debug\netstandard1.6\PartsUnlimited.Models.dll
-C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimited.Models\bin\Debug\netstandard1.6\PartsUnlimited.Models.pdb
-C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimited.Models\obj\Debug\netstandard1.6\PartsUnlimited.Models.csproj.CoreCompileInputs.cache
-C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimited.Models\obj\Debug\netstandard1.6\PartsUnlimited.Models.AssemblyInfoInputs.cache
-C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimited.Models\obj\Debug\netstandard1.6\PartsUnlimited.Models.AssemblyInfo.cs
-C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimited.Models\obj\Debug\netstandard1.6\PartsUnlimited.Models.dll
-C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimited.Models\obj\Debug\netstandard1.6\PartsUnlimited.Models.pdb
-C:\Repos\Intergen\ghpu_intergen_24thjuly17\PartsUnlimited\src\PartsUnlimited.Models\obj\Debug\netstandard1.6\PartsUnlimited.Models.csprojResolveAssemblyReference.cache
