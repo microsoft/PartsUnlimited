@@ -36,8 +36,9 @@
   </ItemGroup>
 
   <Target Name="PrecompileScript" BeforeTargets="BeforeBuild">
+    <Exec Command="npm install python2" />
     <Exec Command="npm install --loglevel=error" />
     <Exec Command="grunt" />
-    </Target>
+  </Target>
 
 </Project>
