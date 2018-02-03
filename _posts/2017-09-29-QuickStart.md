@@ -116,7 +116,7 @@ For this HOL, you will use a Service Principal. Follow these instructions to qui
 
 	![](</PartsUnlimited/assets/quickstart/18.png>)
 
-2. Navigate to "Triggers" tab, check "Continuous integration (CI)" and make sure that your master branch is specified as a trigger. Click on "Save", then "OK".
+2. Navigate to "Triggers" tab, check "Continuous integration (CI)" and make sure that your `master` branch is specified as a trigger. Click on "Save", then "OK".
 
 	![](</PartsUnlimited/assets/quickstart/19.png>)
 
