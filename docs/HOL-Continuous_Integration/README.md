@@ -37,55 +37,58 @@ If you haven't already, create a new team project in your Visual Studio Team Ser
 
 ![](<media/empty-vsts-git.png>)
 
-**1.** Clone the repository to a local directory.
+**1.** Use the Import button to import the repository from Github.
+
+Click on `Code` to navigate to the code hub of your team project. This page has instructions for cloning this repo to your hard drive
+or pushing existing code. Since this is an empty repo, neither of these options apply in this case.
+
+Locate the `Import` button and click it:
+
+![](<media/CI19.png>)
+
+Enter the URL to the Github repo 
+
+```
+https://github.com/Microsoft/PartsUnlimited
+```
+
+and press `Import`.
+
+![](<media/CI20.png>)
+
+It will only take VSTS a few moments to import the repo - once it is complete, you will get a Success message. After a few seconds,
+VSTS will automatically redirect you to the file view of the repository.
+
+![](<media/CI21.png>)
+
+Congratulations, your code should now be in VSTS!
+
+![](<media/CI22.png>)
+
+**2.** Clone the repo to your hard drive.
+
+> Note: You do not have to do this unless you are going to need the source code opened in Visual Studio.
 
 Create a parent **Working Directory** on your local file system. For instance, on a Windows OS you can create the following directory:
 
-`C:\Source\Repos`
+```
+C:\Source\Repos
+```
 
 Open a command line (one that supports Git) and change to the directory you created above.
 
-Clone the repository with the following command. You can paste in the URL if you copied it in Step 1.  In the example below, the clone will be copied into a directory named HOL. Feel free to use whatever directory name you like, or leave it blank to use the default directory name:
+In VSTS, right-click the `Clone` button on the top right of the repository File view. Click the `Copy` button to copy the URL of the repo to
+the clipboard.
 
-	git clone https://github.com/Microsoft/PartsUnlimited.git HOL
+![](<media/CI23.png>)
+
+Clone the repository using the `git clone` command. Type `git clone`, then a space and then paste in the URL you just copied. You can optionally add another space and a repo name. In the example below, the clone will be copied into a directory named HOL. Feel free to use whatever directory name you like, or leave it blank to use the default directory name:
+
+```
+git clone <vsts-git-url> HOL
+```
 
 After a few seconds of downloading, all of the code should now be on your local machine.
-
-Move into the directory that was just created.  In a Windows OS (and assuming you used HOL as the directory name), you can use this command:
-
-	cd HOL
-
-**2.** Remove the link to GitHub.
-
-The Git repo you just downloaded currently has a remote called _origin_ that points to the GitHub repo.  Since we won't be using it any longer, we can delete the reference.
-
-To delete the GitHub remote, use:
-
-	git remote remove origin
-
-**3.** Find the URL to access the VSTS Git repo
-
-First, we need to find the URL to empty Git repository in VSTS.  If you remember your account name, and the Team Project name you created, the URL to the default Git repo is easily assembled:
-
-	https://<account>.visualstudio.com\_git\<project>
-
-Alternatively, you can use a web browser to browse to your account, click into your project, and click the Code tab to get to your default Git repository:
-
-	https://<account>.visualstudio.com
-
-Additionally, at the bottom of the web page, you will see the two commands that we will use to push the existing code to VSTS.
-
-![](<media/findVstsRepoUrl.png>)
-
-**4.** Add the link to VSTS and push your local Git repo
-
-In the local directory from Step 1, use the following command to add VSTS as the Git remote named _origin_. You can either type the URL you found in Step 3, or simply copy the first command from the VSTS web page.
-
-	git remote add origin https://<account>.visualstudio.com\<project>\_git\<project>
-Now you can push the code, including history, to VSTS:
-
-	git push -u origin --all
-Congratulations, your code should now be in VSTS!
 
 ### II. Create Continuous Integration Build
 
