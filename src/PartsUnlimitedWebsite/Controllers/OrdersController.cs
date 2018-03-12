@@ -57,6 +57,7 @@ namespace PartsUnlimited.Controllers
                     {"Id", id.ToString() },
                     {"Username", username }
                 };
+
             if (order.OrderDetails == null)
             {
                 _telemetry.TrackEvent("Order/Server/NullDetails", eventProperties, null);
