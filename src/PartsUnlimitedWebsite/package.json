@@ -31,5 +31,8 @@
     "type": "git",
     "url": "https://partsunlimited.visualstudio.com/DefaultCollection/_git/PartsUnlimited"
   },
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "dependencies": {
+    "python2": "0.0.1"
+  }
 }
