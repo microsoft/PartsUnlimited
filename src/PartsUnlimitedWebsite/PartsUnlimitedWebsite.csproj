@@ -6,9 +6,12 @@
     <AssemblyName>PartsUnlimitedWebsite</AssemblyName>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <UserSecretsId>aspnet-PartsUnlimitedWebsite-88B5164A-732F-489C-B25E-AC693ECEB5FB</UserSecretsId>
+    <ApplicationInsightsResourceId>/subscriptions/a59dd4c8-1bb5-4ee2-a795-a7e2e8ae8b05/resourcegroups/PartsUnlimitedResourceGroup/providers/microsoft.insights/components/PartsUnlimitedApplicationinsights</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/a59dd4c8-1bb5-4ee2-a795-a7e2e8ae8b05/resourcegroups/PartsUnlimitedResourceGroup/providers/microsoft.insights/components/PartsUnlimitedApplicationinsights</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
 
   <ItemGroup>	
+	<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />	
 	<PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />	
 	<PackageReference Include="Microsoft.DotNet.InternalAbstractions" Version="1.0.500-preview2-1-003177" />	
 
@@ -33,6 +36,10 @@
     <None Update="Views\**\*;Areas\**\*">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 
   <Target Name="PrecompileScript" BeforeTargets="BeforeBuild">
