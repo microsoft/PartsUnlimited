@@ -1,0 +1,21 @@
+subst x: "C:\Users\Admin\Dropbox\Xpirit\Klanten en Prospects\Microsoft US\DevOps Configuration Mgmt\Modules"
+
+.\deploy.ps1 -subscriptionId 8791549a-6c99-40d9-8390-d316ee32d284 -resourceGroupName DockerSwarmACS -resourceGroupLocation westeurope -deploymentName initial
+
+
+
+putty:	 	load ACS Linux - ascswarmclustermgmt.westeurope.cloudapp.azure.com @ 2200
+user:		azureuser
+passphrase: 	Msftcourse01!
+pk:		\DevOps Configuration Mgmt\secrets\acscluster.ppk
+
+
+compose file:
+
+web:
+  image: "yeasy/simple-web"
+  ports:
+    - "80:80"
+  restart: "always"
+
+command:	docker-compose up -d

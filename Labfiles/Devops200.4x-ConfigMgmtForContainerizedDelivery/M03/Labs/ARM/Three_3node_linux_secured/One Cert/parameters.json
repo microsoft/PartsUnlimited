@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "clusterName": {
-      "value": "asfc2"
+      "value": "fabricclusterlinux"
     },
     "clusterLocation": {
       "value": "westeurope"
@@ -15,7 +15,7 @@
       "value": "azureuser"
     },
     "adminPassword": {
-      "value": "Pa$$w0rd01!"
+      "value": null
     },
     "nicName": {
       "value": "NIC-fabricclusterlinux"
@@ -27,7 +27,7 @@
       "value": "sfvmfabricclusterlin9993"
     },
     "dnsName": {
-      "value": "asfc2"
+      "value": "fabricclusterlinux"
     },
     "virtualNetworkName": {
       "value": "VNet-fabricclusterlinux"
@@ -45,13 +45,13 @@
       "value": "sflogsfabricclusterl5492"
     },
     "sourceVaultValue": {
-      "value": "/subscriptions/<subscriptionID>/resourceGroups/keyvault_rg/providers/Microsoft.KeyVault/vaults/asfckeyvault"
+      "value": "/subscriptions/8791549a-6c99-40d9-8390-d316ee32d284/resourceGroups/fabricextresources/providers/Microsoft.KeyVault/vaults/servicefabricdemovault"
     },
     "certificateThumbprint": {
-      "value": "94FA1DF98DC4F915D1B84CCBB84B36B82E933635"
+      "value": "3776E7AA2B5AE00EC45281BAF8E465499B68135A"
     },
     "certificateUrlValue": {
-      "value": "https://asfckeyvault.vault.azure.net:443/secrets/asfc/492a50c6f8dc4d08a325b4c1ce805995"
+      "value": "https://servicefabricdemovault.vault.azure.net:443/secrets/fabricclusterlinux-pri/dd01a0c6d6504292ae9b21c4b260903f"
     },
     "vmImageVersion": {
       "value": "6.0.11"

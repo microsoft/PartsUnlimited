@@ -25,25 +25,25 @@
 #>
 
 param(
- [Parameter(Mandatory=$False)]
+ [Parameter(Mandatory=$True)]
  [string]
- $templateFolder = "Two Cert",
+ $templateFolder,
 
- [Parameter(Mandatory=$False)]
+ [Parameter(Mandatory=$True)]
  [string]
- $subscriptionId = "95c0ac4e-9b8c-4fd5-8b02-2308c1bef599",
+ $subscriptionId,
 
- [Parameter(Mandatory=$False)]
+ [Parameter(Mandatory=$True)]
  [string]
- $resourceGroupName = "fabricclusterlinux",
+ $resourceGroupName,
 
- [Parameter(Mandatory=$False)]
+ [Parameter(Mandatory=$True)]
  [string]
- $resourceGroupLocation = "westeurope",
+ $resourceGroupLocation,
 
- [Parameter(Mandatory=$False)]
+ [Parameter(Mandatory=$True)]
  [string]
- $deploymentName = "Deployment",
+ $deploymentName,
 
  [string]
  $templateFilePath = "template.json",
@@ -62,7 +62,7 @@ Function RegisterRP {
     )
 
     Write-Host "Registering resource provider '$ResourceProviderNamespace'";
-    Register-AzureRmResourceProvider -ProviderNamespace $ResourceProviderNamespace;
+    Register-AzureRmResourceProvider -ProviderNamespace $ResourceProviderNamespace -Force;
 }
 
 #******************************************************************************

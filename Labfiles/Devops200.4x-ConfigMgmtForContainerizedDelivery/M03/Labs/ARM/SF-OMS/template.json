@@ -451,21 +451,21 @@
                               "provider": "MyCompany-ServiceFabric.UnreliableServices-UnreliableActor",
                               "scheduledTransferPeriod": "PT5M",
                               "DefaultEvents": {
-                                "eventDestination": "WADETWEventTable"
+                                "eventDestination": "ETWEventTable"
                                 }
                             },
                             {
                               "provider": "MyCompany-ServiceFabric.UnreliableServices-UnreliableStatefulService",
                               "scheduledTransferPeriod": "PT5M",
                               "DefaultEvents": {
-                                "eventDestination": "WADETWEventTable"
+                                "eventDestination": "ETWEventTable"
                                 }
                             },
                             {
                               "provider": "MyCompany-ServiceFabric.UnreliableServices-UnreliableStatelessService",
                               "scheduledTransferPeriod": "PT5M",
                               "DefaultEvents": {
-                                "eventDestination": "WADETWEventTable"
+                                "eventDestination": "ETWEventTable"
                                 }
                             }
                           ],

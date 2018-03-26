@@ -6,7 +6,7 @@
             "value": "azureuser"
         },
         "agentCount": {
-            "value": 2
+            "value": 1
         },
         "dnsNamePrefix": {
             "value": "ascswarmcluster"
