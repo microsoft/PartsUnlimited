@@ -1,0 +1,5 @@
+web:
+  image: "yeasy/simple-web"
+  ports:
+    - "80:80"
+  restart: "always"

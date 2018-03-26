@@ -1,0 +1,90 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterName": {
+      "value": "asfc2"
+    },
+    "clusterLocation": {
+      "value": "westeurope"
+    },
+    "computeLocation": {
+      "value": "westeurope"
+    },
+    "adminUserName": {
+      "value": "azureuser"
+    },
+    "adminPassword": {
+      "value": "Pa$$w0rd01!"
+    },
+    "nicName": {
+      "value": "NIC-fabricclusterlinux"
+    },
+    "publicIPAddressName": {
+      "value": "fabricclusterlinux-PubIP"
+    },
+    "vmStorageAccountName": {
+      "value": "sfvmfabricclusterlin9993"
+    },
+    "dnsName": {
+      "value": "asfc2"
+    },
+    "virtualNetworkName": {
+      "value": "VNet-fabricclusterlinux"
+    },
+    "lbName": {
+      "value": "LB-fabricclusterlinux"
+    },
+    "lbIPName": {
+      "value": "LBIP-fabricclusterlinux"
+    },
+    "applicationDiagnosticsStorageAccountName": {
+      "value": "sfdgfabricclusterlin5943"
+    },
+    "supportLogStorageAccountName": {
+      "value": "sflogsfabricclusterl5492"
+    },
+    "sourceVaultValue": {
+      "value": "/subscriptions/<subscriptionID>/resourceGroups/keyvault_rg/providers/Microsoft.KeyVault/vaults/asfckeyvault"
+    },
+    "certificateThumbprint": {
+      "value": "94FA1DF98DC4F915D1B84CCBB84B36B82E933635"
+    },
+    "certificateUrlValue": {
+      "value": "https://asfckeyvault.vault.azure.net:443/secrets/asfc/492a50c6f8dc4d08a325b4c1ce805995 "
+    },
+    "secCertificateThumbprint": {
+      "value": "905B89EB9752DAD9B87C09D9AA29E3121F2B602A"
+    },
+    "secCertificateUrlValue": {
+      "value": "https://asfckeyvault.vault.azure.net:443/secrets/asfc2sec/bab9ec293abc4cb7bbbfbe2b8429b77c"
+    },   
+    "vmImageVersion": {
+      "value": "6.0.11"
+    },
+    "vmImageSku": {
+      "value": "16.04"
+    },
+    "vmNodeType0Size": {
+      "value": "Standard_D1_V2"
+    },
+    "nt0ephemeralStartPort": {
+      "value": 49152
+    },
+    "nt0ephemeralEndPort": {
+      "value": 65534
+    },
+    "nt0applicationStartPort": {
+      "value": 20000
+    },
+    "nt0applicationEndPort": {
+      "value": 30000
+    },
+    "nt0fabricTcpGatewayPort": {
+      "value": 19000
+    },
+    "nt0fabricHttpGatewayPort": {
+      "value": 19080
+    }
+  }
+}

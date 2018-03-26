@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "linuxAdminUsername": {
+            "value": "azureuser"
+        },
+        "agentCount": {
+            "value": 2
+        },
+        "dnsNamePrefix": {
+            "value": "ascswarmcluster"
+        },
+        "agentVMSize": {
+            "value": "Standard_DS2"
+        },
+        "masterCount": {
+            "value": 1
+        },
+        "orchestratorType": {
+            "value": "Swarm"
+        },
+        "sshRSAPublicKey": {
+            "value": "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAhSWQp+U27XjtP0dd2LF0Ha5edI6EJSYn7lhM0nBLHPPU03Inf6cKa7GBL0CaMY48GezcNHecjFDQ/MLynram9ojWRNmjZXMR7wMrxQTrt01y4Z3lI31SnEw/4zhdTTYhtQNIAf0H0vJKX6mw4XjkWUjFgswnHas3XeueP9yIvLd5xgaBLPOhFU78Vl9AagDTZ7ec3JoO8L6heXwe7oA2lIb6DLw605Gx9oMoBFx6bN5MIGbHx5hOOVPmaqP/vgZpkZtXJtaJ0T5qaG81AANUcA0QJqOXCDbmj8UHgllnyT8ot2vMOjZvGseCtPycbymecoNVyFdE9ebWz5i8dGLY+w=="
+        },
+        "enableDiagnostics": {
+            "value": true
+        }
+    }
+}

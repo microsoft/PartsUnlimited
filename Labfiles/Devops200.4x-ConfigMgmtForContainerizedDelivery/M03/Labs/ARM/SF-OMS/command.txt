@@ -1,0 +1,12 @@
+Creates an unsecure OMS enabled cluster, pre-configured for the UnreliableServices application:
+https://github.com/loekd/ServiceFabric.UnreliableServices
+
+
+Example command line:
+.\deploy.ps1 -subscriptionId 95c0ac4e-9b8c-4fd5-8b02-2308c1bef599 -resourceGroupName fabricclusterwe3 -resourceGroupLocation westeurope -deploymentName d1
+
+
+Alternate subscription:
+.\deploy.ps1 -subscriptionId 8791549a-6c99-40d9-8390-d316ee32d284 -resourceGroupName fabricclusteroms -resourceGroupLocation westeurope -deploymentName d2
+
+
