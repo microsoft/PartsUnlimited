@@ -1,0 +1,38 @@
+Module 1 > Lesson 02: What is Containerization > DEMO: Running a Container
+
+docker version
+
+docker run -it microsoft/windowsservercore cmd
+
+-- in the container
+dir
+md demo
+cd demo
+copy con myfile.txt
+Hello this is in my docker container
+ctrl+c
+
+dir
+-- now you see the text file
+
+-- exit the container
+ctrl+p ctrl+q
+
+--on the host
+docker ps
+-- you now see a running contianer with a name that is generated.
+
+on the c:\ run command 
+dir
+you don't see the demo folder
+
+docker stop name-of-the-container
+docker ps
+docker ps -a
+
+docker run -it microsoft/windowsservercore cmd
+--in the container
+dir
+-- no more demo folder
+
+

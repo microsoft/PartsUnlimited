@@ -1,0 +1,37 @@
+Module 1 > Lesson 03: Containers and Docker > DEMO: Creating an Azure Container Registry
+
+
+Go to http://portal.azure.com
+
+--- Then go to Container registries and create a new Container registry
+
+--- Go to Access keys > Enable Admin User  (so can push images to it, it will create a user name and also generate passwords you cna use.)
+
+---and copy the Login Server details in the form xyz.server.io (this is the location of yourregistry
+
+
+--- in a local command prompt run the command
+docker login -u <username from Azure Container registry> -p < password> <location of registry i.e. Login server>
+
+--- You should now be connected to your Azure Container registry
+
+--- run the command
+
+docker push  <image name>
+
+--- it tries to push the image to docker.io and access is denied
+--- Now you need to tag your custom container image and prefix it with the name of your azure registry
+
+--- tag the image using the command
+docker tag mycontainer myacr/mycontainer
+
+--- verify the imagw tage by runnign the command
+docker image
+
+--- now push the image to the Azure Container Registry
+docker push myacr/mycontainer
+
+---In your Azure Container registry service go to Resources and view the image and its tags.
+
+--- You can also view the list of available images by running the below command locally
+docker search myacr

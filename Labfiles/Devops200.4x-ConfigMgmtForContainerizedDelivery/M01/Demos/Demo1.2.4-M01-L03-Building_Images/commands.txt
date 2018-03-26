@@ -1,0 +1,20 @@
+Module 1 > Lesson 03: Containers and Docker > DEMO: Building Images
+
+docker run -it -name mycontainer microsoft/windowsservercore cmd
+md builddemo
+cd buidldemo
+copy con myfile.txt
+this is a text file
+ctrl+c
+exit
+
+docker ps -a
+docker commit -t mycontainerimage mycontainer 
+docker images 
+docker run -it -name mycontainer microsoft/windowsservercore cmd
+dir
+exit
+
+docker run -it mycontainerimage cmd
+dir 
+you see the demo folder again

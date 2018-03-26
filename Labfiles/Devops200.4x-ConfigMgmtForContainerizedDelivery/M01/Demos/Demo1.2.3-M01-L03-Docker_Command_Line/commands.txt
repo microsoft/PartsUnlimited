@@ -1,0 +1,18 @@
+Module 1 > Lesson 03: Containers and Docker > DEMO: Docker Command Line
+
+docker ps
+docker ps -a 
+-- you now see two images that have exited
+docker search microsoft
+--you see all public images microsoft created as base images
+
+docker run -d microsoft/windowsservercore
+docker attach <name of container>
+docker exec <name of container> cmd
+docker kill <name of container>
+docker inspect <name of container>
+docker tag <name of container> <tagname>
+docker pull microsoft/aspnet
+docker images 
+
+
