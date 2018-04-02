@@ -113,8 +113,7 @@ Parallel
  
     $vm2 = Set-AzureRmVMOperatingSystem -VM $vm2 -Windows -ComputerName $using:vm2Name -Credential $using:credentials -ProvisionVMAgent EnableAutoUpdate 
     $vm2 = Set-AzureRmVMSourceImage -VM $vm2 -PublisherName $using:publisherName -Offer $using:offer -Skus $using:sku -Version $using:version 
-    $vm2 = Set-AzureRmVMOSDisk -VM $vm2 -Name $using:vm2osDiskName -StorageAccountType StandardLRS -DiskSizeInGB $using:vmosDiskSize -CreateOption fromImage -Caching ReadWrite 
- 
+
    $blobPath2 = 'vhds/' + $using:vm2osDiskName + '.vhd' 
    $osDiskUri2 = $storageAccount2.PrimaryEndpoints.Blob.ToString() + $blobPath2 
    $vm2 = Set-AzureRmVMOSDisk -VM $vm2 -Name $using:vm2osDiskName -VhdUri $osDiskUri2 -CreateOption fromImage 
