@@ -1,9 +1,11 @@
----
-layout: page
-title:  Testing in Production
-category: advanced
-order: 1
----
+
+// removed 5th apr 2018
+//---
+//layout: page
+//title:  Testing in Production
+//category: advanced
+//order: 1
+//---
 
 # Testing in Production with Azure Web Apps - PartsUnlimited
 
