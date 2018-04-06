@@ -1,9 +1,10 @@
----
-layout: page
-title:  Getting Started on Linux and OSX
-category: basic
-order: 1
----
+////removed 5th apr 2018
+//---
+//layout: page
+//title:  Getting Started on Linux and OSX
+//category: basic
+//order: 1
+//---
 
 ## Get DNVM
 
