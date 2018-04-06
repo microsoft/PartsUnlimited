@@ -1,9 +1,12 @@
----
-layout: page
-title:  User Telemetry
-category: advanced
-order: 0
----
+
+
+// removed 5th ape 2018 
+//---
+//layout: page
+//title:  User Telemetry
+//category: advanced
+//order: 0
+//---
 
 #User Telemetry and Performance Monitoring with Application Insights
 
