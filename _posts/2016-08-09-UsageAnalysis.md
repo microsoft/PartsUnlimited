@@ -1,9 +1,11 @@
----
-layout: page
-title:  Usage Analysis
-category: advanced
-order: 2
----
+
+// removed 5th apr 2018
+//---
+//layout: page
+//title:  Usage Analysis
+//category: advanced
+//order: 2
+//---
 
 HOL - Usage analysis for web applications with Application Insights
 ===================================================================
