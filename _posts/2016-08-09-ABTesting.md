@@ -1,9 +1,11 @@
----
-layout: page
-title:  Experimentation and A/B Testing with Optimzely
-category: advanced
-order: 4
----
+
+//removed 5th apr 2018
+//---
+//layout: page
+//title:  Experimentation and A/B Testing with Optimzely
+//category: advanced
+//order: 4
+//---
 
 HOL - Experimentation and A/B Testing with Optimizely
 =====================================================
