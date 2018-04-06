@@ -1,9 +1,10 @@
----
-layout: page
-title:  Quick Start
-category: basic
-order: 2
----
+//removed 5th apr 2018
+//---
+//layout: page
+//title:  Quick Start
+//category: basic
+//order: 2
+//---
 
 HOL - Quick Start
 ====================================================================================

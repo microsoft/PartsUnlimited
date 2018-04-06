@@ -1,9 +1,10 @@
----
-layout: page
-title:  Manual Deployment
-category: basic
-order: 3
----
+// removed 5th ape 2018
+//---
+//layout: page
+//title:  Manual Deployment
+//category: basic
+//order: 3
+//---
 
 For full deployments, you can deploy the PartsUnlimited app to slots as needed. The website is setup to keep the connection strings with the slots. This means that if staging and main website slots are switched, the main website will still use the production database, while the staging slot will keep pointing to the staging database.
 
