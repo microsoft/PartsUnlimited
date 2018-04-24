@@ -138,6 +138,8 @@ The infrastructure required for all 3 environments is described in an ARM Templa
 The ARM Template will be invoked during the deployment in the Dev Environment before deploying the website to Dev.
 It will not be necessary to run any infrastructure tasks during Staging or Production deployments in this case.
 
+> **Update 09/05** The task Azure Resource Group Deployment version 2, works just with agent queue Hosted VS2017  
+
 **Step 1.**  Create a Release Definition to Deploy Infrastructure and Deploy to Dev
 
 1. In VSTS, click on Releases. Then click on the "+ New definition" button to create a new definition.
