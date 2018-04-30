@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  partsunlimitedwebsite:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnectionString=Server=db;Initial Catalog=PartsUnlimited;Integrated Security=False;User ID=sa;Password=P@ssw0rd0123!;
+    ports:
+      - "80"    
+    depends_on:
+      - db
+  
+  db:
+    image: microsoft/mssql-server-windows-developer
+    expose:
+     - "1433"
+    environment:
+      ACCEPT_EULA: 'Y'
+      sa_password: 'P@ssw0rd0123!'
+
+
+networks:
+  default:
+    external:
+      name: nat

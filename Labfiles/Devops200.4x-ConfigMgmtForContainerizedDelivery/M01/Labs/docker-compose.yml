@@ -1,25 +1,8 @@
-version: "2.1"
+version: '3'
 
 services:
- web:
-  build: ./web
-  expose:
-   - "80"
-  depends_on:
-   - db
-  tty:
-    true
- db:
-  build: ./db
-  #image: microsoft/windowsservercore
-  expose:
-   - "1433"
-  environment:
-    - "ACCEPT_EULA='Y'"
-  tty:
-    true
-
-networks:
-  default:
-    external:
-      name: "nat"
+  partsunlimitedwebsite:
+    image: partsunlimitedwebsite
+    build:
+      context: .
+      dockerfile: Dockerfile
