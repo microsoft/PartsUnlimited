@@ -9,8 +9,7 @@ Parts Unlimited is an example eCommerce website site based for training purposes
 
 PartsUnlimited will walk you through implementing DevOps practices using Visual Studio Team Services.
 
-
-[Click here](https://github.com/Microsoft/PartsUnlimitedMRP) for the related Parts Unlimited Manufacturing Resource Planning (MRP) application. It will show you how to use Visual Studio Team Services with a Java based application.
+<a href="http://microsoft.github.io/PartsUnlimitedMRP/" target="_blank"><span style="color: #0066cc;" color="#0066cc">Click here</span></a> for the related Parts Unlimited Manufacturing Resource Planning (MRP) application. It will show you how to use Visual Studio Team Services with a Java based application.
 
 
 
