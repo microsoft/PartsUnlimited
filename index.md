@@ -13,14 +13,6 @@ PartsUnlimited will walk you through implementing DevOps practices using Visual 
 [Click here](https://github.com/Microsoft/PartsUnlimitedMRP) for the related Parts Unlimited Manufacturing Resource Planning (MRP) application. It will show you how to use Visual Studio Team Services with a Java based application.
 
 
-<div class="tech-button">
-  <a href="/PartsUnlimited/basic/GettingStarted.html" class="btn btn-lg btn-default">Getting Started</a>
-  <a href="/PartsUnlimited/basic/GettingStartedLinuxOSX.html" class="btn btn-lg btn-default">Getting Started (Linux & OSX)</a>
-  
-</div>
-
-<br/>
-<br/>
 
 
 ### Media Elements and Templates
