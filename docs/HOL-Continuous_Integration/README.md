@@ -196,7 +196,7 @@ We will now test the **Continuous Integration build (CI)** build we created by c
 
 ![](<media/CI15.png>)
 
-**2.** After clicking **Edit**, add in text (i.e. *This is a test of CI*) after the last *Using* statement. Once complete, click **Save**.
+**2.** After clicking **Edit**, add in text (i.e. *This is a test of CI*) after the last *Using* statement. Once complete, click **Commit...**.
 
 ![](<media/CI16.png>)
 
