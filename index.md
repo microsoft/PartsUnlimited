@@ -12,7 +12,6 @@ These labs are based around the application PartsUnlimited, and they will walk y
 
 There is also a shortened URL avalable for this site which you can use if you wish i.e. <a href="http://aka.ms/pulabs" target="_blank"><span style="color: #0066cc;" color="#0066cc">http://aka.ms/pulabs</span></a>
 
-<a href="http://microsoft.github.io/PartsUnlimitedMRP/" target="_blank"><span style="color: #0066cc;" color="#0066cc">Click here</span></a> for the related Parts Unlimited Manufacturing Resource Planning (MRP) application. It will show you how to use Visual Studio Team Services with a Java based application.
 
 ## PartsUnlimted Application - Key Features
 - Works with Visual Studio 2017
@@ -28,7 +27,7 @@ There is also a shortened URL avalable for this site which you can use if you wi
 - Basic administration pages to add or edit product information
 - Includes Azure RM JSON templates and PowerShell automation scripts to easily build and provision your environment
 
-For the labs based around the Java PartsUnlimitedMRP application see the page related java based <a href="http://microsoft.github.io/PartsUnlimitedMRP" target="_blank"><span style="color: #0066cc;" color="#0066cc">http://microsoft.github.io/PartsUnlimited</span></a>. The application and labs use mostly open source software including Linux, Java, Apache, and MongoDB which creates a web front end, an order service, and an integration service.
+For the labs based around the PartsUnlimitedMRP Java based application see the page <a href="http://microsoft.github.io/PartsUnlimitedMRP" target="_blank"><span style="color: #0066cc;" color="#0066cc">http://microsoft.github.io/PartsUnlimited</span></a>. The application and labs on this page use mostly open source software including Linux, Java, Apache, and MongoDB which creates a web front end, an order service, and an integration service.
 
 
 ## Lab Structure
