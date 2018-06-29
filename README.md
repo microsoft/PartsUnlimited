@@ -2,9 +2,10 @@
 
 Parts Unlimited is an example eCommerce website site based for training purposes on the website described in chapters 31-35 of The Phoenix Project, by Gene Kim, Kevin Behr and George Spafford, © 2013 IT Revolution Press LLC, Portland, OR. Resemblance to “Project Unicorn” in the novel is intentional; resemblance to any real company is purely coincidental.
 
-This **gh-pages** branch contains the page configuration, lab steps and graphics for the labs appearing on the github pages site <a href="http://http://microsoft.github.io/PartsUnlimited/" target="_blank"><span style="color: #0066cc;" color="#0066cc">http://http://microsoft.github.io/PartsUnlimited/</span></a>. A shortend link is available in the form of <a href="http://aka.ms/pulabs" target="_blank"><span style="color: #0066cc;" color="#0066cc">http://aka.ms/pulabs</span></a>
+This **gh-pages** branch contains the page configuration, lab steps and graphics for the labs appearing on the github pages site <a href="http://microsoft.github.io/PartsUnlimited/" target="_blank"><span style="color: #0066cc;" color="#0066cc">http://microsoft.github.io/PartsUnlimited/</span></a>. A shortend url is available in the form of <a href="http://aka.ms/pulabs" target="_blank"><span style="color: #0066cc;" color="#0066cc">http://aka.ms/pulabs</span></a>
 
 Any updates or changes to the labs on that page can be done through this branch.
+
 
 
 ## Issues and Updates
