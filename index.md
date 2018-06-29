@@ -57,11 +57,11 @@ If you find any issues with the lab steps, you can open an issue in the github r
 If you wish to submit fixes directly to a lab you can do so by opening Pull Request in the same GitHub repo, i.e. <a href="https://github.com/microsoft/PartsUnlimited" target="_blank"><span style="color: #0066cc;" color="#0066cc">https://github.com/microsoft/PartsUnlimited</span></a> against the file in question. See the bullets below for details.
 
 - The lab steps on this page are sourced from files in the **gh-pages** branch in the **_posts** folder. 
-- To identify the correct file against which to open a Pull Request, note the last part of the URL on the lab in question from your browser i.e. for the **PartsUnlimted Setup with Visual Studio** lab, the URL is **http://microsoft.github.io/PartsUnlimited/pandp/200.1x-PandP-PUsetupwithVS2017.html**. 
-- Then locate the corresponding file in the **gh-pages** branch in the **_posts** folder i.e. in this example it would be https://github.com/Microsoft/PartsUnlimited/blob/gh-pages/_posts/2018-01-08-200.1x-PandP-PUsetupwithVS2017.md . 
+- To identify the correct file against which to open a Pull Request, note the last part of the URL on the lab in question from your browser i.e. for the **PartsUnlimted Setup with Visual Studio** lab, the URL is <a href="http://microsoft.github.io/PartsUnlimited/pandp/200.1x-PandP-PUsetupwithVS2017.html" target="_blank"><span style="color: #0066cc;" color="#0066cc">http://microsoft.github.io/PartsUnlimited/pandp/200.1x-PandP-PUsetupwithVS2017.html</span></a>, so note the last part of that URL. 
+- Then locate the corresponding file in the **gh-pages** branch in the **_posts** folder i.e. in this example it would be <a href="https://github.com/Microsoft/PartsUnlimited/blob/gh-pages/_posts/2018-01-08-200.1x-PandP-PUsetupwithVS2017.md" target="_blank"><span style="color: #0066cc;" color="#0066cc">https://github.com/Microsoft/PartsUnlimited/blob/gh-pages/_posts/2018-01-08-200.1x-PandP-PUsetupwithVS2017.md</span></a> 
 - Then open the Pull request against the file in question.
-- All files are in markdwon 
-- Images are located in the **assets** folder in the individual lab folders and the image location paths are available from the lab markdown files. 
+- All lab step files are in markdown.
+- Images in the lab steps are located in the **assets** folder in individual lab folders. If you are not sur eof the folder, the image location paths are available from the individual lab markdown files located in the **_posts** folder. 
 - Updates to help keep the labs current are welcome.
 
 
