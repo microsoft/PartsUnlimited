@@ -61,7 +61,7 @@ If you wish to submit fixes directly to a lab you can do so by opening Pull Requ
 - Then locate the corresponding file in the **gh-pages** branch in the **_posts** folder i.e. in this example it would be <a href="https://github.com/Microsoft/PartsUnlimited/blob/gh-pages/_posts/2018-01-08-200.1x-PandP-PUsetupwithVS2017.md" target="_blank"><span style="color: #0066cc;" color="#0066cc">https://github.com/Microsoft/PartsUnlimited/blob/gh-pages/_posts/2018-01-08-200.1x-PandP-PUsetupwithVS2017.md</span></a> 
 - Then open the Pull request against the file in question.
 - All lab step files are in markdown.
-- Images in the lab steps are located in the **assets** folder in individual lab folders. If you are not sur eof the folder, the image location paths are available from the individual lab markdown files located in the **_posts** folder. 
+- Images in the lab steps are located in the **assets** folder in individual lab folders. If you are not sure of the folder, the image location paths are available from the individual lab markdown files located in the **_posts** folder. 
 - Updates to help keep the labs current are welcome.
 
 
