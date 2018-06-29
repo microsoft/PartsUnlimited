@@ -1,10 +1,10 @@
-# Parts Unlimited
+﻿# Parts Unlimited
 
 Parts Unlimited is an example eCommerce website site based for training purposes on the website described in chapters 31-35 of The Phoenix Project, by Gene Kim, Kevin Behr and George Spafford, © 2013 IT Revolution Press LLC, Portland, OR. Resemblance to “Project Unicorn” in the novel is intentional; resemblance to any real company is purely coincidental. 
 
 The master branch of this repo contains the PartsUnlimted application, and deployment and configuration files of that sample app. This sample app and configuration files are then used in the labs appearing on the github pages site <a href="http://microsoft.github.io/PartsUnlimited" target="_blank"><span style="color: #0066cc;" color="#0066cc">http://microsoft.github.io/PartsUnlimited</span></a>. A shortend url is available in the form of <a href="http://aka.ms/pulabs" target="_blank"><span style="color: #0066cc;" color="#0066cc">http://aka.ms/pulabs</span></a>
 
-Any updates or changes to the application or labfiles can be made be merging changes into this **master** branch, but lab steps and graphics are sourced from the **gh-pags** branch. Updates to lab page configuration, the lab steps or graphics can be done through the <a href="https://github.com/Microsoft/PartsUnlimited/tree/gh-pages" target="_blank"><span style="color: #0066cc;" color="#0066cc">https://github.com/Microsoft/PartsUnlimited/tree/gh-pages</span></a> branch of this repo.
+Any updates or changes to the application or labfiles can be made be merging changes into this **master** branch, but lab steps and graphics are sourced from the **gh-pages** branch. Updates to lab page configuration, the lab steps or graphics can be done through the <a href="https://github.com/Microsoft/PartsUnlimited/tree/gh-pages" target="_blank"><span style="color: #0066cc;" color="#0066cc">https://github.com/Microsoft/PartsUnlimited/tree/gh-pages</span></a> branch of this repo.
 
 
 
