@@ -52,7 +52,7 @@ The successful completion of the courses and capstone project, that together mak
 
 ## Issues and Updates
 
-If you find any issues with the lab steps, you can open an issue in the github repo <a href="https://github.com/microsoft/PartsUnlimited" target="_blank"><span style="color: #0066cc;" color="#0066cc">https://github.com/microsoft/PartsUnlimited</span></a> and we will try to help resolve it. You can also look through any previosuly logged issues in case it has been reported previously.
+If you find any issues with the lab steps, you can open an issue in the github repo <a href="https://github.com/microsoft/PartsUnlimited" target="_blank"><span style="color: #0066cc;" color="#0066cc">https://github.com/microsoft/PartsUnlimited</span></a> and we will try to help resolve it, although response times can vary. You can also look through any previosuly logged issues in case it has been reported previously.
 
 If you wish to submit fixes directly to a lab you can do so by opening Pull Request in the same GitHub repo, i.e. <a href="https://github.com/microsoft/PartsUnlimited" target="_blank"><span style="color: #0066cc;" color="#0066cc">https://github.com/microsoft/PartsUnlimited</span></a> against the file in question. See the bullets below for details.
 
