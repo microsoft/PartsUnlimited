@@ -20,8 +20,8 @@ Write-Host "$testDir"
 
 # Restore and build projects
 & dotnet restore $solution
-& dotnet build $webSite --configuration $BuildConfiguration
-& dotnet build $test --configuration $BuildConfiguration
+& dotnet build $webSite --configuration $BuildConfiguration --verbosity d
+& dotnet build $test --configuration $BuildConfiguration --verbosity d
 
 # Run tests
 & dotnet test $test --configuration $BuildConfiguration --logger "trx;LogFileName=testresults.xml" --no-build
