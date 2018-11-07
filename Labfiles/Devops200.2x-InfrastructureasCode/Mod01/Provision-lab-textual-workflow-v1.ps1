@@ -55,7 +55,8 @@ $avSet = New-AzureRmAvailabilitySet -ResourceGroupName $resourceGroupName -Name 
  
 InlineScript { 
     $subnet = New-AzureRmVirtualNetworkSubnetConfig -Name $using:subnet1Name -AddressPrefix $using:subnet1Prefix 
-    $vnet = New-AzureRmVirtualNetwork -Name $using:vnetName -ResourceGroupName $using:resourceGroupName -Location $using:location -AddressPrefix $using:vnetPrefix -Subnet $using:subnet 
+    $vnet = New-AzureRmVirtualNetwork -Name $using:vnetName -ResourceGroupName $using:resourceGroupName -Location $using:location -AddressPrefix $using:vnetPrefix -Subnet $using:subnet
+    Set-AzureRmVirtualNetwork -VirtualNetwork $vnet
 } 
  
 Parallel 
