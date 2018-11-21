@@ -2,68 +2,255 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+
         "location": {
-            "type": "string"
+
+            "value": "westeurope"
+
         },
+
         "networkInterfaceName": {
-            "type": "string"
+
+            "value": "vm1876"
+
         },
+
         "networkSecurityGroupName": {
-            "type": "string"
+
+            "value": "vm1-nsg"
+
         },
+
         "networkSecurityGroupRules": {
-            "type": "array"
+
+            "value": [
+
+                {
+
+                    "name": "HTTP",
+
+                    "properties": {
+
+                        "priority": 300,
+
+                        "protocol": "TCP",
+
+                        "access": "Allow",
+
+                        "direction": "Inbound",
+
+                        "sourceAddressPrefix": "*",
+
+                        "sourcePortRange": "*",
+
+                        "destinationAddressPrefix": "*",
+
+                        "destinationPortRange": "80"
+
+                    }
+
+                },
+
+                {
+
+                    "name": "HTTPS",
+
+                    "properties": {
+
+                        "priority": 320,
+
+                        "protocol": "TCP",
+
+                        "access": "Allow",
+
+                        "direction": "Inbound",
+
+                        "sourceAddressPrefix": "*",
+
+                        "sourcePortRange": "*",
+
+                        "destinationAddressPrefix": "*",
+
+                        "destinationPortRange": "443"
+
+                    }
+
+                },
+
+                {
+
+                    "name": "SSH",
+
+                    "properties": {
+
+                        "priority": 340,
+
+                        "protocol": "TCP",
+
+                        "access": "Allow",
+
+                        "direction": "Inbound",
+
+                        "sourceAddressPrefix": "*",
+
+                        "sourcePortRange": "*",
+
+                        "destinationAddressPrefix": "*",
+
+                        "destinationPortRange": "22"
+
+                    }
+
+                },
+
+                {
+
+                    "name": "RDP",
+
+                    "properties": {
+
+                        "priority": 360,
+
+                        "protocol": "TCP",
+
+                        "access": "Allow",
+
+                        "direction": "Inbound",
+
+                        "sourceAddressPrefix": "*",
+
+                        "sourcePortRange": "*",
+
+                        "destinationAddressPrefix": "*",
+
+                        "destinationPortRange": "3389"
+
+                    }
+
+                }
+
+            ]
+
         },
+
         "subnetName": {
-            "type": "string"
+
+            "value": "default"
+
         },
+
         "virtualNetworkName": {
-            "type": "string"
+
+            "value": "vstsagent-vnet"
+
         },
+
         "addressPrefixes": {
-            "type": "array"
+
+            "value": [
+
+                "10.0.0.0/24"
+
+            ]
+
         },
+
         "subnets": {
-            "type": "array"
+
+            "value": [
+
+                {
+
+                    "name": "default",
+
+                    "properties": {
+
+                        "addressPrefix": "10.0.0.0/24"
+
+                    }
+
+                }
+
+            ]
+
         },
+
         "publicIpAddressName": {
-            "type": "string"
+
+            "value": "vm1-ip"
+
         },
+
         "publicIpAddressType": {
-            "type": "string"
+
+            "value": "Dynamic"
+
         },
+
         "publicIpAddressSku": {
-            "type": "string"
+
+            "value": "Basic"
+
         },
+
         "virtualMachineName": {
-            "type": "string"
+
+            "value": "vm1"
+
         },
+
         "virtualMachineRG": {
-            "type": "string"
+
+            "value": "vstsagent"
+
         },
+
         "osDiskType": {
-            "type": "string"
+
+            "value": "StandardSSD_LRS"
+
         },
+
         "virtualMachineSize": {
-            "type": "string"
+
+            "value": "Standard_DS1_v2"
+
         },
+
         "adminUsername": {
-            "type": "string"
+
+            "value": "azureuser"
+
         },
+
         "adminPassword": {
-            "type": "secureString"
+
+            "value": null
+
         },
+
         "diagnosticsStorageAccountName": {
-            "type": "string"
+
+            "value": "vstsagentdiag658"
+
         },
+
         "diagnosticsStorageAccountId": {
-            "type": "string"
+
+            "value": "Microsoft.Storage/storageAccounts/vstsagentdiag658"
+
         },
+
         "diagnosticsStorageAccountType": {
-            "type": "string"
+
+            "value": "Standard_LRS"
+
         },
+
         "diagnosticsStorageAccountKind": {
-            "type": "string"
+
+            "value": "Storage"
+
         }
     },
     "variables": {
