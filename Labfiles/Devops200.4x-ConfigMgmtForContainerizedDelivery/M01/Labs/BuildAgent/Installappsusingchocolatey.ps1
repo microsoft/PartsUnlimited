@@ -9,6 +9,9 @@ $Packages = 'googlechrome',`
             'visualstudio2017community',`
             'visualstudio2017-workload-azure',`
             'visualstudio2017-workload-netweb'
+            'docker-for-windows'
+
+
 
 #Install Packages
 ForEach ($PackageName in $Packages)
