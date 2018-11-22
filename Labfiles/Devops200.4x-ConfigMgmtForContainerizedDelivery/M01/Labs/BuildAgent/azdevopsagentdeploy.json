@@ -44,7 +44,7 @@
     "-PUBIPName": "[concat(variables('Name'), '-PIP')]",
     "InstallScriptFolder": ".",
     "InstallScriptFileName": "Install.ps1",
-    "InstallURL": "https://raw.githubusercontent.com/PartsUnlimited/Labfiles/Devops200.4x-ConfigMgmtForContainerizedDelivery/M01/Labs/BuildAgent/Installappsusingchocolatey.ps1"
+    "InstallURL": "https://raw.githubusercontent.com/Microsoft/PartsUnlimited/master/Labfiles/Devops200.4x-ConfigMgmtForContainerizedDelivery/M01/Labs/BuildAgent/Installappsusingchocolatey.ps1"
   },
   "resources": [
     {
