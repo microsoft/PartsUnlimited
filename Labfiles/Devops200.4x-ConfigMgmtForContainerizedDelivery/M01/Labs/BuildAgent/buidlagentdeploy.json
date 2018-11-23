@@ -51,7 +51,7 @@
       "subnetName": "Subnet",
       "subnetPrefix": "10.0.0.0/24",
       "publicIPAddressName": "myPublicIP",
-      "vmName": "SimpleWinVM",
+      "vmName": "azdevagent",
       "virtualNetworkName": "MyVNET",
       "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
       "networkSecurityGroupName": "nsg"
