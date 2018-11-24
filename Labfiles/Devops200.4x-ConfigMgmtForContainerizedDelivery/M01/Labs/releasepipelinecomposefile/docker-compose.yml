@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  app:
+    image: acrek.azurecr.io/partsunlimitedwebsite:latest
+    ports:
+      - "80:80"
+    networks:
+      - testnetwork
+
+networks:
+  testnetwork:
+    external: true

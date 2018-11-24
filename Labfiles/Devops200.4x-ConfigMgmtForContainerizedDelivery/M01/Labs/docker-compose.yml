@@ -5,4 +5,4 @@ services:
     image: partsunlimitedwebsite
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: src\PartsUnlimitedWebsite\Dockerfile
