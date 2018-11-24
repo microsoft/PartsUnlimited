@@ -4,7 +4,7 @@ Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://cho
 
 #Assign Packages to Install
 $Packages = 'googlechrome',`
-            'visualstudiocode',`
+            'visualstudiocode'
 
 
 #Install Packages
