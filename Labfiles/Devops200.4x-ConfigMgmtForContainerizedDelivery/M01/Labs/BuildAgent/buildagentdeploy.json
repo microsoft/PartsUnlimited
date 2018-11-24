@@ -23,7 +23,7 @@
       },
       "windowsOSVersion": {
         "type": "string",
-        "defaultValue": "2019-Datacenter-with-Containers",
+        "defaultValue": "2016-Datacenter-with-Containers",
         "allowedValues": [
           "2016-Nano-Server",
           "2016-Datacenter-with-Containers",
@@ -52,7 +52,11 @@
       "vmName": "azdevagent",
       "virtualNetworkName": "MyVNET",
       "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
-      "networkSecurityGroupName": "nsg"
+      "networkSecurityGroupName": "nsg",
+      "vmExtensionName": "vmcustomextension",
+      "InstallScriptFolder": ".",
+      "InstallScriptFileName": "Installappsusingchocolatey.ps1",
+      "InstallURL": "https://raw.githubusercontent.com/Microsoft/PartsUnlimited/master/Labfiles/Devops200.4x-ConfigMgmtForContainerizedDelivery/M01/Labs/BuildAgent/Installappsusingchocolatey.ps1"
     },
     "resources": [
       {
@@ -241,7 +245,32 @@
             }
           }
         }
+      },
+      {
+        "apiVersion": "2018-06-01",
+        "type": "Microsoft.Compute/virtualMachines/extensions",
+        "name": "[concat(variables('vmName'),'/', variables('vmExtensionName'))]",
+        "location": "[resourceGroup().location]",
+        "dependsOn": [
+          "[resourceId('Microsoft.Compute/virtualMachines', variables('vmName'))]"
+         ],
+        "tags": {
+          "displayName": "config-app"
+        },
+        "properties": {
+          "publisher": "Microsoft.Compute",
+          "type": "CustomScriptExtension",
+          "typeHandlerVersion": "1.9",
+          "autoUpgradeMinorVersion": true,
+          "settings": {
+            "fileUris": [
+              "[variables('InstallURL')]"
+            ],
+            "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('InstallScriptFolder'), '/', variables('InstallScriptFileName'))]"
+          }
+        }
       }
+    
     ],
     "outputs": {
       "hostname": {
