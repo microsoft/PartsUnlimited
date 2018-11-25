@@ -4,4 +4,4 @@ $ipaddress = docker inspect --format="{{.NetworkSettings.Networks.nat.IPAddress}
 
 Write-Output ("##vso[task.setvariable variable=ipadress:]$ipaddress")
 
-Invoke-Webrequest $ipaddress
+Invoke-Webrequest $ipaddress -UseBasicParsing
