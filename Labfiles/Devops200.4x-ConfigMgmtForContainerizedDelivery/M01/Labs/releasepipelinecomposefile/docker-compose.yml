@@ -4,10 +4,11 @@ services:
   app:
     image: acrek.azurecr.io/partsunlimitedwebsite:latest
     ports:
-      - "80:80"
+      - "8080:80"
     networks:
-      - testnetwork
+      - default
 
-networks:
-  testnetwork:
-    external: true
+ networks:
+      default:
+          external:
+          name: nat
