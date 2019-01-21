@@ -39,8 +39,8 @@
     <None Include="Deployment.targets">
       <Visible>False</Visible>
     </None>
-    <None Include="Templates\FullEnvironmentSetupMerged.json" />
-    <None Include="Templates\FullEnvironmentSetupMerged.param.json" />
+    <Content Include="Templates\FullEnvironmentSetupMerged.json" />
+    <Content Include="Templates\FullEnvironmentSetupMerged.param.json" />
   </ItemGroup>
   <Target Name="GetReferenceAssemblyPaths" />
 </Project>
