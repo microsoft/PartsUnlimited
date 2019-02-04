@@ -28,7 +28,7 @@ The labs available on this page are divided into sections that correspond to onl
 - The online courses are available  on <a href="http://www.edx.org" target="_blank"><span style="color: #0066cc;" color="#0066cc">http://www.edx.org</span></a>
 - The courses corresponding objective domains sections of the <a href="https://www.microsoft.com/en-us/learning/exam-az-400.aspx" target="_blank"><span style="color: #0066cc;" color="#0066cc">AZ-400: Microsoft Azure DevOps Solutions</span></a> exam are classroom based labs delivered by Microsoft Partners. Details of these courses are available from Microsoft partner sites.
 
-### Pages lab sections and corresponding courses
+### GitHub pages lab sections and corresponding courses
 - DevOps Practices and Principles - <a href="https://www.edx.org/course/devops-practices-and-principles-0" target="_blank"><span style="color: #0066cc;" color="#0066cc">DevOps200.1x: DevOps Practices and Principles</span></a>
 - Infrastructure as Code - 
     - <a href="https://www.edx.org/course/infrastructure-as-code-0" target="_blank"><span style="color: #0066cc;" color="#0066cc">DevOps200.2x: Infrastructure as Code</span></a>
