@@ -5,8 +5,8 @@ $resourceGroupName = $projectNamePrefix + "rg"
 $storageAccountName = $projectNamePrefix + "store"
 $containerName = "linkedtemplates" # The name of the Blob container to be created.
 
-$linkedTemplateURL = "https://armtutorials.blob.core.windows.net/linkedtemplates/linkedStorageAccount.json" # A completed linked template used in this tutorial.
-$fileName = "linkedStorageAccount.json" # A file name used for downloading and uploading the linked template.
+$linkedTemplateURL = "https://raw.githubusercontent.com/Microsoft/PartsUnlimited/master/Labfiles/AZ-400T05_Implementing_Application_Infrastructure/M01/storage.json" # A completed linked template used in this lab.
+$fileName = "storage.json" # A file name used for downloading and uploading the linked template.
 
 # Download the tutorial linked template
 Invoke-WebRequest -Uri $linkedTemplateURL -OutFile "$home/$fileName"
@@ -25,6 +25,7 @@ $context = $storageAccount.Context
 
 # Create a container
 New-AzureStorageContainer -Name $containerName -Context $context
+
 
 # Upload the linked template
 Set-AzureStorageBlobContent `
