@@ -45,7 +45,7 @@ The successful completion of the courses and capstone project, that together mak
 ## Lab Structure
 The labs available on this page are divided into sections that correspond to online courses or are direct mapping to objective domains sections of the AZ-400: Microsoft Azure DevOps Solutions exam. 
 - The online courses are available  on <a href="http://www.edx.org" target="_blank"><span style="color: #0066cc;" color="#0066cc">http://www.edx.org</span></a>
-- The courses corresponding objective domains sections of the *AZ-400: Microsoft Azure DevOps Solutions* exam are classroom based labs delivered by Microsoft Partners. details of these course are available from Microsoft partner sites.
+- The courses corresponding objective domains sections of the *AZ-400: Microsoft Azure DevOps Solutions* exam are classroom based labs delivered by Microsoft Partners. Details of these courses are available from Microsoft partner sites.
 
 ### Pages lab sections
 - DevOps Practices and Principles - <a href="https://www.edx.org/course/devops-practices-and-principles-0" target="_blank"><span style="color: #0066cc;" color="#0066cc">DevOps200.1x: DevOps Practices and Principles</span></a>
