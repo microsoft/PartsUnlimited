@@ -16,7 +16,7 @@ There is also a shortened URL avalable for this site which you can use if you wi
 
 ## Training and Certification usage
 
-The labs on these GitHub are used as part of two training paths and certification programs:
+The labs on these GitHub pages are used as part of two training paths and certification programs:
 - **Microsoft Professional Program (MPP) with DevOps**. 
     - The successful completion of the online courses and capstone project, that together make up the **MPP for DevOps**, results in the granting of the **Microsoft MPP for DevOps** credential. For more information on the **Microsoft Professional Program (MPP) for DevOps** program see the pages <a href="https://academy.microsoft.com/en-us/professional-program/tracks/devops/ " target="_blank"><span style="color: #0066cc;" color="#0066cc">https://academy.microsoft.com/en-us/professional-program/tracks/devops/ </span></a> and <a href="https://www.edx.org/microsoft-professional-program-devops " target="_blank"><span style="color: #0066cc;" color="#0066cc">https://www.edx.org/microsoft-professional-program-devops</span></a> 
 - **Microsoft Exam AZ-400: Implementing Azure DevOps Solutions**
