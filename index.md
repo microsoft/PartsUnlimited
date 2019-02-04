@@ -13,23 +13,6 @@ These labs are mostly based around the application PartsUnlimited, and they will
 There is also a shortened URL avalable for this site which you can use if you wish i.e. <a href="http://aka.ms/pulabs" target="_blank"><span style="color: #0066cc;" color="#0066cc">http://aka.ms/pulabs</span></a>
 
 
-## PartsUnlimted Application - Key Features
-- Works with Visual Studio 2017
-- ASP.NET 5 support for Linux and Mono
-- Updated to .NET Core 2.0 in Jan 2018
-- Modern HTML5 responsive layout using bootstrap for mobile, tablet, and PC
-- Includes a Dockerfile and sample publishing profile to publish to a Docker container
-- Supports multiple authentication options including Azure Active Directory, Google, and Facebook
-- Azure Machine Learning product recommendations based on Order History
-- Designed for Azure Websites, including Testing in Production, Staging slots and environment variables for feature flags (to turn off recommendations)
-- Includes Grunt tasks for publishing assets to Azure Storage for CDN ingestion for faster performance
-- Entity Framework code-first using SQL Azure or an in-memory database (Mono)
-- Basic administration pages to add or edit product information
-- Includes Azure RM JSON templates and PowerShell automation scripts to easily build and provision your environment
-
-For the labs based around the PartsUnlimitedMRP Java based application see the page <a href="http://microsoft.github.io/PartsUnlimitedMRP" target="_blank"><span style="color: #0066cc;" color="#0066cc">http://microsoft.github.io/PartsUnlimitedMRP</span></a>. The application and labs on this page use mostly open source software including Linux, Java, Apache, and MongoDB which creates a web front end, an order service, and an integration service.
-
-
 
 ## Training and Certification usage
 
@@ -60,7 +43,21 @@ The labs available on this page are divided into sections that correspond to onl
 - Advanced DevOps Practices
 
 
+## PartsUnlimted Application - Key Features
+- Works with Visual Studio 2017
+- ASP.NET 5 support for Linux and Mono
+- Updated to .NET Core 2.0 in Jan 2018
+- Modern HTML5 responsive layout using bootstrap for mobile, tablet, and PC
+- Includes a Dockerfile and sample publishing profile to publish to a Docker container
+- Supports multiple authentication options including Azure Active Directory, Google, and Facebook
+- Azure Machine Learning product recommendations based on Order History
+- Designed for Azure Websites, including Testing in Production, Staging slots and environment variables for feature flags (to turn off recommendations)
+- Includes Grunt tasks for publishing assets to Azure Storage for CDN ingestion for faster performance
+- Entity Framework code-first using SQL Azure or an in-memory database (Mono)
+- Basic administration pages to add or edit product information
+- Includes Azure RM JSON templates and PowerShell automation scripts to easily build and provision your environment
 
+For the labs based around the PartsUnlimitedMRP Java based application see the page <a href="http://microsoft.github.io/PartsUnlimitedMRP" target="_blank"><span style="color: #0066cc;" color="#0066cc">http://microsoft.github.io/PartsUnlimitedMRP</span></a>. The application and labs on this page use mostly open source software including Linux, Java, Apache, and MongoDB which creates a web front end, an order service, and an integration service.
 
 ## Issues and Updates
 
