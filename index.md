@@ -51,7 +51,7 @@ The labs available on this page are divided into sections that correspond to onl
 - DevOps Practices and Principles - <a href="https://www.edx.org/course/devops-practices-and-principles-0" target="_blank"><span style="color: #0066cc;" color="#0066cc">DevOps200.1x: DevOps Practices and Principles</span></a>
 - Infrastructure as Code - 
     - <a href="https://www.edx.org/course/infrastructure-as-code-0" target="_blank"><span style="color: #0066cc;" color="#0066cc">DevOps200.2x: Infrastructure as Code</span></a>
-    - *AZ-400: Implementing Azure Applications* classroom based course.
+    - *AZ-400T05: Implementing Application Infrastructure* classroom based course.
 - Continuous Integration and Continuous Deployment - <a href="https://www.edx.org/course/continuous-integration-and-continuous-deployment-0" target="_blank"><span style="color: #0066cc;" color="#0066cc">DevOps200.3x: Continuous Integration and Continuous Deployment</span></a>
 - Configuration Management for Containerized Delivery - <a href="https://www.edx.org/course/configuration-management-for-containerized-delivery-0" target="_blank"><span style="color: #0066cc;" color="#0066cc">DevOps200.4x: Configuration Management for Containerized Delivery </span></a>
 - Testing - <a href="https://www.edx.org/course/devops-testing-1" target="_blank"><span style="color: #0066cc;" color="#0066cc">DevOps200.5x: DevOps Testing </span></a>
