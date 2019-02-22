@@ -13,6 +13,7 @@ module.exports = function (grunt) {
                 options: {
                     targetDir: "wwwroot/lib",
                     install: true,
+                    copy: true
                     layout: "byComponent",
                     cleanTargetDir: "true"
                 }
