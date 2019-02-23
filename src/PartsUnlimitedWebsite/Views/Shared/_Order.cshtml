@@ -28,8 +28,7 @@
                     </div>
                 }
 
-                @Html.Partial("_OrderCostSummary", Model.OrderCostSummary)
-
+                <partial name="_OrderCostSummary", for="OrderCostSummary" />
             </div>
 
             <div class="col-md-12">
