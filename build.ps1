@@ -29,7 +29,7 @@ Write-Host "$testDir"
 # Publish
 $publishDirectory = Join-Path $BuildStagingDirectory "Publish"
 $outputDirectory = Join-Path $publishDirectory "PartsUnlimited"
-& dotnet publish $webSite --framework netcoreapp2.0 --output $outputDirectory --configuration $BuildConfiguration
+& dotnet publish $webSite --framework netcoreapp2.2 --output $outputDirectory --configuration $BuildConfiguration
 
 # Package to MSDeploy format
 $manifestFile = Join-Path $publishDirectory "manifest.xml"
