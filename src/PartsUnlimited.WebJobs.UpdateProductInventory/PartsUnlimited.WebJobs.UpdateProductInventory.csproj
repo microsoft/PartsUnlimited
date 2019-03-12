@@ -6,6 +6,10 @@
     <PackageId>PartsUnlimited.WebJobs.UpdateProductInventory</PackageId>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;NU1701</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\PartsUnlimited.Models\PartsUnlimited.Models.csproj" />
   </ItemGroup>
