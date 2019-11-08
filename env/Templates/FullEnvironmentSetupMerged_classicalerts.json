@@ -63,14 +63,6 @@
     "CdnStorageAccountName": {
       "type": "string"
     },
-    "ActionGroupName": {
-      "type": "string",
-      "defaultValue": "Alert Resource Owners"
-    },
-    "ActionGroupShortName": {
-      "type": "string",
-      "defaultValue": "Alert Owners"
-    },
     "CdnStorageContainerName": {
       "type": "string"
     },
@@ -349,229 +341,71 @@
       }
     },
     {
-      "type": "Microsoft.Insights/actionGroups",
-      "apiVersion": "2018-03-01",
-      "name": "[parameters('ActionGroupName')]",
-      "location": "Global",
-      "properties": {
-        "groupShortName": "[parameters('ActionGroupShortName')]",
-        "enabled": true,
-        //"smsReceivers": [
-        // {
-        //  "name": "contosoSMS",
-        //  "countryCode": "1",
-        //  "phoneNumber": "5555551212"
-        //},
-        // {
-        //   "name": "contosoSMS2",
-        //  "countryCode": "1",
-        //   "phoneNumber": "5555552121"
-        // }
-        // ],
-        "emailReceivers": [
-          {
-            "name": "contosoEmail",
-            "emailAddress": "devops@contoso.com"
-          },
-          {
-            "name": "contosoEmail2",
-            "emailAddress": "devops2@contoso.com"
-          }
-        ]
-        //"webhookReceivers": [
-        //  {
-        //   "name": "contosoHook",
-        //   "serviceUri": "http://requestb.in/1bq62iu1"
-        // },
-        // {
-        //   "name": "contosoHook2",
-        //    "serviceUri": "http://requestb.in/1bq62iu2"
-        // }
-        //]
-      }
-    },
-    {
       "name": "[concat('CPUHigh ', parameters('PartsUnlimitedHostingPlanName'))]",
-      "type": "Microsoft.Insights/metricAlerts",
-      "location": "global",
-      "apiVersion": "2018-03-01",
+      "type": "Microsoft.Insights/alertrules",
+      "location": "East US",
+      "apiVersion": "2014-04-01",
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', parameters('PartsUnlimitedHostingPlanName'))]"
       ],
       "tags": {
         "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('PartsUnlimitedHostingPlanName'))]": "Resource",
-        "displayName": "WebsiteHostingPlanCPUHigh"
+        "displayName": "WebsiteHostingPlanAlertRuleCPUHigh"
       },
       "properties": {
-        "name": "[concat('CPUHigh', parameters('PartsUnlimitedHostingPlanName'))]",
+        "name": "[concat('CPUHigh ', parameters('PartsUnlimitedHostingPlanName'))]",
         "description": "[concat('The average CPU is high across all the instances of ', parameters('PartsUnlimitedHostingPlanName'))]",
-        "severity": 3,
-        "enabled": "[parameters('EnableRules')]",
-        "scopes": [
-          "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Web/serverfarms/', parameters('PartsUnlimitedHostingPlanName'))]"
-        ],
-        "evaluationFrequency": "PT1M",
-        "windowSize": "PT5M",
-        "criteria": {
-          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
-          "allof": [
-            {
-              "criterionType": "StaticThresholdCriterion",
-              "name": "CPU High",
-              "metricName": "CpuPercentage",
-              "metricNamespace": "Microsoft.Web/serverFarms",
-              "operator": "GreaterThan",
-              "timeAggregation": "Average",
-              "dimensions": [],
-              "alertSensitivity": "Medium",
-              "threshold": 90
-            }
-          ]
+        "isEnabled": "[parameters('EnableRules')]",
+        "condition": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.ThresholdRuleCondition",
+          "dataSource": {
+            "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleMetricDataSource",
+            "resourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('PartsUnlimitedHostingPlanName'))]",
+            "metricName": "CpuPercentage"
+          },
+          "operator": "GreaterThan",
+          "threshold": 90,
+          "windowSize": "PT15M"
         },
-        "autoMitigate": false,
-        "actions": [
-          {
-            "actionGroupId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.insights/actiongroups/', parameters('ActionGroupName'))]"
-
-          }
-        ]
+        "action": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleEmailAction",
+          "sendToServiceOwners": true,
+          "customEmails": []
+        }
       }
     },
     {
       "name": "[concat('LongHttpQueue ', parameters('PartsUnlimitedHostingPlanName'))]",
-      "type": "Microsoft.Insights/metricAlerts",
-      "location": "global",
-      "apiVersion": "2018-03-01",
+      "type": "Microsoft.Insights/alertrules",
+      "location": "East US",
+      "apiVersion": "2014-04-01",
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', parameters('PartsUnlimitedHostingPlanName'))]"
       ],
       "tags": {
         "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('PartsUnlimitedHostingPlanName'))]": "Resource",
-        "displayName": "WebsiteHostingPlanLongHttpQueue"
+        "displayName": "WebsiteHostingPlanAlertRuleLongHttpQueue"
       },
       "properties": {
-        "name": "[concat('LongHttpQueue', parameters('PartsUnlimitedHostingPlanName'))]",
+        "name": "[concat('LongHttpQueue ', parameters('PartsUnlimitedHostingPlanName'))]",
         "description": "[concat('The HTTP queue for the instances of ', parameters('PartsUnlimitedHostingPlanName'), ' has a large number of pending requests.')]",
-        "severity": 3,
-        "enabled": "[parameters('EnableRules')]",
-        "scopes": [
-          "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Web/serverfarms/', parameters('PartsUnlimitedHostingPlanName'))]"
-        ],
-        "evaluationFrequency": "PT1M",
-        "windowSize": "PT5M",
-        "criteria": {
-          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
-          "allof": [
-            {
-              "criterionType": "StaticThresholdCriterion",
-              "name": "Long HTTP Queue",
-              "metricName": "HttpQueueLength",
-              "metricNamespace": "Microsoft.Web/serverFarms",
-              "operator": "GreaterThan",
-              "timeAggregation": "Average",
-              "dimensions": [],
-              "alertSensitivity": "Medium",
-              "threshold": 100
-            }
-          ]
+        "isEnabled": "[parameters('EnableRules')]",
+        "condition": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.ThresholdRuleCondition",
+          "dataSource": {
+            "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleMetricDataSource",
+            "resourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('PartsUnlimitedHostingPlanName'))]",
+            "metricName": "HttpQueueLength"
+          },
+          "operator": "GreaterThan",
+          "threshold": 100,
+          "windowSize": "PT5M"
         },
-        "autoMitigate": false,
-        "actions": [
-          {
-            "actionGroupId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.insights/actiongroups/', parameters('ActionGroupName'))]"
-
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat('ForbiddenRequests - http 403 errors ', parameters('WebsiteName'))]",
-      "type": "Microsoft.Insights/metricAlerts",
-      "location": "global",
-      "apiVersion": "2018-03-01",
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites', parameters('WebsiteName'))]"
-      ],
-      "tags": {
-        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('WebsiteName'))]": "Resource",
-        "displayName": "ForbiddenRequests - http 403 errors"
-      },
-      "properties": {
-        "name": "[concat('ForbiddenRequests - HTTP 403 errors', parameters('WebsiteName'))]",
-        "description": "[concat(parameters('WebsiteName'), ' has some requests that are forbidden, status code 403.')]",
-        "severity": 2,
-        "enabled": "[parameters('EnableRules')]",
-        "scopes": [
-          "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Web/sites/', parameters('WebsiteName'))]"
-        ],
-        "evaluationFrequency": "PT1M",
-        "windowSize": "PT5M",
-        "criteria": {
-          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
-          "allof": [
-            {
-              "criterionType": "StaticThresholdCriterion",
-              "name": "Forbidden Requests",
-              "metricName": "Http403",
-              "metricNamespace": "Microsoft.Web/sites",
-              "operator": "GreaterThanOrEqual",
-              "timeAggregation": "Count",
-              "threshold": 1
-            }
-          ]
-        },
-        "autoMitigate": false,
-        "actions": [
-          {
-            "actionGroupId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.insights/actiongroups/', parameters('ActionGroupName'))]"
-
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat('ServerErrors ', parameters('WebsiteName'))]",
-      "type": "Microsoft.Insights/metricAlerts",
-      "location": "global",
-      "apiVersion": "2018-03-01",
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites', parameters('WebsiteName'))]"
-      ],
-      "tags": {
-        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('WebsiteName'))]": "Resource",
-        "displayName": "ServerErrors - http 5xx errors"
-      },
-      "properties": {
-        "name": "[concat('ServerErrors - HTTP 5xx errors ', parameters('WebsiteName'))]",
-        "description": "[concat(parameters('WebsiteName'), ' has some server errors, status code 5xx.')]",
-        "severity": 2,
-        "enabled": "[parameters('EnableRules')]",
-        "scopes": [
-          "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Web/sites/', parameters('WebsiteName'))]"
-        ],
-        "evaluationFrequency": "PT1M",
-        "windowSize": "PT5M",
-        "criteria": {
-          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
-          "allof": [
-            {
-              "criterionType": "StaticThresholdCriterion",
-              "name": "Server Errors",
-              "metricName": "Http5xx",
-              "metricNamespace": "Microsoft.Web/sites",
-              "operator": "GreaterThanOrEqual",
-              "timeAggregation": "Count",
-              "threshold": 1
-            }
-          ]
-        },
-        "autoMitigate": false,
-        "actions": [
-          {
-            "actionGroupId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.insights/actiongroups/', parameters('ActionGroupName'))]"
-
-          }
-        ]
+        "action": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleEmailAction",
+          "sendToServiceOwners": true,
+          "customEmails": []
+        }
       }
     },
     {
@@ -717,6 +551,73 @@
           ]
         }
       ]
+    },
+    {
+      "name": "[concat('ServerErrors ', parameters('WebsiteName'))]",
+      "type": "Microsoft.Insights/alertrules",
+      "location": "East US",
+      "apiVersion": "2014-04-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('WebSiteName'))]"
+      ],
+      "tags": {
+        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('WebsiteName'))]": "Resource",
+        "displayName": "WebsiteAlertRuleServerErrors"
+      },
+      "properties": {
+        "name": "[concat('ServerErrors ', parameters('WebsiteName'))]",
+        "description": "[concat(parameters('WebsiteName'), ' has some server errors, status code 5xx.')]",
+        "isEnabled": "[parameters('EnableRules')]",
+        "condition": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.ThresholdRuleCondition",
+          "dataSource": {
+            "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleMetricDataSource",
+            "resourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('WebsiteName'))]",
+            "metricName": "Http5xx"
+          },
+          "operator": "GreaterThan",
+          "threshold": 0,
+          "windowSize": "PT5M"
+        },
+        "action": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleEmailAction",
+          "sendToServiceOwners": true,
+          "customEmails": []
+        }
+      }
+    },
+    {
+      "name": "[concat('ForbiddenRequests ', parameters('WebsiteName'))]",
+      "type": "Microsoft.Insights/alertrules",
+      "location": "East US",
+      "apiVersion": "2014-04-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('WebsiteName'))]"
+      ],
+      "tags": {
+        "displayName": "WebsiteAlertRuleForbiddenRequests"
+      },
+      "properties": {
+        "name": "[concat('ForbiddenRequests ', parameters('WebsiteName'))]",
+        "description": "[concat(parameters('WebsiteName'), ' has some requests that are forbidden, status code 403.')]",
+        "isEnabled": "[parameters('EnableRules')]",
+        "condition": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.ThresholdRuleCondition",
+          "dataSource": {
+            "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleMetricDataSource",
+            "resourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('WebsiteName'))]",
+            "metricName": "Http403"
+          },
+          "operator": "GreaterThan",
+          "threshold": 0,
+          "windowSize": "PT5M"
+        },
+        "action": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleEmailAction",
+          "sendToServiceOwners": true,
+          "customEmails": []
+        }
+      }
     }
   ]
 }
