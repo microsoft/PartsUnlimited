@@ -18,7 +18,7 @@
     "grunt-sass": "^1.0.0",
     "gzip-size": "3.0.0",
     "latest-version": "^2.0.0",
-    "node-sass": "^4.6.1",
+    "node-sass": "^4.13.1",
     "npmconf": "2.1.2",
     "pretty-bytes": "4.0.2",
     "readable-stream": "2.1.5",
