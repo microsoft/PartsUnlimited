@@ -65,7 +65,7 @@ jobs:
     #    uses a compiled language
 
     - name: Restore, build and test 
-    - run: |
+      run: |
        dotnet restore ./PartsUnlimited.sln
        dotnet build ./src/PartsUnlimitedWebsite/PartsUnlimitedWebsite.csproj
        dotnet build ./test/PartsUnlimited.UnitTests/PartsUnlimited.UnitTests.csproj
