@@ -1,0 +1,12 @@
+name: "Custom CodeQL Config"
+
+queries:
+- uses: security-and-quality
+
+paths:
+- src
+- test/PartsUnlimited.UnitTests
+
+paths-ignore:
+- src/node_modules
+- '**/*.test.js'
