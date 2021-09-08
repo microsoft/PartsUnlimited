@@ -23,7 +23,7 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: windows-2019
+    runs-on: windows-latest
     permissions:
       actions: read
       contents: read
@@ -54,8 +54,8 @@ jobs:
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
-    #- name: Autobuild
-    #  uses: github/codeql-action/autobuild@v1
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v1
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl
@@ -64,12 +64,12 @@ jobs:
     #    and modify them (or add more) to build your code if your project
     #    uses a compiled language
 
-    - name: Restore, build and test 
-      run: |
-       dotnet restore ./PartsUnlimited.sln
-       dotnet build ./src/PartsUnlimitedWebsite/PartsUnlimitedWebsite.csproj
-       dotnet build ./test/PartsUnlimited.UnitTests/PartsUnlimited.UnitTests.csproj
-       dotnet test ./test/PartsUnlimited.UnitTests/PartsUnlimited.UnitTests.csproj --configuration "release" --logger "trx;LogFileName=testresults.xml" --no-build
+    #- name: Restore, build and test 
+    #  run: |
+    #   dotnet restore ./PartsUnlimited.sln
+    #   dotnet build ./src/PartsUnlimitedWebsite/PartsUnlimitedWebsite.csproj
+    #   dotnet build ./test/PartsUnlimited.UnitTests/PartsUnlimited.UnitTests.csproj
+    #   dotnet test ./test/PartsUnlimited.UnitTests/PartsUnlimited.UnitTests.csproj --configuration "release" --logger "trx;LogFileName=testresults.xml" --no-build
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
