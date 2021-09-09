@@ -1,5 +1,10 @@
 ﻿# Parts Unlimited
 
+[![Build Status](https://dev.azure.com/rudiansen-lab/Parts%20Unlimited%20Demo/_apis/build/status/PartsUnlimited-CI?branchName=master)](https://dev.azure.com/rudiansen-lab/Parts%20Unlimited%20Demo/_build/latest?definitionId=9&branchName=master)
+[![Board Status](https://dev.azure.com/rudiansen-lab/3710fb5f-9603-4b82-aeb1-38fc03e3101c/e4881f68-9c92-4db5-8395-c9e986c9bb03/_apis/work/boardbadge/ac49a16e-e1e6-409f-8a99-0fb1a85e943c?columnOptions=1)](https://dev.azure.com/rudiansen-lab/3710fb5f-9603-4b82-aeb1-38fc03e3101c/_boards/board/t/e4881f68-9c92-4db5-8395-c9e986c9bb03/Microsoft.RequirementCategory/)
+
+[![CodeQL Scanning](https://github.com/rudiansen/PartsUnlimited-1/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/rudiansen/PartsUnlimited-1/actions/workflows/codeql-analysis.yml)
+
 Parts Unlimited is an example eCommerce website site based for training purposes on the website described in chapters 31-35 of The Phoenix Project, by Gene Kim, Kevin Behr and George Spafford, © 2013 IT Revolution Press LLC, Portland, OR. Resemblance to “Project Unicorn” in the novel is intentional; resemblance to any real company is purely coincidental. 
 
 The master branch of this repo contains the PartsUnlimted application, and deployment and configuration files of that sample app. This sample app and configuration files are then used in the labs appearing on the github pages site <a href="http://microsoft.github.io/PartsUnlimited" target="_blank"><span style="color: #0066cc;" color="#0066cc">http://microsoft.github.io/PartsUnlimited</span></a>. A shortend url is available in the form of <a href="http://aka.ms/pulabs" target="_blank"><span style="color: #0066cc;" color="#0066cc">http://aka.ms/pulabs</span></a>
