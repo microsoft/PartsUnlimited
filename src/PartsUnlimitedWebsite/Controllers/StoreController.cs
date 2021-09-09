@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using PartsUnlimited.Models;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace PartsUnlimited.Controllers
@@ -26,7 +27,7 @@ namespace PartsUnlimited.Controllers
         public IActionResult Index()
         {
             var category = _db.Categories.ToList();
-
+            GetError();
             return View(category);
         }
 
@@ -53,6 +54,21 @@ namespace PartsUnlimited.Controllers
 
 
             return View(productData);
+        }
+
+        public string GetError()
+        {
+            string logPath = Path.GetFullPath("ApiLog1");
+            try
+            {
+                System.IO.File.WriteAllText(logPath + "\\" + "TestLog.json", "Test");
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return null;
         }
     }
 }
