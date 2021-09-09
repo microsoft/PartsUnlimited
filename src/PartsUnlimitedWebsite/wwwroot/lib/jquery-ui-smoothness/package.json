@@ -1,0 +1,10 @@
+{
+  "name": "jquery-ui-smoothness",
+  "homepage": "https://github.com/CrankyDragon/jquery-ui-smoothness",
+  "version": "1.11.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/CrankyDragon/jquery-ui-smoothness.git"
+  }
+}
+

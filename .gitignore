@@ -33,12 +33,10 @@ App_Data/
 bower_components
 node_modules
 *.sln.ide
-src/*/wwwroot
 *.ng.ts
 *.sln.ide
 project.lock.json
 .vs
 env/PartsUnlimited.Environment/PartsUnlimited.Environment/Tools
-env/[Oo]bj/
 /src/PartsUnlimitedWebsite/Properties/launchSettings.json
 /testresults.xml
