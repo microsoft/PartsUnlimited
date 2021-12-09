@@ -41,4 +41,4 @@ project.lock.json
 env/PartsUnlimited.Environment/PartsUnlimited.Environment/Tools
 env/[Oo]bj/
 /src/PartsUnlimitedWebsite/Properties/launchSettings.json
-/testresults.xml
+/testresults.xmland
