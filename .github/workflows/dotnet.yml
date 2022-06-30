@@ -19,8 +19,10 @@ jobs:
         dotnet-version: 2.2.102
    
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore **\*.sln
+      
     - name: Build
       run: dotnet build --no-restore
+      
     - name: Test
       run: dotnet test --no-build --verbosity normal
