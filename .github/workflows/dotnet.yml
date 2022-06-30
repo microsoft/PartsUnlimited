@@ -22,7 +22,7 @@ jobs:
       run: dotnet restore PartsUnlimited.sln
       
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build PartsUnlimited.sln --no-restore --configuration Release
       
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test PartsUnlimited.sln --no-build --verbosity normal
