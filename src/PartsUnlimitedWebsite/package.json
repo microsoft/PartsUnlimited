@@ -3,7 +3,7 @@
   "description": "An online store for PartsUnlimited, a car parts company",
   "devDependencies": {
     "argparse": "1.0.9",
-    "bower": "^1.3.12",
+    "bower": "^1.8.9",
     "bower-registry-client": "^1.0.0",
     "cli-color": "1.1.0",
     "combined-stream": "1.0.5",
