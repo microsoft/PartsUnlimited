@@ -17,13 +17,13 @@
     "grunt-contrib-uglify": "2.0.0",
     "grunt-sass": "^1.0.0",
     "gzip-size": "3.0.0",
-    "latest-version": "^2.0.0",
+    "latest-version": "^7.0.0",
     "node-sass": "^4.6.1",
     "npmconf": "2.1.2",
     "pretty-bytes": "4.0.2",
     "readable-stream": "2.1.5",
     "request": "^2.88.0",
-    "update-notifier": "1.0.2"
+    "update-notifier": "6.0.2"
   },
   "name": "PartsUnlimited",
   "readme": "Look at: https://partsunlimited.visualstudio.com/DefaultCollection/Assets/_git/Cloud#path=%2FREADME.md&version=GBmaster&_a=contents",
