@@ -34,11 +34,5 @@
     </None>
   </ItemGroup>
 
-  <Target Name="PrecompileScript" BeforeTargets="BeforeBuild">
-    <Exec Command="npm install --python=python2.7" />
-    <Exec Command="npm config set python python2.7" />
-    <Exec Command="npm install -g grunt-cli" />
-    <Exec Command="grunt" />
-  </Target>
 
 </Project>
