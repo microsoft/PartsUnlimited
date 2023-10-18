@@ -1,4 +1,4 @@
-﻿
+# orders change﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
@@ -255,6 +255,7 @@ Global
 		{09C947B0-C782-4660-8C20-CB7CC612C7BB}.Release|x86.ActiveCfg = Release|iPhone
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
+
 		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
